@@ -4,14 +4,17 @@ import (
 	"crypto/md5"
 	"crypto/sha1"
 	"crypto/sha256"
+	"encoding/json"
 	"fmt"
 	"hash"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"strings"
 
+	"github.com/dustin/go-jsonpointer"
 	"github.com/progrium/go-basher"
 )
 
@@ -85,6 +88,23 @@ func application(
 	os.Exit(status)
 }
 
+func assert(err error) {
+	if err != nil {
+		fatal(err.Error())
+	}
+}
+
+func JsonPointer(args []string) {
+	if len(args) == 0 {
+		fatal("No json pointer definied")
+	}
+	bytes, err := ioutil.ReadAll(os.Stdin)
+	assert(err)
+	var o map[string]interface{}
+	assert(json.Unmarshal(bytes, &o))
+	println(jsonpointer.Get(o, args[0]).(string))
+}
+
 func Checksum(args []string) {
 	if len(args) < 1 {
 		fatal("No algorithm specified")
@@ -111,8 +131,9 @@ func main() {
 	}
 
 	application(map[string]func([]string){
-		"checksum":    Checksum,
-		"bin-version": BinVersion,
+		"checksum":     Checksum,
+		"bin-version":  BinVersion,
+		"json-pointer": JsonPointer,
 	}, []string{
 		"include/circle.bash",
 		"include/cloudbreak.bash",
