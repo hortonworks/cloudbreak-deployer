@@ -93,6 +93,10 @@ rm *.yml
 cbd generate
 ```
 
+## Cloudbreak UI
+
+The cloudbreak UI can be launched by typing "localhost:3000" in the browser.
+
 ## Debug
 
 If you want to have more detailed output set the `DEBUG` env variable to non-zero:
