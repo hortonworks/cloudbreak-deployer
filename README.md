@@ -4,7 +4,7 @@ For recent changes please check the [CHANGELOG.md](https://github.com/sequenceiq
 ## Requirements
 
 Currently only **Linux** and **OSX** 64 bit binaries are released for Cloudbreak Deployer. For anything else we will create a special Docker container.
-The deployment itself needs only **Docker 1.5.0** or later.
+The deployment itself needs only **Docker 1.5.0** or later. Please ensure docker is running before starting installation.
 
 ## Installation
 
@@ -12,7 +12,7 @@ To install Cloudbreak Deployer, you just have to unzip the platform specific
 single binary to your PATH. The one-liner way is:
 
 ```
-curl https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/install | sh && cbd --version
+curl https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/install | sudo sh && cbd --version
 ```
 
 ## Usage
@@ -46,16 +46,6 @@ It will create:
 - **docker-compose.yml**: Full confirguration of containers needed for Cloudbreak deployment.
 - **uaa.yml**: Identity Server configuration. (For example default user/password in the last line)
 
-### Deploy Cloudbreak
-
-To start all the containers run:
-
-```
-cbd start
-```
-If one of the container is already running, it won’t be started again.
-
-
 ### Pull Docker images
 
 All Cloudbreak components and the backend database is running inside containers.
@@ -66,6 +56,19 @@ cbd pull
 ```
 
 It will take some time, depending on your network connection, so you can grab a cup of coffee.
+
+
+### Deploy Cloudbreak
+
+To start all the containers run:
+
+```
+cbd start
+```
+
+You may need to have root permissions to do this.
+
+If one of the container is already running, it won’t be started again.
 
 
 ### Watch the logs
