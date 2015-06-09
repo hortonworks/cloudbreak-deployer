@@ -4,6 +4,7 @@
 
 ### Added
 
+- New `cbd-cleanup` command for removing old images or exited containers
 - Baywatch default parameters added: `CB_BAYWATCH_ENABLED` and`CB_BAYWATCH_EXTERN_LOCATION`
 
 ### Removed
