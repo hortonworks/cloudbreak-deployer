@@ -247,6 +247,7 @@ main() {
         cmd-export compose-kill kill
         cmd-export compose-logs logs
         cmd-export compose-pull pull
+        cmd-export compose-cleanup cleanup
         cmd-export deployer-login login
 
         cmd-export migrate-startdb startdb
