@@ -26,12 +26,13 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_PERISCOPE 0.5.6
     env-import DOCKER_TAG_PCDB 0.5.6
     env-import DOCKER_TAG_UAA 1.8.1-v2
-    env-import DOCKER_TAG_ULUWATU 1.0.1
-    env-import DOCKER_TAG_SULTANS 1.0.1
+    env-import DOCKER_TAG_ULUWATU 0.5.56
+    env-import DOCKER_TAG_SULTANS 0.5.7
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.0.3
     env-import DOCKER_TAG_CLOUDBREAK_SHELL 0.5.1
-
+    env-import DOCKER_TAG_PROXY 0.0.9
+    
     env-import CB_DOCKER_CONTAINER_AMBARI ""
     env-import CB_DOCKER_CONTAINER_AMBARI_WARM ""
 }
@@ -137,9 +138,9 @@ cloudbreak-conf-cloud-provider() {
 cloudbreak-conf-ui() {
     declare desc="Defines Uluwatu and Sultans related parameters"
 
-    env-import ULU_HOST_ADDRESS  "http://$PUBLIC_IP:3000"
-    env-import ULU_OAUTH_REDIRECT_URI  "$ULU_HOST_ADDRESS/authorize"
-    env-import ULU_SULTANS_ADDRESS  "http://$PUBLIC_IP:3001"
+    env-import ULU_HOST_ADDRESS  "http://$PUBLIC_IP"
+    env-import ULU_OAUTH_REDIRECT_URI  "http://$PUBLIC_IP/authorize"
+    env-import ULU_SULTANS_ADDRESS  "http://$PUBLIC_IP/sultans"
 
 }
 
@@ -176,8 +177,8 @@ _cloudbreak-shell() {
         -e BACKEND_9001=identity.service.consul \
         -e CLOUDBREAK_ADDRESS=http://backend:9000 \
         -e IDENTITY_ADDRESS=http://backend:9001 \
-        -e SEQUENCEIQ_USER=admin@example.com \
-        -e SEQUENCEIQ_PASSWORD=cloudbreak \
+        -e SEQUENCEIQ_USER=$UAA_DEFAULT_USER_EMAIL \
+        -e SEQUENCEIQ_PASSWORD=$UAA_DEFAULT_USER_PW \
         -v $PWD:/data \
         sequenceiq/cb-shell:$DOCKER_TAG_CLOUDBREAK_SHELL
 }
