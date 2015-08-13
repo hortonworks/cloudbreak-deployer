@@ -4,9 +4,14 @@
 
 ### Added
 
+- `DOCKER_CONSUL_OPTIONS` config option to provide arbitrary consul option
+
 ### Removed
 
 ### Changed
+
+- consul discovers host dns settings, and uses the configured nameserver as recursor
+
 ## [v1.0.0] - 2015-07-23
 
 ### Fixed
