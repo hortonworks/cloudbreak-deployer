@@ -10,6 +10,7 @@
 
 ### Changed
 
+- sequenceiq/cloudbreak image updated to 1.0.1
 - consul discovers host dns settings, and uses the configured nameserver as recursor
 
 ## [v1.0.0] - 2015-07-23
