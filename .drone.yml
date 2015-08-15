@@ -1,4 +1,3 @@
 image: go1.3
 iscript:
-    - go build -o cbd
-    - go test || true
+    - make build
