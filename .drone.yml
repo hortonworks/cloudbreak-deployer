@@ -1,3 +1,4 @@
 image: go1.3
 script:
+    - make deps
     - make build
