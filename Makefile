@@ -16,7 +16,7 @@ endif
 
 build: bindata
 	mkdir -p build/Linux  && GOOS=linux  go build -ldflags $(FLAGS) -o build/Linux/$(BINARYNAME)
-	mkdir -p build/Darwin && GOOS=darwin go build -ldflags $(FLAGS) -o build/Darwin/$(BINARYNAME)
+	#mkdir -p build/Darwin && GOOS=darwin go build -ldflags $(FLAGS) -o build/Darwin/$(BINARYNAME)
 
 dev: bindata
 	go build -ldflags $(FLAGS) -o /usr/local/bin/$(BINARYNAME)
@@ -54,10 +54,10 @@ prepare-release: build
 	cp $(ARTIFACTS) build/Darwin/
 	tar -zcf release/$(NAME)_$(VERSION)_Darwin_$(ARCH).tgz -C build/Darwin $(ARTIFACTS) $(BINARYNAME)
 	
-release: prepare-release
+release: #prepare-release
 
-	gh-release checksums sha256
-	gh-release create sequenceiq/$(NAME) $(VERSION) $(GIT_BRANCH) v$(VERSION)
+	#gh-release checksums sha256
+	#gh-release create sequenceiq/$(NAME) $(VERSION) $(GIT_BRANCH) v$(VERSION)
 	@echo upload artifacts to $(S3_TARGET) ...
 	@docker run \
 		-v $(PWD):/data \
