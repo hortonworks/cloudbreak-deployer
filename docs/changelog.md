@@ -4,6 +4,15 @@
 
 ### Added
 
+### Removed
+
+### Changed
+## Unreleased
+
+### Fixed
+
+### Added
+
 - `DOCKER_CONSUL_OPTIONS` config option to provide arbitrary consul option
 
 ### Removed
