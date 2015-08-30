@@ -1,18 +1,23 @@
+#!/bin/bash
 
 : ${GIT_ORG:=sequenceiq}
 : ${GIT_PROJECT:=cloudbreak-deployer}
+: ${VERSION:=latest}
 
 main() {
-    local redirect=$(
-    curl -s \
-        -o /dev/null \
-        -w "%{redirect_url}" \
-        https://github.com/sequenceiq/cloudbreak-deployer/releases/latest
-    )
-    local latest=${redirect##*v}
+    local version=$VERSION
+    if [ "$version" = "latest" ]; then
+      local redirect=$(
+      curl -s \
+          -o /dev/null \
+          -w "%{redirect_url}" \
+          https://github.com/sequenceiq/cloudbreak-deployer/releases/latest
+      )
+      version=${redirect##*v}
+    fi
     local osarch=$(uname -sm|tr " " _)
 
-    local url="https://github.com/${GIT_ORG}/${GIT_PROJECT}/releases/download/v${latest}/${GIT_PROJECT}_${latest}_${osarch}.tgz"
+    local url="https://github.com/${GIT_ORG}/${GIT_PROJECT}/releases/download/v${version}/${GIT_PROJECT}_${version}_${osarch}.tgz"
 
     local dest=/bin
     hash -r > /dev/null
@@ -24,10 +29,9 @@ main() {
             dest=/usr/local/bin
         fi
     fi
-    
+
     curl -Ls $url | tar -xz -C ${dest}
     echo "---> cbd installed into ${dest}"
 }
 
 main
-
