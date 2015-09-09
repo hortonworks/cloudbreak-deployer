@@ -384,6 +384,9 @@
 
 <h2 id="unreleased">Unreleased</h2>
 <h3 id="fixed">Fixed</h3>
+<ul>
+<li>consul recursor now exculdes both docker ip and bridge ip to avoid recursive dns recursor chain</li>
+</ul>
 <h3 id="added">Added</h3>
 <ul>
 <li>Command <code>cbd start</code> will execute the migration by default. If SKIP_DB_MIGRATION_ON_START envvar set to true in Profile, the migration will be skipped</li>
