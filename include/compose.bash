@@ -312,6 +312,7 @@ sultans:
         - SL_ADDRESS=$ULU_SULTANS_ADDRESS
         - SL_UAA_ADDRESS=http://backend:8089
         - BACKEND_8089=identity.service.consul
+        - UAA_DEFAULT_USER_EMAIL=$UAA_DEFAULT_USER_EMAIL
     links:
         - ambassador:backend
     ports:
@@ -335,6 +336,7 @@ uluwatu:
         - BACKEND_8089=identity.service.consul
         - BACKEND_8080=cloudbreak.service.consul
         - BACKEND_8085=periscope.service.consul
+        - LAUNCH_DEFAULT_CREDENTIAL=$LAUNCH_DEFAULT_CREDENTIAL
     links:
         - ambassador:backend
     ports:
