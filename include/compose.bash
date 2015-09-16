@@ -259,6 +259,7 @@ cloudbreak:
         - CB_BLUEPRINT_DEFAULTS=$CB_BLUEPRINT_DEFAULTS
         - CB_TEMPLATE_DEFAULTS=$CB_TEMPLATE_DEFAULTS
         - CB_AZURE_IMAGE_URI=$CB_AZURE_IMAGE_URI
+        - CB_AZURE_RM_IMAGE_URI=$CB_AZURE_RM_IMAGE_URI
         - CB_GCP_SOURCE_IMAGE_PATH=$CB_GCP_SOURCE_IMAGE_PATH
         - CB_AWS_AMI_MAP=$CB_AWS_AMI_MAP
         - CB_OPENSTACK_IMAGE=$CB_OPENSTACK_IMAGE
@@ -287,6 +288,8 @@ cloudbreak:
         - BACKEND_5432=cbdb.service.consul
         - BACKEND_8089=identity.service.consul
         - SECURE_RANDOM=$SECURE_RANDOM
+        - CB_SUCCESS_CLUSTER_INSTALLER_MAIL_TEMPLATE_PATH=templates/launch-cluster-installer-mail-success.ftl
+        - CB_FAILED_CLUSTER_INSTALLER_MAIL_TEMPLATE_PATH=templates/launch-cluster-installer-mail-fail.ftl
     links:
         - ambassador:backend
     ports:

@@ -21,7 +21,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_CONSUL v0.5.0-v3
     env-import DOCKER_TAG_REGISTRATOR v5
     env-import DOCKER_TAG_POSTGRES 9.4.1
-    env-import DOCKER_TAG_CLOUDBREAK 1.2.0-dev.26
+    env-import DOCKER_TAG_CLOUDBREAK 1.2.0-dev.33
     env-import DOCKER_TAG_CBDB 1.0.0
     env-import DOCKER_TAG_PERISCOPE 0.5.6
     env-import DOCKER_TAG_PCDB 0.5.6
@@ -32,8 +32,10 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_CERT_TOOL 0.0.3
     env-import DOCKER_TAG_CLOUDBREAK_SHELL 0.5.1
 
-    env-import CB_DOCKER_CONTAINER_AMBARI ""
-    env-import CB_DOCKER_CONTAINER_AMBARI_WARM ""
+    env-import CB_DOCKER_CONTAINER_AMBARI sequenceiq/ambari-warmup:2.1.0-launch-v1
+    env-import CB_DOCKER_CONTAINER_AMBARI_WARM sequenceiq/ambari-warmup:2.1.0-launch-v1
+
+    env-import CB_AZURE_RM_IMAGE_URI EAST_ASIA:https://sequenceiqeastasia.blob.core.windows.net/images/cb-centos71-amb210-2015-09-16106_2015-September-16_10-6-os-2015-09-16.vhd,EAST_US:https://sequenceiqeastus.blob.core.windows.net/images/cb-centos71-amb210-2015-09-16106_2015-September-16_10-6-os-2015-09-16.vhd,CENTRAL_US:https://sequenceiqcentralus.blob.core.windows.net/images/cb-centos71-amb210-2015-09-16106_2015-September-16_10-6-os-2015-09-16.vhd,NORTH_EUROPE:https://sequenceiqnortheurope.blob.core.windows.net/images/cb-centos71-amb210-2015-09-16106_2015-September-16_10-6-os-2015-09-16.vhd,SOUTH_CENTRAL_US:https://sequenceiqsouthcentralus.blob.core.windows.net/images/cb-centos71-amb210-2015-09-16106_2015-September-16_10-6-os-2015-09-16.vhd,NORTH_CENTRAL_US:https://sequenceiqnorthcentralus.blob.core.windows.net/images/cb-centos71-amb210-2015-09-16106_2015-September-16_10-6-os-2015-09-16.vhd,EAST_US_2:https://sequenceiqeastus2.blob.core.windows.net/images/cb-centos71-amb210-2015-09-16106_2015-September-16_10-6-os-2015-09-16.vhd,JAPAN_EAST:https://sequenceiqjapaneast.blob.core.windows.net/images/cb-centos71-amb210-2015-09-16106_2015-September-16_10-6-os-2015-09-16.vhd,JAPAN_WEST:https://sequenceiqjapanwest.blob.core.windows.net/images/cb-centos71-amb210-2015-09-16106_2015-September-16_10-6-os-2015-09-16.vhd,SOUTHEAST_ASIA:https://sequenceiqsoutheastasia.blob.core.windows.net/images/cb-centos71-amb210-2015-09-16106_2015-September-16_10-6-os-2015-09-16.vhd,WEST_US:https://sequenceiqwestus.blob.core.windows.net/images/cb-centos71-amb210-2015-09-16106_2015-September-16_10-6-os-2015-09-16.vhd,WEST_EUROPE:https://sequenceiqwesteurope.blob.core.windows.net/images/cb-centos71-amb210-2015-09-16106_2015-September-16_10-6-os-2015-09-16.vhd
 }
 
 cloudbreak-conf-images() {
