@@ -395,12 +395,18 @@
 <li>Command <code>cbd start</code> will execute the migration by default. If SKIP_DB_MIGRATION_ON_START envvar set to true in Profile, the migration will be skipped</li>
 <li>Using Dns SRV record in our services instead of ambassador</li>
 <li>Using docker linking system in third party services instead of ambassador</li>
+<li>Integration tests are added, where cbd binary is called, not only sourced functions</li>
 </ul>
 <h3 id="removed">Removed</h3>
 <ul>
 <li>Full removal of ambassador</li>
 </ul>
 <h3 id="changed">Changed</h3>
+<ul>
+<li><code>cbd generate</code> is less verbose, diff doesnt shown</li>
+<li><code>cbd doctor</code> shows diff if generate would change</li>
+<li><code>cbd regenerate</code> creates backup files if changes detected</li>
+</ul>
 <h2 id="v103-2015-09-03">[v1.0.3] - 2015-09-03</h2>
 <h3 id="fixed_1">Fixed</h3>
 <ul>
