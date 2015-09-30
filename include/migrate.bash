@@ -43,8 +43,7 @@ migrate-execute-mybatis-migrations() {
     migrateDebug "Scripts location:  $scripts_location"
     if [ "$service_name" = "uaadb" ]; then
         flag=false
-        while [ "$flag" != "true" ]; do
-            flag=$(check_uaa_running)
+        while ! check_uaa_running; do
             sleep 3
             if [ "$flag" = "false" ]; then
               info "Uaa currently not updated the database. Waiting..."
@@ -68,17 +67,7 @@ migrate-execute-mybatis-migrations() {
 }
 
 check_uaa_running() {
-    uaa_running=false;
-    uaa_info=$(docker exec -it cbreak_uaadb_1 bash -c "psql -U postgres -c 'select count(scope) from oauth_client_details;'"|head -3|tail -1)
-    uaa_info=$(echo $uaa_info|sed 's, ,,g'|head -1)
-    if [[ $uaa_info = *[[:digit:]]* ]]; then
-        if [[ "$uaa_info" -gt 1 ]]; then
-          uaa_running=true;
-        fi
-    else
-      uaa_running=false;
-    fi
-    echo "$uaa_running"
+    docker exec -it cbreak_uaadb_1 bash -c "psql -U postgres -c 'select count(scope) from oauth_client_details;'" &>/dev/null
 }
 
 migrate-one-db() {
