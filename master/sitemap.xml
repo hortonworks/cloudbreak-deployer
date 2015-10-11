@@ -3,8 +3,8 @@
 
     
     <url>
-     <loc>None/</loc>
-     <lastmod>2015-10-03</lastmod>
+     <loc>http://sequenceiq.com/cloudbreak-deployer/</loc>
+     <lastmod>2015-10-11</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,32 +12,32 @@
     
         
     <url>
-     <loc>None/architecture/</loc>
-     <lastmod>2015-10-03</lastmod>
+     <loc>http://sequenceiq.com/cloudbreak-deployer/architecture/</loc>
+     <lastmod>2015-10-11</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>None/configuration/</loc>
-     <lastmod>2015-10-03</lastmod>
+     <loc>http://sequenceiq.com/cloudbreak-deployer/configuration/</loc>
+     <lastmod>2015-10-11</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>None/database/</loc>
-     <lastmod>2015-10-03</lastmod>
+     <loc>http://sequenceiq.com/cloudbreak-deployer/database/</loc>
+     <lastmod>2015-10-11</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>None/development/</loc>
-     <lastmod>2015-10-03</lastmod>
+     <loc>http://sequenceiq.com/cloudbreak-deployer/development/</loc>
+     <lastmod>2015-10-11</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>None/changelog/</loc>
-     <lastmod>2015-10-03</lastmod>
+     <loc>http://sequenceiq.com/cloudbreak-deployer/changelog/</loc>
+     <lastmod>2015-10-11</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
