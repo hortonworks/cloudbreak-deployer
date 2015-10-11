@@ -1,0 +1,259 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "Cloudbreak is a cloud agnostic Hadoop as a Service API. Abstracts the provisioning and ease management and monitoring of on-demand HDP clusters in different virtual environments. For recent changes please check the \nchangelog\n.\n\n\nCloudbreak has two main components - the \nCloudbreak deployer\n and the \nCloudbreak application\n. Cloudbreak deployer helps you to deploy the Cloudbreak application automatically in environments with Docker support. Once the Cloudbreak application is deployed you can use it to provision HDP clusters in different cloud environments.\n\n\nRequirements\n\n\nCurrently only \nLinux\n and \nOSX\n 64 bit binaries are released for Cloudbreak Deployer. For anything else we can create a special Docker container. The deployment itself needs only \nDocker 1.7.0\n or later.\nYour firewall must be configured to let Docker containers talk to each other and have SELinux disabled. \nThis is especially important on CentOS 7 where default firewall configuration blocks connections by default.\n Should you intend to deploy the Cloudbreak application alongside your cluster in your favorite cloud environment you can use our CentOS 7 based default cloud images - that comes with CBD (Cloudbreak deployer) and the required Docker containers pre-installed.\n\n\nOn-prem installation\n\n\nFor on premise installations of the Cloudbreak application please open the \nOnprem submenu\n\n\nAWS based installation\n\n\nWe have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.\n\n\nYou can follow the AWS provider specific documentation using this \nlink\n\n\nAzure based installation\n\n\nWe have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.\n\n\nYou can follow the AWS provider specific documentation using this \nlink\n\n\nGCP based installation\n\n\nWe have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.\n\n\nYou can follow the AWS provider specific documentation using this \nlink\n\n\nOpenStack based installation\n\n\nWe have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.\n\n\nYou can follow the AWS provider specific documentation using this \nlink\n\n\nDebug\n\n\nIf you want to have more detailed output set the \nDEBUG\n env variable to non-zero:\n\n\nDEBUG=1 cbd some_command\n\n\n\n\nTroubleshooting\n\n\nYou can also use the \ndoctor\n command to diagnose your environment:\n\n\ncbd doctor\n\n\n\n\nUpdate\n\n\nThe tool is capable to upgrade itself to a newer version.\n\n\ncbd update\n\n\n\n\nCredits\n\n\nThis tool, and the PR driven release, is inspired from \nglidergun\n. Actually it\ncould be a fork of it. The reason it\u2019s not a fork, because we wanted to have our own binary with all modules\nbuilt in, so only a single binary is needed.", 
+            "title": "Home"
+        }, 
+        {
+            "location": "/#requirements", 
+            "text": "Currently only  Linux  and  OSX  64 bit binaries are released for Cloudbreak Deployer. For anything else we can create a special Docker container. The deployment itself needs only  Docker 1.7.0  or later.\nYour firewall must be configured to let Docker containers talk to each other and have SELinux disabled.  This is especially important on CentOS 7 where default firewall configuration blocks connections by default.  Should you intend to deploy the Cloudbreak application alongside your cluster in your favorite cloud environment you can use our CentOS 7 based default cloud images - that comes with CBD (Cloudbreak deployer) and the required Docker containers pre-installed.", 
+            "title": "Requirements"
+        }, 
+        {
+            "location": "/#on-prem-installation", 
+            "text": "For on premise installations of the Cloudbreak application please open the  Onprem submenu", 
+            "title": "On-prem installation"
+        }, 
+        {
+            "location": "/#aws-based-installation", 
+            "text": "We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.  You can follow the AWS provider specific documentation using this  link", 
+            "title": "AWS based installation"
+        }, 
+        {
+            "location": "/#azure-based-installation", 
+            "text": "We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.  You can follow the AWS provider specific documentation using this  link", 
+            "title": "Azure based installation"
+        }, 
+        {
+            "location": "/#gcp-based-installation", 
+            "text": "We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.  You can follow the AWS provider specific documentation using this  link", 
+            "title": "GCP based installation"
+        }, 
+        {
+            "location": "/#openstack-based-installation", 
+            "text": "We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.  You can follow the AWS provider specific documentation using this  link", 
+            "title": "OpenStack based installation"
+        }, 
+        {
+            "location": "/#debug", 
+            "text": "If you want to have more detailed output set the  DEBUG  env variable to non-zero:  DEBUG=1 cbd some_command", 
+            "title": "Debug"
+        }, 
+        {
+            "location": "/#troubleshooting", 
+            "text": "You can also use the  doctor  command to diagnose your environment:  cbd doctor", 
+            "title": "Troubleshooting"
+        }, 
+        {
+            "location": "/#update", 
+            "text": "The tool is capable to upgrade itself to a newer version.  cbd update", 
+            "title": "Update"
+        }, 
+        {
+            "location": "/#credits", 
+            "text": "This tool, and the PR driven release, is inspired from  glidergun . Actually it\ncould be a fork of it. The reason it\u2019s not a fork, because we wanted to have our own binary with all modules\nbuilt in, so only a single binary is needed.", 
+            "title": "Credits"
+        }, 
+        {
+            "location": "/configuration/", 
+            "text": "Configuration\n\n\nConfiguration is based on environment variables. Cloudbreak Deployer always forks a new bash subprocess \nwithout\ninheriting environment variables\n. The only way to set ENV vars relevant for Cloudbreak Deployer is to set them\nin a file called \nProfile\n.\n\n\nTo see all available config variables with their default value:\n\n\ncbd env show\n\n\n\n\nThe \nProfile\n will be simple \nsourced\n in bash terms, so you can use the usual syntaxes to set config values:\n\n\nexport MY_VAR=some_value\nexport OTHER_VAR=dunno\n\n\n\n\nEnv specific Profile\n\n\nLet\u2019s say you want to use a different version of Cloudbreak for \nprod\n and \nqa\n profile.\nYou can specify the Docker image tag via: \nDOCKER_TAG_CLOUDBREAK\n.\n\nProfile\n is always sourced, so you will have two env specific configurations:\n- \nProfile.dev\n\n- \nProfile.qa\n\n\nFor prod you need:\n\n\n\n\ncreate a file called \nProfile.prod\n\n\nwrite the env specific \nexport DOCKER_TAG_CLOUDBREAK=0.3.99\n into \nProfile.prod\n\n\nset the env variable: \nCBD_DEFAULT_PROFILE=prod\n\n\n\n\nTo use the \nprod\n specific profile once:\n\n\nCBD_DEFAULT_PROFILE=prod cbd some_commands\n\n\n\n\nFor permanent setting you can \nexport CBD_DEFAULT_PROFILE=prod\n in your \n.bash_profile\n.\n\n\nAvailable Configurations\n\n\nSMTP\n\n\nPut these lines into your \nProfile\n\n\nexport CLOUDBREAK_SMTP_SENDER_USERNAME=\nexport CLOUDBREAK_SMTP_SENDER_PASSWORD=\nexport CLOUDBREAK_SMTP_SENDER_HOST=\nexport CLOUDBREAK_SMTP_SENDER_PORT=\nexport CLOUDBREAK_SMTP_SENDER_FROM=\n\n\n\n\nConsul\n\n\nConsul\n is used for dns resolution. All Cloudbreak related services are registered as\n\nsomeservice.service.consul\n. Consul\u2019s built in dns server is able to \u201cfall-back\u201d on an other dns server.\nThis option is called \n-recursor\n. Clodbreak Deployer first tries to discover the dns settings of the host,\nby looking for \nnameserver\n entry in \n/etc/resolv.conf\n. If it finds one consul will use it as a recursor,\notherwise \n8.8.8.8\n will be used.\n\n\nFor a full list of available consul config options, see the \ndocs\n\n\nYou can pass any additional consul configuration by defining a \nDOCKER_CONSUL_OPTIONS\n in \nProfile\n.\n\n\nList of configurations\n\n\n\n\nCB_AWS_AMI_MAP\n : tbd\n\n\nCB_AZURE_IMAGE_URI\n : tbd\n\n\nCB_BLUEPRINT_DEFAULTS\n : tbd\n\n\nCB_TEMPLATE_DEFAULTS\n : tbd\n\n\nCB_DB_ENV_DB\n : tbd\n\n\nCB_DB_ENV_PASS\n : tbd\n\n\nCB_DB_ENV_USER\n : tbd\n\n\nCB_GCP_SOURCE_IMAGE_PATH\n : tbd\n\n\nCB_HBM2DDL_STRATEGY\n : tbd\n\n\nCB_OPENSTACK_IMAGE\n : tbd\n\n\nDOCKER_TAG_ALPINE\n : tbd\n\n\nDOCKER_TAG_CBSHELL\n : tbd\n\n\nDOCKER_TAG_CLOUDBREAK\n : tbd\n\n\nDOCKER_TAG_CONSUL\n : tbd\n\n\nDOCKER_TAG_PERISCOPE\n : tbd\n\n\nDOCKER_TAG_POSTGRES\n : tbd\n\n\nDOCKER_TAG_REGISTRATOR\n : tbd\n\n\nDOCKER_TAG_SULTANS\n : tbd\n\n\nDOCKER_TAG_UAA\n : tbd\n\n\nDOCKER_TAG_ULUWATU\n : tbd\n\n\nPERISCOPE_DB_HBM2DDL_STRATEGY\n : tbd\n\n\n\n\nAzure Resource manager command\n\n\n\n\ncbd azure configure-arm\n\n\ncbd azure deploy-dash\n\nSee the documentation here\n\n\n\n\nCaveats\n\n\nThe \nCloudbreak Deployer\n tool opens a clean bash subshell, without inheriting environment vars.\nActually the following environment vars \nare\n inherited:\n\n\n\n\nHOME\n\n\nDEBUG\n\n\nTRACE\n\n\nCBD_DEFAULT_PROFILE\n\n\nall \nDOCKER_XXX", 
+            "title": "Configuration"
+        }, 
+        {
+            "location": "/configuration/#configuration", 
+            "text": "Configuration is based on environment variables. Cloudbreak Deployer always forks a new bash subprocess  without\ninheriting environment variables . The only way to set ENV vars relevant for Cloudbreak Deployer is to set them\nin a file called  Profile .  To see all available config variables with their default value:  cbd env show  The  Profile  will be simple  sourced  in bash terms, so you can use the usual syntaxes to set config values:  export MY_VAR=some_value\nexport OTHER_VAR=dunno", 
+            "title": "Configuration"
+        }, 
+        {
+            "location": "/configuration/#env-specific-profile", 
+            "text": "Let\u2019s say you want to use a different version of Cloudbreak for  prod  and  qa  profile.\nYou can specify the Docker image tag via:  DOCKER_TAG_CLOUDBREAK . Profile  is always sourced, so you will have two env specific configurations:\n-  Profile.dev \n-  Profile.qa  For prod you need:   create a file called  Profile.prod  write the env specific  export DOCKER_TAG_CLOUDBREAK=0.3.99  into  Profile.prod  set the env variable:  CBD_DEFAULT_PROFILE=prod   To use the  prod  specific profile once:  CBD_DEFAULT_PROFILE=prod cbd some_commands  For permanent setting you can  export CBD_DEFAULT_PROFILE=prod  in your  .bash_profile .", 
+            "title": "Env specific Profile"
+        }, 
+        {
+            "location": "/configuration/#available-configurations", 
+            "text": "", 
+            "title": "Available Configurations"
+        }, 
+        {
+            "location": "/configuration/#smtp", 
+            "text": "Put these lines into your  Profile  export CLOUDBREAK_SMTP_SENDER_USERNAME=\nexport CLOUDBREAK_SMTP_SENDER_PASSWORD=\nexport CLOUDBREAK_SMTP_SENDER_HOST=\nexport CLOUDBREAK_SMTP_SENDER_PORT=\nexport CLOUDBREAK_SMTP_SENDER_FROM=", 
+            "title": "SMTP"
+        }, 
+        {
+            "location": "/configuration/#consul", 
+            "text": "Consul  is used for dns resolution. All Cloudbreak related services are registered as someservice.service.consul . Consul\u2019s built in dns server is able to \u201cfall-back\u201d on an other dns server.\nThis option is called  -recursor . Clodbreak Deployer first tries to discover the dns settings of the host,\nby looking for  nameserver  entry in  /etc/resolv.conf . If it finds one consul will use it as a recursor,\notherwise  8.8.8.8  will be used.  For a full list of available consul config options, see the  docs  You can pass any additional consul configuration by defining a  DOCKER_CONSUL_OPTIONS  in  Profile .  List of configurations   CB_AWS_AMI_MAP  : tbd  CB_AZURE_IMAGE_URI  : tbd  CB_BLUEPRINT_DEFAULTS  : tbd  CB_TEMPLATE_DEFAULTS  : tbd  CB_DB_ENV_DB  : tbd  CB_DB_ENV_PASS  : tbd  CB_DB_ENV_USER  : tbd  CB_GCP_SOURCE_IMAGE_PATH  : tbd  CB_HBM2DDL_STRATEGY  : tbd  CB_OPENSTACK_IMAGE  : tbd  DOCKER_TAG_ALPINE  : tbd  DOCKER_TAG_CBSHELL  : tbd  DOCKER_TAG_CLOUDBREAK  : tbd  DOCKER_TAG_CONSUL  : tbd  DOCKER_TAG_PERISCOPE  : tbd  DOCKER_TAG_POSTGRES  : tbd  DOCKER_TAG_REGISTRATOR  : tbd  DOCKER_TAG_SULTANS  : tbd  DOCKER_TAG_UAA  : tbd  DOCKER_TAG_ULUWATU  : tbd  PERISCOPE_DB_HBM2DDL_STRATEGY  : tbd", 
+            "title": "Consul"
+        }, 
+        {
+            "location": "/configuration/#azure-resource-manager-command", 
+            "text": "cbd azure configure-arm  cbd azure deploy-dash \nSee the documentation here", 
+            "title": "Azure Resource manager command"
+        }, 
+        {
+            "location": "/configuration/#caveats", 
+            "text": "The  Cloudbreak Deployer  tool opens a clean bash subshell, without inheriting environment vars.\nActually the following environment vars  are  inherited:   HOME  DEBUG  TRACE  CBD_DEFAULT_PROFILE  all  DOCKER_XXX", 
+            "title": "Caveats"
+        }, 
+        {
+            "location": "/database/", 
+            "text": "Migrate the databases\n\n\nCreate the database schema or migrate it to the latest version:\n\n\ncbd startdb\ncbd migrate cbdb up\n\n\n\n\nVerify that all scripts have been applied:\n\n\ncbd migrate cbdb status\n\n\n\n\ncbd generate\ncbd migrate cbdb up", 
+            "title": "Database"
+        }, 
+        {
+            "location": "/development/", 
+            "text": "Contribution\n\n\nDevelopment process should happen on separate branches. Then a pull-request should be opened as usual.\n\n\nTo build the project\n\n\n# make deps needed only once\nmake deps\n\nmake install\n\n\n\n\nTo run the unit tests:\n\n\nmake tests\n\n\n\n\nIf you want to test the binary CircleCI build from your branch named \nfix-something\n, to validate the PR binary \ncbd\n tool will be tested. It is built by CircleCI for each branch.\n\n\ncbd update fix-something\n\n\n\n\nTesting\n\n\nShell scripts shouldn\u2019t raise exceptions when it comes to unit testing. \nbasht\n is used for testing. See the reasoning: \nwhy not bats or shunit2\n\n\nPlease cover your bash functions with unit tests and run test with:\n\n\nmake tests\n\n\n\n\nRelease Process of the Clodbreak Deployer tool\n\n\nThe master branch is always built on \nCircleCI\n.\nWhen you wan\u2019t a new release, all you have to do:\n\n\nmake release-next-ver\n\n\n\n\nmake release-next-ver\n performs the following steps:\n\n\n\n\non the \nmaster\n branch:\n\n\nUpdates the \nVERSION\n file by increasing the \npatch\n version number (for example from 0.5.2 to 0.5.3)\n\n\nUpdates \nCHANGELOG.md\n with the release date\n\n\n\n\nCreates a new \nUnreleased\n section in top of \nCHANGELOG.md\n\n\n\n\n\n\nCreates a PullRequest for the release branch:\n\n\n\n\ncreate a new branch with a name like \nrelease-0.5.x\n\n\nthis branch should be the same as \norigin/master\n\n\ncreate a pull request into \nrelease\n branch\n\n\n\n\nAcceptance\n\n\nNow you should test this release. You can get it by \ncbd update release-x.y.z\n. Comment with LGTM (Looking Good To Me).\n\n\nOnce the PR is merged, CircleCI will:\n- create a new release on \nGitHub releases tab\n, with the help of \ngh-release\n.\n- it will create the git tag with \nv\n prefix like: \nv0.0.3", 
+            "title": "Development"
+        }, 
+        {
+            "location": "/development/#contribution", 
+            "text": "Development process should happen on separate branches. Then a pull-request should be opened as usual.  To build the project  # make deps needed only once\nmake deps\n\nmake install  To run the unit tests:  make tests  If you want to test the binary CircleCI build from your branch named  fix-something , to validate the PR binary  cbd  tool will be tested. It is built by CircleCI for each branch.  cbd update fix-something", 
+            "title": "Contribution"
+        }, 
+        {
+            "location": "/development/#testing", 
+            "text": "Shell scripts shouldn\u2019t raise exceptions when it comes to unit testing.  basht  is used for testing. See the reasoning:  why not bats or shunit2  Please cover your bash functions with unit tests and run test with:  make tests", 
+            "title": "Testing"
+        }, 
+        {
+            "location": "/development/#release-process-of-the-clodbreak-deployer-tool", 
+            "text": "The master branch is always built on  CircleCI .\nWhen you wan\u2019t a new release, all you have to do:  make release-next-ver  make release-next-ver  performs the following steps:   on the  master  branch:  Updates the  VERSION  file by increasing the  patch  version number (for example from 0.5.2 to 0.5.3)  Updates  CHANGELOG.md  with the release date   Creates a new  Unreleased  section in top of  CHANGELOG.md    Creates a PullRequest for the release branch:   create a new branch with a name like  release-0.5.x  this branch should be the same as  origin/master  create a pull request into  release  branch   Acceptance  Now you should test this release. You can get it by  cbd update release-x.y.z . Comment with LGTM (Looking Good To Me).  Once the PR is merged, CircleCI will:\n- create a new release on  GitHub releases tab , with the help of  gh-release .\n- it will create the git tag with  v  prefix like:  v0.0.3", 
+            "title": "Release Process of the Clodbreak Deployer tool"
+        }, 
+        {
+            "location": "/changelog/", 
+            "text": "Unreleased\n\n\nFixed\n\n\n\n\nconsul recursor now exculdes both docker ip and bridge ip to avoid recursive dns recursor chain\n\n\ndocs fixed about getting default credentials (cbd login)\n\n\n\n\nAdded\n\n\n\n\nCommand \ncbd azure configure-arm\n will create your arm application which can used by cloudbreak\n\n\nCommand \ncbd azure deploy-dash\n will deploy a dash application in your Azure account\n\n\nCommand \ncbd start\n will execute the migration by default. If SKIP_DB_MIGRATION_ON_START envvar set to true in Profile, the migration will be skipped\n\n\nUsing Dns SRV record in our services instead of ambassador\n\n\nUsing docker linking system in third party services instead of ambassador\n\n\nIntegration tests are added, where cbd binary is called, not only sourced functions\n\n\nDocker based CentOS integration test make target added\n\n\nUaa db migration\n\n\n\n\nRemoved\n\n\n\n\nFull removal of ambassador\n\n\n\n\nChanged\n\n\n\n\ncbd start\n doesn\u2019t start if compose yaml regeneration is needed\n\n\ncbd generate\n is less verbose, diff doesnt shown\n\n\ncbd doctor\n shows diff if generate would change\n\n\ncbd regenerate\n creates backup files if changes detected\n\n\nsequenceiq/uaadb:1.0.1 is used instead of postgres:9.4.1\n\n\n\n\n[v1.0.3] - 2015-09-03\n\n\nFixed\n\n\n\n\nAuthentication error with \ncloudbreak-shell\n and \ncloudbreak-shell-quiet\n is fixed\n\n\nCommand \ncbd update \nbranch\n checks for artifact\n\n\n\n\nAdded\n\n\n\n\nbinary version of gnu-sed 4.2.2 is now included, to solve lot of osx/busybox issues\n\n\nconsul recursor test are added\n\n\n\n\nRemoved\n\n\nChanged\n\n\n\n\n\n\nsequenceiq/cloudbreak image updated to 1.0.3\n\n\n\n\n\n\ndebug() function made multiline capable. Use \\n in messages\n\n\n\n\nrefactor bridge ip discovery to run helper docker command only once\n\n\nconsul recursor handling refactored to be more robust\n\n\n\n\n[v1.0.2] - 2015-08-25\n\n\nFixed\n\n\nAdded\n\n\n\n\nDOCKER_CONSUL_OPTIONS\n config option to provide arbitrary consul option\n\n\n\n\nRemoved\n\n\nChanged\n\n\n\n\nFixed docker version checker to be 1.8.1 compatible. (docker added --format option)\n\n\nsequenceiq/cloudbreak image updated to 1.0.2\n\n\nconsul image changed from sequenceiq/consul to gliderlabs/consul\n\n\nconsul image updated to 0.5.2 (from 0.5.0)\n\n\nconsul discovers host dns settings, and uses the configured nameserver as recursor\n\n\n\n\n[v1.0.0] - 2015-08-15\n\n\nFixed\n\n\nAdded\n\n\nRemoved\n\n\nChanged\n\n\n[v1.0.0] - 2015-07-23\n\n\nFixed\n\n\n\n\nGA Release\n\n\n\n\nAdded\n\n\nRemoved\n\n\nChanged\n\n\n[v0.5.8] - 2015-07-23\n\n\nFixed\n\n\n\n\nFix CircleCI release. CircleCI doesn\u2019t allow --rm on docker run\n\n\n\n\nAdded\n\n\nRemoved\n\n\nChanged\n\n\n[v0.5.7] - 2015-07-23\n\n\nFixed\n\n\n\n\nFix make release dependency\n\n\nFix CHANGELOG generation at \nmake release-next-ver\n avoid inserting extra -e\n\n\n\n\nAdded\n\n\nRemoved\n\n\nChanged\n\n\n[v0.5.6] - 2015-07-23\n\n\nFixed\n\n\nAdded\n\n\n\n\nRelease artifacts are published at public-repo-1.hortonworks.com/HDP/cloudbreak/\n\n\n\n\nRemoved\n\n\nChanged\n\n\n[v0.5.5] - 2015-07-10\n\n\nFixed\n\n\nAdded\n\n\n\n\nCommand \npull-parallel\n added for quicker/simultaneous image pull\n\n\nRelease process includes upload to public-repo s3 bucket\n\n\n\n\nRemoved\n\n\nChanged\n\n\n\n\nLicense changed from MIT to Apache v2\n\n\nrelease artifact includes additional files: license/readme/notes\n\n\n\n\n[v0.5.4] - 2015-07-03\n\n\nFixed\n\n\nAdded\n\n\n\n\nNew \ncbd-cleanup\n command for removing old images or exited containers\n\n\nBaywatch default parameters added: \nCB_BAYWATCH_ENABLED\n and\nCB_BAYWATCH_EXTERN_LOCATION\n\n\nLogs are saved via lospout\n\n\nTLS client certificate needed by Cloudbreak is generated with \ncbd generate\n\n\nCommand \naws delete-role\n added\n\n\nCommand \naws generate-role\n added\n\n\nCommand \naws show-role\n added\n\n\nCommand \ncloudbreak-shell\n added\n\n\nCommand \ncloudbreak-shell-quiet\n added\n\n\nCommand \nlocal-dev\n added\n\n\nCommand \ntoken\n added\n\n\n\n\nRemoved\n\n\nChanged\n\n\n\n\nAWS authentication env varibale is fixed to use the correct AWS_SECRET_ACCESS_KEY (instead the old AWS_SECRET_KEY)\n\n\nUsing sequenceiq/ambassadord:0.5.0 docker image instead of progrium/ambassadord:latest\n\n\n\n\n[v0.5.3] - 2015-06-03\n\n\nFixed\n\n\n\n\nOne-liner installer fixed, to work if previous cbd exists on path.\n\n\ncbd update\n upstream changes on go-bahser broke the selfupdate functionality\n\n\nIn some environment cloudbreak starts really slow. See: \ndetails\n, see: \ncommit\n\n\n\n\nAdded\n\n\n\n\nNew release proposal can be done by \nmake release-next-ver\n\n\n\n\nRemoved\n\n\nChanged\n\n\n[v0.5.2] - 2015-05-21\n\n\nFixed\n\n\nAdded\n\n\nRemoved\n\n\nChanged\n\n\n\n\nCommand \ndoctor\n hints to run boot2docker shellinit if env is unset\n\n\nCommand \ninit\n in case of OSX, DOCKER_XXX envs are initialized in local profile (Profile)\n\n\nDefault docker images are updated to:\n\n\nsequenceiq/cloudbreak:0.5.93\n\n\nsequenceiq/cbdb:0.5.92\n\n\nsequenceiq/uluwatu:0.5.28\n\n\nsequenceiq/sultans:0.5.3\n\n\nsequenceiq/periscope:0.5.5\n\n\n\n\n\n\n\n\n[v0.5.1] - 2015-05-18\n\n\nFixed\n\n\n\n\nIssue #55: Sed handles more robust the issue with: curl includes an extra CR char in header fields.\n\n\n\n\nAdded\n\n\nRemoved\n\n\n\n\ndeployer doesn\u2019t specify cloud specific image defaults. If left empty, they fall back\n  to defaults specified in \njava code\n\n\nCB_AZURE_IMAGE_URI\n\n\nCB_AWS_AMI_MAP\n\n\nCB_OPENSTACK_IMAGE\n\n\nCB_GCP_SOURCE_IMAGE_PATH\n\n\n\n\n\n\n\n\nChanged\n\n\n\n\nCommand \nlogs\n got usage example for specifying servies as filter\n\n\nDefault docker images are updated to:\n\n\nsequenceiq/cloudbreak:0.5.49\n\n\nsequenceiq/uluwatu:0.5.16\n\n\nsequenceiq/sutans:0.5.2\n\n\n\n\n\n\n\n\n[v0.5.0] - 2015-05-08\n\n\nFixed\n\n\n\n\nCommand \npull\n generates yaml files in case they are missing #31\n\n\n\n\nAdded\n\n\n\n\nCommand \nlogin\n Shows Uluwatu login url and credentials\n\n\nCommand \nregenerate\n deletes and generates docker-compose.yml and uaa.yml\n\n\nCommand \ndelete\n added: deletes yamls and dbs\n\n\nCommand \ncloudbreak-shell\n added, right now it internale use DEBUG=1 fn fn-call\n\n\nCommand \nversion\n does correct \nSemantic Versioning\n check to advise an upgrade\n\n\nCommand \ngenerate\n checks and shows if Profile change would result in yaml change.\n\n\nCommand \nstart\n: prints uluwatu url and credential hint\n\n\nCommand \ndoctor\n: fixes boot2docker date/time if not the same as on the host\n\n\nInternal command: \nbrowse\n added to be able to automatically open a browser to a specified url.\n\n\nMini Getting Started guide added into README\n\n\nmake dev-debug\n installs a special cbd on local OSX, which doesn\u2019t includes *.bash scrips, only refers them\n   by path. No need to \nmake dev\n to test small changes in bash scripts.\n\n\nLoad AWS key and AWS id from Profile\n\n\nCommand \ninit\n helps to guess the PUBLIC_IP in public clouds: google, amazon\n\n\n\n\nRemoved\n\n\nChanged\n\n\n\n\nCommand \ncbd env export\n adds export to the begining of each line\n\n\ncbd logs accepts optional [services] parameter\n\n\ndocker-compose uses \ncbreak_\n prefix for container naming instead of the directory name\n\n\nCommand \ngenerate\n prints out some more usefull info\n\n\nuaa.yml generation wont overwrite, just instruct to move existing file (like docker-compose.yml generation)\n\n\nCommand \ninit\n hint fixed on linux.\n\n\nCommand \ninit\n advise to run \ngenerate\n if it finds a Profile\n\n\nCommand \ninit\n set PRIVATE_IP the same as PUBLIC_IP for boot2docker\n\n\nCommand \nmigrate\n is introduced for db migration see \nMigrate the databases\n section of README\n\n\nCommand \nstartdb\n starts the cbdb and pcdb database containers only\n\n\nDatabases are not deleted after boot2docker restart\n\n\nImport ULU_HOST_ADDRESS and ULU_SULTANS_ADDRESS from Profile\n\n\n\n\n[v0.1.0] - 2015-04-16\n\n\nFixed\n\n\n\n\nSelfupdate updates the actual running binary intead of the fixed /us/local/bin/cbd\n\n\nSMTP default port is 25, to fix number conversion exception\n\n\n\n\nAdded\n\n\n\n\nCommand \ninit\n creates Profile\n\n\nInstall cbd to a directory which is available on $PATH\n\n\nDocker based test for the one-liner install from README.md: \nmake install-test\n\n\n\n\nRemoved\n\n\n\n\nupdate-snap\n command removed, replaced by parametrized \nupdate\n\n\n\n\nChanged\n\n\n\n\nCloudbreak/Persicope/Uluwatu/Sultans Dcoker images upgraded to 0.4.x\n\n\nUse the built in 'checksum' function instead of the external 'shasum' to generate secrets\n\n\nCommand \nupdate\n by default updates from latest Github release, parameter can point to branch on CircleCI\n\n\nDOCKER_XXX env varibles are inherited, so they not needed in Profile\n\n\ngenerate\n and compose specific commands are only available when \nProfile\n exists\n\n\ngenerate\n command genertes docker-compose.yml \nand\n uaa.yml\n\n\nPRIVATE_IP\n env var defaults to bridge IP (only PUBLC_IP is required in Profile)\n\n\nuse \nsulans-bin\n docker image istead of sultans\n\n\n\n\n[v0.0.9] - 2015-04-14\n\n\nFixed\n\n\n\n\nBash 4.3 is included in the binary, extracted into .deps/bin upon start\n\n\n\n\nAdded\n\n\nRemoved\n\n\nChanged\n\n\n[v0.0.8] - 2015-04-13\n\n\nFixed\n\n\n\n\nFixing deps module, golang fn: checksum added\n\n\nCircleCI mdule defines required jq\n\n\nFixing PATH issue for binary deps\n\n\n\n\nAdded\n\n\n\n\nuaadb start added\n\n\nidentity server start added\n\n\nmake dev\n added to mac based development\n\n\npull\n command added\n\n\nlogs\n command added\n\n\n\n\nRemoved\n\n\nChanged\n\n\n\n\nDocker containers are managed by \ndocker-compose\n\n\n\n\n[v0.0.7] - 2015-03-26\n\n\nFixed\n\n\nAdded\n\n\n\n\nmake tests\n runs unit tests\n\n\ndocker unit tests are added\n\n\nstart command added: WIP consul, registrator starts\n\n\nkill command addd: stops and removes cloudbreak specific containers\n\n\nSKIP_XXX skips the container start\n\n\n\n\nRemoved\n\n\nChanged\n\n\n\n\nenv command namespace is always exported, not only in DEBUG mode\n\n\nenv export: machine friendly config list\n\n\nenv show: human readable config list\n\n\ncircle runs unit tests\n\n\nsnapshot binaries include branch name in version string\n\n\n\n\n[v0.0.6] - 2015-03-25\n\n\nFixed\n\n\n\n\nremoved dos2unix dependency for the update command\n\n\n\n\nAdded\n\n\n\n\ndoctor command added\n\n\ndocker-check-version command added\n\n\ncci-latest accepts branch as parameter, needed for PR testing\n\n\nexport fn command in DEBUG mode\n\n\nexport env command in DEBUG mode\n\n\ndoctor: add instruction about setting DOCKER_XXX env vars in Profile\n\n\ninfo() function added to print green text to STDOUT\n\n\n\n\nRemoved\n\n\nChanged\n\n\n\n\nHOME env var is also inherited (boot2docker version failed)\n\n\nrelease process fully automatized\n\n\n\n\n[v0.0.5] - 2015-03-23\n\n\n\n\nupdate\n command works without dos2unix\n\n\n\n\n[v0.0.4] - 2015-03-23\n\n\nFixed\n\n\n\n\ndebug function fixed\n\n\nDEBUG, TRACE and CBD_DEFAULT_PROFILE env vars are inherited\n\n\n\n\nAdded\n\n\n\n\nProfile handling added with docs\n\n\nOne-liner install added\n\n\nDocs: install and update process described\n\n\nDocs: release process described with sample git commands\n\n\nPrint version number in debug mode\n\n\nupdate-snap\n downloads binary from latest os specific CircleCI binary artifact.\n\n\n\n\nRemoved\n\n\nChanged\n\n\n\n\nTool specific library renamed from cloudbreak.bash to deployer.bash\n\n\n\n\n[v0.0.6] - 2015-03-25\n\n\n[v0.0.3] - 2015-03-19\n\n\nFixed\n\n\n\n\nmake release\n creates binary with X.X.X version when on release branch otherwise X.X.X-gitrev\n\n\n\n\nAdded\n\n\n\n\nDocs: release process described\n\n\n\n\nRemoved\n\n\nChanged\n\n\n[v0.0.2] - 2015-03-19\n\n\nAdded\n\n\nAdded\n- selfupdate command\n- gray debug to stderr\n\n\n[v0.0.1] - 2015-03-18\n\n\nAdded\n\n\n\n\nhelp command added\n\n\nversion command added\n\n\nAdded --version\n\n\nCircleCI build\n\n\nLinux/Darwin binary releases on github", 
+            "title": "Changelog"
+        }, 
+        {
+            "location": "/changelog/#unreleased", 
+            "text": "Fixed   consul recursor now exculdes both docker ip and bridge ip to avoid recursive dns recursor chain  docs fixed about getting default credentials (cbd login)   Added   Command  cbd azure configure-arm  will create your arm application which can used by cloudbreak  Command  cbd azure deploy-dash  will deploy a dash application in your Azure account  Command  cbd start  will execute the migration by default. If SKIP_DB_MIGRATION_ON_START envvar set to true in Profile, the migration will be skipped  Using Dns SRV record in our services instead of ambassador  Using docker linking system in third party services instead of ambassador  Integration tests are added, where cbd binary is called, not only sourced functions  Docker based CentOS integration test make target added  Uaa db migration   Removed   Full removal of ambassador   Changed   cbd start  doesn\u2019t start if compose yaml regeneration is needed  cbd generate  is less verbose, diff doesnt shown  cbd doctor  shows diff if generate would change  cbd regenerate  creates backup files if changes detected  sequenceiq/uaadb:1.0.1 is used instead of postgres:9.4.1", 
+            "title": "Unreleased"
+        }, 
+        {
+            "location": "/changelog/#v103-2015-09-03", 
+            "text": "Fixed   Authentication error with  cloudbreak-shell  and  cloudbreak-shell-quiet  is fixed  Command  cbd update  branch  checks for artifact   Added   binary version of gnu-sed 4.2.2 is now included, to solve lot of osx/busybox issues  consul recursor test are added   Removed  Changed    sequenceiq/cloudbreak image updated to 1.0.3    debug() function made multiline capable. Use \\n in messages   refactor bridge ip discovery to run helper docker command only once  consul recursor handling refactored to be more robust", 
+            "title": "[v1.0.3] - 2015-09-03"
+        }, 
+        {
+            "location": "/changelog/#v102-2015-08-25", 
+            "text": "Fixed  Added   DOCKER_CONSUL_OPTIONS  config option to provide arbitrary consul option   Removed  Changed   Fixed docker version checker to be 1.8.1 compatible. (docker added --format option)  sequenceiq/cloudbreak image updated to 1.0.2  consul image changed from sequenceiq/consul to gliderlabs/consul  consul image updated to 0.5.2 (from 0.5.0)  consul discovers host dns settings, and uses the configured nameserver as recursor", 
+            "title": "[v1.0.2] - 2015-08-25"
+        }, 
+        {
+            "location": "/changelog/#v100-2015-08-15", 
+            "text": "Fixed  Added  Removed  Changed", 
+            "title": "[v1.0.0] - 2015-08-15"
+        }, 
+        {
+            "location": "/changelog/#v100-2015-07-23", 
+            "text": "Fixed   GA Release   Added  Removed  Changed", 
+            "title": "[v1.0.0] - 2015-07-23"
+        }, 
+        {
+            "location": "/changelog/#v058-2015-07-23", 
+            "text": "Fixed   Fix CircleCI release. CircleCI doesn\u2019t allow --rm on docker run   Added  Removed  Changed", 
+            "title": "[v0.5.8] - 2015-07-23"
+        }, 
+        {
+            "location": "/changelog/#v057-2015-07-23", 
+            "text": "Fixed   Fix make release dependency  Fix CHANGELOG generation at  make release-next-ver  avoid inserting extra -e   Added  Removed  Changed", 
+            "title": "[v0.5.7] - 2015-07-23"
+        }, 
+        {
+            "location": "/changelog/#v056-2015-07-23", 
+            "text": "Fixed  Added   Release artifacts are published at public-repo-1.hortonworks.com/HDP/cloudbreak/   Removed  Changed", 
+            "title": "[v0.5.6] - 2015-07-23"
+        }, 
+        {
+            "location": "/changelog/#v055-2015-07-10", 
+            "text": "Fixed  Added   Command  pull-parallel  added for quicker/simultaneous image pull  Release process includes upload to public-repo s3 bucket   Removed  Changed   License changed from MIT to Apache v2  release artifact includes additional files: license/readme/notes", 
+            "title": "[v0.5.5] - 2015-07-10"
+        }, 
+        {
+            "location": "/changelog/#v054-2015-07-03", 
+            "text": "Fixed  Added   New  cbd-cleanup  command for removing old images or exited containers  Baywatch default parameters added:  CB_BAYWATCH_ENABLED  and CB_BAYWATCH_EXTERN_LOCATION  Logs are saved via lospout  TLS client certificate needed by Cloudbreak is generated with  cbd generate  Command  aws delete-role  added  Command  aws generate-role  added  Command  aws show-role  added  Command  cloudbreak-shell  added  Command  cloudbreak-shell-quiet  added  Command  local-dev  added  Command  token  added   Removed  Changed   AWS authentication env varibale is fixed to use the correct AWS_SECRET_ACCESS_KEY (instead the old AWS_SECRET_KEY)  Using sequenceiq/ambassadord:0.5.0 docker image instead of progrium/ambassadord:latest", 
+            "title": "[v0.5.4] - 2015-07-03"
+        }, 
+        {
+            "location": "/changelog/#v053-2015-06-03", 
+            "text": "Fixed   One-liner installer fixed, to work if previous cbd exists on path.  cbd update  upstream changes on go-bahser broke the selfupdate functionality  In some environment cloudbreak starts really slow. See:  details , see:  commit   Added   New release proposal can be done by  make release-next-ver   Removed  Changed", 
+            "title": "[v0.5.3] - 2015-06-03"
+        }, 
+        {
+            "location": "/changelog/#v052-2015-05-21", 
+            "text": "Fixed  Added  Removed  Changed   Command  doctor  hints to run boot2docker shellinit if env is unset  Command  init  in case of OSX, DOCKER_XXX envs are initialized in local profile (Profile)  Default docker images are updated to:  sequenceiq/cloudbreak:0.5.93  sequenceiq/cbdb:0.5.92  sequenceiq/uluwatu:0.5.28  sequenceiq/sultans:0.5.3  sequenceiq/periscope:0.5.5", 
+            "title": "[v0.5.2] - 2015-05-21"
+        }, 
+        {
+            "location": "/changelog/#v051-2015-05-18", 
+            "text": "Fixed   Issue #55: Sed handles more robust the issue with: curl includes an extra CR char in header fields.   Added  Removed   deployer doesn\u2019t specify cloud specific image defaults. If left empty, they fall back\n  to defaults specified in  java code  CB_AZURE_IMAGE_URI  CB_AWS_AMI_MAP  CB_OPENSTACK_IMAGE  CB_GCP_SOURCE_IMAGE_PATH     Changed   Command  logs  got usage example for specifying servies as filter  Default docker images are updated to:  sequenceiq/cloudbreak:0.5.49  sequenceiq/uluwatu:0.5.16  sequenceiq/sutans:0.5.2", 
+            "title": "[v0.5.1] - 2015-05-18"
+        }, 
+        {
+            "location": "/changelog/#v050-2015-05-08", 
+            "text": "Fixed   Command  pull  generates yaml files in case they are missing #31   Added   Command  login  Shows Uluwatu login url and credentials  Command  regenerate  deletes and generates docker-compose.yml and uaa.yml  Command  delete  added: deletes yamls and dbs  Command  cloudbreak-shell  added, right now it internale use DEBUG=1 fn fn-call  Command  version  does correct  Semantic Versioning  check to advise an upgrade  Command  generate  checks and shows if Profile change would result in yaml change.  Command  start : prints uluwatu url and credential hint  Command  doctor : fixes boot2docker date/time if not the same as on the host  Internal command:  browse  added to be able to automatically open a browser to a specified url.  Mini Getting Started guide added into README  make dev-debug  installs a special cbd on local OSX, which doesn\u2019t includes *.bash scrips, only refers them\n   by path. No need to  make dev  to test small changes in bash scripts.  Load AWS key and AWS id from Profile  Command  init  helps to guess the PUBLIC_IP in public clouds: google, amazon   Removed  Changed   Command  cbd env export  adds export to the begining of each line  cbd logs accepts optional [services] parameter  docker-compose uses  cbreak_  prefix for container naming instead of the directory name  Command  generate  prints out some more usefull info  uaa.yml generation wont overwrite, just instruct to move existing file (like docker-compose.yml generation)  Command  init  hint fixed on linux.  Command  init  advise to run  generate  if it finds a Profile  Command  init  set PRIVATE_IP the same as PUBLIC_IP for boot2docker  Command  migrate  is introduced for db migration see  Migrate the databases  section of README  Command  startdb  starts the cbdb and pcdb database containers only  Databases are not deleted after boot2docker restart  Import ULU_HOST_ADDRESS and ULU_SULTANS_ADDRESS from Profile", 
+            "title": "[v0.5.0] - 2015-05-08"
+        }, 
+        {
+            "location": "/changelog/#v010-2015-04-16", 
+            "text": "Fixed   Selfupdate updates the actual running binary intead of the fixed /us/local/bin/cbd  SMTP default port is 25, to fix number conversion exception   Added   Command  init  creates Profile  Install cbd to a directory which is available on $PATH  Docker based test for the one-liner install from README.md:  make install-test   Removed   update-snap  command removed, replaced by parametrized  update   Changed   Cloudbreak/Persicope/Uluwatu/Sultans Dcoker images upgraded to 0.4.x  Use the built in 'checksum' function instead of the external 'shasum' to generate secrets  Command  update  by default updates from latest Github release, parameter can point to branch on CircleCI  DOCKER_XXX env varibles are inherited, so they not needed in Profile  generate  and compose specific commands are only available when  Profile  exists  generate  command genertes docker-compose.yml  and  uaa.yml  PRIVATE_IP  env var defaults to bridge IP (only PUBLC_IP is required in Profile)  use  sulans-bin  docker image istead of sultans", 
+            "title": "[v0.1.0] - 2015-04-16"
+        }, 
+        {
+            "location": "/changelog/#v009-2015-04-14", 
+            "text": "Fixed   Bash 4.3 is included in the binary, extracted into .deps/bin upon start   Added  Removed  Changed", 
+            "title": "[v0.0.9] - 2015-04-14"
+        }, 
+        {
+            "location": "/changelog/#v008-2015-04-13", 
+            "text": "Fixed   Fixing deps module, golang fn: checksum added  CircleCI mdule defines required jq  Fixing PATH issue for binary deps   Added   uaadb start added  identity server start added  make dev  added to mac based development  pull  command added  logs  command added   Removed  Changed   Docker containers are managed by  docker-compose", 
+            "title": "[v0.0.8] - 2015-04-13"
+        }, 
+        {
+            "location": "/changelog/#v007-2015-03-26", 
+            "text": "Fixed  Added   make tests  runs unit tests  docker unit tests are added  start command added: WIP consul, registrator starts  kill command addd: stops and removes cloudbreak specific containers  SKIP_XXX skips the container start   Removed  Changed   env command namespace is always exported, not only in DEBUG mode  env export: machine friendly config list  env show: human readable config list  circle runs unit tests  snapshot binaries include branch name in version string", 
+            "title": "[v0.0.7] - 2015-03-26"
+        }, 
+        {
+            "location": "/changelog/#v006-2015-03-25", 
+            "text": "Fixed   removed dos2unix dependency for the update command   Added   doctor command added  docker-check-version command added  cci-latest accepts branch as parameter, needed for PR testing  export fn command in DEBUG mode  export env command in DEBUG mode  doctor: add instruction about setting DOCKER_XXX env vars in Profile  info() function added to print green text to STDOUT   Removed  Changed   HOME env var is also inherited (boot2docker version failed)  release process fully automatized", 
+            "title": "[v0.0.6] - 2015-03-25"
+        }, 
+        {
+            "location": "/changelog/#v005-2015-03-23", 
+            "text": "update  command works without dos2unix", 
+            "title": "[v0.0.5] - 2015-03-23"
+        }, 
+        {
+            "location": "/changelog/#v004-2015-03-23", 
+            "text": "Fixed   debug function fixed  DEBUG, TRACE and CBD_DEFAULT_PROFILE env vars are inherited   Added   Profile handling added with docs  One-liner install added  Docs: install and update process described  Docs: release process described with sample git commands  Print version number in debug mode  update-snap  downloads binary from latest os specific CircleCI binary artifact.   Removed  Changed   Tool specific library renamed from cloudbreak.bash to deployer.bash", 
+            "title": "[v0.0.4] - 2015-03-23"
+        }, 
+        {
+            "location": "/changelog/#v006-2015-03-25_1", 
+            "text": "", 
+            "title": "[v0.0.6] - 2015-03-25"
+        }, 
+        {
+            "location": "/changelog/#v003-2015-03-19", 
+            "text": "Fixed   make release  creates binary with X.X.X version when on release branch otherwise X.X.X-gitrev   Added   Docs: release process described   Removed  Changed", 
+            "title": "[v0.0.3] - 2015-03-19"
+        }, 
+        {
+            "location": "/changelog/#v002-2015-03-19", 
+            "text": "Added  Added\n- selfupdate command\n- gray debug to stderr", 
+            "title": "[v0.0.2] - 2015-03-19"
+        }, 
+        {
+            "location": "/changelog/#v001-2015-03-18", 
+            "text": "", 
+            "title": "[v0.0.1] - 2015-03-18"
+        }, 
+        {
+            "location": "/changelog/#added_22", 
+            "text": "help command added  version command added  Added --version  CircleCI build  Linux/Darwin binary releases on github", 
+            "title": "Added"
+        }
+    ]
+}

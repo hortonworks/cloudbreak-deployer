@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+
+	<title>Changelog - Cloudbreak Deployer</title>
+
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation" background="red">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <img class="navbar-logo" src="http://docs.hortonworks.com/HDPDocuments/Ambari-2.1.0.0/bk_Installing_HDP_AMB/common/images/hortonworks-logo.png" alt="Hortonworks Documentation" width="132" height="52">
+            <a class="navbar-brand" href="..">Cloudbreak Deployer</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Home</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Docs <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../configuration/">Configuration</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../database/">Database</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../development/">Development</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Changelog</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../development/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li class="disabled">
+                        <a rel="prev" >
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#unreleased">Unreleased</a></li>
+        
+            <li><a href="#fixed">Fixed</a></li>
+        
+            <li><a href="#added">Added</a></li>
+        
+            <li><a href="#removed">Removed</a></li>
+        
+            <li><a href="#changed">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v103-2015-09-03">[v1.0.3] - 2015-09-03</a></li>
+        
+            <li><a href="#fixed_1">Fixed</a></li>
+        
+            <li><a href="#added_1">Added</a></li>
+        
+            <li><a href="#removed_1">Removed</a></li>
+        
+            <li><a href="#changed_1">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v102-2015-08-25">[v1.0.2] - 2015-08-25</a></li>
+        
+            <li><a href="#fixed_2">Fixed</a></li>
+        
+            <li><a href="#added_2">Added</a></li>
+        
+            <li><a href="#removed_2">Removed</a></li>
+        
+            <li><a href="#changed_2">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v100-2015-08-15">[v1.0.0] - 2015-08-15</a></li>
+        
+            <li><a href="#fixed_3">Fixed</a></li>
+        
+            <li><a href="#added_3">Added</a></li>
+        
+            <li><a href="#removed_3">Removed</a></li>
+        
+            <li><a href="#changed_3">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v100-2015-07-23">[v1.0.0] - 2015-07-23</a></li>
+        
+            <li><a href="#fixed_4">Fixed</a></li>
+        
+            <li><a href="#added_4">Added</a></li>
+        
+            <li><a href="#removed_4">Removed</a></li>
+        
+            <li><a href="#changed_4">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v058-2015-07-23">[v0.5.8] - 2015-07-23</a></li>
+        
+            <li><a href="#fixed_5">Fixed</a></li>
+        
+            <li><a href="#added_5">Added</a></li>
+        
+            <li><a href="#removed_5">Removed</a></li>
+        
+            <li><a href="#changed_5">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v057-2015-07-23">[v0.5.7] - 2015-07-23</a></li>
+        
+            <li><a href="#fixed_6">Fixed</a></li>
+        
+            <li><a href="#added_6">Added</a></li>
+        
+            <li><a href="#removed_6">Removed</a></li>
+        
+            <li><a href="#changed_6">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v056-2015-07-23">[v0.5.6] - 2015-07-23</a></li>
+        
+            <li><a href="#fixed_7">Fixed</a></li>
+        
+            <li><a href="#added_7">Added</a></li>
+        
+            <li><a href="#removed_7">Removed</a></li>
+        
+            <li><a href="#changed_7">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v055-2015-07-10">[v0.5.5] - 2015-07-10</a></li>
+        
+            <li><a href="#fixed_8">Fixed</a></li>
+        
+            <li><a href="#added_8">Added</a></li>
+        
+            <li><a href="#removed_8">Removed</a></li>
+        
+            <li><a href="#changed_8">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v054-2015-07-03">[v0.5.4] - 2015-07-03</a></li>
+        
+            <li><a href="#fixed_9">Fixed</a></li>
+        
+            <li><a href="#added_9">Added</a></li>
+        
+            <li><a href="#removed_9">Removed</a></li>
+        
+            <li><a href="#changed_9">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v053-2015-06-03">[v0.5.3] - 2015-06-03</a></li>
+        
+            <li><a href="#fixed_10">Fixed</a></li>
+        
+            <li><a href="#added_10">Added</a></li>
+        
+            <li><a href="#removed_10">Removed</a></li>
+        
+            <li><a href="#changed_10">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v052-2015-05-21">[v0.5.2] - 2015-05-21</a></li>
+        
+            <li><a href="#fixed_11">Fixed</a></li>
+        
+            <li><a href="#added_11">Added</a></li>
+        
+            <li><a href="#removed_11">Removed</a></li>
+        
+            <li><a href="#changed_11">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v051-2015-05-18">[v0.5.1] - 2015-05-18</a></li>
+        
+            <li><a href="#fixed_12">Fixed</a></li>
+        
+            <li><a href="#added_12">Added</a></li>
+        
+            <li><a href="#removed_12">Removed</a></li>
+        
+            <li><a href="#changed_12">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v050-2015-05-08">[v0.5.0] - 2015-05-08</a></li>
+        
+            <li><a href="#fixed_13">Fixed</a></li>
+        
+            <li><a href="#added_13">Added</a></li>
+        
+            <li><a href="#removed_13">Removed</a></li>
+        
+            <li><a href="#changed_13">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v010-2015-04-16">[v0.1.0] - 2015-04-16</a></li>
+        
+            <li><a href="#fixed_14">Fixed</a></li>
+        
+            <li><a href="#added_14">Added</a></li>
+        
+            <li><a href="#removed_14">Removed</a></li>
+        
+            <li><a href="#changed_14">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v009-2015-04-14">[v0.0.9] - 2015-04-14</a></li>
+        
+            <li><a href="#fixed_15">Fixed</a></li>
+        
+            <li><a href="#added_15">Added</a></li>
+        
+            <li><a href="#removed_15">Removed</a></li>
+        
+            <li><a href="#changed_15">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v008-2015-04-13">[v0.0.8] - 2015-04-13</a></li>
+        
+            <li><a href="#fixed_16">Fixed</a></li>
+        
+            <li><a href="#added_16">Added</a></li>
+        
+            <li><a href="#removed_16">Removed</a></li>
+        
+            <li><a href="#changed_16">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v007-2015-03-26">[v0.0.7] - 2015-03-26</a></li>
+        
+            <li><a href="#fixed_17">Fixed</a></li>
+        
+            <li><a href="#added_17">Added</a></li>
+        
+            <li><a href="#removed_17">Removed</a></li>
+        
+            <li><a href="#changed_17">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v006-2015-03-25">[v0.0.6] - 2015-03-25</a></li>
+        
+            <li><a href="#fixed_18">Fixed</a></li>
+        
+            <li><a href="#added_18">Added</a></li>
+        
+            <li><a href="#removed_18">Removed</a></li>
+        
+            <li><a href="#changed_18">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v005-2015-03-23">[v0.0.5] - 2015-03-23</a></li>
+        
+    
+        <li class="main "><a href="#v004-2015-03-23">[v0.0.4] - 2015-03-23</a></li>
+        
+            <li><a href="#fixed_19">Fixed</a></li>
+        
+            <li><a href="#added_19">Added</a></li>
+        
+            <li><a href="#removed_19">Removed</a></li>
+        
+            <li><a href="#changed_19">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v006-2015-03-25_1">[v0.0.6] - 2015-03-25</a></li>
+        
+    
+        <li class="main "><a href="#v003-2015-03-19">[v0.0.3] - 2015-03-19</a></li>
+        
+            <li><a href="#fixed_20">Fixed</a></li>
+        
+            <li><a href="#added_20">Added</a></li>
+        
+            <li><a href="#removed_20">Removed</a></li>
+        
+            <li><a href="#changed_20">Changed</a></li>
+        
+    
+        <li class="main "><a href="#v002-2015-03-19">[v0.0.2] - 2015-03-19</a></li>
+        
+            <li><a href="#added_21">Added</a></li>
+        
+    
+        <li class="main "><a href="#v001-2015-03-18">[v0.0.1] - 2015-03-18</a></li>
+        
+    
+        <li class="main "><a href="#added_22">Added</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h2 id="unreleased">Unreleased</h2>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li>consul recursor now exculdes both docker ip and bridge ip to avoid recursive dns recursor chain</li>
+<li>docs fixed about getting default credentials (cbd login)</li>
+</ul>
+<h3 id="added">Added</h3>
+<ul>
+<li>Command <code>cbd azure configure-arm</code> will create your arm application which can used by cloudbreak</li>
+<li>Command <code>cbd azure deploy-dash</code> will deploy a dash application in your Azure account</li>
+<li>Command <code>cbd start</code> will execute the migration by default. If SKIP_DB_MIGRATION_ON_START envvar set to true in Profile, the migration will be skipped</li>
+<li>Using Dns SRV record in our services instead of ambassador</li>
+<li>Using docker linking system in third party services instead of ambassador</li>
+<li>Integration tests are added, where cbd binary is called, not only sourced functions</li>
+<li>Docker based CentOS integration test make target added</li>
+<li>Uaa db migration</li>
+</ul>
+<h3 id="removed">Removed</h3>
+<ul>
+<li>Full removal of ambassador</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><code>cbd start</code> doesn’t start if compose yaml regeneration is needed</li>
+<li><code>cbd generate</code> is less verbose, diff doesnt shown</li>
+<li><code>cbd doctor</code> shows diff if generate would change</li>
+<li><code>cbd regenerate</code> creates backup files if changes detected</li>
+<li>sequenceiq/uaadb:1.0.1 is used instead of postgres:9.4.1</li>
+</ul>
+<h2 id="v103-2015-09-03">[v1.0.3] - 2015-09-03</h2>
+<h3 id="fixed_1">Fixed</h3>
+<ul>
+<li>Authentication error with <code>cloudbreak-shell</code> and <code>cloudbreak-shell-quiet</code> is fixed</li>
+<li>Command <code>cbd update &lt;branch&gt;</code> checks for artifact</li>
+</ul>
+<h3 id="added_1">Added</h3>
+<ul>
+<li>binary version of gnu-sed 4.2.2 is now included, to solve lot of osx/busybox issues</li>
+<li>consul recursor test are added</li>
+</ul>
+<h3 id="removed_1">Removed</h3>
+<h3 id="changed_1">Changed</h3>
+<ul>
+<li>
+<p>sequenceiq/cloudbreak image updated to 1.0.3</p>
+</li>
+<li>
+<p>debug() function made multiline capable. Use \n in messages</p>
+</li>
+<li>refactor bridge ip discovery to run helper docker command only once</li>
+<li>consul recursor handling refactored to be more robust</li>
+</ul>
+<h2 id="v102-2015-08-25">[v1.0.2] - 2015-08-25</h2>
+<h3 id="fixed_2">Fixed</h3>
+<h3 id="added_2">Added</h3>
+<ul>
+<li><code>DOCKER_CONSUL_OPTIONS</code> config option to provide arbitrary consul option</li>
+</ul>
+<h3 id="removed_2">Removed</h3>
+<h3 id="changed_2">Changed</h3>
+<ul>
+<li>Fixed docker version checker to be 1.8.1 compatible. (docker added --format option)</li>
+<li>sequenceiq/cloudbreak image updated to 1.0.2</li>
+<li>consul image changed from sequenceiq/consul to gliderlabs/consul</li>
+<li>consul image updated to 0.5.2 (from 0.5.0)</li>
+<li>consul discovers host dns settings, and uses the configured nameserver as recursor</li>
+</ul>
+<h2 id="v100-2015-08-15">[v1.0.0] - 2015-08-15</h2>
+<h3 id="fixed_3">Fixed</h3>
+<h3 id="added_3">Added</h3>
+<h3 id="removed_3">Removed</h3>
+<h3 id="changed_3">Changed</h3>
+<h2 id="v100-2015-07-23">[v1.0.0] - 2015-07-23</h2>
+<h3 id="fixed_4">Fixed</h3>
+<ul>
+<li>GA Release</li>
+</ul>
+<h3 id="added_4">Added</h3>
+<h3 id="removed_4">Removed</h3>
+<h3 id="changed_4">Changed</h3>
+<h2 id="v058-2015-07-23">[v0.5.8] - 2015-07-23</h2>
+<h3 id="fixed_5">Fixed</h3>
+<ul>
+<li>Fix CircleCI release. CircleCI doesn’t allow --rm on docker run</li>
+</ul>
+<h3 id="added_5">Added</h3>
+<h3 id="removed_5">Removed</h3>
+<h3 id="changed_5">Changed</h3>
+<h2 id="v057-2015-07-23">[v0.5.7] - 2015-07-23</h2>
+<h3 id="fixed_6">Fixed</h3>
+<ul>
+<li>Fix make release dependency</li>
+<li>Fix CHANGELOG generation at <code>make release-next-ver</code> avoid inserting extra -e</li>
+</ul>
+<h3 id="added_6">Added</h3>
+<h3 id="removed_6">Removed</h3>
+<h3 id="changed_6">Changed</h3>
+<h2 id="v056-2015-07-23">[v0.5.6] - 2015-07-23</h2>
+<h3 id="fixed_7">Fixed</h3>
+<h3 id="added_7">Added</h3>
+<ul>
+<li>Release artifacts are published at public-repo-1.hortonworks.com/HDP/cloudbreak/</li>
+</ul>
+<h3 id="removed_7">Removed</h3>
+<h3 id="changed_7">Changed</h3>
+<h2 id="v055-2015-07-10">[v0.5.5] - 2015-07-10</h2>
+<h3 id="fixed_8">Fixed</h3>
+<h3 id="added_8">Added</h3>
+<ul>
+<li>Command <code>pull-parallel</code> added for quicker/simultaneous image pull</li>
+<li>Release process includes upload to public-repo s3 bucket</li>
+</ul>
+<h3 id="removed_8">Removed</h3>
+<h3 id="changed_8">Changed</h3>
+<ul>
+<li>License changed from MIT to Apache v2</li>
+<li>release artifact includes additional files: license/readme/notes</li>
+</ul>
+<h2 id="v054-2015-07-03">[v0.5.4] - 2015-07-03</h2>
+<h3 id="fixed_9">Fixed</h3>
+<h3 id="added_9">Added</h3>
+<ul>
+<li>New <code>cbd-cleanup</code> command for removing old images or exited containers</li>
+<li>Baywatch default parameters added: <code>CB_BAYWATCH_ENABLED</code> and<code>CB_BAYWATCH_EXTERN_LOCATION</code></li>
+<li>Logs are saved via lospout</li>
+<li>TLS client certificate needed by Cloudbreak is generated with <code>cbd generate</code></li>
+<li>Command <code>aws delete-role</code> added</li>
+<li>Command <code>aws generate-role</code> added</li>
+<li>Command <code>aws show-role</code> added</li>
+<li>Command <code>cloudbreak-shell</code> added</li>
+<li>Command <code>cloudbreak-shell-quiet</code> added</li>
+<li>Command <code>local-dev</code> added</li>
+<li>Command <code>token</code> added</li>
+</ul>
+<h3 id="removed_9">Removed</h3>
+<h3 id="changed_9">Changed</h3>
+<ul>
+<li>AWS authentication env varibale is fixed to use the correct AWS_SECRET_ACCESS_KEY (instead the old AWS_SECRET_KEY)</li>
+<li>Using sequenceiq/ambassadord:0.5.0 docker image instead of progrium/ambassadord:latest</li>
+</ul>
+<h2 id="v053-2015-06-03">[v0.5.3] - 2015-06-03</h2>
+<h3 id="fixed_10">Fixed</h3>
+<ul>
+<li>One-liner installer fixed, to work if previous cbd exists on path.</li>
+<li><code>cbd update</code> upstream changes on go-bahser broke the selfupdate functionality</li>
+<li>In some environment cloudbreak starts really slow. See: <a href="http://stackoverflow.com/questions/137212/how-to-solve-performance-problem-with-java-securerandom">details</a>, see: <a href="https://github.com/sequenceiq/docker-cloudbreak/commit/e00581d04fb14f28f778cf71253f2c8fa0d704ae">commit</a></li>
+</ul>
+<h3 id="added_10">Added</h3>
+<ul>
+<li>New release proposal can be done by <code>make release-next-ver</code></li>
+</ul>
+<h3 id="removed_10">Removed</h3>
+<h3 id="changed_10">Changed</h3>
+<h2 id="v052-2015-05-21">[v0.5.2] - 2015-05-21</h2>
+<h3 id="fixed_11">Fixed</h3>
+<h3 id="added_11">Added</h3>
+<h3 id="removed_11">Removed</h3>
+<h3 id="changed_11">Changed</h3>
+<ul>
+<li>Command <code>doctor</code> hints to run boot2docker shellinit if env is unset</li>
+<li>Command <code>init</code> in case of OSX, DOCKER_XXX envs are initialized in local profile (Profile)</li>
+<li>Default docker images are updated to:<ul>
+<li>sequenceiq/cloudbreak:0.5.93</li>
+<li>sequenceiq/cbdb:0.5.92</li>
+<li>sequenceiq/uluwatu:0.5.28</li>
+<li>sequenceiq/sultans:0.5.3</li>
+<li>sequenceiq/periscope:0.5.5</li>
+</ul>
+</li>
+</ul>
+<h2 id="v051-2015-05-18">[v0.5.1] - 2015-05-18</h2>
+<h3 id="fixed_12">Fixed</h3>
+<ul>
+<li>Issue #55: Sed handles more robust the issue with: curl includes an extra CR char in header fields.</li>
+</ul>
+<h3 id="added_12">Added</h3>
+<h3 id="removed_12">Removed</h3>
+<ul>
+<li>deployer doesn’t specify cloud specific image defaults. If left empty, they fall back
+  to defaults specified in <a href="https://github.com/sequenceiq/cloudbreak/blob/master/core/src/main/java/com/sequenceiq/cloudbreak/EnvironmentVariableConfig.java#L46-L49">java code</a><ul>
+<li>CB_AZURE_IMAGE_URI</li>
+<li>CB_AWS_AMI_MAP</li>
+<li>CB_OPENSTACK_IMAGE</li>
+<li>CB_GCP_SOURCE_IMAGE_PATH</li>
+</ul>
+</li>
+</ul>
+<h3 id="changed_12">Changed</h3>
+<ul>
+<li>Command <code>logs</code> got usage example for specifying servies as filter</li>
+<li>Default docker images are updated to:<ul>
+<li>sequenceiq/cloudbreak:0.5.49</li>
+<li>sequenceiq/uluwatu:0.5.16</li>
+<li>sequenceiq/sutans:0.5.2</li>
+</ul>
+</li>
+</ul>
+<h2 id="v050-2015-05-08">[v0.5.0] - 2015-05-08</h2>
+<h3 id="fixed_13">Fixed</h3>
+<ul>
+<li>Command <code>pull</code> generates yaml files in case they are missing #31</li>
+</ul>
+<h3 id="added_13">Added</h3>
+<ul>
+<li>Command <code>login</code> Shows Uluwatu login url and credentials</li>
+<li>Command <code>regenerate</code> deletes and generates docker-compose.yml and uaa.yml</li>
+<li>Command <code>delete</code> added: deletes yamls and dbs</li>
+<li>Command <code>cloudbreak-shell</code> added, right now it internale use DEBUG=1 fn fn-call</li>
+<li>Command <code>version</code> does correct <a href="http://semver.org">Semantic Versioning</a> check to advise an upgrade</li>
+<li>Command <code>generate</code> checks and shows if Profile change would result in yaml change.</li>
+<li>Command <code>start</code>: prints uluwatu url and credential hint</li>
+<li>Command <code>doctor</code>: fixes boot2docker date/time if not the same as on the host</li>
+<li>Internal command: <code>browse</code> added to be able to automatically open a browser to a specified url.</li>
+<li>Mini Getting Started guide added into README</li>
+<li><code>make dev-debug</code> installs a special cbd on local OSX, which doesn’t includes *.bash scrips, only refers them
+   by path. No need to <code>make dev</code> to test small changes in bash scripts.</li>
+<li>Load AWS key and AWS id from Profile</li>
+<li>Command <code>init</code> helps to guess the PUBLIC_IP in public clouds: google, amazon</li>
+</ul>
+<h3 id="removed_13">Removed</h3>
+<h3 id="changed_13">Changed</h3>
+<ul>
+<li>Command <code>cbd env export</code> adds export to the begining of each line</li>
+<li>cbd logs accepts optional [services] parameter</li>
+<li>docker-compose uses <code>cbreak_</code> prefix for container naming instead of the directory name</li>
+<li>Command <code>generate</code> prints out some more usefull info</li>
+<li>uaa.yml generation wont overwrite, just instruct to move existing file (like docker-compose.yml generation)</li>
+<li>Command <code>init</code> hint fixed on linux.</li>
+<li>Command <code>init</code> advise to run <code>generate</code> if it finds a Profile</li>
+<li>Command <code>init</code> set PRIVATE_IP the same as PUBLIC_IP for boot2docker</li>
+<li>Command <code>migrate</code> is introduced for db migration see <code>Migrate the databases</code> section of README</li>
+<li>Command <code>startdb</code> starts the cbdb and pcdb database containers only</li>
+<li>Databases are not deleted after boot2docker restart</li>
+<li>Import ULU_HOST_ADDRESS and ULU_SULTANS_ADDRESS from Profile</li>
+</ul>
+<h2 id="v010-2015-04-16">[v0.1.0] - 2015-04-16</h2>
+<h3 id="fixed_14">Fixed</h3>
+<ul>
+<li>Selfupdate updates the actual running binary intead of the fixed /us/local/bin/cbd</li>
+<li>SMTP default port is 25, to fix number conversion exception</li>
+</ul>
+<h3 id="added_14">Added</h3>
+<ul>
+<li>Command <code>init</code> creates Profile</li>
+<li>Install cbd to a directory which is available on $PATH</li>
+<li>Docker based test for the one-liner install from README.md: <code>make install-test</code></li>
+</ul>
+<h3 id="removed_14">Removed</h3>
+<ul>
+<li><code>update-snap</code> command removed, replaced by parametrized <code>update</code></li>
+</ul>
+<h3 id="changed_14">Changed</h3>
+<ul>
+<li>Cloudbreak/Persicope/Uluwatu/Sultans Dcoker images upgraded to 0.4.x</li>
+<li>Use the built in 'checksum' function instead of the external 'shasum' to generate secrets</li>
+<li>Command <code>update</code> by default updates from latest Github release, parameter can point to branch on CircleCI</li>
+<li>DOCKER_XXX env varibles are inherited, so they not needed in Profile</li>
+<li><code>generate</code> and compose specific commands are only available when <code>Profile</code> exists</li>
+<li><code>generate</code> command genertes docker-compose.yml <strong>and</strong> uaa.yml</li>
+<li><code>PRIVATE_IP</code> env var defaults to bridge IP (only PUBLC_IP is required in Profile)</li>
+<li>use <strong>sulans-bin</strong> docker image istead of sultans</li>
+</ul>
+<h2 id="v009-2015-04-14">[v0.0.9] - 2015-04-14</h2>
+<h3 id="fixed_15">Fixed</h3>
+<ul>
+<li>Bash 4.3 is included in the binary, extracted into .deps/bin upon start</li>
+</ul>
+<h3 id="added_15">Added</h3>
+<h3 id="removed_15">Removed</h3>
+<h3 id="changed_15">Changed</h3>
+<h2 id="v008-2015-04-13">[v0.0.8] - 2015-04-13</h2>
+<h3 id="fixed_16">Fixed</h3>
+<ul>
+<li>Fixing deps module, golang fn: checksum added</li>
+<li>CircleCI mdule defines required jq</li>
+<li>Fixing PATH issue for binary deps</li>
+</ul>
+<h3 id="added_16">Added</h3>
+<ul>
+<li>uaadb start added</li>
+<li>identity server start added</li>
+<li><code>make dev</code> added to mac based development</li>
+<li><code>pull</code> command added</li>
+<li><code>logs</code> command added</li>
+</ul>
+<h3 id="removed_16">Removed</h3>
+<h3 id="changed_16">Changed</h3>
+<ul>
+<li>Docker containers are managed by <strong>docker-compose</strong></li>
+</ul>
+<h2 id="v007-2015-03-26">[v0.0.7] - 2015-03-26</h2>
+<h3 id="fixed_17">Fixed</h3>
+<h3 id="added_17">Added</h3>
+<ul>
+<li><code>make tests</code> runs unit tests</li>
+<li>docker unit tests are added</li>
+<li>start command added: WIP consul, registrator starts</li>
+<li>kill command addd: stops and removes cloudbreak specific containers</li>
+<li>SKIP_XXX skips the container start</li>
+</ul>
+<h3 id="removed_17">Removed</h3>
+<h3 id="changed_17">Changed</h3>
+<ul>
+<li>env command namespace is always exported, not only in DEBUG mode</li>
+<li>env export: machine friendly config list</li>
+<li>env show: human readable config list</li>
+<li>circle runs unit tests</li>
+<li>snapshot binaries include branch name in version string</li>
+</ul>
+<h2 id="v006-2015-03-25">[v0.0.6] - 2015-03-25</h2>
+<h3 id="fixed_18">Fixed</h3>
+<ul>
+<li>removed dos2unix dependency for the update command</li>
+</ul>
+<h3 id="added_18">Added</h3>
+<ul>
+<li>doctor command added</li>
+<li>docker-check-version command added</li>
+<li>cci-latest accepts branch as parameter, needed for PR testing</li>
+<li>export fn command in DEBUG mode</li>
+<li>export env command in DEBUG mode</li>
+<li>doctor: add instruction about setting DOCKER_XXX env vars in Profile</li>
+<li>info() function added to print green text to STDOUT</li>
+</ul>
+<h3 id="removed_18">Removed</h3>
+<h3 id="changed_18">Changed</h3>
+<ul>
+<li>HOME env var is also inherited (boot2docker version failed)</li>
+<li>release process fully automatized</li>
+</ul>
+<h2 id="v005-2015-03-23">[v0.0.5] - 2015-03-23</h2>
+<ul>
+<li><code>update</code> command works without dos2unix</li>
+</ul>
+<h2 id="v004-2015-03-23">[v0.0.4] - 2015-03-23</h2>
+<h3 id="fixed_19">Fixed</h3>
+<ul>
+<li>debug function fixed</li>
+<li>DEBUG, TRACE and CBD_DEFAULT_PROFILE env vars are inherited</li>
+</ul>
+<h3 id="added_19">Added</h3>
+<ul>
+<li>Profile handling added with docs</li>
+<li>One-liner install added</li>
+<li>Docs: install and update process described</li>
+<li>Docs: release process described with sample git commands</li>
+<li>Print version number in debug mode</li>
+<li><code>update-snap</code> downloads binary from latest os specific CircleCI binary artifact.</li>
+</ul>
+<h3 id="removed_19">Removed</h3>
+<h3 id="changed_19">Changed</h3>
+<ul>
+<li>Tool specific library renamed from cloudbreak.bash to deployer.bash</li>
+</ul>
+<h2 id="v006-2015-03-25_1">[v0.0.6] - 2015-03-25</h2>
+<h2 id="v003-2015-03-19">[v0.0.3] - 2015-03-19</h2>
+<h3 id="fixed_20">Fixed</h3>
+<ul>
+<li><code>make release</code> creates binary with X.X.X version when on release branch otherwise X.X.X-gitrev</li>
+</ul>
+<h3 id="added_20">Added</h3>
+<ul>
+<li>Docs: release process described</li>
+</ul>
+<h3 id="removed_20">Removed</h3>
+<h3 id="changed_20">Changed</h3>
+<h2 id="v002-2015-03-19">[v0.0.2] - 2015-03-19</h2>
+<h3 id="added_21">Added</h3>
+<p>Added
+- selfupdate command
+- gray debug to stderr</p>
+<h2 id="v001-2015-03-18">[v0.0.1] - 2015-03-18</h2>
+<h2 id="added_22">Added</h2>
+<ul>
+<li>help command added</li>
+<li>version command added</li>
+<li>Added --version</li>
+<li>CircleCI build</li>
+<li>Linux/Darwin binary releases on github</li>
+</ul></div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script>
+        <script>var base_url = '..';</script>
+        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+        <script src="../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
