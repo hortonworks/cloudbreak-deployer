@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/configuration/">
+        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/azure_cb_ui/">
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Configuration - Cloudbreak Deployer</title>
+	<title>Provisioning - webui - Cloudbreak Deployer</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -60,13 +60,13 @@
                 
                 
                 
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Docs <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             
-<li class="active">
-    <a href="./">Configuration</a>
+<li >
+    <a href="../configuration/">Configuration</a>
 </li>
 
                         
@@ -111,7 +111,7 @@
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Providers <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -154,8 +154,8 @@
 
         
             
-<li >
-    <a href="../azure_cb_ui/">Provisioning - webui</a>
+<li class="active">
+    <a href="./">Provisioning - webui</a>
 </li>
 
         
@@ -202,12 +202,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="..">
+                        <a rel="next" href="../azure/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../shell/">
+                        <a rel="prev" href="../azure_cb_shell/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -223,115 +223,89 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#configuration">Configuration</a></li>
+        <li class="main active"><a href="#manage-cloud-credentials">Manage cloud credentials</a></li>
         
     
-        <li class="main "><a href="#env-specific-profile">Env specific Profile</a></li>
+        <li class="main "><a href="#manage-resources">Manage resources</a></li>
         
     
-        <li class="main "><a href="#available-configurations">Available Configurations</a></li>
+        <li class="main "><a href="#manage-blueprints">Manage blueprints</a></li>
         
-            <li><a href="#smtp">SMTP</a></li>
+    
+        <li class="main "><a href="#manage-networks">Manage networks</a></li>
         
-            <li><a href="#consul">Consul</a></li>
+    
+        <li class="main "><a href="#manage-security-groups">Manage security groups</a></li>
         
-            <li><a href="#azure-resource-manager-command">Azure Resource manager command</a></li>
-        
-            <li><a href="#caveats">Caveats</a></li>
+    
+        <li class="main "><a href="#create-a-cluster">Create a cluster</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="configuration">Configuration</h1>
-<p>Configuration is based on environment variables. Cloudbreak Deployer always forks a new bash subprocess <strong>without
-inheriting environment variables</strong>. The only way to set ENV vars relevant for Cloudbreak Deployer is to set them
-in a file called <code>Profile</code>.</p>
-<p>To see all available config variables with their default value:</p>
-<pre><code>cbd env show
-</code></pre>
-
-<p>The <code>Profile</code> will be simple <strong>sourced</strong> in bash terms, so you can use the usual syntaxes to set config values:</p>
-<pre><code>export MY_VAR=some_value
-export OTHER_VAR=dunno
-</code></pre>
-
-<h1 id="env-specific-profile">Env specific Profile</h1>
-<p>Let’s say you want to use a different version of Cloudbreak for <strong>prod</strong> and <strong>qa</strong> profile.
-You can specify the Docker image tag via: <code>DOCKER_TAG_CLOUDBREAK</code>.
-<code>Profile</code> is always sourced, so you will have two env specific configurations:
-- <code>Profile.dev</code>
-- <code>Profile.qa</code></p>
-<p>For prod you need:</p>
-<ul>
-<li>create a file called <code>Profile.prod</code></li>
-<li>write the env specific <code>export DOCKER_TAG_CLOUDBREAK=0.3.99</code> into <code>Profile.prod</code></li>
-<li>set the env variable: <code>CBD_DEFAULT_PROFILE=prod</code></li>
-</ul>
-<p>To use the <code>prod</code> specific profile once:</p>
-<pre><code>CBD_DEFAULT_PROFILE=prod cbd some_commands
-</code></pre>
-
-<p>For permanent setting you can <code>export CBD_DEFAULT_PROFILE=prod</code> in your <code>.bash_profile</code>.</p>
-<h1 id="available-configurations">Available Configurations</h1>
-<h2 id="smtp">SMTP</h2>
-<p>Put these lines into your <code>Profile</code></p>
-<pre><code>export CLOUDBREAK_SMTP_SENDER_USERNAME=
-export CLOUDBREAK_SMTP_SENDER_PASSWORD=
-export CLOUDBREAK_SMTP_SENDER_HOST=
-export CLOUDBREAK_SMTP_SENDER_PORT=
-export CLOUDBREAK_SMTP_SENDER_FROM=
-</code></pre>
-
-<h2 id="consul">Consul</h2>
-<p><a href="http://consul.io">Consul</a> is used for dns resolution. All Cloudbreak related services are registered as
-<strong>someservice.service.consul</strong>. Consul’s built in dns server is able to “fall-back” on an other dns server.
-This option is called <code>-recursor</code>. Clodbreak Deployer first tries to discover the dns settings of the host,
-by looking for <strong>nameserver</strong> entry in <code>/etc/resolv.conf</code>. If it finds one consul will use it as a recursor,
-otherwise <strong>8.8.8.8</strong> will be used.</p>
-<p>For a full list of available consul config options, see the <a href="https://consul.io/docs/agent/options.html">docs</a></p>
-<p>You can pass any additional consul configuration by defining a <code>DOCKER_CONSUL_OPTIONS</code> in <code>Profile</code>.</p>
-<h3 id="list-of-configurations">List of configurations</h3>
-<ul>
-<li><strong>CB_AWS_AMI_MAP</strong> : tbd</li>
-<li><strong>CB_AZURE_IMAGE_URI</strong> : tbd</li>
-<li><strong>CB_BLUEPRINT_DEFAULTS</strong> : tbd</li>
-<li><strong>CB_TEMPLATE_DEFAULTS</strong> : tbd</li>
-<li><strong>CB_DB_ENV_DB</strong> : tbd</li>
-<li><strong>CB_DB_ENV_PASS</strong> : tbd</li>
-<li><strong>CB_DB_ENV_USER</strong> : tbd</li>
-<li><strong>CB_GCP_SOURCE_IMAGE_PATH</strong> : tbd</li>
-<li><strong>CB_HBM2DDL_STRATEGY</strong> : tbd</li>
-<li><strong>CB_OPENSTACK_IMAGE</strong> : tbd</li>
-<li><strong>DOCKER_TAG_ALPINE</strong> : tbd</li>
-<li><strong>DOCKER_TAG_CBSHELL</strong> : tbd</li>
-<li><strong>DOCKER_TAG_CLOUDBREAK</strong> : tbd</li>
-<li><strong>DOCKER_TAG_CONSUL</strong> : tbd</li>
-<li><strong>DOCKER_TAG_PERISCOPE</strong> : tbd</li>
-<li><strong>DOCKER_TAG_POSTGRES</strong> : tbd</li>
-<li><strong>DOCKER_TAG_REGISTRATOR</strong> : tbd</li>
-<li><strong>DOCKER_TAG_SULTANS</strong> : tbd</li>
-<li><strong>DOCKER_TAG_UAA</strong> : tbd</li>
-<li><strong>DOCKER_TAG_ULUWATU</strong> : tbd</li>
-<li><strong>PERISCOPE_DB_HBM2DDL_STRATEGY</strong> : tbd</li>
-</ul>
-<h2 id="azure-resource-manager-command">Azure Resource manager command</h2>
-<ul>
-<li><strong>cbd azure configure-arm</strong></li>
-<li><strong>cbd azure deploy-dash</strong>
-See the documentation here</li>
-</ul>
-<h2 id="caveats">Caveats</h2>
-<p>The <strong>Cloudbreak Deployer</strong> tool opens a clean bash subshell, without inheriting environment vars.
-Actually the following environment vars <em>are</em> inherited:</p>
-<ul>
-<li><code>HOME</code></li>
-<li><code>DEBUG</code></li>
-<li><code>TRACE</code></li>
-<li><code>CBD_DEFAULT_PROFILE</code></li>
-<li>all <code>DOCKER_XXX</code></li>
-</ul></div>
+<p>Once Cloudbreak is up and running you can launch clusters in two different ways. You can use the <a href="./">Cloudbreak UI</a> or use the <a href="../azure_cb_shell/">Cloudbreak shell</a>.</p>
+<h2 id="manage-cloud-credentials">Manage cloud credentials</h2>
+<p>You can now log into the Cloudbreak application at http://PUBLIC_IP:3000. Once logged in go to <strong>Manage credentials</strong>. Using manage credentials will  link your cloud account with the Cloudbreak account.</p>
+<p><code>Name:</code> name of your credential</p>
+<p><code>Description:</code> short description of your linked credential</p>
+<p><code>Subscription Id:</code> your Azure subscription id - see Accounts (Browse all&gt; Subscription)</p>
+<p><code>Password:</code> your password which was setted up when you create the AD app</p>
+<p><code>App ID:</code> You app Id (Browse all&gt; Subscription&gt; Subscription detail&gt; Users&gt; You application&gt; Properties)</p>
+<p><code>App Owner Tenant ID:</code> You Tenant Id (Browse all&gt; Subscription&gt; Subscription detail&gt; Users&gt; You application&gt; Properties)</p>
+<p><code>SSH certificate:</code> the SSH public certificate in OpenSSH format that's private keypair can be used to log into the launched instances later (The key generation process is described in the Configuring the Microsoft Azure account section)</p>
+<p>The ssh username is <strong>cloudbreak</strong></p>
+<h2 id="manage-resources">Manage resources</h2>
+<p>Using manage resources you can create infrastructure templates. Templates describes the infrastructure where the HDP cluster will be provisioned. We support heterogenous clusters - this means that one cluster can be built by combining different templates.</p>
+<p><code>Name:</code> name of your template</p>
+<p><code>Description:</code> short description of your template</p>
+<p><code>Instance type:</code> the Amazon instance type to be used - we suggest to use at least small or medium instances</p>
+<p><code>Volume type:</code> option to choose are SSD, regular HDD (both EBS) or Ephemeral</p>
+<p><code>Attached volumes per instance:</code> the number of disks to be attached</p>
+<p><code>Volume size (GB):</code> the size of the attached disks (in GB)</p>
+<p><code>Spot price:</code> option to set a spot price - not mandatory, if specified we will request spot price instances (which might take a while or never be fulfilled by Amazon)</p>
+<p><code>EBS encryption:</code> this feature is supported with all EBS volume types (General Purpose (SSD), Provisioned IOPS (SSD), and Magnetic</p>
+<p><code>Public in account:</code> share it with others in the account</p>
+<h2 id="manage-blueprints">Manage blueprints</h2>
+<p>Blueprints are your declarative definition of a Hadoop cluster.</p>
+<p><code>Name:</code> name of your blueprint</p>
+<p><code>Description:</code> short description of your blueprint</p>
+<p><code>Source URL:</code> you can add a blueprint by pointing to a URL. As an example you can use this <a href="https://github.com/sequenceiq/ambari-rest-client/raw/1.6.0/src/main/resources/blueprints/multi-node-hdfs-yarn">blueprint</a>.</p>
+<p><code>Manual copy:</code> you can copy paste your blueprint in this text area</p>
+<p><code>Public in account:</code> share it with others in the account</p>
+<h2 id="manage-networks">Manage networks</h2>
+<p>Manage networks allows you to create or reuse existing networks and configure them.</p>
+<p><code>Name:</code> name of the network</p>
+<p><code>Description:</code> short description of your network</p>
+<p><code>Subnet (CIDR):</code> a subnet in the VPC with CIDR block</p>
+<p><code>Address prefix (CIDR):</code> the address space that is used for subnets</p>
+<p><code>Public in account:</code> share it with others in the account</p>
+<h2 id="manage-security-groups">Manage security groups</h2>
+<p>Security groups allows configuration of traffic/access to the cluster. Currently there are two default groups, and later versions will allow setup of new groups.</p>
+<p><code>only-ssh-and-ssl:</code> all ports are locked down (you can't access Hadoop services outside of the VPN) but SSH (22) and HTTPS (443)</p>
+<p><code>all-services-port:</code> all Hadoop services + SSH/HTTP are accessible by default: SSH (22) HTTPS (443) 8080 (Ambari) 8500 (Consul) 50070 (NN) 8088 (RM Web) 8030 (RM Scheduler) 8050 (RM IPC) 19888 (Job history server) 60010 (HBase master) 15000 (Falcon) 8744 (Storm) 11000 (Oozie) 18080 (Spark HS) 8042 (NM Web) 9996 (Zeppelin WebSocket) 9995 (Zeppelin UI) 3080 (Kibana) 9200 (Elasticsearch)</p>
+<h2 id="create-a-cluster">Create a cluster</h2>
+<p>Using the create cluster functionality Cloudbreak will create a cloud Stack and a Hadoop Cluster. In order to create a cluster you will have to select a credential first.</p>
+<p><code>Cluster name:</code> your cluster name</p>
+<p><code>Region:</code> the region where the cluster is started</p>
+<p><code>Network:</code> the network template</p>
+<p>`Security Group:" the security group</p>
+<p><code>Blueprint:</code> your Hadoop cluster blueprint. Once the blueprint is selected we parse it and give you the option to select the followings for each <strong>hostgroup</strong>.</p>
+<p><code>Hostgroup configuration</code></p>
+<p><code>Group size:</code> the number of instances to be started</p>
+<p><code>Template:</code> the stack template associated to the hostgroup</p>
+<p><code>DASH Account Name:</code> values printed by Cloudbreak deployer when the DASH service was deployed</p>
+<p><code>DASH Account Key:</code> values printed by Cloudbreak deployer when the DASH service was deployed</p>
+<p><strong>Important:</strong> For better performance DASH service and the Cloudbreak cluster must be in the same Azure region.</p>
+<p><code>Enable security:</code> Install KDC and Kerberize the cluster</p>
+<p><code>Public in account:</code> share it with others in the account</p>
+<p><strong>Advanced features</strong>:</p>
+<p><code>Consul server count:</code> the number of Consul servers (odd number), by default is 3. It varies with the cluster size.</p>
+<p><code>Minimum cluster size:</code> the provisioning strategy in case of the cloud provider can't allocate all the requested nodes</p>
+<p><code>Validate blueprint:</code> feature to validate or not the Ambari blueprint. By default is switched on.</p>
+<p><code>Ambari Repository config:</code> you can take the stack RPM's from a custom stack repository</p>
+<p>Once you have launched the cluster creation you can track the progress either on Cloudbreak UI or your cloud provider management UI.</p></div>
             
         </div>
 

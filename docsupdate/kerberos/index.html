@@ -6,15 +6,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        
-        <link rel="shortcut icon" href="./img/favicon.ico">
+        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/kerberos/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Cloudbreak Deployer</title>
+	<title>Kerberos - Cloudbreak Deployer</title>
 
-        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
-        <link href="./css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="./css/highlight.css">
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -44,7 +44,7 @@
 
             <!-- Main title -->
             <img class="navbar-logo" src="http://docs.hortonworks.com/HDPDocuments/Ambari-2.1.0.0/bk_Installing_HDP_AMB/common/images/hortonworks-logo.png" alt="Hortonworks Documentation" width="132" height="52">
-            <a class="navbar-brand" href=".">Cloudbreak Deployer</a>
+            <a class="navbar-brand" href="..">Cloudbreak Deployer</a>
         </div>
 
         <!-- Expanded navigation -->
@@ -55,54 +55,54 @@
                 
                 
                     <li >
-                        <a href=".">Home</a>
+                        <a href="..">Home</a>
                     </li>
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Docs <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             
 <li >
-    <a href="configuration/">Configuration</a>
+    <a href="../configuration/">Configuration</a>
 </li>
 
                         
                             
 <li >
-    <a href="shell/">Shell</a>
+    <a href="../shell/">Shell</a>
 </li>
 
                         
                             
 <li >
-    <a href="recipes/">Recipes</a>
+    <a href="../recipes/">Recipes</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Kerberos</a>
 </li>
 
                         
                             
 <li >
-    <a href="kerberos/">Kerberos</a>
+    <a href="../database/">Database</a>
 </li>
 
                         
                             
 <li >
-    <a href="database/">Database</a>
+    <a href="../development/">Development</a>
 </li>
 
                         
                             
 <li >
-    <a href="development/">Development</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="changelog/">Changelog</a>
+    <a href="../changelog/">Changelog</a>
 </li>
 
                         
@@ -122,19 +122,19 @@
         
             
 <li >
-    <a href="aws/">Deployment</a>
+    <a href="../aws/">Deployment</a>
 </li>
 
         
             
 <li >
-    <a href="aws_cb_ui/">Provisioning - webui</a>
+    <a href="../aws_cb_ui/">Provisioning - webui</a>
 </li>
 
         
             
 <li >
-    <a href="aws_cb_shell/">Provisioning - cli</a>
+    <a href="../aws_cb_shell/">Provisioning - cli</a>
 </li>
 
         
@@ -149,19 +149,19 @@
         
             
 <li >
-    <a href="azure/">Deployment</a>
+    <a href="../azure/">Deployment</a>
 </li>
 
         
             
 <li >
-    <a href="azure_cb_ui/">Provisioning - webui</a>
+    <a href="../azure_cb_ui/">Provisioning - webui</a>
 </li>
 
         
             
 <li >
-    <a href="azure_cb_shell/">Provisioning - cli</a>
+    <a href="../azure_cb_shell/">Provisioning - cli</a>
 </li>
 
         
@@ -171,13 +171,13 @@
                         
                             
 <li >
-    <a href="gcp/">GCP</a>
+    <a href="../gcp/">GCP</a>
 </li>
 
                         
                             
 <li >
-    <a href="openstack/">OpenStack</a>
+    <a href="../openstack/">OpenStack</a>
 </li>
 
                         
@@ -201,13 +201,13 @@
                     </a>
                 </li>
                 
-                    <li class="disabled">
-                        <a rel="next" >
+                    <li >
+                        <a rel="next" href="../recipes/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
-                    <li class="disabled">
-                        <a rel="prev" >
+                    <li >
+                        <a rel="prev" href="../database/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -220,15 +220,48 @@
 
         <div class="container">
             
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#kerberos-security">Kerberos security</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
 
-    <div class="row-fluid">
-      <div id="main-content" class="span12">
-        <h1 id="404-page-not-found" style="text-align: center">404</h1>
-        <p style="text-align: center"><strong>Page not found</strong></p>
-      </div>
-    </div>
+<h2 id="kerberos-security">Kerberos security</h2>
+<p>Ambari supports Kerberos security for internal communication. To activate Kerberos with Cloudbreak you have enable security option and fill the <code>kerberos master key</code>, <code>kerberos admin</code> and <code>kerberos password</code> too.
+To run a job on the cluster, you can use one of the default Hadoop users, like <code>ambari-qa</code>, as usual.</p>
+<p><strong>Optional</strong></p>
+<p>To create custom users please follow the steps below.</p>
+<ul>
+<li>Log in via SSH to the Cloudbreak gateway node (IP address is the same as the Ambari UI)</li>
+</ul>
+<pre><code>sudo docker exec -i kerberos bash
+kadmin -p [admin_user]/[admin_user]@NODE.DC1.CONSUL (type admin password)
+addprinc custom-user (type user password twice)
+</code></pre>
 
+<ul>
+<li>Log in via SSH to all other nodes</li>
+</ul>
+<pre><code>sudo docker exec -i $(docker ps | grep ambari-warmup | cut -d&quot; &quot; -f 1) bash
+useradd custom-user
+</code></pre>
 
+<ul>
+<li>Log in via SSH to one of the nodes</li>
+</ul>
+<pre><code>sudo docker exec -i $(docker ps | grep ambari-warmup | cut -d&quot; &quot; -f 1) bash
+su custom-user
+kinit -p custom-user (type user password)
+hdfs dfs -mkdir input
+hdfs dfs -put /tmp/wait-for-host-number.sh input
+yarn jar $(find /usr/hdp -name hadoop-mapreduce-examples.jar) wordcount input output
+hdfs dfs -cat output/*
+</code></pre></div>
+            
         </div>
 
         <footer class="col-md-12">
@@ -237,12 +270,12 @@
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
 
-        <script src="./js/jquery-1.10.2.min.js"></script>
-        <script src="./js/bootstrap-3.0.3.min.js"></script>
-        <script src="./js/highlight.pack.js"></script>
-        <script>var base_url = '.';</script>
-        <script data-main="./mkdocs/js/search.js" src="./mkdocs/js/require.js"></script>
-        <script src="./js/base.js"></script>
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script>
+        <script>var base_url = '..';</script>
+        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+        <script src="../js/base.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
             <div class="modal-dialog">

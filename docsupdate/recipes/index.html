@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/configuration/">
+        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/recipes/">
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Configuration - Cloudbreak Deployer</title>
+	<title>Recipes - Cloudbreak Deployer</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -65,8 +65,8 @@
                         <ul class="dropdown-menu">
                         
                             
-<li class="active">
-    <a href="./">Configuration</a>
+<li >
+    <a href="../configuration/">Configuration</a>
 </li>
 
                         
@@ -77,8 +77,8 @@
 
                         
                             
-<li >
-    <a href="../recipes/">Recipes</a>
+<li class="active">
+    <a href="./">Recipes</a>
 </li>
 
                         
@@ -202,12 +202,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="..">
+                        <a rel="next" href="../shell/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../shell/">
+                        <a rel="prev" href="../kerberos/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -223,115 +223,95 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#configuration">Configuration</a></li>
+        <li class="main active"><a href="#cluster-customization">Cluster customization</a></li>
         
-    
-        <li class="main "><a href="#env-specific-profile">Env specific Profile</a></li>
+            <li><a href="#downloadable-recipes">Downloadable recipes</a></li>
         
-    
-        <li class="main "><a href="#available-configurations">Available Configurations</a></li>
-        
-            <li><a href="#smtp">SMTP</a></li>
-        
-            <li><a href="#consul">Consul</a></li>
-        
-            <li><a href="#azure-resource-manager-command">Azure Resource manager command</a></li>
-        
-            <li><a href="#caveats">Caveats</a></li>
+            <li><a href="#stored-recipes">Stored recipes</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="configuration">Configuration</h1>
-<p>Configuration is based on environment variables. Cloudbreak Deployer always forks a new bash subprocess <strong>without
-inheriting environment variables</strong>. The only way to set ENV vars relevant for Cloudbreak Deployer is to set them
-in a file called <code>Profile</code>.</p>
-<p>To see all available config variables with their default value:</p>
-<pre><code>cbd env show
+<h2 id="cluster-customization">Cluster customization</h2>
+<p>With the help of Cloudbreak it is very easy to provision Hadoop clusters in the cloud from an Apache Ambari blueprint. Cloudbreak built in provisioning doesn't contain every use case, so we are introducing the concept of recipes.
+Recipes are basically script extensions to a cluster that run on a set of nodes before or after the Ambari cluster installation. With recipes it's quite easy for example to put a JAR file on the Hadoop classpath or run some custom scripts.
+In Cloudbreak we supports two ways to configure recipe, we have downloadable and stored recipes. A downloadable recipe should be available on HTTP, HTTPS protocols optionally with basic authentication, or any kind of public Git repository.
+As the name mentions stored recipes are uploaded and stored in Cloudbreak with (Clodbreak shell)[https://github.com/sequenceiq/cloudbreak-shell]. <a href="https://github.com/sequenceiq/uluwatu">Uluwatu</a> support coming soon.</p>
+<h3 id="downloadable-recipes">Downloadable recipes</h3>
+<p>This kind of recipe must contain a plugin.toml file, with some basic information about the recipe, and at least a recipe-pre-install or recipe-post-install script.
+Content of plugin.toml</p>
+<pre><code>[plugin]
+name = &quot;[recipe-name]&quot;
+description = &quot;[description-of-the-recipe]&quot;
+version = &quot;1.0&quot;
+maintainer_name = &quot;[maintainer-name]&quot;
+maintainer_email = &quot;[maintainer-email]&quot;
+website_url = &quot;[website-url]&quot;
 </code></pre>
 
-<p>The <code>Profile</code> will be simple <strong>sourced</strong> in bash terms, so you can use the usual syntaxes to set config values:</p>
-<pre><code>export MY_VAR=some_value
-export OTHER_VAR=dunno
+<p>Pre and post scripts are regular shell scripts, and must be executable.</p>
+<p>To configure recipe or recipe groups in Cloudbreak you have to create a descriptive JSON file and send it to Cloudbreak via our shell.</p>
+<pre><code>{
+  &quot;name&quot;: &quot;[recipe-name]&quot;,
+  &quot;description&quot;: &quot;[description-of-the-recipe]&quot;,
+  &quot;properties&quot;: {
+    &quot;[key]&quot;: &quot;[value]&quot;
+  },
+  &quot;plugins&quot;: {
+      &quot;git://github.com/account/recipe.git&quot;: &quot;ONE_NODE&quot;
+      &quot;http://user:password@mydomain.com/my-recipe.tar&quot;: &quot;ALL_NODES&quot;
+      &quot;https://mydomain.com/my-recipe.zip&quot;: &quot;ALL_NODES&quot;
+  }
+}
 </code></pre>
 
-<h1 id="env-specific-profile">Env specific Profile</h1>
-<p>Let’s say you want to use a different version of Cloudbreak for <strong>prod</strong> and <strong>qa</strong> profile.
-You can specify the Docker image tag via: <code>DOCKER_TAG_CLOUDBREAK</code>.
-<code>Profile</code> is always sourced, so you will have two env specific configurations:
-- <code>Profile.dev</code>
-- <code>Profile.qa</code></p>
-<p>For prod you need:</p>
+<p>At this point we need to understand some element of the JSON above.</p>
+<p>First of all properties. Properties are saved to Consul key/value store, and they are available from the pre or post script by fetching http://localhost:8500/v1/kv/[key]?raw url. The limitation of the value's base64 representation is 512kB. This option is a good choice if you want to write reusable recipes.</p>
+<p>The next one is plugins. As you read before we support a few kind of protocols, and each of them has their own limitations:</p>
 <ul>
-<li>create a file called <code>Profile.prod</code></li>
-<li>write the env specific <code>export DOCKER_TAG_CLOUDBREAK=0.3.99</code> into <code>Profile.prod</code></li>
-<li>set the env variable: <code>CBD_DEFAULT_PROFILE=prod</code></li>
+<li>
+<p>Git</p>
+<ul>
+<li>git repository must be public (or available from the cluster)</li>
+<li>the recipe files must be on the root</li>
+<li>only repository default branch supported, there is no opportunity to check out different branch</li>
 </ul>
-<p>To use the <code>prod</code> specific profile once:</p>
-<pre><code>CBD_DEFAULT_PROFILE=prod cbd some_commands
+</li>
+<li>
+<p>HTTP(S)</p>
+<ul>
+<li>on this kind of protocols you have to bundle your recipe into a tar or zip file</li>
+<li>basic authentication is the only way to protect recipe from public</li>
+</ul>
+</li>
+</ul>
+<p>Last one is the execution type of the recipe. We supports two options:</p>
+<ul>
+<li>ONE_NODE means the recipe will execute only one node in the hostgroup</li>
+<li>All_NODES runs every single instance in the hostgroup.</li>
+</ul>
+<p>To add recipe use the command(s) below:</p>
+<pre><code>recipe add --file /path/of/the/recipe/json
 </code></pre>
 
-<p>For permanent setting you can <code>export CBD_DEFAULT_PROFILE=prod</code> in your <code>.bash_profile</code>.</p>
-<h1 id="available-configurations">Available Configurations</h1>
-<h2 id="smtp">SMTP</h2>
-<p>Put these lines into your <code>Profile</code></p>
-<pre><code>export CLOUDBREAK_SMTP_SENDER_USERNAME=
-export CLOUDBREAK_SMTP_SENDER_PASSWORD=
-export CLOUDBREAK_SMTP_SENDER_HOST=
-export CLOUDBREAK_SMTP_SENDER_PORT=
-export CLOUDBREAK_SMTP_SENDER_FROM=
+<p>or</p>
+<pre><code>recipe add --url http(s)://mydomain.com/my-recipe.json
 </code></pre>
 
-<h2 id="consul">Consul</h2>
-<p><a href="http://consul.io">Consul</a> is used for dns resolution. All Cloudbreak related services are registered as
-<strong>someservice.service.consul</strong>. Consul’s built in dns server is able to “fall-back” on an other dns server.
-This option is called <code>-recursor</code>. Clodbreak Deployer first tries to discover the dns settings of the host,
-by looking for <strong>nameserver</strong> entry in <code>/etc/resolv.conf</code>. If it finds one consul will use it as a recursor,
-otherwise <strong>8.8.8.8</strong> will be used.</p>
-<p>For a full list of available consul config options, see the <a href="https://consul.io/docs/agent/options.html">docs</a></p>
-<p>You can pass any additional consul configuration by defining a <code>DOCKER_CONSUL_OPTIONS</code> in <code>Profile</code>.</p>
-<h3 id="list-of-configurations">List of configurations</h3>
-<ul>
-<li><strong>CB_AWS_AMI_MAP</strong> : tbd</li>
-<li><strong>CB_AZURE_IMAGE_URI</strong> : tbd</li>
-<li><strong>CB_BLUEPRINT_DEFAULTS</strong> : tbd</li>
-<li><strong>CB_TEMPLATE_DEFAULTS</strong> : tbd</li>
-<li><strong>CB_DB_ENV_DB</strong> : tbd</li>
-<li><strong>CB_DB_ENV_PASS</strong> : tbd</li>
-<li><strong>CB_DB_ENV_USER</strong> : tbd</li>
-<li><strong>CB_GCP_SOURCE_IMAGE_PATH</strong> : tbd</li>
-<li><strong>CB_HBM2DDL_STRATEGY</strong> : tbd</li>
-<li><strong>CB_OPENSTACK_IMAGE</strong> : tbd</li>
-<li><strong>DOCKER_TAG_ALPINE</strong> : tbd</li>
-<li><strong>DOCKER_TAG_CBSHELL</strong> : tbd</li>
-<li><strong>DOCKER_TAG_CLOUDBREAK</strong> : tbd</li>
-<li><strong>DOCKER_TAG_CONSUL</strong> : tbd</li>
-<li><strong>DOCKER_TAG_PERISCOPE</strong> : tbd</li>
-<li><strong>DOCKER_TAG_POSTGRES</strong> : tbd</li>
-<li><strong>DOCKER_TAG_REGISTRATOR</strong> : tbd</li>
-<li><strong>DOCKER_TAG_SULTANS</strong> : tbd</li>
-<li><strong>DOCKER_TAG_UAA</strong> : tbd</li>
-<li><strong>DOCKER_TAG_ULUWATU</strong> : tbd</li>
-<li><strong>PERISCOPE_DB_HBM2DDL_STRATEGY</strong> : tbd</li>
-</ul>
-<h2 id="azure-resource-manager-command">Azure Resource manager command</h2>
-<ul>
-<li><strong>cbd azure configure-arm</strong></li>
-<li><strong>cbd azure deploy-dash</strong>
-See the documentation here</li>
-</ul>
-<h2 id="caveats">Caveats</h2>
-<p>The <strong>Cloudbreak Deployer</strong> tool opens a clean bash subshell, without inheriting environment vars.
-Actually the following environment vars <em>are</em> inherited:</p>
-<ul>
-<li><code>HOME</code></li>
-<li><code>DEBUG</code></li>
-<li><code>TRACE</code></li>
-<li><code>CBD_DEFAULT_PROFILE</code></li>
-<li>all <code>DOCKER_XXX</code></li>
-</ul></div>
+<p>Add command has an optional parameter --publicInAccount, flags if the template is public in the account.</p>
+<h3 id="stored-recipes">Stored recipes</h3>
+<p>The easiest way to create a custom recipe in Cloudbreak is stored recipes. Create your own pre and/or post scripts, and upload them via shell. In the background Cloudbreak pushes recipe to Consul key/value store during cluster creation.
+Stored recipes has the same size limitation like properties in downloadable recipe, because of the key/value store, the base64 encoded contents of the scripts must be less then 512kB.</p>
+<pre><code>recipe store --name [recipe-name] --executionType [ONE_NODE|ALL_NODES] --preInstallScriptFile /path/of/the/pre-install-script --postInstallScriptFile /path/of/the/post-install-script
+</code></pre>
+
+<p>This command has two optional parameters:
+- --description "string": description of the recipe
+- --timeout "integer": timeout of the script execution
+- --publicInAccount "flag": flags if the template is public in the account</p>
+<p>Recipes are ready to attach to a hostgroup, for more information about hostgroups please jump to <a href="https://github.com/sequenceiq/cloudbreak#create-cluster">Create cluster</a> section or visit the shell <a href="https://github.com/sequenceiq/cloudbreak-shell#configure-a-host-groups">documentation</a>.</p></div>
             
         </div>
 

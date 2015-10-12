@@ -72,6 +72,24 @@
                         
                             
 <li >
+    <a href="shell/">Shell</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="recipes/">Recipes</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="kerberos/">Kerberos</a>
+</li>
+
+                        
+                            
+<li >
     <a href="database/">Database</a>
 </li>
 
@@ -85,6 +103,81 @@
                             
 <li >
     <a href="changelog/">Changelog</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Providers <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">AWS</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="aws/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="aws_cb_ui/">Provisioning - webui</a>
+</li>
+
+        
+            
+<li >
+    <a href="aws_cb_shell/">Provisioning - cli</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">Azure</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="azure/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="azure_cb_ui/">Provisioning - webui</a>
+</li>
+
+        
+            
+<li >
+    <a href="azure_cb_shell/">Provisioning - cli</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                            
+<li >
+    <a href="gcp/">GCP</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="openstack/">OpenStack</a>
 </li>
 
                         
@@ -130,31 +223,31 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#requirements">Requirements</a></li>
+        <li class="main active"><a href="#technology">Technology</a></li>
         
     
-        <li class="main "><a href="#on-prem-installation">On-prem installation</a></li>
+        <li class="main "><a href="#installation">Installation</a></li>
+        
+            <li><a href="#diy-installation">DIY installation</a></li>
+        
+            <li><a href="#aws-based-installation">AWS based installation</a></li>
+        
+            <li><a href="#azure-based-installation">Azure based installation</a></li>
+        
+            <li><a href="#gcp-based-installation">GCP based installation</a></li>
+        
+            <li><a href="#openstack-based-installation">OpenStack based installation</a></li>
         
     
-        <li class="main "><a href="#aws-based-installation">AWS based installation</a></li>
+        <li class="main "><a href="#misc">Misc</a></li>
         
-    
-        <li class="main "><a href="#azure-based-installation">Azure based installation</a></li>
+            <li><a href="#debug">Debug</a></li>
         
-    
-        <li class="main "><a href="#gcp-based-installation">GCP based installation</a></li>
+            <li><a href="#troubleshoot">Troubleshoot</a></li>
         
-    
-        <li class="main "><a href="#openstack-based-installation">OpenStack based installation</a></li>
+            <li><a href="#logs">Logs</a></li>
         
-    
-        <li class="main "><a href="#debug">Debug</a></li>
-        
-    
-        <li class="main "><a href="#troubleshooting">Troubleshooting</a></li>
-        
-    
-        <li class="main "><a href="#update">Update</a></li>
+            <li><a href="#update">Update</a></li>
         
     
         <li class="main "><a href="#credits">Credits</a></li>
@@ -164,36 +257,46 @@
 </div></div>
                 <div class="col-md-9" role="main">
 
-<p>Cloudbreak is a cloud agnostic Hadoop as a Service API. Abstracts the provisioning and ease management and monitoring of on-demand HDP clusters in different virtual environments. For recent changes please check the <a href="http://sequenceiq.com/cloudbreak-deployer/latest/changelog/">changelog</a>.</p>
+<p>Cloudbreak is a cloud agnostic Hadoop as a Service API. Abstracts the provisioning and ease management and monitoring of on-demand HDP clusters in different virtual environments. Once it is deployed in your favorite servlet container exposes a REST API allowing to span up Hadoop clusters of arbitrary sizes on your selected cloud provider. Provisioning Hadoop has never been easier.
+Cloudbreak is built on the foundation of cloud providers API (Microsoft Azure, Amazon AWS, Google Cloud Platform, OpenStack), Apache Ambari, Docker containers, Swarm and Consul.</p>
+<p>For a detailed overview please follow this <a href="http://sequenceiq.com/cloudbreak-deployer/docsupdate/overview/">link</a></p>
+<p>For recent changes please check the <a href="http://sequenceiq.com/cloudbreak-deployer/latest/changelog/">changelog</a>.</p>
 <p>Cloudbreak has two main components - the <a href="http://sequenceiq.com/cloudbreak-deployer">Cloudbreak deployer</a> and the <a href="http://sequenceiq.com/cloudbreak">Cloudbreak application</a>. Cloudbreak deployer helps you to deploy the Cloudbreak application automatically in environments with Docker support. Once the Cloudbreak application is deployed you can use it to provision HDP clusters in different cloud environments.</p>
-<h2 id="requirements">Requirements</h2>
-<p>Currently only <strong>Linux</strong> and <strong>OSX</strong> 64 bit binaries are released for Cloudbreak Deployer. For anything else we can create a special Docker container. The deployment itself needs only <strong>Docker 1.7.0</strong> or later.
-Your firewall must be configured to let Docker containers talk to each other and have SELinux disabled. <em>This is especially important on CentOS 7 where default firewall configuration blocks connections by default.</em> Should you intend to deploy the Cloudbreak application alongside your cluster in your favorite cloud environment you can use our CentOS 7 based default cloud images - that comes with CBD (Cloudbreak deployer) and the required Docker containers pre-installed.</p>
-<h2 id="on-prem-installation">On-prem installation</h2>
-<p>For on premise installations of the Cloudbreak application please open the <a href="onprem.md">Onprem submenu</a></p>
-<h2 id="aws-based-installation">AWS based installation</h2>
+<h2 id="technology">Technology</h2>
+<p>For an architectural overview of the CLoudbreak deployer and application please follow this <a href="http://sequenceiq.com/cloudbreak-deployer/docsupdate/technology/">link</a></p>
+<h2 id="installation">Installation</h2>
+<p>Currently only <strong>Linux</strong> and <strong>OSX</strong> 64 bit binaries are released for Cloudbreak Deployer. For anything else we can create a special Docker container. The deployment itself needs only <strong>Docker 1.7.0</strong> or later.</p>
+<h4 id="diy-installation">DIY installation</h4>
+<p>For on premise installations of the Cloudbreak application please follow the <a href="http://sequenceiq.com/cloudbreak-deployer/docsupdate/onprem">link</a></p>
+<h4 id="aws-based-installation">AWS based installation</h4>
 <p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
-<p>You can follow the AWS provider specific documentation using this <a href="aws.md">link</a></p>
-<h2 id="azure-based-installation">Azure based installation</h2>
+<p>You can follow the AWS provider specific documentation using this <a href="http://sequenceiq.com/cloudbreak-deployer/docsupdate/onpremaws">link</a></p>
+<h4 id="azure-based-installation">Azure based installation</h4>
 <p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
-<p>You can follow the AWS provider specific documentation using this <a href="azure.md">link</a></p>
-<h2 id="gcp-based-installation">GCP based installation</h2>
+<p>You can follow the AWS provider specific documentation using this <a href="http://sequenceiq.com/cloudbreak-deployer/docsupdate/azure">link</a></p>
+<h4 id="gcp-based-installation">GCP based installation</h4>
 <p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
-<p>You can follow the AWS provider specific documentation using this <a href="gcp.md">link</a></p>
-<h2 id="openstack-based-installation">OpenStack based installation</h2>
+<p>You can follow the AWS provider specific documentation using this <a href="http://sequenceiq.com/cloudbreak-deployer/docsupdate/gcp">link</a></p>
+<h4 id="openstack-based-installation">OpenStack based installation</h4>
 <p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
-<p>You can follow the AWS provider specific documentation using this <a href="openstack.md">link</a></p>
-<h2 id="debug">Debug</h2>
+<p>You can follow the AWS provider specific documentation using this <a href="openstack/">link</a></p>
+<h2 id="misc">Misc</h2>
+<h4 id="debug">Debug</h4>
 <p>If you want to have more detailed output set the <code>DEBUG</code> env variable to non-zero:</p>
 <pre><code>DEBUG=1 cbd some_command
 </code></pre>
 
-<h2 id="troubleshooting">Troubleshooting</h2>
+<h4 id="troubleshoot">Troubleshoot</h4>
 <p>You can also use the <code>doctor</code> command to diagnose your environment:</p>
 <pre><code>cbd doctor
 </code></pre>
 
-<h2 id="update">Update</h2>
+<h4 id="logs">Logs</h4>
+<p>For logs use the :</p>
+<pre><code>cbd logs
+</code></pre>
+
+<h4 id="update">Update</h4>
 <p>The tool is capable to upgrade itself to a newer version.</p>
 <pre><code>cbd update
 </code></pre>
@@ -258,5 +361,5 @@ built in, so only a single binary is needed.</p></div>
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2015-10-11 13:59:39.680214
+Build Date UTC : 2015-10-12 06:06:02.569084
 -->
