@@ -54,8 +54,56 @@
                 <ul class="nav navbar-nav">
                 
                 
-                    <li class="active">
-                        <a href=".">Overview</a>
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Home <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li class="active">
+    <a href=".">Overview</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="technology/">Technology</a>
+</li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">Installation</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="aws/">AWS</a>
+</li>
+
+        
+            
+<li >
+    <a href="azure/">Azure</a>
+</li>
+
+        
+            
+<li >
+    <a href="gcp/">GCP</a>
+</li>
+
+        
+            
+<li >
+    <a href="openstack/">OpenStack</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                        </ul>
                     </li>
                 
                 
@@ -213,6 +261,12 @@
                         
                             
 <li >
+    <a href="insights/">Insights</a>
+</li>
+
+                        
+                            
+<li >
     <a href="database/">Migration</a>
 </li>
 
@@ -261,7 +315,7 @@
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="aws/">
+                        <a rel="prev" href="technology/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -286,7 +340,7 @@
         <li class="main "><a href="#installation">Installation</a></li>
         
     
-        <li class="main "><a href="#misc">Misc</a></li>
+        <li class="main "><a href="#release-notes-110">Release notes - 1.1.0</a></li>
         
     
     </ul>
@@ -299,7 +353,7 @@ Cloudbreak is built on the foundation of cloud providers API (Microsoft Azure, A
 <p>For a detailed overview please follow this <a href="overview.md">link</a></p>
 <p>Cloudbreak has two main components - the <a href="http://sequenceiq.com/cloudbreak-deployer">Cloudbreak deployer</a> and the <a href="http://sequenceiq.com/cloudbreak">Cloudbreak application</a>. Cloudbreak deployer helps you to deploy the Cloudbreak application automatically in environments with Docker support. Once the Cloudbreak application is deployed you can use it to provision HDP clusters in different cloud environments.</p>
 <h2 id="technology">Technology</h2>
-<p>For an architectural overview of the <a href="http://sequenceiq.com/cloudbreak-deployer">Cloudbreak deployer</a> and the <a href="http://sequenceiq.com/cloudbreak">Cloudbreak application</a> please follow this <a href="technology.md">link</a>.</p>
+<p>For an architectural overview of the <a href="http://sequenceiq.com/cloudbreak-deployer">Cloudbreak deployer</a> and the <a href="http://sequenceiq.com/cloudbreak">Cloudbreak application</a> please follow this <a href="technology/">link</a>.</p>
 <h2 id="installation">Installation</h2>
 <p>Currently only <strong>Linux</strong> and <strong>OSX</strong> 64 bit binaries are released for Cloudbreak Deployer. For anything else we can create a special Docker container - please contact us. The deployment itself needs only <strong>Docker 1.7.0</strong> or later. You can install the Cloudbreak installation anywhere (on-prem or cloud VMs), however we suggest to installed it as close to the desired HDP clusters as possible. For further information check the <strong>Provider</strong> section of the documentation.</p>
 <p><strong>On-prem installation</strong></p>
@@ -316,27 +370,63 @@ Cloudbreak is built on the foundation of cloud providers API (Microsoft Azure, A
 <p><strong>OpenStack based installation</strong></p>
 <p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
 <p>You can follow the AWS provider specific documentation using this <a href="openstack/">link</a></p>
-<h2 id="misc">Misc</h2>
-<p><strong>Debug</strong></p>
-<p>If you want to have more detailed output set the <code>DEBUG</code> env variable to non-zero:</p>
-<pre><code>DEBUG=1 cbd some_command
-</code></pre>
-
-<p><strong>Troubleshoot</strong></p>
-<p>You can also use the <code>doctor</code> command to diagnose your environment:</p>
-<pre><code>cbd doctor
-</code></pre>
-
-<p><strong>Logs</strong></p>
-<p>For logs use the :</p>
-<pre><code>cbd logs
-</code></pre>
-
-<p><strong>Update</strong></p>
-<p>The tool is capable to upgrade itself to a newer version.</p>
-<pre><code>cbd update
-</code></pre>
-
+<h2 id="release-notes-110">Release notes - 1.1.0</h2>
+<table>
+<thead>
+<tr>
+<th>Components</th>
+<th align="center">GA</th>
+<th align="right">Tech preview</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AWS</td>
+<td align="center">yes</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>Azure ARM</td>
+<td align="center">yes</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>Azure ARM</td>
+<td align="center">yes</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>GCP</td>
+<td align="center">yes</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>OpenStack Juno</td>
+<td align="center"></td>
+<td align="right">yes</td>
+</tr>
+<tr>
+<td>SPI interface</td>
+<td align="center"></td>
+<td align="right">yes</td>
+</tr>
+<tr>
+<td>CLI/shell</td>
+<td align="center">yes</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>Recipes</td>
+<td align="center"></td>
+<td align="right">yes</td>
+</tr>
+<tr>
+<td>Kerberos</td>
+<td align="center"></td>
+<td align="right">yes</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Credits</strong></p>
 <p>This tool, and the PR driven release, is inspired from <a href="https://github.com/gliderlabs/glidergun">glidergun</a>. Actually it
 could be a fork of it. The reason it’s not a fork, because we wanted to have our own binary with all modules
@@ -397,5 +487,5 @@ built in, so only a single binary is needed.</p></div>
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2015-10-16 22:23:00.890421
+Build Date UTC : 2015-10-16 23:01:13.839418
 -->
