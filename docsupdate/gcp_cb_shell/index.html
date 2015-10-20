@@ -355,11 +355,26 @@
 <p>Start the shell with <code>cbd util cloudbreak-shell</code>. This will launch the Cloudbreak shell inside a Docker container and you are ready to start using it.</p>
 <h3 id="create-a-cloud-credential">Create a cloud credential</h3>
 <p>In order to start using Cloudbreak to provision a cluster in Google Cloud you will need to have an GCP credential. If you do not want to Cloubreak to reach you google cloud resources then you have to delete the service account.</p>
-<pre><code>credential create --GCP --description &quot;description&quot; --name &quot;myCredentialName&quot; --projectId &quot;proctid&quot; --serviceAccountId &quot;12345test@developer.gserviceaccount.com&quot; --serviceAccountPrivateKeyPath &quot;/tmp/gcp.p12&quot; --sshKeyUrl &quot;URL towards your GCP public key&quot;
+<pre><code>credential create --GCP --description &quot;description&quot; --name &quot;myCredentialName&quot; --projectId &quot;projectid&quot; --serviceAccountId &quot;12345test@developer.gserviceaccount.com&quot; --serviceAccountPrivateKeyPath &quot;/tmp/gcp.p12&quot; --sshKeyUrl &quot;URL towards your GCP public key&quot;
 </code></pre>
 
-<p>Alternatively you can upload your public key from a file as well, by using the <code>—sshKeyPath</code> switch. You can check whether the credential was creates successfully by using the <code>credential list</code> command. You can switch between your cloud credential - when you’d like to use one and act with that you will have to use:</p>
+<p>Alternatively you can upload your public key from a file as well, by using the <code>—sshKeyPath</code> switch. You can check whether the credential was creates successfully by using the <code>credential list</code> command.
+You can switch between your cloud credential - when you’d like to use one and act with that you will have to use:</p>
 <pre><code>credential select --id #ID of the credential
+or
+credential select --name #NAME of the credential
+</code></pre>
+
+<p>You can delete your cloud credential - when you’d like to delete one you will have to use:</p>
+<pre><code>credential delete --id #ID of the credential
+or
+credential delete --name #NAME of the credential
+</code></pre>
+
+<p>You can show your cloud credential - when you’d like to show one you will have to use:</p>
+<pre><code>credential show --id #ID of the credential
+or
+credential show --name #NAME of the credential
 </code></pre>
 
 <h3 id="create-a-template">Create a template</h3>
@@ -370,10 +385,23 @@
 <p>Other available options:</p>
 <p>--volumeType "voltype": defaults to "HDD", other allowed value: "SSD"</p>
 <p>--publicInAccount "flag": flags if the template is public in the account</p>
-<p>You can check whether the template was created successfully by using the <code>template list</code> command. Check the template and select it if you are happy with it:</p>
-<pre><code>template show --id #ID of the template
+<p>You can check whether the template was created successfully by using the <code>template list</code> command.
+Check the template and select it if you are happy with it:</p>
+<pre><code>template select --id #ID of the template
+or
+template select --name #NAME of the template
+</code></pre>
 
-template select --id #ID of the template
+<p>You can delete your cloud template - when you’d like to delete one you will have to use:</p>
+<pre><code>template delete --id #ID of the template
+or
+template delete --name #NAME of the template
+</code></pre>
+
+<p>You can show your cloud template - when you’d like to show one you will have to use:</p>
+<pre><code>template show --id #ID of the template
+or
+template show --name #NAME of the template
 </code></pre>
 
 <h3 id="create-a-stack">Create a stack</h3>
