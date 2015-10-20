@@ -372,7 +372,9 @@
 <p>Please edit the Profile file - the only mandatory configuration is the <code>PUBLIC_IP</code>. This IP will be used to access the Cloudbreak UI
 (called Uluwatu). In some cases the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
 <h4 id="azure-access-setup">Azure access setup</h4>
-<p>In order for Cloudbreak to be able to launch clusters on Azure on your behalf you need to set up your Azure ARM application.</p>
+<p>If you want to use your Azure subscription then you need an Azure Active directory user.
+You can configure your AD users on <code>manage.windowsazure.com</code> &gt; <code>Active Directory</code> &gt; <code>Your active directory</code> &gt; <code>Users</code> &gt; <code>Add User</code> after you add the user to the AD you need to add to the <code>manage.windowsazure.com</code> &gt; <code>Settings</code> &gt; <code>Administrators</code> &gt; <code>Add</code> now you can create ARM application with cbd
+In order for Cloudbreak to be able to launch clusters on Azure on your behalf you need to set up your Azure ARM application.</p>
 <pre><code>cbd azure configure-arm --app_name myapp --app_password password123 --subscription_id 1234-abcd-efgh-1234 --username example@company.onmicrosoft.com --password password123
 </code></pre>
 
