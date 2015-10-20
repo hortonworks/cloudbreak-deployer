@@ -335,21 +335,10 @@
         
             <li><a href="#usage">Usage</a></li>
         
-            <li><a href="#default-credentials">Default Credentials</a></li>
+    
+        <li class="main "><a href="#use-cloudbreak">Use Cloudbreak</a></li>
         
             <li><a href="#provider-specific-configurations">Provider specific configurations</a></li>
-        
-            <li><a href="#manage-cloud-credentials">Manage cloud credentials</a></li>
-        
-            <li><a href="#manage-resources">Manage resources</a></li>
-        
-            <li><a href="#manage-blueprints">Manage blueprints</a></li>
-        
-            <li><a href="#manage-networks">Manage networks</a></li>
-        
-            <li><a href="#manage-security-groups">Manage security groups</a></li>
-        
-            <li><a href="#create-a-cluster">Create a cluster</a></li>
         
     
     </ul>
@@ -374,8 +363,25 @@ cd cloudbreak-deployment
 <p>It will create a <code>Profile</code> file in the current directory. Please edit the file - the only required
 configuration is the <code>PUBLIC_IP</code>. This IP will be used to access the Cloudbreak UI
 (called Uluwatu). In some cases the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
-<h3 id="start-cloudbreak">Start Cloudbreak</h3>
-<p>To start all the containers run:</p>
+<h4 id="change-default-usernamepassword">Change default username/Password</h4>
+<p>The default credentials can be revealed by <code>cbd login</code> These values are used in the <code>uaa.yml</code> file's end section. To change these values, add 2 lines into your Profile:</p>
+<pre><code>export UAA_DEFAULT_USER_EMAIL=myself@example.com
+export UAA_DEFAULT_USER_PW=demo123
+</code></pre>
+
+<h4 id="regenerate-your-profile">Regenerate your Profile</h4>
+<p>You are done with the configuration of Cloudbreak deployer. The last thing you have to do is to regenerate the configurations in order to take effect.</p>
+<pre><code>rm *.yml
+cbd generate
+</code></pre>
+
+<h4 id="verify-configs">Verify configs</h4>
+<p>In order to verify that all configs are OK use the <code>doctor</code> command.</p>
+<pre><code>cbd doctor
+</code></pre>
+
+<h1 id="use-cloudbreak">Use Cloudbreak</h1>
+<p>To start the Cloudbreak application use the following command.</p>
 <pre><code>cbd start
 </code></pre>
 
@@ -385,20 +391,8 @@ configuration is the <code>PUBLIC_IP</code>. This IP will be used to access the 
 <li>create <strong>docker-compose.yml</strong>: Full configuration of containers needed for the Cloudbreak deployment.</li>
 <li>create <strong>uaa.yml</strong>: Identity Server configuration.</li>
 </ul>
-<h3 id="watch-the-logs">Watch the logs</h3>
+<p>This will start all the Docker containers and initialize the application. Please give a few minutes until all services starts. While the services are starting you can check the logs.</p>
 <pre><code>cbd logs
-</code></pre>
-
-<h2 id="default-credentials">Default Credentials</h2>
-<p>The default credentials can be revealed by <code>cbd login</code></p>
-<p>These values are used in the <code>uaa.yml</code> end section. To change these values, add 2 lines into your Profile:</p>
-<pre><code>export UAA_DEFAULT_USER_EMAIL=myself@example.com
-export UAA_DEFAULT_USER_PW=demo123
-</code></pre>
-
-<p>and than you need to recreate configs:</p>
-<pre><code>rm *.yml
-cbd generate
 </code></pre>
 
 <h2 id="provider-specific-configurations">Provider specific configurations</h2>
@@ -416,63 +410,7 @@ cbd generate
 <li>Google Cloud Storage JSON API</li>
 </ul>
 <p>When creating GCP credentials in Cloudbreak you will have to provide the email address of the Service Account and the project ID (from Google Developers Console - Projects) where the service account is created. You'll also have to upload the generated P12 file and provide an OpenSSH formatted public key that will be used as an SSH key.</p>
-<h2 id="manage-cloud-credentials">Manage cloud credentials</h2>
-<p>You can now log into the Cloudbreak application at http://PUBLIC_IP:3000. Once logged in go to <strong>Manage credentials</strong>. Using manage credentials will  link your cloud account with the Cloudbreak account.</p>
-<p><code>Name:</code> name of your credential</p>
-<p><code>Description:</code> short description of your linked credential</p>
-<p><code>Project Id:</code> your GCP Project id - see Accounts</p>
-<p><code>Service Account Email Address:</code> your GCP service account mail address - see Accounts</p>
-<p><code>Service Account private (p12) key:</code> your GCP service account generated private key - see Accounts</p>
-<p><code>SSH public key:</code> the SSH public key in OpenSSH format that's private keypair can be used to log into the launched instances later</p>
-<p><code>Public in account:</code> share it with others in the account</p>
-<p>The ssh username is cloudbreak.</p>
-<h2 id="manage-resources">Manage resources</h2>
-<p>Using manage resources you can create infrastructure templates. Templates describes the infrastructure where the HDP cluster will be provisioned. We support heterogenous clusters - this means that one cluster can be built by combining different templates.</p>
-<p><code>Name:</code> name of your template</p>
-<p><code>Description:</code> short description of your template</p>
-<p><code>Instance type:</code> the Amazon instance type to be used - we suggest to use at least small or medium instances</p>
-<p><code>Volume type:</code> option to choose are SSD, regular HDD (both EBS) or Ephemeral</p>
-<p><code>Attached volumes per instance:</code> the number of disks to be attached</p>
-<p><code>Volume size (GB):</code> the size of the attached disks (in GB)</p>
-<p><code>Spot price:</code> option to set a spot price - not mandatory, if specified we will request spot price instances (which might take a while or never be fulfilled by Amazon)</p>
-<p><code>EBS encryption:</code> this feature is supported with all EBS volume types (General Purpose (SSD), Provisioned IOPS (SSD), and Magnetic</p>
-<p><code>Public in account:</code> share it with others in the account</p>
-<h2 id="manage-blueprints">Manage blueprints</h2>
-<p>Blueprints are your declarative definition of a Hadoop cluster.</p>
-<p><code>Name:</code> name of your blueprint</p>
-<p><code>Description:</code> short description of your blueprint</p>
-<p><code>Source URL:</code> you can add a blueprint by pointing to a URL. As an example you can use this <a href="https://github.com/sequenceiq/ambari-rest-client/raw/1.6.0/src/main/resources/blueprints/multi-node-hdfs-yarn">blueprint</a>.</p>
-<p><code>Manual copy:</code> you can copy paste your blueprint in this text area</p>
-<p><code>Public in account:</code> share it with others in the account</p>
-<h2 id="manage-networks">Manage networks</h2>
-<p>Manage networks allows you to create or reuse existing networks and configure them.</p>
-<p><code>Name:</code> name of the network</p>
-<p><code>Description:</code> short description of your network</p>
-<p><code>Subnet (CIDR):</code> a subnet in the VPC with CIDR block</p>
-<p><code>Address prefix (CIDR):</code> the address space that is used for subnets</p>
-<p><code>Public in account:</code> share it with others in the account</p>
-<h2 id="manage-security-groups">Manage security groups</h2>
-<p>Security groups allows configuration of traffic/access to the cluster. Currently there are two default groups, and later versions will allow setup of new groups.</p>
-<p><code>only-ssh-and-ssl:</code> all ports are locked down (you can't access Hadoop services outside of the VPN) but SSH (22) and HTTPS (443)</p>
-<p><code>all-services-port:</code> all Hadoop services + SSH/HTTP are accessible by default: SSH (22) HTTPS (443) 8080 (Ambari) 8500 (Consul) 50070 (NN) 8088 (RM Web) 8030 (RM Scheduler) 8050 (RM IPC) 19888 (Job history server) 60010 (HBase master) 15000 (Falcon) 8744 (Storm) 11000 (Oozie) 18080 (Spark HS) 8042 (NM Web) 9996 (Zeppelin WebSocket) 9995 (Zeppelin UI) 3080 (Kibana) 9200 (Elasticsearch)</p>
-<h2 id="create-a-cluster">Create a cluster</h2>
-<p>Using the create cluster functionality Cloudbreak will create a cloud Stack and a Hadoop Cluster. In order to create a cluster you will have to select a credential first.</p>
-<p><code>Cluster name:</code> your cluster name</p>
-<p><code>Region:</code> the region where the cluster is started</p>
-<p><code>Network:</code> the network template</p>
-<p>`Security Group:" the security group</p>
-<p><code>Blueprint:</code> your Hadoop cluster blueprint. Once the blueprint is selected we parse it and give you the option to select the followings for each <strong>hostgroup</strong>.</p>
-<p><code>Hostgroup configuration</code></p>
-<p><code>Group size:</code> the number of instances to be started</p>
-<p><code>Template:</code> the stack template associated to the hostgroup</p>
-<p><code>Enable security:</code> Install KDC and Kerberize the cluster</p>
-<p><code>Public in account:</code> share it with others in the account</p>
-<p><strong>Advanced features</strong>:</p>
-<p><code>Consul server count:</code> the number of Consul servers (odd number), by default is 3. It varies with the cluster size.</p>
-<p><code>Minimum cluster size:</code> the provisioning strategy in case of the cloud provider can't allocate all the requested nodes</p>
-<p><code>Validate blueprint:</code> feature to validate or not the Ambari blueprint. By default is switched on.</p>
-<p><code>Ambari Repository config:</code> you can take the stack RPM's from a custom stack repository</p>
-<p>Once you have launched the cluster creation you can track the progress either on Cloudbreak UI or your cloud provider management UI.</p></div>
+<p>Once Cloudbreak is up and running you can launch clusters in two different ways. You can use the <a href="../gcp_cb_ui/">Cloudbreak UI</a> or use the <a href="../gcp_cb_shell/">Cloudbreak shell</a>.</p></div>
             
         </div>
 

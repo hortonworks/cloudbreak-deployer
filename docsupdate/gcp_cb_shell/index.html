@@ -352,10 +352,10 @@
                 <div class="col-md-9" role="main">
 
 <h1 id="interactive-mode">Interactive mode</h1>
-<p>Start the shell with <code>cbd util cloudbreak-shell</code>. This will launch the Cloudbr shell inside a Docker container and you are ready to start using it.</p>
+<p>Start the shell with <code>cbd util cloudbreak-shell</code>. This will launch the Cloudbreak shell inside a Docker container and you are ready to start using it.</p>
 <h3 id="create-a-cloud-credential">Create a cloud credential</h3>
-<p>In order to start using Cloudbreak you will need to have an AWS cloud use configured. Note that Cloudbreak <strong>does not</strong> store you cloud user details - we work around the concept of <a href="http://aws.amazon.com/iam/">IAM</a> - on Amazon (or other cloud providers) you will have to create an IAM role, a policy and associate that with your Cloudbreak account.</p>
-<pre><code>credential createEC2 --description “description&quot; --name “myCredentialName&quot; --roleArn &quot;arn:aws:iam::NUMBER:role/cloudbreak-ABC&quot; --sshKeyUrl “URL towards your AWS public key&quot;
+<p>In order to start using Cloudbreak to provision a cluster in Google Cloud you will need to have an GCP credential. If you do not want to Cloubreak to reach you google cloud resources then you have to delete the service account.</p>
+<pre><code>credential create --GCP --description &quot;description&quot; --name &quot;myCredentialName&quot; --projectId &quot;proctid&quot; --serviceAccountId &quot;12345test@developer.gserviceaccount.com&quot; --serviceAccountPrivateKeyPath &quot;/tmp/gcp.p12&quot; --sshKeyUrl &quot;URL towards your GCP public key&quot;
 </code></pre>
 
 <p>Alternatively you can upload your public key from a file as well, by using the <code>—sshKeyPath</code> switch. You can check whether the credential was creates successfully by using the <code>credential list</code> command. You can switch between your cloud credential - when you’d like to use one and act with that you will have to use:</p>
@@ -364,9 +364,12 @@
 
 <h3 id="create-a-template">Create a template</h3>
 <p>A template gives developers and systems administrators an easy way to create and manage a collection of cloud infrastructure related resources, maintaining and updating them in an orderly and predictable fashion. A template can be used repeatedly to create identical copies of the same stack (or to use as a foundation to start a new stack).</p>
-<pre><code>template createEC2 --name awstemplate --description aws-template  --region EU_WEST_1 --instanceType M3Xlarge --volumeSize 100 --volumeCount 2
+<pre><code>template create --GCP --name gcptemplate --description gcp-template --instanceType N1_STANDARD_4 --volumeSize 100 --volumeCount 2
 </code></pre>
 
+<p>Other available options:</p>
+<p>--volumeType "voltype": defaults to "HDD", other allowed value: "SSD"</p>
+<p>--publicInAccount "flag": flags if the template is public in the account</p>
 <p>You can check whether the template was created successfully by using the <code>template list</code> command. Check the template and select it if you are happy with it:</p>
 <pre><code>template show --id #ID of the template
 
@@ -375,7 +378,7 @@ template select --id #ID of the template
 
 <h3 id="create-a-stack">Create a stack</h3>
 <p>Stacks are template <code>instances</code> - a running cloud infrastructure created based on a template. Use the following command to create a stack to be used with your Hadoop cluster:</p>
-<pre><code>stack create --name “myStackName&quot; --nodeCount 10
+<pre><code>stack create --name &quot;myStackName&quot; --nodeCount 10
 </code></pre>
 
 <h3 id="select-a-blueprint">Select a blueprint</h3>
@@ -387,13 +390,13 @@ blueprint select --id #ID of the blueprint
 
 <h3 id="create-a-hadoop-cluster">Create a Hadoop cluster</h3>
 <p>You are almost done - one more command and this will create your Hadoop cluster on your favorite cloud provider. Same as the API, or UI this will use your <code>template</code>, and by using CloudFormation will launch a cloud <code>stack</code> - once the <code>stack</code> is up and running (cloud provisioning is done) it will use your selected <code>blueprint</code> and install your custom Hadoop cluster with the selected components and services.</p>
-<pre><code>cluster create --description “my cluster desc&quot;
+<pre><code>cluster create --description &quot;my cluster desc&quot;
 </code></pre>
 
 <p>You are done - you can check the progress through the Ambari UI. If you log back to Cloudbreak UI you can check the progress over there as well, and learn the IP address of Ambari.</p>
 <h1 id="silent-mode">Silent mode</h1>
 <p>With Cloudbreak shell you can recreate clusters based on earlier deployments. Each time you start the shell the executed commands are logged in a file line by line and later either with the <code>script</code> command or specifying an <code>—cmdfile</code> option the same commands can be executed again.</p>
-<p>With c<code>bd util cloudbreak-shell-quiet</code> you can specify a shell file and let the shell apply the configs step by step in a silent mode.</p></div>
+<p>With <code>cbd util cloudbreak-shell-quiet</code> you can specify a shell file and let the shell apply the configs step by step in a silent mode.</p></div>
             
         </div>
 
