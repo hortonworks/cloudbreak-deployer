@@ -331,11 +331,115 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
+        <li class="main active"><a href="#manage-cloud-credentials">Manage cloud credentials</a></li>
+        
+    
+        <li class="main "><a href="#manage-resources">Manage resources</a></li>
+        
+    
+        <li class="main "><a href="#manage-blueprints">Manage blueprints</a></li>
+        
+    
+        <li class="main "><a href="#manage-networks">Manage networks</a></li>
+        
+    
+        <li class="main "><a href="#manage-security-groups">Manage security groups</a></li>
+        
+    
+        <li class="main "><a href="#create-a-cluster">Create a cluster</a></li>
+        
+    
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-</div>
+<p>Once Cloudbreak is up and running you can launch clusters in two different ways. You can use the <a href="./">Cloudbreak UI</a> or use the <a href="../openstack_cb_shell/">Cloudbreak shell</a>.</p>
+<h2 id="manage-cloud-credentials">Manage cloud credentials</h2>
+<p>You can now log into the Cloudbreak application at http://PUBLIC_IP:3000. Once logged in go to <strong>Manage credentials</strong>. Using manage credentials will  link your cloud account with the Cloudbreak account.</p>
+<p><code>Name:</code> name of your credential</p>
+<p><code>Description:</code> short description of your linked credential</p>
+<p><code>User:</code> your OpenStack user</p>
+<p><code>Password:</code> your password</p>
+<p><code>Tenant Name:</code> OpenStack tenant name</p>
+<p><code>Endpoint:</code> Openstack Identity Service (Keystone) endpont (e.g. http://PUBLIC_IP:5000/v2.0)</p>
+<p><code>SSH certificate:</code> the SSH public certificate in OpenSSH format that's private keypair can be used to log into the launched instances later with the ssh username <strong>centos</strong></p>
+<p><code>Public in account:</code> share it with others in the account</p>
+<h2 id="manage-resources">Manage resources</h2>
+<p>Using manage resources you can create infrastructure templates. Templates describes the infrastructure where the HDP cluster will be provisioned. We support heterogenous clusters - this means that one cluster can be built by combining different templates.</p>
+<p><code>Name:</code> name of your template</p>
+<p><code>Description:</code> short description of your template</p>
+<p><code>Instance type:</code> the OpenStack instance type to be used</p>
+<p><code>Attached volumes per instance:</code> the number of disks to be attached</p>
+<p><code>Volume size (GB):</code> the size of the attached disks (in GB)</p>
+<p><code>Public in account:</code> share it with others in the account</p>
+<h2 id="manage-blueprints">Manage blueprints</h2>
+<p>Blueprints are your declarative definition of a Hadoop cluster.</p>
+<p><code>Name:</code> name of your blueprint</p>
+<p><code>Description:</code> short description of your blueprint</p>
+<p><code>Source URL:</code> you can add a blueprint by pointing to a URL. As an example you can use this <a href="https://github.com/sequenceiq/ambari-rest-client/raw/1.6.0/src/main/resources/blueprints/multi-node-hdfs-yarn">blueprint</a>.</p>
+<p><code>Manual copy:</code> you can copy paste your blueprint in this text area</p>
+<p><code>Public in account:</code> share it with others in the account</p>
+<h2 id="manage-networks">Manage networks</h2>
+<p>Manage networks allows you to create or reuse existing networks and configure them.</p>
+<p><code>Name:</code> name of the network</p>
+<p><code>Description:</code> short description of your network</p>
+<p><code>Subnet (CIDR):</code> a subnet in the VPC with CIDR block</p>
+<p><code>Public network ID</code> id of an OpenStack public network</p>
+<p><code>Public in account:</code> share it with others in the account</p>
+<h2 id="manage-security-groups">Manage security groups</h2>
+<p>Security groups allows configuration of traffic/access to the cluster. Currently there are two default groups, and later versions will allow setup of new groups.</p>
+<p><code>only-ssh-and-ssl:</code> all ports are locked down (you can't access Hadoop services outside of the VPN) but </p>
+<ul>
+<li>SSH (22)</li>
+<li>HTTPS (443)</li>
+</ul>
+<p><code>all-services-port:</code> all Hadoop services + SSH/HTTP are accessible by default:</p>
+<ul>
+<li>SSH (22)</li>
+<li>HTTPS (443)</li>
+<li>Ambari (8080)</li>
+<li>Consul (8500) </li>
+<li>NN (50070) </li>
+<li>RM Web (8088) </li>
+<li>RM Scheduler (8030) </li>
+<li>RM IPC (8050) </li>
+<li>Job history server (19888) </li>
+<li>HBase master (60010) </li>
+<li>Falcon (15000) </li>
+<li>Storm (8744) </li>
+<li>Oozie (11000) </li>
+<li>Spark HS (18080) </li>
+<li>NM Web (8042) </li>
+<li>Zeppelin WebSocket (9996) </li>
+<li>Zeppelin UI (9995) </li>
+<li>Kibana (3080) </li>
+<li>Elasticsearch (9200) </li>
+</ul>
+<h2 id="create-a-cluster">Create a cluster</h2>
+<p>Using the create cluster functionality Cloudbreak will create a cloud Stack and a Hadoop Cluster. In order to create a cluster you will have to select a credential first.</p>
+<p><code>Cluster name:</code> your cluster name</p>
+<p><code>Region:</code> the region where the cluster is started</p>
+<p><code>Network:</code> the network template</p>
+<p>`Security Group:" the security group</p>
+<p><code>Blueprint:</code> your Hadoop cluster blueprint. Once the blueprint is selected we parse it and give you the option to select the followings for each <strong>hostgroup</strong>.</p>
+<p><code>Hostgroup configuration</code></p>
+<ul>
+<li><code>Group size:</code> the number of instances to be started</li>
+<li><code>Template:</code> the stack template associated to the hostgroup</li>
+</ul>
+<p><code>Public in account:</code> share it with others in the account</p>
+<p><code>Enable security:</code> Install KDC and Kerberize the cluster</p>
+<p><strong>Advanced features</strong>:</p>
+<p><code>Consul server count:</code> the number of Consul servers (odd number), by default is 3. It varies with the cluster size.</p>
+<p><code>Platform variant:</code> Cloudbreak provides two implementation for creating OpenStack cluster</p>
+<ul>
+<li><code>HEAT:</code> using heat template to create the resources</li>
+<li><code>NATIVE:</code> using API calls to create the resources</li>
+</ul>
+<p><code>Minimum cluster size:</code> the provisioning strategy in case of the cloud provider can't allocate all the requested nodes</p>
+<p><code>Validate blueprint:</code> feature to validate or not the Ambari blueprint. By default is switched on.</p>
+<p><code>Ambari Repository config:</code> you can take the stack RPM's from a custom stack repository</p>
+<p>Once you have launched the cluster creation you can track the progress either on Cloudbreak UI or your cloud provider management UI.</p></div>
             
         </div>
 
