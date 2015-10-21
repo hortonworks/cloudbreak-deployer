@@ -400,10 +400,16 @@
 </li>
 </ol>
 <p>In order for Cloudbreak to be able to launch clusters on Azure on your behalf you need to set up your Azure ARM application.</p>
-<pre><code>cbd azure configure-arm --app_name myapp --app_password password123 --subscription_id 1234-abcd-efgh-1234 --username example@company.onmicrosoft.com --password password123
+<pre><code>cbd azure configure-arm --app_name myapp --app_password password123 --subscription_id 1234-abcd-efgh-1234 --username testuser@company.onmicrosoft.com --password password123
 </code></pre>
 
-<p>Where <code>--app_password</code> is your application password (default is password), <code>--subscription_id</code> is your Azure subscription ID, <code>--username</code> is your Azure username and  <code>--password</code> is your Azure password.</p>
+<p>The command first creates an Active Directory application with the configured name and password and adds the permissions that are needed to call the Azure Resource Manager API.</p>
+<p><em>Options:</em></p>
+<p><strong>--app_name</strong>: Your application name. Default is <em>app</em>.</p>
+<p><strong>--app_password</strong>: Your application password. Default is <em>password</em>.</p>
+<p><strong>--subscription_id</strong>: Your Azure subscription ID.</p>
+<p><strong>--username</strong>: Your Azure username.</p>
+<p><strong>--password</strong>: Your Azure password.</p>
 <h4 id="filesystem-configuration">Filesystem configuration</h4>
 <p>When starting a cluster with Cloudbreak on Azure, the default filesystem is “Windows Azure blob storage with DASH”. Hadoop has built-in support for the <a href="https://hadoop.apache.org/docs/current/hadoop-azure/index.html">WASB filesystem</a> so it can be used easily as HDFS instead of disks.</p>
 <h5 id="disks-and-blob-storage">Disks and blob storage</h5>
@@ -412,7 +418,7 @@ When WASB is used as a Hadoop filesystem the files are full-value blobs in a sto
 To bypass those limits Microsoft created a small service called <a href="https://github.com/MicrosoftDX/Dash">DASH</a>. DASH itself is a service that imitates the API of the Azure Blob Storage API and it can be deployed as a Microsoft Azure Cloud Service. Because its API is the same as the standard blob storage API it can be used <em>almost</em> in the same way as the default WASB filesystem from a Hadoop deployment.
 DASH works by sharding the storage access across multiple storage accounts. It can be configured to distribute storage account load to at most 15 <strong>scaleout</strong> storage accounts. It needs one more <strong>namespace</strong> storage account where it keeps track of where the data is stored.
 When configuring a WASB filesystem with Hadoop, the only required config entries are the ones where the access details are described. To access a storage account Azure generates an access key that is displayed on the Azure portal or can be queried through the API while the account name is the name of the storage account itself. A DASH service has a similar account name and key, those can be configured in the configuration file while deploying the cloud service.</p>
-<p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak/master/docs/images/dash.png" /></p>
+<p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/dash.png" /></p>
 <h5 id="deploying-a-dash-service-with-cloudbreak-deployer">Deploying a DASH service with Cloudbreak deployer</h5>
 <p>We have automated the deployment of a DASH service in cloudbreak-deployer. After cbd is installed, simply run the following command to deploy a DASH cloud service with 5 scale out storage accounts:</p>
 <pre><code>cbd azure deploy-dash --accounts 5 --prefix dash --location &quot;West Europe&quot; --instances 3
