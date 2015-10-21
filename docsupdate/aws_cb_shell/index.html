@@ -359,7 +359,7 @@
 </code></pre>
 
 <p>Alternatively you can upload your public key from a file as well, by using the <code>—sshKeyPath</code> switch. You can check whether the credential was creates successfully by using the <code>credential list</code> command. You can switch between your cloud credential - when you’d like to use one and act with that you will have to use:</p>
-<pre><code>credential select --id #ID of the credential
+<pre><code>credential select --name #NAME of the credential
 </code></pre>
 
 <h3 id="create-a-template">Create a template</h3>
@@ -368,26 +368,26 @@
 </code></pre>
 
 <p>You can check whether the template was created successfully by using the <code>template list</code> command. Check the template and select it if you are happy with it:</p>
-<pre><code>template show --id #ID of the template
+<pre><code>template show --name #NAME of the template
 
-template select --id #ID of the template
+template select --name #NAME of the template
 </code></pre>
 
 <h3 id="create-a-stack">Create a stack</h3>
 <p>Stacks are template <code>instances</code> - a running cloud infrastructure created based on a template. Use the following command to create a stack to be used with your Hadoop cluster:</p>
-<pre><code>stack create --name “myStackName&quot; --nodeCount 10
+<pre><code>stack create --name &quot;myStackName&quot; --nodeCount 10
 </code></pre>
 
 <h3 id="select-a-blueprint">Select a blueprint</h3>
 <p>We ship default Hadoop cluster blueprints with Cloudbreak. You can use these blueprints or add yours. To see the available blueprints and use one of them please use:</p>
 <pre><code>blueprint list
 
-blueprint select --id #ID of the blueprint
+blueprint select --name #NAME of the blueprint
 </code></pre>
 
 <h3 id="create-a-hadoop-cluster">Create a Hadoop cluster</h3>
 <p>You are almost done - one more command and this will create your Hadoop cluster on your favorite cloud provider. Same as the API, or UI this will use your <code>template</code>, and by using CloudFormation will launch a cloud <code>stack</code> - once the <code>stack</code> is up and running (cloud provisioning is done) it will use your selected <code>blueprint</code> and install your custom Hadoop cluster with the selected components and services.</p>
-<pre><code>cluster create --description “my cluster desc&quot;
+<pre><code>cluster create --description &quot;my cluster desc&quot;
 </code></pre>
 
 <p>You are done - you can check the progress through the Ambari UI. If you log back to Cloudbreak UI you can check the progress over there as well, and learn the IP address of Ambari.</p>
