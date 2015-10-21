@@ -361,7 +361,7 @@
 <p><code>Service Account private (p12) key:</code> your GCP service account generated private key - see Accounts</p>
 <p><code>SSH public key:</code> the SSH public key in OpenSSH format that's private keypair can be used to log into the launched instances later</p>
 <p><code>Public in account:</code> share it with others in the account</p>
-<p>The ssh username is cloudbreak.</p>
+<p>The ssh username is <strong>cloudbreak</strong>.</p>
 <h2 id="manage-resources">Manage resources</h2>
 <p>Using manage resources you can create infrastructure templates. Templates describes the infrastructure where the HDP cluster will be provisioned. We support heterogenous clusters - this means that one cluster can be built by combining different templates.</p>
 <p><code>Name:</code> name of your template</p>
@@ -375,7 +375,7 @@
 <p>Blueprints are your declarative definition of a Hadoop cluster.</p>
 <p><code>Name:</code> name of your blueprint</p>
 <p><code>Description:</code> short description of your blueprint</p>
-<p><code>Source URL:</code> you can add a blueprint by pointing to a URL. As an example you can use this <a href="https://github.com/sequenceiq/ambari-rest-client/raw/1.6.0/src/main/resources/blueprints/multi-node-hdfs-yarn">blueprint</a>.</p>
+<p><code>Source URL:</code> you can add a blueprint by pointing to a URL. As an example you can use this [blueprint](https://raw.githubusercontent.com/sequenceiq/cloudbreak/master/core/src/main/resources/defaults/blueprints/multi-node-hdfs-yarn.bp.</p>
 <p><code>Manual copy:</code> you can copy paste your blueprint in this text area</p>
 <p><code>Public in account:</code> share it with others in the account</p>
 <h2 id="manage-networks">Manage networks</h2>
@@ -418,7 +418,7 @@
 <p><code>Cluster name:</code> your cluster name</p>
 <p><code>Region:</code> the region where the cluster is started</p>
 <p><code>Network:</code> the network template</p>
-<p>`Security Group:" the security group</p>
+<p><code>Security Group:</code> the security group</p>
 <p><code>Blueprint:</code> your Hadoop cluster blueprint. Once the blueprint is selected we parse it and give you the option to select the followings for each <strong>hostgroup</strong>.</p>
 <p><code>Hostgroup configuration</code></p>
 <p><code>Group size:</code> the number of instances to be started</p>
