@@ -331,32 +331,32 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#azure-based-installation">AZURE based installation</a></li>
+        <li class="main active"><a href="#azure-deployment">AZURE deployment</a></li>
         
-            <li><a href="#usage">Usage</a></li>
+            <li><a href="#installation">Installation</a></li>
+        
+            <li><a href="#initialize-profile">Initialize Profile</a></li>
         
             <li><a href="#use-cloudbreak">Use Cloudbreak</a></li>
         
-            <li><a href="#azure-access-setup">Azure access setup</a></li>
-        
-            <li><a href="#filesystem-configuration">Filesystem configuration</a></li>
+            <li><a href="#provider-specific-configurations">Provider specific configurations</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="azure-based-installation">AZURE based installation</h1>
-<p>We have pre-built a custom Azure image available on VM Depot with all the required tooling and Cloudbreak deployer installed. In order to launch this image on Azure please use the following <a href="">image</a>.</p>
-<p>Note that we use the new <a href="https://azure.microsoft.com/en-us/documentation/articles/resource-group-overview/">Azure ARM</a> in order to launch clusters. In order to work we need to create an Active Directory application with the configured name and password and adds the permissions that are needed to call the Azure Resource Manager API. Cloudbreak deployer automates all this for you.</p>
-<h2 id="usage">Usage</h2>
+<h1 id="azure-deployment">AZURE deployment</h1>
+<p>AZURE image is available on the VM Depot with all the required tools and installed Cloudbreak Deployer.. In order to launch this image on Azure please use the following <a href="https://102589fae040d8westeurope.blob.core.windows.net/images/cb-centos71-amb210-2015-08-25-ofs_2015-August-25_10-1-os-2015-08-25.vhd">image</a>.</p>
+<h2 id="installation">Installation</h2>
 <p>Once the Cloudbreak deployer is installed it will generate some config files and will download supporting binaries. It is
 advised that you create a dedicated directory for it:</p>
 <pre><code>mkdir cloudbreak-deployment
 cd cloudbreak-deployment
+curl https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/install | sh &amp;&amp; cbd --version
 </code></pre>
 
-<h3 id="initialize-profile">Initialize Profile</h3>
+<h2 id="initialize-profile">Initialize Profile</h2>
 <p>First initialize your directory by creating a <code>Profile</code> file:</p>
 <pre><code>cbd init
 </code></pre>
@@ -364,21 +364,26 @@ cd cloudbreak-deployment
 <p>It will create a <code>Profile</code> file in the current directory. Please edit the file - the only required
 configuration is the <code>PUBLIC_IP</code>. This IP will be used to access the Cloudbreak UI
 (called Uluwatu). In some cases the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
-<h4 id="change-default-usernamepassword">Change default username/Password</h4>
+<h3 id="change-default-usernamepassword">Change default username/Password</h3>
 <p>The default credentials can be revealed by <code>cbd login</code> These values are used in the <code>uaa.yml</code> file's end section. To change these values, add 2 lines into your Profile:</p>
 <pre><code>export UAA_DEFAULT_USER_EMAIL=myself@example.com
 export UAA_DEFAULT_USER_PW=demo123
 </code></pre>
 
-<h4 id="regenerate-your-profile">Regenerate your Profile</h4>
+<h3 id="regenerate-your-profile">Regenerate your Profile</h3>
 <p>You are done with the configuration of Cloudbreak deployer. The last thing you have to do is to regenerate the configurations in order to take effect.</p>
 <pre><code>rm *.yml
 cbd generate
 </code></pre>
 
-<h4 id="verify-configs">Verify configs</h4>
+<h3 id="verify-configurations">Verify configurations</h3>
 <p>In order to verify that all configs are OK use the <code>doctor</code> command.</p>
 <pre><code>cbd doctor
+</code></pre>
+
+<h3 id="pull-docker-images">Pull Docker images</h3>
+<p>All Cloudbreak components and the backend database is running inside containers. The pull command is optional but you can run it prior to cbd start</p>
+<pre><code>cbd pull
 </code></pre>
 
 <h2 id="use-cloudbreak">Use Cloudbreak</h2>
@@ -396,7 +401,9 @@ cbd generate
 <pre><code>cbd logs
 </code></pre>
 
-<h2 id="azure-access-setup">Azure access setup</h2>
+<h2 id="provider-specific-configurations">Provider specific configurations</h2>
+<p>Note that we use the new <a href="https://azure.microsoft.com/en-us/documentation/articles/resource-group-overview/">Azure ARM</a> in order to launch clusters. In order to work we need to create an Active Directory application with the configured name and password and adds the permissions that are needed to call the Azure Resource Manager API. Cloudbreak deployer automates all this for you.</p>
+<h3 id="azure-access-setup">Azure access setup</h3>
 <p>If you want to use your Azure subscription then you need an Azure Active directory user.</p>
 <ol>
 <li>
@@ -435,7 +442,7 @@ cbd generate
 <p><strong>--subscription_id</strong>: Your Azure subscription ID.</p>
 <p><strong>--username</strong>: Your Azure username.</p>
 <p><strong>--password</strong>: Your Azure password.</p>
-<h2 id="filesystem-configuration">Filesystem configuration</h2>
+<h3 id="filesystem-configuration">Filesystem configuration</h3>
 <p>When starting a cluster with Cloudbreak on Azure, the default filesystem is “Windows Azure blob storage with DASH”. Hadoop has built-in support for the <a href="https://hadoop.apache.org/docs/current/hadoop-azure/index.html">WASB filesystem</a> so it can be used easily as HDFS instead of disks.</p>
 <h5 id="disks-and-blob-storage">Disks and blob storage</h5>
 <p>In Azure every data disk attached to a virtual machine <a href="https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-disks-vhds/">is stored</a> as a virtual hard disk (VHD) in a page blob inside an Azure storage account. Because these are not local disks and the operations must be done on the VHD files it causes degraded performance when used as HDFS.

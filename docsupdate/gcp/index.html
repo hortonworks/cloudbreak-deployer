@@ -331,9 +331,11 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#gcp-based-installation">GCP based installation</a></li>
+        <li class="main active"><a href="#gcp-deployment">GCP deployment</a></li>
         
-            <li><a href="#usage">Usage</a></li>
+            <li><a href="#installation">Installation</a></li>
+        
+            <li><a href="#initialize-profile">Initialize Profile</a></li>
         
             <li><a href="#use-cloudbreak">Use Cloudbreak</a></li>
         
@@ -344,17 +346,18 @@
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="gcp-based-installation">GCP based installation</h1>
-<p>We have pre-built a custom GCP image available on VM Depot with all the required tooling and Cloudbreak deployer installed. In order to launch this image on Azure please use the following <a href="">image</a>.</p>
+<h1 id="gcp-deployment">GCP deployment</h1>
+<p>GCP image is available in our storage with all the required tools and installed Cloudbreak Deployer. In order to launch this image on GCP please use the following <a href="http://storage.googleapis.com/sequenceiqimage/cb-centos71-amb210-2015-08-24-docker18.tar.gz">image</a>.</p>
 <p>Cloudbreak will already be installed, thus you can follow these steps to launch the application.</p>
-<h2 id="usage">Usage</h2>
+<h2 id="installation">Installation</h2>
 <p>Once the Cloudbreak deployer is installed it will generate some config files and will download supporting binaries. It is
 advised that you create a dedicated directory for it:</p>
 <pre><code>mkdir cloudbreak-deployment
 cd cloudbreak-deployment
+curl https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/install | sh &amp;&amp; cbd --version
 </code></pre>
 
-<h3 id="initialize-profile">Initialize Profile</h3>
+<h2 id="initialize-profile">Initialize Profile</h2>
 <p>First initialize your directory by creating a <code>Profile</code> file:</p>
 <pre><code>cbd init
 </code></pre>
@@ -362,21 +365,25 @@ cd cloudbreak-deployment
 <p>It will create a <code>Profile</code> file in the current directory. Please edit the file - the only required
 configuration is the <code>PUBLIC_IP</code>. This IP will be used to access the Cloudbreak UI
 (called Uluwatu). In some cases the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
-<h4 id="change-default-usernamepassword">Change default username/Password</h4>
+<h3 id="change-default-usernamepassword">Change default username/Password</h3>
 <p>The default credentials can be revealed by <code>cbd login</code> These values are used in the <code>uaa.yml</code> file's end section. To change these values, add 2 lines into your Profile:</p>
 <pre><code>export UAA_DEFAULT_USER_EMAIL=myself@example.com
 export UAA_DEFAULT_USER_PW=demo123
 </code></pre>
 
-<h4 id="regenerate-your-profile">Regenerate your Profile</h4>
-<p>You are done with the configuration of Cloudbreak deployer. The last thing you have to do is to regenerate the configurations in order to take effect.</p>
-<pre><code>rm *.yml
-cbd generate
+<h3 id="regenerate-your-profile">Regenerate your Profile</h3>
+<p>There is available a "cbd regenerate" command for this.</p>
+<pre><code>cbd regenerate
 </code></pre>
 
-<h4 id="verify-configs">Verify configs</h4>
+<h3 id="verify-configurations">Verify configurations</h3>
 <p>In order to verify that all configs are OK use the <code>doctor</code> command.</p>
 <pre><code>cbd doctor
+</code></pre>
+
+<h3 id="pull-docker-images">Pull Docker images</h3>
+<p>All Cloudbreak components and the backend database is running inside containers. The pull command is optional but you can run it prior to cbd start</p>
+<pre><code>cbd pull
 </code></pre>
 
 <h2 id="use-cloudbreak">Use Cloudbreak</h2>
