@@ -335,8 +335,6 @@
         
             <li><a href="#usage">Usage</a></li>
         
-            <li><a href="#default-credentials">Default Credentials</a></li>
-        
     
     </ul>
 </div></div>
@@ -391,18 +389,6 @@ cbd generate
 <p>This will start all the Docker containers and initialize the application. Please give a few minutes until all services starts. While the services are starting you can check the logs.</p>
 <h3 id="watch-the-logs">Watch the logs</h3>
 <pre><code>cbd logs
-</code></pre>
-
-<h2 id="default-credentials">Default Credentials</h2>
-<p>The default credentials can be revealed by <code>cbd login</code></p>
-<p>These values are used in the <code>uaa.yml</code> end section. To change these values, add 2 lines into your Profile:</p>
-<pre><code>export UAA_DEFAULT_USER_EMAIL=myself@example.com
-export UAA_DEFAULT_USER_PW=demo123
-</code></pre>
-
-<p>and than you need to recreate configs:</p>
-<pre><code>rm *.yml
-cbd generate
 </code></pre></div>
             
         </div>
