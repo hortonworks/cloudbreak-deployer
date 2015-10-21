@@ -337,14 +337,19 @@
         
             <li><a href="#create-a-template">Create a template</a></li>
         
-            <li><a href="#create-a-stack">Create a stack</a></li>
+            <li><a href="#create-or-select-a-blueprint">Create or select a blueprint</a></li>
         
-            <li><a href="#select-a-blueprint">Select a blueprint</a></li>
+            <li><a href="#create-a-network">Create a network</a></li>
         
-            <li><a href="#create-a-hadoop-cluster">Create a Hadoop cluster</a></li>
+            <li><a href="#create-a-security-group">Create a security group</a></li>
+        
+            <li><a href="#configure-instance-groups">Configure instance groups</a></li>
         
     
         <li class="main "><a href="#silent-mode">Silent mode</a></li>
+        
+    
+        <li class="main "><a href="#example">Example</a></li>
         
     
     </ul>
@@ -352,48 +357,114 @@
                 <div class="col-md-9" role="main">
 
 <h1 id="interactive-mode">Interactive mode</h1>
-<p>Start the shell with <code>cbd util cloudbreak-shell</code>. This will launch the Cloudbr shell inside a Docker container and you are ready to start using it.</p>
+<p>Start the shell with <code>cbd util cloudbreak-shell</code>. This will launch the Cloudbreak shell inside a Docker container and you are ready to start using it.
+You have to copy files into the cbd working directory, which you would like to use from shell.</p>
 <h3 id="create-a-cloud-credential">Create a cloud credential</h3>
 <p>In order to start using Cloudbreak you will need to have an AWS cloud use configured. Note that Cloudbreak <strong>does not</strong> store you cloud user details - we work around the concept of <a href="http://aws.amazon.com/iam/">IAM</a> - on Amazon (or other cloud providers) you will have to create an IAM role, a policy and associate that with your Cloudbreak account.</p>
-<pre><code>credential createEC2 --description “description&quot; --name “myCredentialName&quot; --roleArn &quot;arn:aws:iam::NUMBER:role/cloudbreak-ABC&quot; --sshKeyUrl “URL towards your AWS public key&quot;
+<pre><code>credential create --EC2 --description &quot;description&quot; --name my-aws-credential --roleArn &lt;arn role&gt; --sshKeyUrl &lt;URL towards your AWS public key&gt;
 </code></pre>
 
 <p>Alternatively you can upload your public key from a file as well, by using the <code>—sshKeyPath</code> switch. You can check whether the credential was creates successfully by using the <code>credential list</code> command. You can switch between your cloud credential - when you’d like to use one and act with that you will have to use:</p>
-<pre><code>credential select --name #NAME of the credential
+<pre><code>credential select --name my-aws-credential
 </code></pre>
 
 <h3 id="create-a-template">Create a template</h3>
 <p>A template gives developers and systems administrators an easy way to create and manage a collection of cloud infrastructure related resources, maintaining and updating them in an orderly and predictable fashion. A template can be used repeatedly to create identical copies of the same stack (or to use as a foundation to start a new stack).</p>
-<pre><code>template createEC2 --name awstemplate --description aws-template  --region EU_WEST_1 --instanceType M3Xlarge --volumeSize 100 --volumeCount 2
+<pre><code>template create --EC2 --name awstemplate --description aws-template --instanceType M3Xlarge --volumeSize 100 --volumeCount 2
 </code></pre>
 
-<p>You can check whether the template was created successfully by using the <code>template list</code> command. Check the template and select it if you are happy with it:</p>
-<pre><code>template show --name #NAME of the template
-
-template select --name #NAME of the template
+<p>You can check whether the template was created successfully by using the <code>template list</code> or <code>template show</code> command.</p>
+<h3 id="create-or-select-a-blueprint">Create or select a blueprint</h3>
+<p>You can define Hadoop cluster blueprints with cloudbreak-shell:</p>
+<pre><code>blueprint add --name myblueprint --description myblueprint-description --url &lt;url of blueprint&gt;
 </code></pre>
 
-<h3 id="create-a-stack">Create a stack</h3>
-<p>Stacks are template <code>instances</code> - a running cloud infrastructure created based on a template. Use the following command to create a stack to be used with your Hadoop cluster:</p>
-<pre><code>stack create --name &quot;myStackName&quot; --nodeCount 10
-</code></pre>
-
-<h3 id="select-a-blueprint">Select a blueprint</h3>
+<p>Other available options:</p>
+<ul>
+<li>--file</li>
+<li>--publicInAccount</li>
+</ul>
 <p>We ship default Hadoop cluster blueprints with Cloudbreak. You can use these blueprints or add yours. To see the available blueprints and use one of them please use:</p>
 <pre><code>blueprint list
 
-blueprint select --name #NAME of the blueprint
+blueprint select --name hdp-small-default
 </code></pre>
 
+<h3 id="create-a-network">Create a network</h3>
+<p>A network gives developers and systems administrators an easy way to create and manage a collection of cloud infrastructure related networking, maintaining and updating them in an orderly and predictable fashion. A network can be used repeatedly to create identical copies of the same stack (or to use as a foundation to start a new stack).</p>
+<pre><code>network create --EC2 --name awsnetwork --description aws-network --subnet 10.0.0.0/16
+</code></pre>
+
+<p>Other available options:</p>
+<ul>
+<li>
+<p>--vpcID "string": your existing vpc on amazon</p>
+</li>
+<li>
+<p>--internetGatewayID "string": your amazon internet gateway</p>
+</li>
+<li>
+<p>--publicInAccount "flag": flags if the network is public in the account</p>
+</li>
+</ul>
+<p>There is a default network with name "default-aws-network".</p>
+<p>You can check whether the network was created successfully by using the <code>network list</code> command. Check the network and select it if you are happy with it:</p>
+<pre><code>network show --name awsnetwork
+
+network select --name awsnetwork
+</code></pre>
+
+<h3 id="create-a-security-group">Create a security group</h3>
+<p>A security group gives developers and systems administrators an easy way to create and manage a collection of cloud infrastructure related security rules, maintaining and updating them in an orderly and predictable fashion. A security group can be used repeatedly to create identical copies of the same stack (or to use as a foundation to start a new stack).</p>
+<pre><code>securitygroup create --name secgroup_example --description securitygroup-example --rules 0.0.0.0/0:tcp:8080,9090;10.0.33.0/24:tcp:1234,1235
+</code></pre>
+
+<p>You can check whether the security group was created successfully by using the <code>securitygroup list</code> command. Check the security group and select it if you are happy with it:</p>
+<pre><code>securitygroup show --name secgroup_example
+
+securitygroup select --name secgroup_example
+</code></pre>
+
+<p>There are two default security groups defined: "all-services-port" and "only-ssh-and-ssl"</p>
+<h2 id="configure-instance-groups">Configure instance groups</h2>
+<p>You have to configure the instancegroups before the provisioning. An instancegroup is defining a group of your nodes with a specified template. Usually we create instancegroups for the hostgroups defined in the blueprints.</p>
+<pre><code>instancegroup configure --instanceGroup host_group_slave_1 --nodecount 3 --templateName minviable-aws
+</code></pre>
+
+<p>Other available options:</p>
+<ul>
+<li>--templateId "string": Id of the template</li>
+</ul>
 <h3 id="create-a-hadoop-cluster">Create a Hadoop cluster</h3>
-<p>You are almost done - one more command and this will create your Hadoop cluster on your favorite cloud provider. Same as the API, or UI this will use your <code>template</code>, and by using CloudFormation will launch a cloud <code>stack</code> - once the <code>stack</code> is up and running (cloud provisioning is done) it will use your selected <code>blueprint</code> and install your custom Hadoop cluster with the selected components and services.</p>
-<pre><code>cluster create --description &quot;my cluster desc&quot;
+<p>You are almost done - two more command and this will create your Hadoop cluster on your favorite cloud provider. Same as the API, or UI this will use your <code>template</code>, and by using CloudFormation will launch a cloud stack</p>
+<pre><code>stack create --name my-first-stack
+</code></pre>
+
+<p>Once the <code>stack</code> is up and running (cloud provisioning is done) it will use your selected <code>blueprint</code> and install your custom Hadoop cluster with the selected components and services.</p>
+<pre><code>cluster create --description &quot;my first cluster&quot;
 </code></pre>
 
 <p>You are done - you can check the progress through the Ambari UI. If you log back to Cloudbreak UI you can check the progress over there as well, and learn the IP address of Ambari.</p>
 <h1 id="silent-mode">Silent mode</h1>
 <p>With Cloudbreak shell you can recreate clusters based on earlier deployments. Each time you start the shell the executed commands are logged in a file line by line and later either with the <code>script</code> command or specifying an <code>—cmdfile</code> option the same commands can be executed again.</p>
-<p>With c<code>bd util cloudbreak-shell-quiet</code> you can specify a shell file and let the shell apply the configs step by step in a silent mode.</p></div>
+<p>With <code>cbd util cloudbreak-shell-quiet</code> you can specify a shell file and let the shell apply the configs step by step in a silent mode.</p>
+<h1 id="example">Example</h1>
+<p>The following example creates a hadoop cluster with <code>hdp-small-default</code> blueprint on M3Xlarge instances with 2X100G attached disks on <code>default-aws-network</code> network using <code>all-services-port</code> security group:</p>
+<pre><code>credential create --EC2 --description description --name my-aws-credential --roleArn &lt;arn role&gt; --sshKeyPath &lt;path of your AWS public key&gt;
+credential select --name mvCredentialName
+template create --EC2 --name awstemplate --description aws-template --instanceType M3Xlarge --volumeSize 100 --volumeCount 2
+blueprint select --name hdp-small-default
+instancegroup configure --instanceGroup cbgateway --nodecount 1 --templateName minviable-aws
+instancegroup configure --instanceGroup host_group_master_1 --nodecount 1 --templateName awstemplate
+instancegroup configure --instanceGroup host_group_master_2 --nodecount 1 --templateName awstemplate
+instancegroup configure --instanceGroup host_group_master_3 --nodecount 1 --templateName awstemplate
+instancegroup configure --instanceGroup host_group_client_1  --nodecount 1 --templateName awstemplate
+instancegroup configure --instanceGroup host_group_slave_1 --nodecount 3 --templateName awstemplate
+network select --name default-aws-network
+securitygroup select --name all-services-port
+stack create --name my-first-stack --region US_EAST_1
+cluster create --description &quot;My first cluster&quot;
+</code></pre></div>
             
         </div>
 
