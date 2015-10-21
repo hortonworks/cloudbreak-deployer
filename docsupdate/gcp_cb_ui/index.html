@@ -386,8 +386,33 @@
 <p><code>Public in account:</code> share it with others in the account</p>
 <h2 id="manage-security-groups">Manage security groups</h2>
 <p>Security groups allows configuration of traffic/access to the cluster. Currently there are two default groups, and later versions will allow setup of new groups.</p>
-<p><code>only-ssh-and-ssl:</code> all ports are locked down (you can't access Hadoop services outside of the VPN) but SSH (22) and HTTPS (443)</p>
-<p><code>all-services-port:</code> all Hadoop services + SSH/HTTP are accessible by default: SSH (22) HTTPS (443) 8080 (Ambari) 8500 (Consul) 50070 (NN) 8088 (RM Web) 8030 (RM Scheduler) 8050 (RM IPC) 19888 (Job history server) 60010 (HBase master) 15000 (Falcon) 8744 (Storm) 11000 (Oozie) 18080 (Spark HS) 8042 (NM Web) 9996 (Zeppelin WebSocket) 9995 (Zeppelin UI) 3080 (Kibana) 9200 (Elasticsearch)</p>
+<p><code>only-ssh-and-ssl:</code> all ports are locked down (you can't access Hadoop services outside of the VPN)</p>
+<ul>
+<li>SSH (22)</li>
+<li>HTTPS (443)</li>
+</ul>
+<p><code>all-services-port:</code> all Hadoop services + SSH/HTTP are accessible by default:</p>
+<ul>
+<li>SSH (22)</li>
+<li>HTTPS (443)</li>
+<li>Ambari (8080)</li>
+<li>Consul (8500)</li>
+<li>NN (50070)</li>
+<li>RM Web (8088)</li>
+<li>RM Scheduler (8030)</li>
+<li>RM IPC (8050)</li>
+<li>Job history server (19888)</li>
+<li>HBase master (60010)</li>
+<li>Falcon (15000)</li>
+<li>Storm (8744)</li>
+<li>Oozie (11000)</li>
+<li>Spark HS (18080)</li>
+<li>NM Web (8042)</li>
+<li>Zeppelin WebSocket (9996)</li>
+<li>Zeppelin UI (9995)</li>
+<li>Kibana (3080)</li>
+<li>Elasticsearch (9200)</li>
+</ul>
 <h2 id="create-a-cluster">Create a cluster</h2>
 <p>Using the create cluster functionality Cloudbreak will create a cloud Stack and a Hadoop Cluster. In order to create a cluster you will have to select a credential first.</p>
 <p><code>Cluster name:</code> your cluster name</p>
