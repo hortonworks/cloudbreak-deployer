@@ -349,6 +349,9 @@
         <li class="main "><a href="#technology">Technology</a></li>
         
     
+        <li class="main "><a href="#process-overview">Process Overview</a></li>
+        
+    
         <li class="main "><a href="#installation">Installation</a></li>
         
     
@@ -363,9 +366,29 @@
 <p>Cloudbreak is a cloud agnostic Hadoop as a Service API. Abstracts the provisioning and ease management and monitoring of on-demand HDP clusters in different virtual environments. Once it is deployed in your favorite servlet container exposes a REST API allowing to span up Hadoop clusters of arbitrary sizes on your selected cloud provider. Provisioning Hadoop has never been easier.
 Cloudbreak is built on the foundation of cloud providers API (Microsoft Azure, Amazon AWS, Google Cloud Platform, OpenStack), Apache Ambari, Docker containers, Swarm and Consul.</p>
 <p>For a detailed overview please follow this <a href="overview.md">link</a></p>
-<p>Cloudbreak has two main components - the <a href="http://sequenceiq.com/cloudbreak-deployer">Cloudbreak deployer</a> and the <a href="http://sequenceiq.com/cloudbreak">Cloudbreak application</a>. Cloudbreak deployer helps you to deploy the Cloudbreak application automatically in environments with Docker support. Once the Cloudbreak application is deployed you can use it to provision HDP clusters in different cloud environments.</p>
+<p>Cloudbreak has two main components - the <a href="http://sequenceiq.com/cloudbreak-deployer">Cloudbreak deployer</a> and the Cloudbreak application, which is made up from Microservices (Cloudbreak, Uluwatu, Sultans, ...). Cloudbreak deployer helps you to deploy the Cloudbreak application automatically in environments with Docker support. Once the Cloudbreak application is deployed you can use it to provision HDP clusters in different cloud environments.</p>
 <h2 id="technology">Technology</h2>
-<p>For an architectural overview of the <a href="http://sequenceiq.com/cloudbreak-deployer">Cloudbreak deployer</a> and the <a href="http://sequenceiq.com/cloudbreak">Cloudbreak application</a> please follow this <a href="technology/">link</a>.</p>
+<p>For an architectural overview of the <a href="http://sequenceiq.com/cloudbreak-deployer">Cloudbreak deployer</a> and the Cloudbreak application please follow this <a href="technology/">link</a>.</p>
+<h2 id="process-overview">Process Overview</h2>
+<p>The full proceess to be able to use an HDP cluster includes the following steps:</p>
+<ul>
+<li><strong>Cloudbreak Deployer Installation</strong>: You need to install Cloudbreak Deployer which is a small cli tool called
+<code>cbd</code>. It will help you to deploy the CloudBreak Application consisting several Docker containers. You have
+finished this step if you can issue <code>cbd --version</code>.</li>
+<li><strong>CloudBreak Deployment</strong>: Once you have installed Cloudbreak Deployer (cbd), it will start up several
+Docker containers: CloudBreak API, CloudBreak UI (called Uluwatu), Identity Server, and supporting databases.
+You have finished this step, if you are able to login in your browser to Cloudbreak UI (Uluwatu).</li>
+<li><strong>HDP Cluster Provisioning</strong>: To be able to provision a HDP cluster, you will use the browser, to:</li>
+<li>Create Credentials: You give access to Cloudbreak, to act on behalf of you, and start resources on the
+    cloud provider.</li>
+<li>Create Resources: Optionally you can define infrastructure parameters, such as, instance type,
+    memory size, disk type/size, network ...</li>
+<li>Blueprint configuration: You can choose which Ambari Blueprint you want to use (or upload a custom one)
+    and assign hostgroups to resource types (created in the previous step)</li>
+<li>Create Cluster: You define the region, where you want to create the HDP cluster. Once Cloudbreak
+    recognize that Ambari Server is up and running, it posts the configured blueprint to it, which
+    triggers a cluster wide HDP component installation process.</li>
+</ul>
 <h2 id="installation">Installation</h2>
 <p>Currently only <strong>Linux</strong> and <strong>OSX</strong> 64 bit binaries are released for Cloudbreak Deployer. For anything else we can create a special Docker container - please contact us. The deployment itself needs only <strong>Docker 1.7.0</strong> or later. You can install the Cloudbreak installation anywhere (on-prem or cloud VMs), however we suggest to installed it as close to the desired HDP clusters as possible. For further information check the <strong>Provider</strong> section of the documentation.</p>
 <p><strong>On-prem installation</strong></p>
@@ -499,5 +522,5 @@ built in, so only a single binary is needed.</p></div>
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2015-10-22 13:48:24.384054
+Build Date UTC : 2015-10-22 14:17:41.029758
 -->
