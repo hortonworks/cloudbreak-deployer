@@ -357,12 +357,19 @@
     
         <li class="main active"><a href="#provision-prerequisites">Provision prerequisites</a></li>
         
+            <li><a href="#creating-a-google-cloud-service-account">Creating a Google Cloud Service Account</a></li>
+        
+            <li><a href="#generate-a-new-ssh-key">Generate a new SSH key</a></li>
+        
+            <li><a href="#next-steps">Next steps</a></li>
+        
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
 <h1 id="provision-prerequisites">Provision prerequisites</h1>
+<h2 id="creating-a-google-cloud-service-account">Creating a Google Cloud Service Account</h2>
 <p>Follow the <a href="https://cloud.google.com/storage/docs/authentication#service_accounts">instructions</a> in Google Cloud's documentation to create a <code>Service account</code> and <code>Generate a new P12 key</code>.</p>
 <p>Make sure that at API level (<strong>APIs and auth</strong> menu) you have enabled:</p>
 <ul>
@@ -380,7 +387,34 @@
 <p>If you enabled every API then you have to wait about <strong>10 minutes</strong> for the provider.</p>
 </blockquote>
 <p>When creating GCP credentials in Cloudbreak you will have to provide the email address of the Service Account and the project ID (from Google Developers Console - Projects) where the service account is created. You'll also have to upload the generated P12 file and provide an OpenSSH formatted public key that will be used as an SSH key.</p>
-<p>Once your prerequisites created you can use the <a href="../gcp_cb_ui/">Cloudbreak UI</a> or use the <a href="../gcp_cb_shell/">Cloudbreak shell</a>.</p></div>
+<p>Once your prerequisites created you can use the <a href="../gcp_cb_ui/">Cloudbreak UI</a> or use the <a href="../gcp_cb_shell/">Cloudbreak shell</a>.</p>
+<h2 id="generate-a-new-ssh-key">Generate a new SSH key</h2>
+<p>All the instances created by Cloudbreak are configured to allow key-based SSH,
+so you'll need to provide an SSH public key that can be used later to SSH onto the instances in the clusters you'll create with Cloudbreak.
+You can use one of your existing keys or you can generate a new one.</p>
+<p>To generate a new SSH keypair:</p>
+<pre><code>ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;
+# Creates a new ssh key, using the provided email as a label
+# Generating public/private rsa key pair.
+</code></pre>
+
+<pre><code># Enter file in which to save the key (/Users/you/.ssh/id_rsa): [Press enter]
+You'll be asked to enter a passphrase, but you can leave it empty.
+
+# Enter passphrase (empty for no passphrase): [Type a passphrase]
+# Enter same passphrase again: [Type passphrase again]
+</code></pre>
+
+<p>After you enter a passphrase the keypair is generated. The output should look something like below.</p>
+<pre><code># Your identification has been saved in /Users/you/.ssh/id_rsa.
+# Your public key has been saved in /Users/you/.ssh/id_rsa.pub.
+# The key fingerprint is:
+# 01:0f:f4:3b:ca:85:sd:17:sd:7d:sd:68:9d:sd:a2:sd your_email@example.com
+</code></pre>
+
+<p>Later you'll need to pass the <code>.pub</code> file's contents to Cloudbreak and use the private part to SSH to the instances.</p>
+<h2 id="next-steps">Next steps</h2>
+<p>After these prerequisites are done you can move on to create clusters on the <a href="../gcp_cb_ui/">UI</a> or with the <a href="../gcp_cb_shell/">Shell</a>.</p></div>
             
         </div>
 

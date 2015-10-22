@@ -363,6 +363,8 @@
         
             <li><a href="#filesystem-configuration">Filesystem configuration</a></li>
         
+            <li><a href="#next-steps">Next steps</a></li>
+        
     
     </ul>
 </div></div>
@@ -371,26 +373,30 @@
 <h1 id="provision-prerequisites">Provision prerequisites</h1>
 <p>Note that we use the new <a href="https://azure.microsoft.com/en-us/documentation/articles/resource-group-overview/">Azure ARM</a> in order to launch clusters. In order to work we need to create an Active Directory application with the configured name and password and adds the permissions that are needed to call the Azure Resource Manager API. Cloudbreak deployer automates all this for you.</p>
 <h2 id="generate-a-new-ssh-key">Generate a new SSH key</h2>
-<p>With Terminal still open, copy and paste the text below.</p>
+<p>All the instances created by Cloudbreak are configured to allow key-based SSH,
+so you'll need to provide an SSH public key that can be used later to SSH onto the instances in the clusters you'll create with Cloudbreak.
+You can use one of your existing keys or you can generate a new one.</p>
+<p>To generate a new SSH keypair:</p>
 <pre><code>ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;
 # Creates a new ssh key, using the provided email as a label
 # Generating public/private rsa key pair.
 </code></pre>
 
 <pre><code># Enter file in which to save the key (/Users/you/.ssh/id_rsa): [Press enter]
-You'll be asked to enter a passphrase.
+You'll be asked to enter a passphrase, but you can leave it empty.
 
 # Enter passphrase (empty for no passphrase): [Type a passphrase]
 # Enter same passphrase again: [Type passphrase again]
 </code></pre>
 
-<p>After you enter a passphrase, you'll be given the fingerprint, or id, of your SSH key. It will look something like this:</p>
+<p>After you enter a passphrase the keypair is generated. The output should look something like below.</p>
 <pre><code># Your identification has been saved in /Users/you/.ssh/id_rsa.
 # Your public key has been saved in /Users/you/.ssh/id_rsa.pub.
 # The key fingerprint is:
 # 01:0f:f4:3b:ca:85:sd:17:sd:7d:sd:68:9d:sd:a2:sd your_email@example.com
 </code></pre>
 
+<p>Later you'll need to pass the <code>.pub</code> file's contents to Cloudbreak and use the private part to SSH to the instances.</p>
 <h2 id="azure-access-setup">Azure access setup</h2>
 <p>If you do not have an Active directory user then you have to configure it before deploying a cluster with Cloudbreak.</p>
 <ol>
@@ -458,7 +464,8 @@ When configuring a WASB filesystem with Hadoop, the only required config entries
 
 <p>The command first creates the namespace account and the scaleout storage accounts, builds the <em>.cscfg</em> configuration file based on the created storage account names and keys, generates an Account Name and an Account Key for the DASH service and finally deploys the cloud service package file to a new cloud service.</p>
 <p>The WASB filesystem configured with DASH can be used as a data lake - when multiple clusters are deployed with the same DASH filesystem configuration the same data can be accessed from all the clusters, but every cluster can have a different service configured as well. In that case deploy as many DASH services with cbd as clusters with Cloudbreak and configure them accordingly.</p>
-<p>Once your prerequisites created you can use the <a href="../azure_cb_ui/">Cloudbreak UI</a> or use the <a href="../azure_cb_shell/">Cloudbreak shell</a>.</p></div>
+<h2 id="next-steps">Next steps</h2>
+<p>After these prerequisites are done you can move on to create clusters on the <a href="../azure_cb_ui/">UI</a> or with the <a href="../azure_cb_shell/">Shell</a>.</p></div>
             
         </div>
 
