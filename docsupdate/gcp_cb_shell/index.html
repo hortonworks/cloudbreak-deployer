@@ -361,14 +361,19 @@
         
             <li><a href="#create-a-template">Create a template</a></li>
         
-            <li><a href="#create-a-stack">Create a stack</a></li>
+            <li><a href="#create-or-select-a-blueprint">Create or select a blueprint</a></li>
         
-            <li><a href="#select-a-blueprint">Select a blueprint</a></li>
+            <li><a href="#create-a-network">Create a network</a></li>
         
-            <li><a href="#create-a-hadoop-cluster">Create a Hadoop cluster</a></li>
+            <li><a href="#create-a-security-group">Create a security group</a></li>
+        
+            <li><a href="#configure-instance-groups">Configure instance groups</a></li>
         
     
         <li class="main "><a href="#silent-mode">Silent mode</a></li>
+        
+    
+        <li class="main "><a href="#example">Example</a></li>
         
     
     </ul>
@@ -377,22 +382,23 @@
 
 <h1 id="interactive-mode">Interactive mode</h1>
 <p>Start the shell with <code>cbd util cloudbreak-shell</code>. This will launch the Cloudbreak shell inside a Docker container and you are ready to start using it.</p>
+<p>You have to copy files into the cbd working directory, which you would like to use from shell. For example if your <code>cbd</code> working directory is <code>~/prj/cbd</code> then copy your blueprint and public ssh key file into this directory. You can refer to these files with their names from the shell.</p>
 <h3 id="create-a-cloud-credential">Create a cloud credential</h3>
 <p>In order to start using Cloudbreak to provision a cluster in Google Cloud you will need to have an GCP credential. If you do not want to Cloubreak to reach you google cloud resources then you have to delete the service account.</p>
-<pre><code>credential create --GCP --description &quot;description&quot; --name &quot;myCredentialName&quot; --projectId &quot;projectid&quot; --serviceAccountId &quot;12345test@developer.gserviceaccount.com&quot; --serviceAccountPrivateKeyPath &quot;/tmp/gcp.p12&quot; --sshKeyUrl &quot;URL towards your GCP public key&quot;
+<pre><code>credential create --GCP --description &quot;description&quot; --name my-gcp-credential --projectId &lt;your gcp projectid&gt; --serviceAccountId &lt; your GCP service account mail address&gt; --serviceAccountPrivateKeyPath &lt;path of your GCP service account generated private key&gt; --sshKeyFile &lt;path of your GCP public key&gt;
 </code></pre>
 
-<p>Alternatively you can upload your public key from a file as well, by using the <code>—sshKeyPath</code> switch. You can check whether the credential was creates successfully by using the <code>credential list</code> command.
+<p>Alternatively you can upload your public key from an url as well, by using the <code>—sshKeyUrl</code> switch. You can check whether the credential was creates successfully by using the <code>credential list</code> command.
 You can switch between your cloud credential - when you’d like to use one and act with that you will have to use:</p>
-<pre><code>credential select --name #NAME of the credential
+<pre><code>credential select --name my-gcp-credential
 </code></pre>
 
 <p>You can delete your cloud credential - when you’d like to delete one you will have to use:</p>
-<pre><code>credential delete --name #NAME of the credential
+<pre><code>credential delete --name my-gcp-credential
 </code></pre>
 
 <p>You can show your cloud credential - when you’d like to show one you will have to use:</p>
-<pre><code>credential show --name #NAME of the credential
+<pre><code>credential show --name my-gcp-credential
 </code></pre>
 
 <h3 id="create-a-template">Create a template</h3>
@@ -401,42 +407,133 @@ You can switch between your cloud credential - when you’d like to use one and 
 </code></pre>
 
 <p>Other available options:</p>
-<p>--volumeType "voltype": defaults to "HDD", other allowed value: "SSD"</p>
-<p>--publicInAccount "flag": flags if the template is public in the account</p>
-<p>You can check whether the template was created successfully by using the <code>template list</code> command.
-Check the template and select it if you are happy with it:</p>
-<pre><code>template select --name #NAME of the template
-</code></pre>
-
+<p><code>--volumeType</code> defaults to "HDD", other allowed value: "SSD"</p>
+<p><code>--publicInAccount</code> flags if the template is public in the account</p>
+<p>You can check whether the template was created successfully by using the <code>template list</code> or <code>template show</code> command.</p>
 <p>You can delete your cloud template - when you’d like to delete one you will have to use:</p>
-<pre><code>template delete --name #NAME of the template
+<pre><code>template delete --name gcptemplate
 </code></pre>
 
-<p>You can show your cloud template - when you’d like to show one you will have to use:</p>
-<pre><code>template show --name #NAME of the template
+<h3 id="create-or-select-a-blueprint">Create or select a blueprint</h3>
+<p>You can define Ambari blueprints with cloudbreak-shell:</p>
+<pre><code>blueprint add --name myblueprint --description myblueprint-description --file &lt;the path of the blueprint&gt;
 </code></pre>
 
-<h3 id="create-a-stack">Create a stack</h3>
-<p>Stacks are template <code>instances</code> - a running cloud infrastructure created based on a template. Use the following command to create a stack to be used with your Hadoop cluster:</p>
-<pre><code>stack create --name &quot;myStackName&quot; --nodeCount 10
-</code></pre>
-
-<h3 id="select-a-blueprint">Select a blueprint</h3>
-<p>We ship default Hadoop cluster blueprints with Cloudbreak. You can use these blueprints or add yours. To see the available blueprints and use one of them please use:</p>
+<p>Other available options:</p>
+<p><code>--url</code> the url of the blueprint</p>
+<p><code>--publicInAccount</code> flags if the network is public in the account</p>
+<p>We ship default Ambari blueprints with Cloudbreak. You can use these blueprints or add yours. To see the available blueprints and use one of them please use:</p>
 <pre><code>blueprint list
 
-blueprint select --name #NAME of the blueprint
+blueprint select --name hdp-small-default
 </code></pre>
 
+<h3 id="create-a-network">Create a network</h3>
+<p>A network gives developers and systems administrators an easy way to create and manage a collection of cloud infrastructure related networking, maintaining and updating them in an orderly and predictable fashion. A network can be used repeatedly to create identical copies of the same stack (or to use as a foundation to start a new stack).</p>
+<pre><code>network create --GCP --name gcpnetwork --description &quot;gcp network&quot;--subnet 10.0.0.0/16
+</code></pre>
+
+<p>Other available options:</p>
+<p><code>--publicInAccount</code> flags if the network is public in the account</p>
+<p>There is a default network with name <code>default-gcp-network</code>. If we use this for cluster creation, Cloudbreak will create the cluster within the 10.0.0.0/16 subnet.</p>
+<p>You can check whether the network was created successfully by using the <code>network list</code> command. Check the network and select it if you are happy with it:</p>
+<pre><code>network show --name gcpnetwork
+
+network select --name gcpnetwork
+</code></pre>
+
+<h3 id="create-a-security-group">Create a security group</h3>
+<p>A security group gives developers and systems administrators an easy way to create and manage a collection of cloud infrastructure related security rules.</p>
+<pre><code>securitygroup create --name secgroup_example --description securitygroup-example --rules 0.0.0.0/0:tcp:8080,9090;10.0.33.0/24:tcp:1234,1235
+</code></pre>
+
+<p>You can check whether the security group was created successfully by using the <code>securitygroup list</code> command. Check the security group and select it if you are happy with it:</p>
+<pre><code>securitygroup show --name secgroup_example
+
+securitygroup select --name secgroup_example
+</code></pre>
+
+<p>There are two default security groups defined: <code>all-services-port</code> and <code>only-ssh-and-ssl</code></p>
+<p><code>only-ssh-and-ssl:</code> all ports are locked down (you can't access Hadoop services outside of the VPN)</p>
+<ul>
+<li>SSH (22)</li>
+<li>HTTPS (443)</li>
+</ul>
+<p><code>all-services-port:</code> all Hadoop services + SSH/HTTP are accessible by default:</p>
+<ul>
+<li>SSH (22)</li>
+<li>HTTPS (443)</li>
+<li>Ambari (8080) </li>
+<li>Consul (8500) </li>
+<li>NN (50070) </li>
+<li>RM Web (8088) </li>
+<li>Scheduler (8030RM) </li>
+<li>IPC (8050RM) </li>
+<li>Job history server (19888) </li>
+<li>HBase master (60000) </li>
+<li>HBase master web (60010) </li>
+<li>HBase RS (16020) </li>
+<li>HBase RS info (60030) </li>
+<li>Falcon (15000) </li>
+<li>Storm (8744) </li>
+<li>Hive metastore (9083) </li>
+<li>Hive server (10000) </li>
+<li>Hive server HTTP (10001) </li>
+<li>Accumulo master (9999) </li>
+<li>Accumulo Tserver (9997) </li>
+<li>Atlas (21000) </li>
+<li>KNOX (8443) </li>
+<li>Oozie (11000) </li>
+<li>Spark HS (18080) </li>
+<li>NM Web (8042) </li>
+<li>Zeppelin WebSocket (9996) </li>
+<li>Zeppelin UI (9995) </li>
+<li>Kibana (3080) </li>
+<li>Elasticsearch (9200) </li>
+</ul>
+<h2 id="configure-instance-groups">Configure instance groups</h2>
+<p>You have to configure the instancegroups before the provisioning. An instancegroup is defining a group of your nodes with a specified template. Usually we create instancegroups for the hostgroups defined in the blueprints.</p>
+<pre><code>instancegroup configure --instanceGroup host_group_slave_1 --nodecount 3 --templateName minviable-gcp
+</code></pre>
+
+<p>Other available options:</p>
+<p><code>--templateId</code> Id of the template</p>
 <h3 id="create-a-hadoop-cluster">Create a Hadoop cluster</h3>
-<p>You are almost done - one more command and this will create your Hadoop cluster on your favorite cloud provider. Same as the API, or UI this will use your <code>template</code>, and by using CloudFormation will launch a cloud <code>stack</code> - once the <code>stack</code> is up and running (cloud provisioning is done) it will use your selected <code>blueprint</code> and install your custom Hadoop cluster with the selected components and services.</p>
-<pre><code>cluster create --description &quot;my cluster desc&quot;
+<p>You are almost done - two more command and this will create your Hadoop cluster on your favorite cloud provider. Same as the API, or UI this will use your <code>credential</code>, <code>instancegroups</code>, <code>network</code>, <code>securitygroup</code>, and by using Google Cloud Platform will launch a cloud stack</p>
+<pre><code>stack create --name my-first-stack --region US_CENTRAL1_A
+</code></pre>
+
+<p>Once the <code>stack</code> is up and running (cloud provisioning is done) it will use your selected <code>blueprint</code> and install your custom Hadoop cluster with the selected components and services.</p>
+<pre><code>cluster create --description &quot;my first cluster&quot;
 </code></pre>
 
 <p>You are done - you can check the progress through the Ambari UI. If you log back to Cloudbreak UI you can check the progress over there as well, and learn the IP address of Ambari.</p>
 <h1 id="silent-mode">Silent mode</h1>
-<p>With Cloudbreak shell you can recreate clusters based on earlier deployments. Each time you start the shell the executed commands are logged in a file line by line and later either with the <code>script</code> command or specifying an <code>—cmdfile</code> option the same commands can be executed again.</p>
-<p>With <code>cbd util cloudbreak-shell-quiet</code> you can specify a shell file and let the shell apply the configs step by step in a silent mode.</p></div>
+<p>With Cloudbreak shell you can execute script files as well. A script file contains cloudbreak shell commands and can be executed with the <code>script</code> cloudbreak shell command </p>
+<pre><code>script &lt;your script file&gt;
+</code></pre>
+
+<p>or with the <code>cbd util cloudbreak-shell-quiet</code> cbd command:</p>
+<pre><code>cbd util cloudbreak-shell-quiet &lt; example.sh
+</code></pre>
+
+<h1 id="example">Example</h1>
+<p>The following example creates a hadoop cluster with <code>hdp-small-default</code> blueprint on M3Xlarge instances with 2X100G attached disks on <code>default-gcp-network</code> network using <code>all-services-port</code> security group. You should copy your ssh public key file and your GCP service account generated private key into your cbd working directory with name <code>id_rsa.pub</code> and <code>gcp.p12</code> and change the <code>&lt;...&gt;</code> parts with your gcp credential details.</p>
+<pre><code>credential create --GCP --description &quot;my credential&quot; --name my-gcp-credential --projectId &lt;your gcp projectid&gt; --serviceAccountId &lt; your GCP service account mail address&gt; --serviceAccountPrivateKeyPath gcp.p12 --sshKeyFile id_rsa.pub
+credential select --name my-gcp-credential
+template create --EC2 --name gcptemplate --description gcp-template --instanceType N1_STANDARD_4 --volumeSize 100 --volumeCount 2
+blueprint select --name hdp-small-default
+instancegroup configure --instanceGroup cbgateway --nodecount 1 --templateName gcptemplate
+instancegroup configure --instanceGroup host_group_master_1 --nodecount 1 --templateName gcptemplate
+instancegroup configure --instanceGroup host_group_master_2 --nodecount 1 --templateName gcptemplate
+instancegroup configure --instanceGroup host_group_master_3 --nodecount 1 --templateName gcptemplate
+instancegroup configure --instanceGroup host_group_client_1  --nodecount 1 --templateName gcptemplate
+instancegroup configure --instanceGroup host_group_slave_1 --nodecount 3 --templateName gcptemplate
+network select --name default-gcp-network
+securitygroup select --name all-services-port
+stack create --name my-first-stack --region US_CENTRAL1_A
+cluster create --description &quot;My first cluster&quot;
+</code></pre></div>
             
         </div>
 

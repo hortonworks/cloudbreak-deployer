@@ -490,7 +490,7 @@ securitygroup select --name secgroup_example
 <p><code>--templateId</code> Id of the template</p>
 <h3 id="create-a-hadoop-cluster">Create a Hadoop cluster</h3>
 <p>You are almost done - two more command and this will create your Hadoop cluster on your favorite cloud provider. Same as the API, or UI this will use your <code>credential</code>, <code>instancegroups</code>, <code>network</code>, <code>securitygroup</code>, and by using CloudFormation will launch a cloud stack</p>
-<pre><code>stack create --name my-first-stack
+<pre><code>stack create --name my-first-stack --region US_EAST_1
 </code></pre>
 
 <p>Once the <code>stack</code> is up and running (cloud provisioning is done) it will use your selected <code>blueprint</code> and install your custom Hadoop cluster with the selected components and services.</p>

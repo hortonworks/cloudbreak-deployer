@@ -486,7 +486,7 @@ securitygroup select --name secgroup_example
 <p><code>--templateId</code> Id of the template</p>
 <h3 id="create-a-hadoop-cluster">Create a Hadoop cluster</h3>
 <p>You are almost done - two more command and this will create your Hadoop cluster on your favorite cloud provider. Same as the API, or UI this will use your <code>credential</code>, <code>instancegroups</code>, <code>network</code>, <code>securitygroup</code>, and by using OpenStack Heat will launch a cloud stack</p>
-<pre><code>stack create --name my-first-stack
+<pre><code>stack create --name my-first-stack --region local
 </code></pre>
 
 <p>Once the <code>stack</code> is up and running (cloud provisioning is done) it will use your selected <code>blueprint</code> and install your custom Hadoop cluster with the selected components and services.</p>
@@ -518,7 +518,7 @@ instancegroup configure --instanceGroup host_group_slave_1 --nodecount 3 --templ
 network create --OPENSTACK --name osnetwork --description openstack-network --publicNetID &lt;id of an OpenStack public network&gt; --subnet 10.0.0.0/16
 network select --name osnetwork
 securitygroup select --name all-services-port
-stack create --name my-first-stack --region US_EAST_1
+stack create --name my-first-stack --region local
 cluster create --description &quot;My first cluster&quot;
 </code></pre></div>
             
