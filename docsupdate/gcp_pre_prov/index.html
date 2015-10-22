@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/api/">
+        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/gcp_pre_prov/">
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>API - Cloudbreak Deployer</title>
+	<title>Provisioning prerequisites - Cloudbreak Deployer</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -108,7 +108,7 @@
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Providers <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -184,8 +184,8 @@
 
         
             
-<li >
-    <a href="../gcp_pre_prov/">Provisioning prerequisites</a>
+<li class="active">
+    <a href="./">Provisioning prerequisites</a>
 </li>
 
         
@@ -237,13 +237,13 @@
                 
                 
                 
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Docs <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             
-<li class="active">
-    <a href="./">API</a>
+<li >
+    <a href="../api/">API</a>
 </li>
 
                         
@@ -322,12 +322,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../openstack_cb_shell/">
+                        <a rel="next" href="../gcp/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../shell/">
+                        <a rel="prev" href="../gcp_cb_ui/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -343,16 +343,32 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#api-documentation">API documentation</a></li>
+        <li class="main active"><a href="#provision-prerequisites">Provision prerequisites</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h2 id="api-documentation">API documentation</h2>
-<p>Cloudbreak is a RESTful application development platform with the goal of helping developers to build solutions for deploying HDP clusters in different environments. Once it is deployed in your favourite servlet container it exposes a REST API allowing to span up Hadoop clusters of arbitary sizes and cloud providers.</p>
-<p>The <a href="https://cloudbreak-api.sequenceiq.com/api/index.html">API documentation</a> is generated from the code using <a href="http://swagger.io/">Swagger</a>.</p></div>
+<h1 id="provision-prerequisites">Provision prerequisites</h1>
+<p>Follow the <a href="https://cloud.google.com/storage/docs/authentication#service_accounts">instructions</a> in Google Cloud's documentation to create a <code>Service account</code> and <code>Generate a new P12 key</code>.</p>
+<p>Make sure that at API level (<strong>APIs and auth</strong> menu) you have enabled:</p>
+<ul>
+<li>Google Compute Engine</li>
+<li>Google Compute Engine Instance Group Manager API</li>
+<li>Google Compute Engine Instance Groups API</li>
+<li>BigQuery API</li>
+<li>Google Cloud Deployment Manager API</li>
+<li>Google Cloud DNS API</li>
+<li>Google Cloud SQL</li>
+<li>Google Cloud Storage</li>
+<li>Google Cloud Storage JSON API</li>
+</ul>
+<blockquote>
+<p>If you enabled every API then you have to wait about <strong>10 minutes</strong> for the provider.</p>
+</blockquote>
+<p>When creating GCP credentials in Cloudbreak you will have to provide the email address of the Service Account and the project ID (from Google Developers Console - Projects) where the service account is created. You'll also have to upload the generated P12 file and provide an OpenSSH formatted public key that will be used as an SSH key.</p>
+<p>Once your prerequisites created you can use the <a href="../gcp_cb_ui/">Cloudbreak UI</a> or use the <a href="../gcp_cb_shell/">Cloudbreak shell</a>.</p></div>
             
         </div>
 
