@@ -409,16 +409,26 @@
 <ul>
 <li>SSH (22)</li>
 <li>HTTPS (443)</li>
-<li>Ambari (8080)</li>
+<li>Ambari (8080) </li>
 <li>Consul (8500) </li>
 <li>NN (50070) </li>
 <li>RM Web (8088) </li>
-<li>RM Scheduler (8030) </li>
-<li>RM IPC (8050) </li>
+<li>Scheduler (8030RM) </li>
+<li>IPC (8050RM) </li>
 <li>Job history server (19888) </li>
-<li>HBase master (60010) </li>
+<li>HBase master (60000) </li>
+<li>HBase master web (60010) </li>
+<li>HBase RS (16020) </li>
+<li>HBase RS info (60030) </li>
 <li>Falcon (15000) </li>
 <li>Storm (8744) </li>
+<li>Hive metastore (9083) </li>
+<li>Hive server (10000) </li>
+<li>Hive server HTTP (10001) </li>
+<li>Accumulo master (9999) </li>
+<li>Accumulo Tserver (9997) </li>
+<li>Atlas (21000) </li>
+<li>KNOX (8443) </li>
 <li>Oozie (11000) </li>
 <li>Spark HS (18080) </li>
 <li>NM Web (8042) </li>
@@ -432,7 +442,7 @@
 <p><code>Cluster name:</code> your cluster name</p>
 <p><code>Region:</code> the region where the cluster is started</p>
 <p><code>Network:</code> the network template</p>
-<p>`Security Group:" the security group</p>
+<p><code>Security Group:</code> the security group</p>
 <p><code>Blueprint:</code> your Hadoop cluster blueprint. Once the blueprint is selected we parse it and give you the option to select the followings for each <strong>hostgroup</strong>.</p>
 <p><code>Hostgroup configuration</code></p>
 <ul>
