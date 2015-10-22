@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/configuration/">
+        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/azure_pre_provision/">
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Configuration - Cloudbreak Deployer</title>
+	<title>Provisioning prerequisites - Cloudbreak Deployer</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -108,7 +108,7 @@
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Providers <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -151,8 +151,8 @@
 
         
             
-<li >
-    <a href="../azure_pre_provision/">Provisioning prerequisites</a>
+<li class="active">
+    <a href="./">Provisioning prerequisites</a>
 </li>
 
         
@@ -237,7 +237,7 @@
                 
                 
                 
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Docs <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -284,8 +284,8 @@
 
                         
                             
-<li class="active">
-    <a href="./">Configuration</a>
+<li >
+    <a href="../configuration/">Configuration</a>
 </li>
 
                         
@@ -322,12 +322,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../database/">
+                        <a rel="next" href="../azure/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../development/">
+                        <a rel="prev" href="../azure_cb_ui/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -343,115 +343,75 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#configuration">Configuration</a></li>
+        <li class="main active"><a href="#preprovision-configurations">Preprovision configurations</a></li>
         
-    
-        <li class="main "><a href="#env-specific-profile">Env specific Profile</a></li>
+            <li><a href="#azure-access-setup">Azure access setup</a></li>
         
-    
-        <li class="main "><a href="#available-configurations">Available Configurations</a></li>
-        
-            <li><a href="#smtp">SMTP</a></li>
-        
-            <li><a href="#consul">Consul</a></li>
-        
-            <li><a href="#azure-resource-manager-command">Azure Resource manager command</a></li>
-        
-            <li><a href="#caveats">Caveats</a></li>
+            <li><a href="#filesystem-configuration">Filesystem configuration</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="configuration">Configuration</h1>
-<p>Configuration is based on environment variables. Cloudbreak Deployer always forks a new bash subprocess <strong>without
-inheriting environment variables</strong>. The only way to set ENV vars relevant for Cloudbreak Deployer is to set them
-in a file called <code>Profile</code>.</p>
-<p>To see all available config variables with their default value:</p>
-<pre><code>cbd env show
+<h1 id="preprovision-configurations">Preprovision configurations</h1>
+<p>Note that we use the new <a href="https://azure.microsoft.com/en-us/documentation/articles/resource-group-overview/">Azure ARM</a> in order to launch clusters. In order to work we need to create an Active Directory application with the configured name and password and adds the permissions that are needed to call the Azure Resource Manager API. Cloudbreak deployer automates all this for you.</p>
+<h2 id="azure-access-setup">Azure access setup</h2>
+<p>If you want to use your Azure subscription then you need an Azure Active directory user.</p>
+<ol>
+<li>
+<p>You can configure your AD users on <code>manage.windowsazure.com</code> &gt; <code>Active Directory</code> &gt; <code>Your active directory</code> &gt; <code>Users</code> menu
+<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure2.png" /></p>
+</li>
+<li>
+<p>Now you add the new user to AD. Simply click on <code>Add User</code> on the bottom of the page
+<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure3.png" /></p>
+</li>
+<li>
+<p>Type the new user name in to the box
+<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure4.png" /></p>
+</li>
+<li>
+<p>You will see the added user in the list
+<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure5.png" /></p>
+</li>
+<li>
+<p>After you add the user to the AD you need to add to the <code>manage.windowsazure.com</code> &gt; <code>Settings</code> &gt; <code>Administrators</code>
+<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure6.png" /></p>
+</li>
+<li>
+<p>Now you add the new user to Administrators. Simply click on <code>Add</code> on the bottom of the page
+<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure7.png" /></p>
+</li>
+</ol>
+<p>In order for Cloudbreak to be able to launch clusters on Azure on your behalf you need to set up your Azure ARM application.</p>
+<pre><code>cbd azure configure-arm --app_name myapp --app_password password123 --subscription_id 1234-abcd-efgh-1234 --username testuser@company.onmicrosoft.com --password password123
 </code></pre>
 
-<p>The <code>Profile</code> will be simple <strong>sourced</strong> in bash terms, so you can use the usual syntaxes to set config values:</p>
-<pre><code>export MY_VAR=some_value
-export OTHER_VAR=dunno
+<p>The command first creates an Active Directory application with the configured name and password and adds the permissions that are needed to call the Azure Resource Manager API.</p>
+<p><em>Options:</em></p>
+<p><strong>--app_name</strong>: Your application name. Default is <em>app</em>.</p>
+<p><strong>--app_password</strong>: Your application password. Default is <em>password</em>.</p>
+<p><strong>--subscription_id</strong>: Your Azure subscription ID.</p>
+<p><strong>--username</strong>: Your Azure username.</p>
+<p><strong>--password</strong>: Your Azure password.</p>
+<h2 id="filesystem-configuration">Filesystem configuration</h2>
+<p>When starting a cluster with Cloudbreak on Azure, the default filesystem is “Windows Azure blob storage with DASH”. Hadoop has built-in support for the <a href="https://hadoop.apache.org/docs/current/hadoop-azure/index.html">WASB filesystem</a> so it can be used easily as HDFS instead of disks.</p>
+<h3 id="disks-and-blob-storage">Disks and blob storage</h3>
+<p>In Azure every data disk attached to a virtual machine <a href="https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-disks-vhds/">is stored</a> as a virtual hard disk (VHD) in a page blob inside an Azure storage account. Because these are not local disks and the operations must be done on the VHD files it causes degraded performance when used as HDFS.
+When WASB is used as a Hadoop filesystem the files are full-value blobs in a storage account. It means better performance compared to the data disks and the WASB filesystem can be configured very easily but Azure storage accounts have their own <a href="https://azure.microsoft.com/en-us/documentation/articles/azure-subscription-service-limits/#storage-limits">limitations</a> as well. There is a space limitation for TB per storage account (500 TB) as well but the real bottleneck is the total request rate that is only 20000 IOPS where Azure will start to throw errors when trying to do an I/O operation.
+To bypass those limits Microsoft created a small service called <a href="https://github.com/MicrosoftDX/Dash">DASH</a>. DASH itself is a service that imitates the API of the Azure Blob Storage API and it can be deployed as a Microsoft Azure Cloud Service. Because its API is the same as the standard blob storage API it can be used <em>almost</em> in the same way as the default WASB filesystem from a Hadoop deployment.
+DASH works by sharding the storage access across multiple storage accounts. It can be configured to distribute storage account load to at most 15 <strong>scaleout</strong> storage accounts. It needs one more <strong>namespace</strong> storage account where it keeps track of where the data is stored.
+When configuring a WASB filesystem with Hadoop, the only required config entries are the ones where the access details are described. To access a storage account Azure generates an access key that is displayed on the Azure portal or can be queried through the API while the account name is the name of the storage account itself. A DASH service has a similar account name and key, those can be configured in the configuration file while deploying the cloud service.</p>
+<p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/dash.png" /></p>
+<h3 id="deploying-a-dash-service-with-cloudbreak-deployer">Deploying a DASH service with Cloudbreak deployer</h3>
+<p>We have automated the deployment of a DASH service in cloudbreak-deployer. After cbd is installed, simply run the following command to deploy a DASH cloud service with 5 scale out storage accounts:</p>
+<pre><code>cbd azure deploy-dash --accounts 5 --prefix dash --location &quot;West Europe&quot; --instances 3
 </code></pre>
 
-<h1 id="env-specific-profile">Env specific Profile</h1>
-<p>Let’s say you want to use a different version of Cloudbreak for <strong>prod</strong> and <strong>qa</strong> profile.
-You can specify the Docker image tag via: <code>DOCKER_TAG_CLOUDBREAK</code>.
-<code>Profile</code> is always sourced, so you will have two env specific configurations:
-- <code>Profile.dev</code>
-- <code>Profile.qa</code></p>
-<p>For prod you need:</p>
-<ul>
-<li>create a file called <code>Profile.prod</code></li>
-<li>write the env specific <code>export DOCKER_TAG_CLOUDBREAK=0.3.99</code> into <code>Profile.prod</code></li>
-<li>set the env variable: <code>CBD_DEFAULT_PROFILE=prod</code></li>
-</ul>
-<p>To use the <code>prod</code> specific profile once:</p>
-<pre><code>CBD_DEFAULT_PROFILE=prod cbd some_commands
-</code></pre>
-
-<p>For permanent setting you can <code>export CBD_DEFAULT_PROFILE=prod</code> in your <code>.bash_profile</code>.</p>
-<h1 id="available-configurations">Available Configurations</h1>
-<h2 id="smtp">SMTP</h2>
-<p>Put these lines into your <code>Profile</code></p>
-<pre><code>export CLOUDBREAK_SMTP_SENDER_USERNAME=
-export CLOUDBREAK_SMTP_SENDER_PASSWORD=
-export CLOUDBREAK_SMTP_SENDER_HOST=
-export CLOUDBREAK_SMTP_SENDER_PORT=
-export CLOUDBREAK_SMTP_SENDER_FROM=
-</code></pre>
-
-<h2 id="consul">Consul</h2>
-<p><a href="http://consul.io">Consul</a> is used for dns resolution. All Cloudbreak related services are registered as
-<strong>someservice.service.consul</strong>. Consul’s built in dns server is able to “fall-back” on an other dns server.
-This option is called <code>-recursor</code>. Clodbreak Deployer first tries to discover the dns settings of the host,
-by looking for <strong>nameserver</strong> entry in <code>/etc/resolv.conf</code>. If it finds one consul will use it as a recursor,
-otherwise <strong>8.8.8.8</strong> will be used.</p>
-<p>For a full list of available consul config options, see the <a href="https://consul.io/docs/agent/options.html">docs</a></p>
-<p>You can pass any additional consul configuration by defining a <code>DOCKER_CONSUL_OPTIONS</code> in <code>Profile</code>.</p>
-<h3 id="list-of-configurations">List of configurations</h3>
-<ul>
-<li><strong>CB_AWS_AMI_MAP</strong> : tbd</li>
-<li><strong>CB_AZURE_IMAGE_URI</strong> : tbd</li>
-<li><strong>CB_BLUEPRINT_DEFAULTS</strong> : tbd</li>
-<li><strong>CB_TEMPLATE_DEFAULTS</strong> : tbd</li>
-<li><strong>CB_DB_ENV_DB</strong> : tbd</li>
-<li><strong>CB_DB_ENV_PASS</strong> : tbd</li>
-<li><strong>CB_DB_ENV_USER</strong> : tbd</li>
-<li><strong>CB_GCP_SOURCE_IMAGE_PATH</strong> : tbd</li>
-<li><strong>CB_HBM2DDL_STRATEGY</strong> : tbd</li>
-<li><strong>CB_OPENSTACK_IMAGE</strong> : tbd</li>
-<li><strong>DOCKER_TAG_ALPINE</strong> : tbd</li>
-<li><strong>DOCKER_TAG_CBSHELL</strong> : tbd</li>
-<li><strong>DOCKER_TAG_CLOUDBREAK</strong> : tbd</li>
-<li><strong>DOCKER_TAG_CONSUL</strong> : tbd</li>
-<li><strong>DOCKER_TAG_PERISCOPE</strong> : tbd</li>
-<li><strong>DOCKER_TAG_POSTGRES</strong> : tbd</li>
-<li><strong>DOCKER_TAG_REGISTRATOR</strong> : tbd</li>
-<li><strong>DOCKER_TAG_SULTANS</strong> : tbd</li>
-<li><strong>DOCKER_TAG_UAA</strong> : tbd</li>
-<li><strong>DOCKER_TAG_ULUWATU</strong> : tbd</li>
-<li><strong>PERISCOPE_DB_HBM2DDL_STRATEGY</strong> : tbd</li>
-</ul>
-<h2 id="azure-resource-manager-command">Azure Resource manager command</h2>
-<ul>
-<li><strong>cbd azure configure-arm</strong></li>
-<li><strong>cbd azure deploy-dash</strong>
-See the documentation here</li>
-</ul>
-<h2 id="caveats">Caveats</h2>
-<p>The <strong>Cloudbreak Deployer</strong> tool opens a clean bash subshell, without inheriting environment vars.
-Actually the following environment vars <em>are</em> inherited:</p>
-<ul>
-<li><code>HOME</code></li>
-<li><code>DEBUG</code></li>
-<li><code>TRACE</code></li>
-<li><code>CBD_DEFAULT_PROFILE</code></li>
-<li>all <code>DOCKER_XXX</code></li>
-</ul></div>
+<p>The command first creates the namespace account and the scaleout storage accounts, builds the <em>.cscfg</em> configuration file based on the created storage account names and keys, generates an Account Name and an Account Key for the DASH service and finally deploys the cloud service package file to a new cloud service.</p>
+<p>The WASB filesystem configured with DASH can be used as a data lake - when multiple clusters are deployed with the same DASH filesystem configuration the same data can be accessed from all the clusters, but every cluster can have a different service configured as well. In that case deploy as many DASH services with cbd as clusters with Cloudbreak and configure them accordingly.</p>
+<p>Once Cloudbreak is up and running you can launch clusters in two different ways. You can use the <a href="../azure_cb_ui/">Cloudbreak UI</a> or use the <a href="../azure_cb_shell/">Cloudbreak shell</a>.</p></div>
             
         </div>
 
