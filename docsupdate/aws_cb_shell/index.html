@@ -441,23 +441,33 @@ securitygroup select --name secgroup_example
 <ul>
 <li>SSH (22)</li>
 <li>HTTPS (443)</li>
-<li>Ambari (8080)</li>
-<li>Consul (8500)</li>
-<li>NN (50070)</li>
-<li>RM Web (8088)</li>
-<li>RM Scheduler (8030)</li>
-<li>RM IPC (8050)</li>
-<li>Job history server (19888)</li>
-<li>HBase master (60010)</li>
-<li>Falcon (15000)</li>
-<li>Storm (8744)</li>
-<li>Oozie (11000)</li>
-<li>Spark HS (18080)</li>
-<li>NM Web (8042)</li>
-<li>Zeppelin WebSocket (9996)</li>
-<li>Zeppelin UI (9995)</li>
-<li>Kibana (3080)</li>
-<li>Elasticsearch (9200)</li>
+<li>Ambari (8080) </li>
+<li>Consul (8500) </li>
+<li>NN (50070) </li>
+<li>RM Web (8088) </li>
+<li>Scheduler (8030RM) </li>
+<li>IPC (8050RM) </li>
+<li>Job history server (19888) </li>
+<li>HBase master (60000) </li>
+<li>HBase master web (60010) </li>
+<li>HBase RS (16020) </li>
+<li>HBase RS info (60030) </li>
+<li>Falcon (15000) </li>
+<li>Storm (8744) </li>
+<li>Hive metastore (9083) </li>
+<li>Hive server (10000) </li>
+<li>Hive server HTTP (10001) </li>
+<li>Accumulo master (9999) </li>
+<li>Accumulo Tserver (9997) </li>
+<li>Atlas (21000) </li>
+<li>KNOX (8443) </li>
+<li>Oozie (11000) </li>
+<li>Spark HS (18080) </li>
+<li>NM Web (8042) </li>
+<li>Zeppelin WebSocket (9996) </li>
+<li>Zeppelin UI (9995) </li>
+<li>Kibana (3080) </li>
+<li>Elasticsearch (9200) </li>
 </ul>
 <h2 id="configure-instance-groups">Configure instance groups</h2>
 <p>You have to configure the instancegroups before the provisioning. An instancegroup is defining a group of your nodes with a specified template. Usually we create instancegroups for the hostgroups defined in the blueprints.</p>
