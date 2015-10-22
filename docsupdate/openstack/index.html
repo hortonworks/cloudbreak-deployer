@@ -355,27 +355,34 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#openstack-based-installation">OpenStack based installation</a></li>
+        <li class="main active"><a href="#openstack-deployment">OpenStack deployment</a></li>
         
-            <li><a href="#deployment-prerequisites">Deployment prerequisites</a></li>
+            <li><a href="#download-the-cloudbreak-image">Download the Cloudbreak image</a></li>
+        
+            <li><a href="#import-the-image-into-openstack">Import the image into OpenStack</a></li>
         
             <li><a href="#usage">Usage</a></li>
+        
+            <li><a href="#initialize-your-profile">Initialize your Profile</a></li>
+        
+            <li><a href="#generate-your-profile">Generate your Profile</a></li>
+        
+            <li><a href="#start-cloudbreak">Start Cloudbreak</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="openstack-based-installation">OpenStack based installation</h1>
-<h2 id="deployment-prerequisites">Deployment prerequisites</h2>
-<h3 id="download-the-cloudbreak-image">Download the Cloudbreak image</h3>
+<h1 id="openstack-deployment">OpenStack deployment</h1>
+<h2 id="download-the-cloudbreak-image">Download the Cloudbreak image</h2>
 <p>You can download the latest Cloudbreak OpenStack image with the following commands</p>
 <pre><code>LATEST_IMAGE=&quot;cb-openstack-images/cb-centos71-amb212-2015-10-09.img&quot;
 LOCAL_IMAGE_NAME=&quot;...&quot;
 aws s3 cp s3://$LATEST_IMAGE $LOCAL_IMAGE_NAME
 </code></pre>
 
-<h3 id="import-the-image-into-openstack">Import the image into OpenStack</h3>
+<h2 id="import-the-image-into-openstack">Import the image into OpenStack</h2>
 <pre><code>OS_IMAGE_NAME=&quot;name_in_openstack&quot;
 glance image-create --name &quot;$OS_IMAGE_NAME&quot; --file &quot;$LOCAL_IMAGE_NAME&quot;  --disk-format qcow2 --container-format bare --is-public True --progress
 </code></pre>
@@ -387,39 +394,43 @@ advised that you create a dedicated directory for it:</p>
 cd cloudbreak-deployment
 </code></pre>
 
-<h3 id="initialize-profile">Initialize Profile</h3>
+<h2 id="initialize-your-profile">Initialize your Profile</h2>
 <p>First initialize your directory by creating a <code>Profile</code> file:</p>
 <pre><code>cbd init
 </code></pre>
 
-<p>It will create a <code>Profile</code> file in the current directory. Please edit the file - the only required
-configuration is the <code>PUBLIC_IP</code>. This IP will be used to access the Cloudbreak UI
-(called Uluwatu). In some cases the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
-<h3 id="configure-the-name-of-the-cloudbreak-image">Configure the name of the Cloudbreak image</h3>
-<p>You need to set the Cloudbreak image name you uploaded in your OpenStack cloud in the <code>Profile</code> file.</p>
+<p>It will create a <code>Profile</code> file in the current directory. Please edit the file - one of the required configurations is the <code>PUBLIC_IP</code>.
+This IP will be used to access the Cloudbreak UI (called Uluwatu). In some cases the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
+<p>The other required configuration in the <code>Profile</code> is the name of the Cloudbreak image you uploaded to your OpenStack cloud.</p>
 <pre><code>export CB_OPENSTACK_IMAGE=&quot;$OS_IMAGE_NAME&quot;
 </code></pre>
 
-<h3 id="start-cloudbreak">Start Cloudbreak</h3>
-<p>To start all the containers run:</p>
+<h2 id="generate-your-profile">Generate your Profile</h2>
+<p>You are done with the configuration of Cloudbreak deployer. The last thing you have to do is to regenerate the configurations in order to take effect.</p>
+<pre><code>rm *.yml
+cbd generate
+</code></pre>
+
+<h2 id="start-cloudbreak">Start Cloudbreak</h2>
+<p>To start the Cloudbreak application use the following command.
+This will start all the Docker containers and initialize the application. It will take a few minutes until all the services start.</p>
 <pre><code>cbd start
 </code></pre>
 
-<p>Launching the first time will take more time as it does some additional steps:</p>
+<p>Launching it the first time will take more time as it does some additional steps:</p>
 <ul>
-<li>download all the docker images, needed by Cloudbreak.</li>
-<li>create <strong>docker-compose.yml</strong>: Full configuration of containers needed for the Cloudbreak deployment.</li>
-<li>create <strong>uaa.yml</strong>: Identity Server configuration.</li>
+<li>downloads all the docker images needed by Cloudbreak.</li>
+<li>creates the <strong>docker-compose.yml</strong> file that describes the configuration of all the Docker containers needed for the Cloudbreak deployment.</li>
+<li>creates the <strong>uaa.yml</strong> file that holds the configuration of the identity server used to authenticate users to Cloudbreak.</li>
 </ul>
-<p>This will start all the Docker containers and initialize the application. Please give a few minutes until all services starts. While the services are starting you can check the logs.</p>
-<h3 id="watch-the-logs">Watch the logs</h3>
+<p>After the <code>cbd generate</code> command finishes you can check the logs of the Cloudbreak server with this command:</p>
 <pre><code>cbd logs cloudbreak
 </code></pre>
 
 <blockquote>
-<p>You can check the logs when the application is ready. It is about 30 seconds.</p>
+<p>Cloudbreak server should start within a minute - you should see a line like this: <code>Started CloudbreakApplication in 36.823 seconds</code></p>
 </blockquote>
-<p>Once Cloudbreak is up and running you can launch clusters in two different ways. You can use the <a href="../openstack_cb_ui/">Cloudbreak UI</a> or use the <a href="../openstack_cb_shell/">Cloudbreak shell</a> but before the provisioning please create the <a href="../openstack_pre_prov/">Provisioning prerequisites</a>.</p></div>
+<p>Once Cloudbreak is up and running you should check out the <a href="../openstack_pre_prov/">prerequisites</a> needed to create OpenStack clusters with Cloudbreak.</p></div>
             
         </div>
 
