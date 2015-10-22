@@ -224,6 +224,12 @@
         
             
 <li >
+    <a href="../openstack_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
     <a href="../openstack_cb_ui/">Provisioning - UI</a>
 </li>
 
@@ -333,7 +339,7 @@
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../openstack_cb_ui/">
+                        <a rel="prev" href="../openstack_pre_prov/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -351,6 +357,8 @@
     
         <li class="main active"><a href="#openstack-based-installation">OpenStack based installation</a></li>
         
+            <li><a href="#deployment-prerequisites">Deployment prerequisites</a></li>
+        
             <li><a href="#usage">Usage</a></li>
         
     
@@ -359,8 +367,19 @@
                 <div class="col-md-9" role="main">
 
 <h1 id="openstack-based-installation">OpenStack based installation</h1>
-<p>We have pre-built a custom OpenStack image available on VM Depot with all the required tooling and Cloudbreak deployer installed. In order to launch this image on OpenStack please use the following <a href="">image</a>.</p>
-<p>Cloudbreak will already be installed, thus you can follow these steps to launch the application.</p>
+<h2 id="deployment-prerequisites">Deployment prerequisites</h2>
+<h3 id="download-the-cloudbreak-image">Download the Cloudbreak image</h3>
+<p>You can download the latest Cloudbreak OpenStack image with the following commands</p>
+<pre><code>LATEST_IMAGE=&quot;cb-openstack-images/cb-centos71-amb212-2015-10-09.img&quot;
+LOCAL_IMAGE_NAME=&quot;...&quot;
+aws s3 cp s3://$LATEST_IMAGE $LOCAL_IMAGE_NAME
+</code></pre>
+
+<h3 id="import-the-image-into-openstack">Import the image into OpenStack</h3>
+<pre><code>OS_IMAGE_NAME=&quot;name_in_openstack&quot;
+glance image-create --name &quot;$OS_IMAGE_NAME&quot; --file &quot;$LOCAL_IMAGE_NAME&quot;  --disk-format qcow2 --container-format bare --is-public True --progress
+</code></pre>
+
 <h2 id="usage">Usage</h2>
 <p>Once the Cloudbreak deployer is installed it will generate some config files and will download supporting binaries. It is
 advised that you create a dedicated directory for it:</p>
@@ -376,6 +395,11 @@ cd cloudbreak-deployment
 <p>It will create a <code>Profile</code> file in the current directory. Please edit the file - the only required
 configuration is the <code>PUBLIC_IP</code>. This IP will be used to access the Cloudbreak UI
 (called Uluwatu). In some cases the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
+<h3 id="configure-the-name-of-the-cloudbreak-image">Configure the name of the Cloudbreak image</h3>
+<p>You need to set the Cloudbreak image name you uploaded in your OpenStack cloud in the <code>Profile</code> file.</p>
+<pre><code>export CB_OPENSTACK_IMAGE=&quot;$OS_IMAGE_NAME&quot;
+</code></pre>
+
 <h3 id="start-cloudbreak">Start Cloudbreak</h3>
 <p>To start all the containers run:</p>
 <pre><code>cbd start
