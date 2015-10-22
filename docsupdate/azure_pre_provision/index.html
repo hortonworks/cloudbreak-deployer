@@ -357,38 +357,39 @@
 <h1 id="preprovision-configurations">Preprovision configurations</h1>
 <p>Note that we use the new <a href="https://azure.microsoft.com/en-us/documentation/articles/resource-group-overview/">Azure ARM</a> in order to launch clusters. In order to work we need to create an Active Directory application with the configured name and password and adds the permissions that are needed to call the Azure Resource Manager API. Cloudbreak deployer automates all this for you.</p>
 <h2 id="azure-access-setup">Azure access setup</h2>
-<p>If you want to use your Azure subscription then you need an Azure Active directory user.</p>
+<p>If you do not have an Active directory user then you have to configure it before deploying a cluster with Cloudbreak.</p>
 <ol>
 <li>
 <p>You can configure your AD users on <code>manage.windowsazure.com</code> &gt; <code>Active Directory</code> &gt; <code>Your active directory</code> &gt; <code>Users</code> menu
 <img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure2.png" /></p>
 </li>
 <li>
-<p>Now you add the new user to AD. Simply click on <code>Add User</code> on the bottom of the page
+<p>Here you can add the new user to AD. Simply click on <code>Add User</code> on the bottom of the page
 <img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure3.png" /></p>
 </li>
 <li>
-<p>Type the new user name in to the box
+<p>Type the new user name into the box
 <img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure4.png" /></p>
 </li>
 <li>
-<p>You will see the added user in the list
+<p>You will see the new user in the list
 <img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure5.png" /></p>
 </li>
 <li>
-<p>After you add the user to the AD you need to add to the <code>manage.windowsazure.com</code> &gt; <code>Settings</code> &gt; <code>Administrators</code>
+<p>After you add the user to the AD you need to add your AD user to the <code>manage.windowsazure.com</code> &gt; <code>Settings</code> &gt; <code>Administrators</code>
 <img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure6.png" /></p>
 </li>
 <li>
-<p>Now you add the new user to Administrators. Simply click on <code>Add</code> on the bottom of the page
+<p>Here you can add the new user to Administrators. Simply click on <code>Add</code> on the bottom of the page
 <img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure7.png" /></p>
 </li>
 </ol>
-<p>In order for Cloudbreak to be able to launch clusters on Azure on your behalf you need to set up your Azure ARM application.</p>
+<p>In order for Cloudbreak to be able to launch clusters on Azure on your behalf you need to set up your <strong>Azure ARM application</strong>.</p>
 <pre><code>cbd azure configure-arm --app_name myapp --app_password password123 --subscription_id 1234-abcd-efgh-1234 --username testuser@company.onmicrosoft.com --password password123
 </code></pre>
 
-<p>The command first creates an Active Directory application with the configured name and password and adds the permissions that are needed to call the Azure Resource Manager API.</p>
+<p>The command first creates an Active Directory application with the configured name and password and adds the permissions that are needed to call the Azure Resource Manager API.
+Please use the output of the command when you creating your Azure credential in Cloudbreak.</p>
 <p><em>Options:</em></p>
 <p><strong>--app_name</strong>: Your application name. Default is <em>app</em>.</p>
 <p><strong>--app_password</strong>: Your application password. Default is <em>password</em>.</p>
