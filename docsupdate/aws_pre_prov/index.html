@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/development/">
+        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/aws_pre_prov/">
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Development - Cloudbreak Deployer</title>
+	<title>Provisioning prerequisites - Cloudbreak Deployer</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -108,7 +108,7 @@
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Providers <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -124,8 +124,8 @@
 
         
             
-<li >
-    <a href="../aws_pre_prov/">Provisioning prerequisites</a>
+<li class="active">
+    <a href="./">Provisioning prerequisites</a>
 </li>
 
         
@@ -243,7 +243,7 @@
                 
                 
                 
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Docs <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -296,8 +296,8 @@
 
                         
                             
-<li class="active">
-    <a href="./">Development</a>
+<li >
+    <a href="../development/">Development</a>
 </li>
 
                         
@@ -328,12 +328,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../configuration/">
+                        <a rel="next" href="../aws/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../changelog/">
+                        <a rel="prev" href="../aws_cb_ui/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -349,70 +349,35 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#contribution">Contribution</a></li>
-        
-    
-        <li class="main "><a href="#testing">Testing</a></li>
-        
-    
-        <li class="main "><a href="#release-process-of-the-clodbreak-deployer-tool">Release Process of the Clodbreak Deployer tool</a></li>
-        
-            <li><a href="#acceptance">Acceptance</a></li>
+        <li class="main active"><a href="#provision-prerequisites">Provision prerequisites</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h2 id="contribution">Contribution</h2>
-<p>Development process should happen on separate branches. Then a pull-request should be opened as usual.</p>
-<p>To build the project</p>
-<pre><code># make deps needed only once
-make deps
-
-make install
-</code></pre>
-
-<p>To run the unit tests:</p>
-<pre><code>make tests
-</code></pre>
-
-<p>If you want to test the binary CircleCI build from your branch named <code>fix-something</code>, to validate the PR binary <code>cbd</code> tool will be tested. It is built by CircleCI for each branch.</p>
-<pre><code>cbd update fix-something
-</code></pre>
-
-<h2 id="testing">Testing</h2>
-<p>Shell scripts shouldn’t raise exceptions when it comes to unit testing. <a href="https://github.com/progrium/basht">basht</a> is used for testing. See the reasoning: <a href="https://github.com/progrium/basht#why-not-bats-or-shunit2">why not bats or shunit2</a></p>
-<p>Please cover your bash functions with unit tests and run test with:</p>
-<pre><code>make tests
-</code></pre>
-
-<h2 id="release-process-of-the-clodbreak-deployer-tool">Release Process of the Clodbreak Deployer tool</h2>
-<p>The master branch is always built on <a href="https://circleci.com/gh/sequenceiq/cloudbreak-deployer">CircleCI</a>.
-When you wan’t a new release, all you have to do:</p>
-<pre><code>make release-next-ver
-</code></pre>
-
-<p><code>make release-next-ver</code> performs the following steps:</p>
+<h1 id="provision-prerequisites">Provision prerequisites</h1>
+<p>Cloudbreak works by connecting your AWS account through so called <em>Credentials</em>, and then uses these credentials to create resources on your behalf.
+It is important that a Cloudbreak deployment uses two different AWS accounts for two different purposes:</p>
 <ul>
-<li>on the <code>master</code> branch:</li>
-<li>Updates the <code>VERSION</code> file by increasing the <strong>patch</strong> version number (for example from 0.5.2 to 0.5.3)</li>
-<li>Updates <code>CHANGELOG.md</code> with the release date</li>
-<li>
-<p>Creates a new <strong>Unreleased</strong> section in top of <code>CHANGELOG.md</code></p>
-</li>
-<li>
-<p>Creates a PullRequest for the release branch:</p>
-</li>
-<li>create a new branch with a name like <code>release-0.5.x</code></li>
-<li>this branch should be the same as <code>origin/master</code></li>
-<li>create a pull request into <code>release</code> branch</li>
+<li>The account belonging to the Cloudbreak webapp itself that acts as a <em>third party</em> that creates resources on the account of the <em>end-user</em>. This account is configured at server-deployment time.</li>
+<li>The account belonging to the <em>end user</em> who uses the UI or the Shell to create clusters. This account is configured when setting up credentials.</li>
 </ul>
-<h3 id="acceptance">Acceptance</h3>
-<p>Now you should test this release. You can get it by <code>cbd update release-x.y.z</code>. Comment with LGTM (Looking Good To Me).</p>
-<p>Once the PR is merged, CircleCI will:
-- create a new release on <a href="https://github.com/sequenceiq/cloudbreak-deployer/releases">GitHub releases tab</a>, with the help of <a href="https://github.com/progrium/gh-release">gh-release</a>.
-- it will create the git tag with <code>v</code> prefix like: <code>v0.0.3</code></p></div>
+<p>These two accounts are usually <em>the same</em> when the end user is the same who deployed the Cloudbreak server, but it allows Cloudbreak to act as a SaaS project as well if needed.</p>
+<p>Credentials use <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html">IAM Roles</a> to give access to the third party to act on behalf of the end user without giving full access to your resources.
+This IAM Role will be <em>assumed</em> later by the deployment account.
+This section is about how to setup the IAM role used to create Cloudbreak credentials - to see the other part about how to setup the deployment account with cbd check out <a href="../aws/">this description</a>.</p>
+<p>To connect your (end user) AWS account with a credential in Cloudbreak you'll have to create an IAM role on your AWS account that is configured to allow the third-party account to access and create resources on your behalf.
+The easiest way to do this is with cbd commands but it can also be done manually from the AWS Console:</p>
+<pre><code>cbd aws generate-role  - Generates an AWS IAM role for Cloudbreak provisioning on AWS
+cbd aws show-role      - Show assumers and policies for an AWS role
+cbd aws delete-role    - Deletes an AWS IAM role, removes all inline policies
+</code></pre>
+
+<p>The <code>generate-role</code> command creates a role that is assumable by the Cloudbreak deployer's AWS account and has a broad policy setup.</p>
+<p>You can check the generated role on your AWS console, under IAM roles:</p>
+<p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/aws-iam-role.png" /></p>
+<p>After you're IAM role is configured you can move on to create clusters on the <a href="../aws_cb_ui/">UI</a> or with the <a href="../aws_cb_shell/">Shell</a>.</p></div>
             
         </div>
 
