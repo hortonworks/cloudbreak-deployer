@@ -355,25 +355,46 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#cluster-customization">Cluster customization</a></li>
-        
-            <li><a href="#downloadable-recipes">Downloadable recipes</a></li>
+        <li class="main active"><a href="#recipes">Recipes</a></li>
         
             <li><a href="#stored-recipes">Stored recipes</a></li>
+        
+            <li><a href="#downloadable-recipes">Downloadable recipes</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h2 id="cluster-customization">Cluster customization</h2>
-<p>With the help of Cloudbreak it is very easy to provision Hadoop clusters in the cloud from an Apache Ambari blueprint. Cloudbreak built in provisioning doesn't contain every use case, so we are introducing the concept of recipes.
-Recipes are basically script extensions to a cluster that run on a set of nodes before or after the Ambari cluster installation. With recipes it's quite easy for example to put a JAR file on the Hadoop classpath or run some custom scripts.
-In Cloudbreak we supports two ways to configure recipe, we have downloadable and stored recipes. A downloadable recipe should be available on HTTP, HTTPS protocols optionally with basic authentication, or any kind of public Git repository.
-As the name mentions stored recipes are uploaded and stored in Cloudbreak via web interface or shell.</p>
-<h3 id="downloadable-recipes">Downloadable recipes</h3>
+<h1 id="recipes">Recipes</h1>
+<p>With the help of Cloudbreak it is very easy to provision Hadoop clusters in the cloud from an Apache Ambari blueprint. Cloudbreak built in provisioning doesn't contain every use case, so we are introducing the concept of recipes.</p>
+<p>Recipes are basically script extensions to a cluster that run on a set of nodes before or after the Ambari cluster installation. With recipes it's quite easy for example to put a JAR file on the Hadoop classpath or run some custom scripts.</p>
+<p>In Cloudbreak we supports two ways to configure recipe, we have downloadable and stored recipes.</p>
+<h2 id="stored-recipes">Stored recipes</h2>
+<p>As the name mentions stored recipes are uploaded and stored in Cloudbreak via web interface or shell.</p>
+<p>The easiest way to create a custom recipe:</p>
+<ul>
+<li>create your own pre and/or post scripts</li>
+<li>upload them on shell or web interface</li>
+</ul>
+<h3 id="add-recipe">Add recipe</h3>
+<p>On the web interface under "manage recipes" section you should create new recipe. Please select SCRIPT or FILE type plugin, and fill other required fields.</p>
+<p>To add recipe via shell use the following command:</p>
+<pre><code>recipe store --name [recipe-name] --executionType [ONE_NODE|ALL_NODES] --preInstallScriptFile /path/of/the/pre-install-script --postInstallScriptFile /path/of/the/post-install-script
+</code></pre>
+
+<p>This command has two optional parameters:</p>
+<ul>
+<li>--description "string": description of the recipe</li>
+<li>--timeout "integer": timeout of the script execution</li>
+<li>--publicInAccount "flag": flags if the template is public in the account</li>
+</ul>
+<p>In the background Cloudbreak pushes recipe to Consul key/value store during cluster creation.</p>
+<p>Stored recipes has limitation on size, because they are stored in Consul key/value store, the base64 encoded content of the scripts must be less then 512kB.</p>
+<h2 id="downloadable-recipes">Downloadable recipes</h2>
+<p>A downloadable recipe should be available on HTTP, HTTPS protocols optionally with basic authentication, or any kind of public Git repository.</p>
 <p>This kind of recipe must contain a plugin.toml file, with some basic information about the recipe, and at least a recipe-pre-install or recipe-post-install script.
-Content of plugin.toml</p>
+Content of plugin.toml:</p>
 <pre><code>[plugin]
 name = &quot;[recipe-name]&quot;
 description = &quot;[description-of-the-recipe]&quot;
@@ -383,8 +404,8 @@ maintainer_email = &quot;[maintainer-email]&quot;
 website_url = &quot;[website-url]&quot;
 </code></pre>
 
-<p>Pre and post scripts are regular shell scripts, and must be executable.</p>
-<p>To configure recipe or recipe groups in Cloudbreak you have to create a descriptive JSON file and send it to Cloudbreak via our shell. On web interface you could skip this step, just fill the required fields.</p>
+<p>Pre- and post scripts are regular shell scripts, and must be executable.</p>
+<p>To configure recipe or recipe groups in Cloudbreak you have to create a descriptive JSON file and send it to Cloudbreak via our shell. On web interface you don't need to take care of this file.</p>
 <pre><code>{
   &quot;name&quot;: &quot;[recipe-name]&quot;,
   &quot;description&quot;: &quot;[description-of-the-recipe]&quot;,
@@ -424,7 +445,9 @@ website_url = &quot;[website-url]&quot;
 <li>ONE_NODE means the recipe will execute only one node in the hostgroup</li>
 <li>All_NODES runs every single instance in the hostgroup.</li>
 </ul>
-<p>To add recipe use the command(s) below:</p>
+<h3 id="add-recipe_1">Add recipe</h3>
+<p>On the web interface please select URL type plugin, and fill other required fields.</p>
+<p>To add recipe via shell use the command(s) below:</p>
 <pre><code>recipe add --file /path/of/the/recipe/json
 </code></pre>
 
@@ -432,18 +455,10 @@ website_url = &quot;[website-url]&quot;
 <pre><code>recipe add --url http(s)://mydomain.com/my-recipe.json
 </code></pre>
 
-<p>Add command has an optional parameter --publicInAccount, flags if the template is public in the account.</p>
-<h3 id="stored-recipes">Stored recipes</h3>
-<p>The easiest way to create a custom recipe in Cloudbreak is stored recipes. Create your own pre and/or post scripts, and upload them via shell or web interface. In the background Cloudbreak pushes recipe to Consul key/value store during cluster creation.
-Stored recipes has the same size limitation like properties in downloadable recipe, because of the key/value store, the base64 encoded contents of the scripts must be less then 512kB.</p>
-<pre><code>recipe store --name [recipe-name] --executionType [ONE_NODE|ALL_NODES] --preInstallScriptFile /path/of/the/pre-install-script --postInstallScriptFile /path/of/the/post-install-script
-</code></pre>
-
-<p>This command has two optional parameters:
-- --description "string": description of the recipe
-- --timeout "integer": timeout of the script execution
-- --publicInAccount "flag": flags if the template is public in the account</p>
-<p>Recipes are ready to use at hostgroup configuration.</p></div>
+<p>Add command has an optional parameter</p>
+<ul>
+<li>--publicInAccount, flags if the template is public in the account.</li>
+</ul></div>
             
         </div>
 
