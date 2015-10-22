@@ -146,13 +146,7 @@
         
             
 <li >
-    <a href="../azure/">Installation</a>
-</li>
-
-        
-            
-<li >
-    <a href="../azure_pre_provision/">Provisioning prerequisites</a>
+    <a href="../azure/">Deployment</a>
 </li>
 
         
@@ -180,12 +174,6 @@
             
 <li >
     <a href="../gcp/">Deployment</a>
-</li>
-
-        
-            
-<li >
-    <a href="../gcp_pre_provision/">Provisioning prerequisites</a>
 </li>
 
         
@@ -322,7 +310,7 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../azure_pre_provision/">
+                        <a rel="next" href="../azure/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
@@ -367,7 +355,7 @@
 
 <h2 id="manage-cloud-credentials">Manage cloud credentials</h2>
 <p>You can now log into the Cloudbreak application at http://PUBLIC_IP:3000. Once logged in go to <strong>Manage credentials</strong>. Using manage credentials will  link your cloud account with the Cloudbreak account.
-If you do not have an Azure Resource manager application you can simply create it with Cloudbreak deployer. Please read the <a href="../azure_pre_provision/">Provisioning prerequisites</a> for more information.</p>
+If you do not have an Azure Resource manager application you can simply create it with Cloudbreak deployer. Please read the <a href="azure_pre_provision.md">Provisioning prerequisites</a> for more information.</p>
 <p><code>Name:</code> name of your credential</p>
 <p><code>Description:</code> short description of your linked credential</p>
 <p><code>Subscription Id:</code> your Azure subscription id - see Accounts (Browse all&gt; Subscription)</p>
@@ -416,19 +404,29 @@ If you do not have an Azure Resource manager application you can simply create i
 <li>Consul (8500)</li>
 <li>NN (50070)</li>
 <li>RM Web (8088)</li>
-<li>RM Scheduler (8030)</li>
-<li>RM IPC (8050)</li>
+<li>Scheduler (8030RM)</li>
+<li>IPC (8050RM)</li>
 <li>Job history server (19888)</li>
-<li>HBase master (60010)</li>
+<li>HBase master (60000)</li>
+<li>HBase master web (60010)</li>
+<li>HBase RS (16020)</li>
+<li>HBase RS info (60030)</li>
 <li>Falcon (15000)</li>
 <li>Storm (8744)</li>
+<li>Hive metastore (9083)</li>
+<li>Hive server (10000)</li>
+<li>Hive server HTTP (10001)</li>
+<li>Accumulo master (9999)</li>
+<li>Accumulo Tserver (9997)</li>
+<li>Atlas (21000)</li>
+<li>KNOX (8443)</li>
 <li>Oozie (11000)</li>
 <li>Spark HS (18080)</li>
 <li>NM Web (8042)</li>
 <li>Zeppelin WebSocket (9996)</li>
 <li>Zeppelin UI (9995)</li>
 <li>Kibana (3080)</li>
-<li>Elasticsearch (9200)</li>
+<li>Elasticsearch (9200) </li>
 </ul>
 <h2 id="create-a-cluster">Create a cluster</h2>
 <p>Using the create cluster functionality Cloudbreak will create a cloud Stack and a Hadoop Cluster. In order to create a cluster you will have to select a credential first.</p>

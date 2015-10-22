@@ -146,13 +146,7 @@
         
             
 <li >
-    <a href="../azure/">Installation</a>
-</li>
-
-        
-            
-<li >
-    <a href="../azure_pre_provision/">Provisioning prerequisites</a>
+    <a href="../azure/">Deployment</a>
 </li>
 
         
@@ -180,12 +174,6 @@
             
 <li class="active">
     <a href="./">Deployment</a>
-</li>
-
-        
-            
-<li >
-    <a href="../gcp_pre_provision/">Provisioning prerequisites</a>
 </li>
 
         
@@ -327,7 +315,7 @@
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../gcp_pre_provision/">
+                        <a rel="prev" href="../gcp_cb_ui/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -345,6 +333,10 @@
     
         <li class="main active"><a href="#gcp-deployment">GCP deployment</a></li>
         
+            <li><a href="#preprovision-configurations">Preprovision configurations</a></li>
+        
+            <li><a href="#start-cloudbreak">Start Cloudbreak</a></li>
+        
             <li><a href="#initialize-profile">Initialize Profile</a></li>
         
             <li><a href="#use-cloudbreak">Use Cloudbreak</a></li>
@@ -355,6 +347,25 @@
                 <div class="col-md-9" role="main">
 
 <h1 id="gcp-deployment">GCP deployment</h1>
+<h2 id="preprovision-configurations">Preprovision configurations</h2>
+<p>Follow the <a href="https://cloud.google.com/storage/docs/authentication#service_accounts">instructions</a> in Google Cloud's documentation to create a <code>Service account</code> and <code>Generate a new P12 key</code>.</p>
+<p>Make sure that at API level (<strong>APIs and auth</strong> menu) you have enabled:</p>
+<ul>
+<li>Google Compute Engine</li>
+<li>Google Compute Engine Instance Group Manager API</li>
+<li>Google Compute Engine Instance Groups API</li>
+<li>BigQuery API</li>
+<li>Google Cloud Deployment Manager API</li>
+<li>Google Cloud DNS API</li>
+<li>Google Cloud SQL</li>
+<li>Google Cloud Storage</li>
+<li>Google Cloud Storage JSON API</li>
+</ul>
+<blockquote>
+<p>If you enabled every API then you have to wait about <strong>10 minutes</strong> for the provider.</p>
+</blockquote>
+<p>When creating GCP credentials in Cloudbreak you will have to provide the email address of the Service Account and the project ID (from Google Developers Console - Projects) where the service account is created. You'll also have to upload the generated P12 file and provide an OpenSSH formatted public key that will be used as an SSH key.</p>
+<h2 id="start-cloudbreak">Start Cloudbreak</h2>
 <p>You already have a cloudbreak-deployer on the machine now we have to start Cloudbreak.</p>
 <pre><code>mkdir -p cloudbreak-deployer
 cd cloudbreak-deployer
@@ -368,27 +379,6 @@ cd cloudbreak-deployer
 <p>It will create a <code>Profile</code> file in the current directory. Please edit the file - the only required
 configuration is the <code>PUBLIC_IP</code>. This IP will be used to access the Cloudbreak UI
 (called Uluwatu). In some cases the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
-<h3 id="change-default-usernamepassword">Change default username/Password</h3>
-<p>The default credentials can be revealed by <code>cbd login</code> These values are used in the <code>uaa.yml</code> file's end section. To change these values, add 2 lines into your Profile:</p>
-<pre><code>export UAA_DEFAULT_USER_EMAIL=myself@example.com
-export UAA_DEFAULT_USER_PW=demo123
-</code></pre>
-
-<h3 id="regenerate-your-profile">Regenerate your Profile</h3>
-<p>There is available a "cbd regenerate" command for this.</p>
-<pre><code>cbd regenerate
-</code></pre>
-
-<h3 id="verify-configurations">Verify configurations</h3>
-<p>In order to verify that all configs are OK use the <code>doctor</code> command.</p>
-<pre><code>cbd doctor
-</code></pre>
-
-<h3 id="pull-docker-images">Pull Docker images</h3>
-<p>All Cloudbreak components and the backend database is running inside containers. The pull command is optional but you can run it prior to cbd start</p>
-<pre><code>cbd pull
-</code></pre>
-
 <h2 id="use-cloudbreak">Use Cloudbreak</h2>
 <p>To start the Cloudbreak application use the following command.</p>
 <pre><code>cbd start
@@ -407,7 +397,7 @@ export UAA_DEFAULT_USER_PW=demo123
 <blockquote>
 <p>You can check the logs when the application is ready. It is about 30 seconds.</p>
 </blockquote>
-<p>Once Cloudbreak is up and running you have to make some provider based configuration. You can use the <a href="">Cloudbreak UI</a>.</p></div>
+<p>Once Cloudbreak is up and running you can launch clusters in two different ways. You can use the <a href="../gcp_cb_ui/">Cloudbreak UI</a> or use the <a href="../gcp_cb_shell/">Cloudbreak shell</a>.</p></div>
             
         </div>
 

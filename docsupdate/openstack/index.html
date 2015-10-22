@@ -146,13 +146,7 @@
         
             
 <li >
-    <a href="../azure/">Installation</a>
-</li>
-
-        
-            
-<li >
-    <a href="../azure_pre_provision/">Provisioning prerequisites</a>
+    <a href="../azure/">Deployment</a>
 </li>
 
         
@@ -180,12 +174,6 @@
             
 <li >
     <a href="../gcp/">Deployment</a>
-</li>
-
-        
-            
-<li >
-    <a href="../gcp_pre_provision/">Provisioning prerequisites</a>
 </li>
 
         
@@ -358,7 +346,7 @@
 <h2 id="usage">Usage</h2>
 <p>Once the Cloudbreak deployer is installed it will generate some config files and will download supporting binaries. It is
 advised that you create a dedicated directory for it:</p>
-<pre><code>mkdir cloudbreak-deployment
+<pre><code>mkdir -p cloudbreak-deployment
 cd cloudbreak-deployment
 </code></pre>
 
@@ -370,23 +358,6 @@ cd cloudbreak-deployment
 <p>It will create a <code>Profile</code> file in the current directory. Please edit the file - the only required
 configuration is the <code>PUBLIC_IP</code>. This IP will be used to access the Cloudbreak UI
 (called Uluwatu). In some cases the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
-<h4 id="change-default-usernamepassword">Change default username/Password</h4>
-<p>The default credentials can be revealed by <code>cbd login</code> These values are used in the <code>uaa.yml</code> file's end section. To change these values, add 2 lines into your Profile:</p>
-<pre><code>export UAA_DEFAULT_USER_EMAIL=myself@example.com
-export UAA_DEFAULT_USER_PW=demo123
-</code></pre>
-
-<h4 id="regenerate-your-profile">Regenerate your Profile</h4>
-<p>You are done with the configuration of Cloudbreak deployer. The last thing you have to do is to regenerate the configurations in order to take effect.</p>
-<pre><code>rm *.yml
-cbd generate
-</code></pre>
-
-<h4 id="verify-configs">Verify configs</h4>
-<p>In order to verify that all configs are OK use the <code>doctor</code> command.</p>
-<pre><code>cbd doctor
-</code></pre>
-
 <h3 id="start-cloudbreak">Start Cloudbreak</h3>
 <p>To start all the containers run:</p>
 <pre><code>cbd start
