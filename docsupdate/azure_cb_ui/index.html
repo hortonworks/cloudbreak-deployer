@@ -365,15 +365,15 @@
 </div></div>
                 <div class="col-md-9" role="main">
 
-<p>Once Cloudbreak is up and running you can launch clusters in two different ways. You can use the <a href="./">Cloudbreak UI</a> or use the <a href="../azure_cb_shell/">Cloudbreak shell</a>.</p>
 <h2 id="manage-cloud-credentials">Manage cloud credentials</h2>
-<p>You can now log into the Cloudbreak application at http://PUBLIC_IP:3000. Once logged in go to <strong>Manage credentials</strong>. Using manage credentials will  link your cloud account with the Cloudbreak account.</p>
+<p>You can now log into the Cloudbreak application at http://PUBLIC_IP:3000. Once logged in go to <strong>Manage credentials</strong>. Using manage credentials will  link your cloud account with the Cloudbreak account.
+If you do not have an Azure Resource manager application you can simply create it with Cloudbreak deployer. Please read the <a href="../azure_pre_provision/">Provisioning prerequisites</a> for more information.</p>
 <p><code>Name:</code> name of your credential</p>
 <p><code>Description:</code> short description of your linked credential</p>
 <p><code>Subscription Id:</code> your Azure subscription id - see Accounts (Browse all&gt; Subscription)</p>
 <p><code>Password:</code> your password which was setted up when you create the AD app</p>
-<p><code>App ID:</code> You app Id (Browse all&gt; Subscription&gt; Subscription detail&gt; Users&gt; You application&gt; Properties)</p>
-<p><code>App Owner Tenant ID:</code> You Tenant Id (Browse all&gt; Subscription&gt; Subscription detail&gt; Users&gt; You application&gt; Properties)</p>
+<p><code>App ID:</code> You app Id (<code>Browse all</code>&gt; <code>Subscription</code>&gt; <code>Subscription detail</code>&gt; <code>Users</code>&gt; <code>You application</code>&gt; <code>Properties</code>)</p>
+<p><code>App Owner Tenant ID:</code> You Tenant Id (<code>Browse all</code>&gt; <code>Subscription</code>&gt; <code>Subscription detail</code>&gt; <code>Users</code>&gt; <code>You application</code>&gt; <code>Properties</code>)</p>
 <p><code>SSH public key:</code> the SSH public key in OpenSSH format that's private keypair can be used to log into the launched instances later</p>
 <blockquote>
 <p>Cloudbreak supporting simple rsa public key instead of X509 certificate file after 1.0.4 version</p>
@@ -383,8 +383,7 @@
 <p>Using manage resources you can create infrastructure templates. Templates describes the infrastructure where the HDP cluster will be provisioned. We support heterogenous clusters - this means that one cluster can be built by combining different templates.</p>
 <p><code>Name:</code> name of your template</p>
 <p><code>Description:</code> short description of your template</p>
-<p><code>Instance type:</code> the Amazon instance type to be used - we suggest to use at least small or medium instances</p>
-<p><code>Volume type:</code> option to choose are SSD, regular HDD (both EBS) or Ephemeral</p>
+<p><code>Instance type:</code> the Azure instance type to be used</p>
 <p><code>Attached volumes per instance:</code> the number of disks to be attached</p>
 <p><code>Volume size (GB):</code> the size of the attached disks (in GB)</p>
 <p><code>Public in account:</code> share it with others in the account</p>
