@@ -374,6 +374,10 @@
 </code></pre>
 
 <p>You can check whether the template was created successfully by using the <code>template list</code> or <code>template show</code> command.</p>
+<p>You can delete your cloud template - when you’d like to delete one you will have to use:</p>
+<pre><code>template delete --name awstemplate
+</code></pre>
+
 <h3 id="create-or-select-a-blueprint">Create or select a blueprint</h3>
 <p>You can define Ambari blueprints with cloudbreak-shell:</p>
 <pre><code>blueprint add --name myblueprint --description myblueprint-description --file &lt;the path of the blueprint&gt;
@@ -390,7 +394,7 @@ blueprint select --name hdp-small-default
 
 <h3 id="create-a-network">Create a network</h3>
 <p>A network gives developers and systems administrators an easy way to create and manage a collection of cloud infrastructure related networking, maintaining and updating them in an orderly and predictable fashion. A network can be used repeatedly to create identical copies of the same stack (or to use as a foundation to start a new stack).</p>
-<pre><code>network create --EC2 --name awsnetwork --description aws-network --subnet 10.0.0.0/16
+<pre><code>network create --AWS --name awsnetwork --description aws-network --subnet 10.0.0.0/16
 </code></pre>
 
 <p>Other available options:</p>
@@ -449,9 +453,7 @@ securitygroup select --name secgroup_example
 </code></pre>
 
 <p>Other available options:</p>
-<ul>
-<li>--templateId "string": Id of the template</li>
-</ul>
+<p><code>--templateId</code> Id of the template</p>
 <h3 id="create-a-hadoop-cluster">Create a Hadoop cluster</h3>
 <p>You are almost done - two more command and this will create your Hadoop cluster on your favorite cloud provider. Same as the API, or UI this will use your <code>credential</code>, <code>instancegroups</code>, <code>network</code>, <code>securitygroup</code>, and by using CloudFormation will launch a cloud stack</p>
 <pre><code>stack create --name my-first-stack
@@ -474,10 +476,10 @@ securitygroup select --name secgroup_example
 <h1 id="example">Example</h1>
 <p>The following example creates a hadoop cluster with <code>hdp-small-default</code> blueprint on M3Xlarge instances with 2X100G attached disks on <code>default-aws-network</code> network using <code>all-services-port</code> security group. You should copy your ssh public key file into your cbd working directory with name <code>id_rsa.pub</code> and change the <code>&lt;arn role&gt;</code> part with your arn role.</p>
 <pre><code>credential create --EC2 --description description --name my-aws-credential --roleArn &lt;arn role&gt; --sshKeyPath id_rsa.pub
-credential select --name mvCredentialName
+credential select --name my-aws-credential
 template create --EC2 --name awstemplate --description aws-template --instanceType M3Xlarge --volumeSize 100 --volumeCount 2
 blueprint select --name hdp-small-default
-instancegroup configure --instanceGroup cbgateway --nodecount 1 --templateName minviable-aws
+instancegroup configure --instanceGroup cbgateway --nodecount 1 --templateName awstemplate
 instancegroup configure --instanceGroup host_group_master_1 --nodecount 1 --templateName awstemplate
 instancegroup configure --instanceGroup host_group_master_2 --nodecount 1 --templateName awstemplate
 instancegroup configure --instanceGroup host_group_master_3 --nodecount 1 --templateName awstemplate
