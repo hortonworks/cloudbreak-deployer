@@ -355,7 +355,7 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#setting-up-azure-credentials">Setting up AZURE credentials</a></li>
+        <li class="main active"><a href="#setting-up-azure-credentials">Setting up Azure credentials</a></li>
         
     
         <li class="main "><a href="#infrastructure-templates">Infrastructure templates</a></li>
@@ -384,14 +384,14 @@ This description details the AZURE setup - if you'd like to use a different clou
 <li>create a blueprint that describes the HDP services in your clusters and add some recipes for customization</li>
 <li>launch the cluster itself based on these template resources</li>
 </ul>
-<h2 id="setting-up-azure-credentials">Setting up AZURE credentials</h2>
-<p>If you do not have an Azure Resource manager application you can simply create it with Cloudbreak deployer. Please read the <a href="azure_pre_provision.md">Provisioning prerequisites</a> for more information.</p>
+<h2 id="setting-up-azure-credentials">Setting up Azure credentials</h2>
+<p>If you do not have an Azure Resource manager application you can simply create it with Cloudbreak deployer. Please read the <a href="../azure_pre_prov/">Provisioning prerequisites</a> for more information.</p>
 <p><code>Name:</code> name of your credential</p>
 <p><code>Description:</code> short description of your linked credential</p>
-<p><code>Subscription Id:</code> your Azure subscription id - see Accounts (Browse all&gt; Subscription)</p>
+<p><code>Subscription Id:</code> your Azure subscription id - see Accounts (<code>portal.azure.com</code>&gt; <code>Browse all</code>&gt; <code>Subscription</code>)</p>
 <p><code>Password:</code> your password which was setted up when you create the AD app</p>
-<p><code>App ID:</code> You app Id (<code>Browse all</code>&gt; <code>Subscription</code>&gt; <code>Subscription detail</code>&gt; <code>Users</code>&gt; <code>You application</code>&gt; <code>Properties</code>)</p>
-<p><code>App Owner Tenant ID:</code> You Tenant Id (<code>Browse all</code>&gt; <code>Subscription</code>&gt; <code>Subscription detail</code>&gt; <code>Users</code>&gt; <code>You application</code>&gt; <code>Properties</code>)</p>
+<p><code>App Id:</code> You app Id (<code>portal.azure.com</code>&gt; <code>Browse all</code>&gt; <code>Subscription</code>&gt; <code>Subscription detail</code>&gt; <code>Users</code>&gt; <code>You application</code>&gt; <code>Properties</code>)</p>
+<p><code>App Owner Tenant Id:</code> You Tenant Id (<code>portal.azure.com</code>&gt; <code>Browse all</code>&gt; <code>Subscription</code>&gt; <code>Subscription detail</code>&gt; <code>Users</code>&gt; <code>You application</code>&gt; <code>Properties</code>)</p>
 <p><code>SSH public key:</code> the SSH public key in OpenSSH format that's private keypair can be used to log into the launched instances later</p>
 <blockquote>
 <p>Cloudbreak is supporting simple rsa public key instead of X509 certificate file after 1.0.4 version</p>
