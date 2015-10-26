@@ -405,7 +405,7 @@ This description details the AZURE setup - if you'd like to use a different clou
 <li>security groups</li>
 </ul>
 <p>When you create a template, Cloudbreak <em>doesn't make any requests</em> to AZURE.
-Resources are only created on AZURE after the <code>Create cluster</code> button is pushed.
+Resources are only created on AZURE after the <code>create cluster</code> button is pushed.
 These templates are saved to Cloudbreak's database and can be reused with multiple clusters to describe the infrastructure.</p>
 <p><strong>Manage resources</strong></p>
 <p>Using manage resources you can create infrastructure templates. Templates describes the infrastructure where the HDP cluster will be provisioned. We support heterogenous clusters - this means that one cluster can be built by combining different templates.</p>
@@ -433,8 +433,7 @@ These templates are saved to Cloudbreak's database and can be reused with multip
 <p>They describe the allowed inbound traffic to the instances in the cluster.
 Currently only one security group template can be selected for a Cloudbreak cluster and all the instances have a public IP address so all the instances in the cluster will belong to the same security group.
 This may change in a later release.</p>
-<p>You can define your own security group by adding all the ports, protocols and CIDR range you'd like to use. 443 needs to be there in every security group otherwise Cloudbreak won't be able to
-The rules defined here doesn't need to contain the internal rules, those are automatically added by Cloudbreak to the security group on AZURE.</p>
+<p>You can define your own security group by adding all the ports, protocols and CIDR range you'd like to use. 443 needs to be there in every security group otherwise Cloudbreak won't be able to communicate with the provisioned cluster. The rules defined here doesn't need to contain the internal rules, those are automatically added by Cloudbreak to the security group on Azure.</p>
 <p>You can also use the two pre-defined security groups in Cloudbreak:</p>
 <p><code>only-ssh-and-ssl:</code> all ports are locked down except for SSH and gateway HTTPS (you can't access Hadoop services outside of the VPC):</p>
 <ul>
