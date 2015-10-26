@@ -361,6 +361,8 @@
         
             <li><a href="#azure-access-setup">Azure access setup</a></li>
         
+            <li><a href="#azure-application-setup-with-cloudbreak-deployer">Azure application setup with Cloudbreak Deployer</a></li>
+        
             <li><a href="#filesystem-configuration">Filesystem configuration</a></li>
         
             <li><a href="#next-steps">Next steps</a></li>
@@ -429,7 +431,8 @@ You'll be asked to enter a passphrase, but you can leave it empty.
 <img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure7.png" /></p>
 </li>
 </ol>
-<p>In order for Cloudbreak to be able to launch clusters on Azure on your behalf you need to set up your <strong>Azure ARM application</strong>.</p>
+<h2 id="azure-application-setup-with-cloudbreak-deployer">Azure application setup with Cloudbreak Deployer</h2>
+<p>In order for Cloudbreak to be able to launch clusters on Azure on your behalf you need to set up your <strong>Azure ARM application</strong>. We have automated the Azure configurations in the Cloudbreak Deployer (CBD). After the CBD has installed, simply run the following command:</p>
 <pre><code>cbd azure configure-arm --app_name myapp --app_password password123 --subscription_id 1234-abcd-efgh-1234 --username testuser@company.onmicrosoft.com --password password123
 </code></pre>
 
@@ -449,7 +452,7 @@ App Owner Tenant ID: sdwerwe1-d98e-dsf12-dsf123-df123232
 <p><strong>--username</strong>: Your Azure username.</p>
 <p><strong>--password</strong>: Your Azure password.</p>
 <h2 id="filesystem-configuration">Filesystem configuration</h2>
-<p>When starting a cluster with Cloudbreak on Azure, the default filesystem is “Windows Azure blob storage with DASH”. Hadoop has built-in support for the <a href="https://hadoop.apache.org/docs/current/hadoop-azure/index.html">WASB filesystem</a> so it can be used easily as HDFS instead of disks.</p>
+<p>When starting a cluster with Cloudbreak on Azure, the default filesystem is “Windows Azure Blob Storage with DASH”. Hadoop has built-in support for the <a href="https://hadoop.apache.org/docs/current/hadoop-azure/index.html">WASB filesystem</a> so it can be used easily as HDFS instead of disks.</p>
 <h3 id="disks-and-blob-storage">Disks and blob storage</h3>
 <p>In Azure every data disk attached to a virtual machine <a href="https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-disks-vhds/">is stored</a> as a virtual hard disk (VHD) in a page blob inside an Azure storage account. Because these are not local disks and the operations must be done on the VHD files it causes degraded performance when used as HDFS.
 When WASB is used as a Hadoop filesystem the files are full-value blobs in a storage account. It means better performance compared to the data disks and the WASB filesystem can be configured very easily but Azure storage accounts have their own <a href="https://azure.microsoft.com/en-us/documentation/articles/azure-subscription-service-limits/#storage-limits">limitations</a> as well. There is a space limitation for TB per storage account (500 TB) as well but the real bottleneck is the total request rate that is only 20000 IOPS where Azure will start to throw errors when trying to do an I/O operation.
