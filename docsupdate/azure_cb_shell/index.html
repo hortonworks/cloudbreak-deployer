@@ -361,7 +361,7 @@
         
             <li><a href="#create-a-template">Create a template</a></li>
         
-            <li><a href="#configure-instance-groups">Configure instance groups</a></li>
+            <li><a href="#create-a-hadoop-cluster">Create a Hadoop cluster</a></li>
         
     
         <li class="main "><a href="#silent-mode">Silent mode</a></li>
@@ -486,14 +486,14 @@ securitygroup select --name secgroup_example
 <li>Kibana (3080)</li>
 <li>Elasticsearch (9200)</li>
 </ul>
-<h2 id="configure-instance-groups">Configure instance groups</h2>
+<h3 id="configure-instance-groups">Configure instance groups</h3>
 <p>You have to configure the instancegroups before the provisioning. An instancegroup is defining a group of your nodes with a specified template. Usually we create instancegroups for the hostgroups defined in the blueprints.</p>
 <pre><code>instancegroup configure --instanceGroup host_group_slave_1 --nodecount 3 --templateName minviable-azure
 </code></pre>
 
 <p>Other available options:</p>
 <p><code>--templateId</code> Id of the template</p>
-<h3 id="create-a-hadoop-cluster">Create a Hadoop cluster</h3>
+<h2 id="create-a-hadoop-cluster">Create a Hadoop cluster</h2>
 <p>You are almost done - two more command and this will create your Hadoop cluster on your favorite cloud provider. Same as the API, or UI this will use your <code>credential</code>, <code>instancegroups</code>, <code>network</code>, <code>securitygroup</code>, and by using Azure ResourceManager will launch a cloud stack</p>
 <pre><code>stack create --name my-first-stack --region WEST_US
 </code></pre>

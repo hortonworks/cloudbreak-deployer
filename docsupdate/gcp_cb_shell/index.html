@@ -369,6 +369,8 @@
         
             <li><a href="#configure-instance-groups">Configure instance groups</a></li>
         
+            <li><a href="#create-a-hadoop-cluster">Create a Hadoop cluster</a></li>
+        
     
         <li class="main "><a href="#silent-mode">Silent mode</a></li>
         
@@ -465,42 +467,42 @@ securitygroup select --name secgroup_example
 <ul>
 <li>SSH (22)</li>
 <li>HTTPS (443)</li>
-<li>Ambari (8080) </li>
-<li>Consul (8500) </li>
-<li>NN (50070) </li>
-<li>RM Web (8088) </li>
-<li>Scheduler (8030RM) </li>
-<li>IPC (8050RM) </li>
-<li>Job history server (19888) </li>
-<li>HBase master (60000) </li>
-<li>HBase master web (60010) </li>
-<li>HBase RS (16020) </li>
-<li>HBase RS info (60030) </li>
-<li>Falcon (15000) </li>
-<li>Storm (8744) </li>
-<li>Hive metastore (9083) </li>
-<li>Hive server (10000) </li>
-<li>Hive server HTTP (10001) </li>
-<li>Accumulo master (9999) </li>
-<li>Accumulo Tserver (9997) </li>
-<li>Atlas (21000) </li>
-<li>KNOX (8443) </li>
-<li>Oozie (11000) </li>
-<li>Spark HS (18080) </li>
-<li>NM Web (8042) </li>
-<li>Zeppelin WebSocket (9996) </li>
-<li>Zeppelin UI (9995) </li>
-<li>Kibana (3080) </li>
-<li>Elasticsearch (9200) </li>
+<li>Ambari (8080)</li>
+<li>Consul (8500)</li>
+<li>NN (50070)</li>
+<li>RM Web (8088)</li>
+<li>Scheduler (8030RM)</li>
+<li>IPC (8050RM)</li>
+<li>Job history server (19888)</li>
+<li>HBase master (60000)</li>
+<li>HBase master web (60010)</li>
+<li>HBase RS (16020)</li>
+<li>HBase RS info (60030)</li>
+<li>Falcon (15000)</li>
+<li>Storm (8744)</li>
+<li>Hive metastore (9083)</li>
+<li>Hive server (10000)</li>
+<li>Hive server HTTP (10001)</li>
+<li>Accumulo master (9999)</li>
+<li>Accumulo Tserver (9997)</li>
+<li>Atlas (21000)</li>
+<li>KNOX (8443)</li>
+<li>Oozie (11000)</li>
+<li>Spark HS (18080)</li>
+<li>NM Web (8042)</li>
+<li>Zeppelin WebSocket (9996)</li>
+<li>Zeppelin UI (9995)</li>
+<li>Kibana (3080)</li>
+<li>Elasticsearch (9200)</li>
 </ul>
-<h2 id="configure-instance-groups">Configure instance groups</h2>
+<h3 id="configure-instance-groups">Configure instance groups</h3>
 <p>You have to configure the instancegroups before the provisioning. An instancegroup is defining a group of your nodes with a specified template. Usually we create instancegroups for the hostgroups defined in the blueprints.</p>
 <pre><code>instancegroup configure --instanceGroup host_group_slave_1 --nodecount 3 --templateName minviable-gcp
 </code></pre>
 
 <p>Other available options:</p>
 <p><code>--templateId</code> Id of the template</p>
-<h3 id="create-a-hadoop-cluster">Create a Hadoop cluster</h3>
+<h2 id="create-a-hadoop-cluster">Create a Hadoop cluster</h2>
 <p>You are almost done - two more command and this will create your Hadoop cluster on your favorite cloud provider. Same as the API, or UI this will use your <code>credential</code>, <code>instancegroups</code>, <code>network</code>, <code>securitygroup</code>, and by using Google Cloud Platform will launch a cloud stack</p>
 <pre><code>stack create --name my-first-stack --region US_CENTRAL1_A
 </code></pre>
@@ -511,7 +513,7 @@ securitygroup select --name secgroup_example
 
 <p>You are done - you can check the progress through the Ambari UI. If you log back to Cloudbreak UI you can check the progress over there as well, and learn the IP address of Ambari.</p>
 <h1 id="silent-mode">Silent mode</h1>
-<p>With Cloudbreak shell you can execute script files as well. A script file contains cloudbreak shell commands and can be executed with the <code>script</code> cloudbreak shell command </p>
+<p>With Cloudbreak shell you can execute script files as well. A script file contains cloudbreak shell commands and can be executed with the <code>script</code> cloudbreak shell command</p>
 <pre><code>script &lt;your script file&gt;
 </code></pre>
 
