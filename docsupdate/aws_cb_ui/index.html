@@ -355,25 +355,24 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#setting-up-aws-credentials">Setting up AWS credentials</a></li>
+        <li class="main active"><a href="#provisioning-via-browser">Provisioning via Browser</a></li>
         
-    
-        <li class="main "><a href="#infrastructure-templates">Infrastructure templates</a></li>
+            <li><a href="#setting-up-aws-credentials">Setting up AWS credentials</a></li>
         
-    
-        <li class="main "><a href="#defining-cluster-services">Defining cluster services</a></li>
+            <li><a href="#infrastructure-templates">Infrastructure templates</a></li>
         
-    
-        <li class="main "><a href="#cluster-deployment">Cluster deployment</a></li>
+            <li><a href="#defining-cluster-services">Defining cluster services</a></li>
         
-    
-        <li class="main "><a href="#next-steps">Next steps</a></li>
+            <li><a href="#cluster-deployment">Cluster deployment</a></li>
+        
+            <li><a href="#next-steps">Next steps</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
+<h1 id="provisioning-via-browser">Provisioning via Browser</h1>
 <p>You can log into the Cloudbreak application at http://PUBLIC_IP:3000.</p>
 <p>The main goal of the Cloudbreak UI is to easily create clusters on your own cloud provider account.
 This description details the AWS setup - if you'd like to use a different cloud provider check out its manual.</p>
@@ -401,7 +400,7 @@ The SSH username for the EC2 instances is <strong>ec2-user</strong>.</p>
 <li>security groups</li>
 </ul>
 <p>When you create a template, Cloudbreak <em>doesn't make any requests</em> to AWS.
-Resources are only created on AWS after the <code>Create cluster</code> button is pushed.
+Resources are only created on AWS after the <code>create cluster</code> button is pushed.
 These templates are saved to Cloudbreak's database and can be reused with multiple clusters to describe the infrastructure.</p>
 <p><strong>Resources</strong></p>
 <p>Resources describe the instances of your cluster - the instance type and the attached volumes.
@@ -432,8 +431,7 @@ Please make sure that the subnet you define here doesn't overlap with any of you
 They describe the allowed inbound traffic to the instances in the cluster.
 Currently only one security group template can be selected for a Cloudbreak cluster and all the instances have a public IP address so all the instances in the cluster will belong to the same security group.
 This may change in a later release.</p>
-<p>You can define your own security group by adding all the ports, protocols and CIDR range you'd like to use. 443 needs to be there in every security group otherwise Cloudbreak won't be able to
-The rules defined here doesn't need to contain the internal rules, those are automatically added by Cloudbreak to the security group on AWS.</p>
+<p>You can define your own security group by adding all the ports, protocols and CIDR range you'd like to use. 443 needs to be there in every security group otherwise Cloudbreak won't be able to communicate with the provisioned cluster. The rules defined here doesn't need to contain the internal rules, those are automatically added by Cloudbreak to the security group on AWS.</p>
 <p>You can also use the two pre-defined security groups in Cloudbreak:</p>
 <p><code>only-ssh-and-ssl:</code> all ports are locked down except for SSH and gateway HTTPS (you can't access Hadoop services outside of the VPC):</p>
 <ul>
@@ -505,7 +503,7 @@ After you've selected a <code>Blueprint</code> as well you should be able to con
 Cloudbreak uses <em>CloudFormation</em> to create the resources - you can check out the resources created by Cloudbreak on the AWS Console under the CloudFormation page.</p>
 <p><strong>Important!</strong> Always use Cloudbreak to delete the cluster, or if that fails for some reason always try to delete the CloudFormation stack first.
 Instances are started in an Auto Scaling Group so they may be restarted if you terminate an instance manually!</p>
-<p><strong>Advanced features</strong></p>
+<p><strong>Advanced options</strong></p>
 <p>There are some advanced features when deploying a new cluster, these are the following:</p>
 <p><code>Availability Zone</code>: You can restrict the instances to a specific availability zone. It may be useful if you're using reserved instances.</p>
 <p><code>Dedicated instances:</code> Use <a href="https://aws.amazon.com/ec2/purchasing-options/dedicated-instances/">dedicated instances</a> on EC2</p>

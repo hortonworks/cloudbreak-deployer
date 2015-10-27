@@ -355,25 +355,24 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#manage-cloud-credentials">Manage cloud credentials</a></li>
+        <li class="main active"><a href="#provisioning-via-browser">Provisioning via Browser</a></li>
         
-    
-        <li class="main "><a href="#infrastructure-templates">Infrastructure templates</a></li>
+            <li><a href="#manage-cloud-credentials">Manage cloud credentials</a></li>
         
-    
-        <li class="main "><a href="#cluster-installation">Cluster installation</a></li>
+            <li><a href="#infrastructure-templates">Infrastructure templates</a></li>
         
-    
-        <li class="main "><a href="#cluster-deployment">Cluster deployment</a></li>
+            <li><a href="#cluster-installation">Cluster installation</a></li>
         
-    
-        <li class="main "><a href="#next-steps">Next steps</a></li>
+            <li><a href="#cluster-deployment">Cluster deployment</a></li>
+        
+            <li><a href="#next-steps">Next steps</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
+<h1 id="provisioning-via-browser">Provisioning via Browser</h1>
 <p>You can log into the Cloudbreak application at http://PUBLIC_IP:3000.</p>
 <p>The main goal of the Cloudbreak UI is to easily create clusters on your own cloud provider account.
 This description details the GCP setup - if you'd like to use a different cloud provider check out its manual.</p>
@@ -430,8 +429,7 @@ These templates are saved to Cloudbreak's database and can be reused with multip
 <p>They describe the allowed inbound traffic to the instances in the cluster.
 Currently only one security group template can be selected for a Cloudbreak cluster and all the instances have a public IP address so all the instances in the cluster will belong to the same security group.
 This may change in a later release.</p>
-<p>You can define your own security group by adding all the ports, protocols and CIDR range you'd like to use. 443 needs to be there in every security group otherwise Cloudbreak won't be able to
-The rules defined here doesn't need to contain the internal rules, those are automatically added by Cloudbreak to the security group on GCP.</p>
+<p>You can define your own security group by adding all the ports, protocols and CIDR range you'd like to use. 443 needs to be there in every security group otherwise Cloudbreak won't be able to communicate with the provisioned cluster. The rules defined here doesn't need to contain the internal rules, those are automatically added by Cloudbreak to the security group on GCP.</p>
 <p>You can also use the two pre-defined security groups in Cloudbreak:</p>
 <p><code>only-ssh-and-ssl:</code> all ports are locked down except for SSH and gateway HTTPS (you can't access Hadoop services outside of the VPC):</p>
 <ul>
@@ -500,7 +498,7 @@ After you've selected a <code>Blueprint</code> as well you should be able to con
 <p>After the <code>create and start cluster</code> button is pushed Cloudbreak will start to create resources on your GCP account.
 Cloudbreak uses <em>ARM template</em> to create the resources - you can check out the resources created by Cloudbreak on the ARM Console under the Resourcegroups page.</p>
 <p><strong>Important!</strong> Always use Cloudbreak to delete the cluster, or if that fails for some reason always try to delete the ARM first.</p>
-<p><strong>Advanced features</strong></p>
+<p><strong>Advanced options</strong></p>
 <p>There are some advanced features when deploying a new cluster, these are the following:</p>
 <p><code>Minimum cluster size:</code> the provisioning strategy in case of the cloud provider can't allocate all the requested nodes</p>
 <p><code>Validate blueprint:</code> feature to validate or not the Ambari blueprint. By default is switched on.</p>
