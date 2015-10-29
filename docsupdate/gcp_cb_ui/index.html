@@ -407,8 +407,8 @@ These templates are saved to Cloudbreak's database and can be reused with multip
 <p>Using manage resources you can create infrastructure templates. Templates describes the infrastructure where the HDP cluster will be provisioned. We support heterogenous clusters - this means that one cluster can be built by combining different templates.</p>
 <p><code>Name:</code> name of your template</p>
 <p><code>Description:</code> short description of your template</p>
-<p><code>Instance type:</code> the Amazon instance type to be used - we suggest to use at least small or medium instances</p>
-<p><code>Volume type:</code> option to choose are SSD, regular HDD (both EBS) or Ephemeral</p>
+<p><code>Instance type:</code> the Google Cloud instance type to be used - we suggest to use at least n1-standard-4 instances</p>
+<p><code>Volume type:</code> option to choose are SSD, regular Magnetic</p>
 <p><code>Attached volumes per instance:</code> the number of disks to be attached</p>
 <p><code>Volume size (GB):</code> the size of the attached disks (in GB)</p>
 <p><code>Public in account:</code> share it with others in the account</p>
@@ -495,9 +495,8 @@ Click on <code>create cluster</code>, give it a <code>Name</code>, select a <cod
 After you've selected a <code>Blueprint</code> as well you should be able to configure the <code>Template resources</code> and the number of nodes for all of the hostgroups in the blueprint.</p>
 <p>If <code>Public in account</code> is checked all the users belonging to your account will be able to see the newly created cluster on the UI, but cannot delete or modify it.</p>
 <p>If <code>Enable security</code> is checked as well, Cloudbreak will install KDC and the cluster will be Kerberized. See more about it in the <a href="../kerberos/">Kerberos</a> section of this documentation.</p>
-<p>After the <code>create and start cluster</code> button is pushed Cloudbreak will start to create resources on your GCP account.
-Cloudbreak uses <em>ARM template</em> to create the resources - you can check out the resources created by Cloudbreak on the ARM Console under the Resourcegroups page.</p>
-<p><strong>Important!</strong> Always use Cloudbreak to delete the cluster, or if that fails for some reason always try to delete the ARM first.</p>
+<p>After the <code>create and start cluster</code> button is pushed Cloudbreak will start to create resources on your GCP account.</p>
+<p><strong>Important!</strong> Always use Cloudbreak to delete the cluster, or if that fails for some reason always try to delete the Google Cloud first.</p>
 <p><strong>Advanced options</strong></p>
 <p>There are some advanced features when deploying a new cluster, these are the following:</p>
 <p><code>Minimum cluster size:</code> the provisioning strategy in case of the cloud provider can't allocate all the requested nodes</p>
