@@ -387,7 +387,12 @@ cbd aws show-role      - Show assumers and policies for an AWS role
 cbd aws delete-role    - Deletes an AWS IAM role, removes all inline policies
 </code></pre>
 
-<p>The <code>generate-role</code> command creates a role that is assumable by the Cloudbreak deployer's AWS account and has a broad policy setup.</p>
+<p>The <code>generate-role</code> command creates a role that is assumable by the Cloudbreak deployer's AWS account and has a broad policy setup.
+By default the <code>generate-role</code> command creates a role with the name <code>cbreak-deployer</code>.
+If you'd like to create the role with a different name or if you'd like to create multiple roles then the role's name can be changed by adding this line to your <code>Profile</code>:</p>
+<pre><code>export AWS_ROLE_NAME=my-cloudbreak-role
+</code></pre>
+
 <p>You can check the generated role on your AWS console, under IAM roles:</p>
 <p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/aws-iam-role.png" /></p>
 <h2 id="generate-a-new-ssh-key">Generate a new SSH key</h2>
