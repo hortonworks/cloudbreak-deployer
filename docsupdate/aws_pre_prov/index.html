@@ -371,13 +371,15 @@
 <h1 id="provision-prerequisites">Provision prerequisites</h1>
 <h2 id="iam-role-setup">IAM role setup</h2>
 <p>Cloudbreak works by connecting your AWS account through so called <em>Credentials</em>, and then uses these credentials to create resources on your behalf.</p>
-<p><strong>Important!</strong> Cloudbreak deployment uses two different AWS accounts for two different purposes:
-- The account belonging to the <em>Cloudbreak webapp</em> itself that acts as a <em>third party</em> that creates resources on the account of the <em>end-user</em>. This account is configured at server-deployment time.
-- The account belonging to the <em>end user</em> who uses the UI or the Shell to create clusters. This account is configured when setting up credentials.</p>
+<p><strong>Important!</strong> Cloudbreak deployment uses two different AWS accounts for two different purposes:</p>
+<ul>
+<li>The account belonging to the <em>Cloudbreak webapp</em> itself that acts as a <em>third party</em> that creates resources on the account of the <em>end-user</em>. This account is configured at server-deployment time.</li>
+<li>The account belonging to the <em>end user</em> who uses the UI or the Shell to create clusters. This account is configured when setting up credentials.</li>
+</ul>
 <p>These two accounts are usually <em>the same</em> when the end user is the same who deployed the Cloudbreak server, but it allows Cloudbreak to act as a SaaS project as well if needed.</p>
 <p>Credentials use <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html">IAM Roles</a> to give access to the third party to act on behalf of the end user without giving full access to your resources.
 This IAM Role will be <em>assumed</em> later by the deployment account.
-This section is about how to setup the IAM role to see how to setup the <em>deployment</em> account check out <a href="../aws/">this description</a>.</p>
+This section is about how to setup the IAM role, to see how to setup the <em>deployment</em> account check out <a href="../aws/">this description</a>.</p>
 <p>To connect your (<em>end user</em>) AWS account with a credential in Cloudbreak you'll have to create an IAM role on your AWS account that is configured to allow the third-party account to access and create resources on your behalf.
 The easiest way to do this is with cbd commands (but it can also be done manually from the <a href="https://console.aws.amazon.com">AWS Console</a>):</p>
 <pre><code>cbd aws generate-role  - Generates an AWS IAM role for Cloudbreak provisioning on AWS
