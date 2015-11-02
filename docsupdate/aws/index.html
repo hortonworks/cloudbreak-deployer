@@ -385,7 +385,7 @@ cd cloudbreak-deployment
 <p>It will create a <code>Profile</code> file in the current directory. Please edit the file - one of the required configurations is the <code>PUBLIC_IP</code>.
 This IP will be used to access the Cloudbreak UI (called Uluwatu). In some cases the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
 <p>The other required configuration in the <code>Profile</code> are the AWS keys belonging to the AWS account used by the Cloudbreak application.
-In order for Cloudbreak to be able to launch clusters on AWS on your behalf you need to set your AWS keys in the Profile file.
+In order for Cloudbreak to be able to launch clusters on AWS on your behalf you need to set your AWS keys in the <code>Profile</code> file.
 We suggest to use the keys of an <em>IAM User</em> here. The IAM User's policies must be configured to have permission to assume roles (<code>sts:AssumeRole</code>) on all (<code>*</code>) resources.</p>
 <pre><code>export AWS_ACCESS_KEY_ID=AKIA**************W7SA
 export AWS_SECRET_ACCESS_KEY=RWCT4Cs8******************/*skiOkWD
