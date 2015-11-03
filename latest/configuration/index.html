@@ -54,8 +54,197 @@
                 <ul class="nav navbar-nav">
                 
                 
-                    <li >
-                        <a href="..">Home</a>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Home <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="..">Overview</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../technology/">Technology</a>
+</li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">Installation</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../aws/">AWS</a>
+</li>
+
+        
+            
+<li >
+    <a href="../azure/">Azure</a>
+</li>
+
+        
+            
+<li >
+    <a href="../gcp/">GCP</a>
+</li>
+
+        
+            
+<li >
+    <a href="../openstack/">OpenStack</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Providers <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">AWS</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../aws/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="../aws_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="../aws_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li >
+    <a href="../aws_cb_shell/">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">Azure</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../azure/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="../azure_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="../azure_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li >
+    <a href="../azure_cb_shell/">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">GCP</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../gcp/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="../gcp_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="../gcp_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li >
+    <a href="../gcp_cb_shell/">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">OpenStack</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../openstack/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="../openstack_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="../openstack_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li >
+    <a href="../openstack_cb_shell/">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                        </ul>
                     </li>
                 
                 
@@ -66,19 +255,49 @@
                         
                             
 <li >
-    <a href="../architecture/">Architecture</a>
+    <a href="../api/">API</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../shell/">Shell</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../recipes/">Recipes</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../spi/">SPI</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../kerberos/">Kerberos</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../insights/">Insights</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../database/">Migration</a>
 </li>
 
                         
                             
 <li class="active">
     <a href="./">Configuration</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../database/">Database</a>
 </li>
 
                         
@@ -115,12 +334,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../architecture/">
+                        <a rel="next" href="../database/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../database/">
+                        <a rel="prev" href="../development/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -189,16 +408,18 @@ You can specify the Docker image tag via: <code>DOCKER_TAG_CLOUDBREAK</code>.
 <p>For permanent setting you can <code>export CBD_DEFAULT_PROFILE=prod</code> in your <code>.bash_profile</code>.</p>
 <h1 id="available-configurations">Available Configurations</h1>
 <h2 id="smtp">SMTP</h2>
-<p>Put these lines into your <code>Profile</code></p>
+<p>If you want to change SMTP parameters, put the corresponding lines into your <code>Profile</code>. You can also see the default values of the parameters in the following box.</p>
 <pre><code>export CLOUDBREAK_SMTP_SENDER_USERNAME=
 export CLOUDBREAK_SMTP_SENDER_PASSWORD=
 export CLOUDBREAK_SMTP_SENDER_HOST=
-export CLOUDBREAK_SMTP_SENDER_PORT=
+export CLOUDBREAK_SMTP_SENDER_PORT=25
 export CLOUDBREAK_SMTP_SENDER_FROM=
+export CB_MAIL_SMTP_AUTH=true
+export CB_MAIL_SMTP_STARTTLS_ENABLE=true
 </code></pre>
 
 <h2 id="consul">Consul</h2>
-<p><a href="http://consul.io">Consul</a> is used for dns resolution. All cloudbreak related services are registered as
+<p><a href="http://consul.io">Consul</a> is used for dns resolution. All Cloudbreak related services are registered as
 <strong>someservice.service.consul</strong>. Consul’s built in dns server is able to “fall-back” on an other dns server.
 This option is called <code>-recursor</code>. Clodbreak Deployer first tries to discover the dns settings of the host,
 by looking for <strong>nameserver</strong> entry in <code>/etc/resolv.conf</code>. If it finds one consul will use it as a recursor,
@@ -251,7 +472,7 @@ Actually the following environment vars <em>are</em> inherited:</p>
         <footer class="col-md-12">
             <hr>
             
-            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+            <center>Documentation built with <a href="https://gliderlabs.com/pagebuilder">Pagebuilder</a>.</center>
         </footer>
 
         <script src="../js/jquery-1.10.2.min.js"></script>

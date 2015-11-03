@@ -54,8 +54,197 @@
                 <ul class="nav navbar-nav">
                 
                 
-                    <li class="active">
-                        <a href=".">Home</a>
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Home <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li class="active">
+    <a href=".">Overview</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="technology/">Technology</a>
+</li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">Installation</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="aws/">AWS</a>
+</li>
+
+        
+            
+<li >
+    <a href="azure/">Azure</a>
+</li>
+
+        
+            
+<li >
+    <a href="gcp/">GCP</a>
+</li>
+
+        
+            
+<li >
+    <a href="openstack/">OpenStack</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Providers <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">AWS</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="aws/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="aws_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="aws_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li >
+    <a href="aws_cb_shell/">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">Azure</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="azure/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="azure_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="azure_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li >
+    <a href="azure_cb_shell/">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">GCP</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="gcp/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="gcp_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="gcp_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li >
+    <a href="gcp_cb_shell/">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">OpenStack</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="openstack/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="openstack_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="openstack_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li >
+    <a href="openstack_cb_shell/">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                        </ul>
                     </li>
                 
                 
@@ -66,19 +255,49 @@
                         
                             
 <li >
-    <a href="architecture/">Architecture</a>
+    <a href="api/">API</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="shell/">Shell</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="recipes/">Recipes</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="spi/">SPI</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="kerberos/">Kerberos</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="insights/">Insights</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="database/">Migration</a>
 </li>
 
                         
                             
 <li >
     <a href="configuration/">Configuration</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="database/">Database</a>
 </li>
 
                         
@@ -120,7 +339,7 @@
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="architecture/">
+                        <a rel="prev" href="technology/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -136,125 +355,126 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#requirements">Requirements</a></li>
+        <li class="main active"><a href="#overview">Overview</a></li>
+        
+    
+        <li class="main "><a href="#technology">Technology</a></li>
+        
+    
+        <li class="main "><a href="#process-overview">Process Overview</a></li>
         
     
         <li class="main "><a href="#installation">Installation</a></li>
         
     
-        <li class="main "><a href="#usage">Usage</a></li>
-        
-            <li><a href="#initialize-profile">Initialize Profile</a></li>
-        
-            <li><a href="#deploy-cloudbreak">Deploy Cloudbreak</a></li>
-        
-            <li><a href="#watch-the-logs">Watch the logs</a></li>
-        
-            <li><a href="#pull-docker-images">Pull Docker images</a></li>
-        
-    
-        <li class="main "><a href="#default-credentials">Default Credentials</a></li>
-        
-    
-        <li class="main "><a href="#cloud-provider-configuration">Cloud Provider configuration</a></li>
-        
-    
-        <li class="main "><a href="#debug">Debug</a></li>
-        
-    
-        <li class="main "><a href="#update">Update</a></li>
-        
-    
-        <li class="main "><a href="#credits">Credits</a></li>
+        <li class="main "><a href="#release-notes-110">Release notes - 1.1.0</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<p>Cloudbreak Deployer helps to deploy a Cloudbreak environment into Docker containers.
-For recent changes please check the <a href="http://sequenceiq.com/cloudbreak-deployer/latest/changelog/">changelog</a>.</p>
-<p>Full documentation is generated <a href="http://sequenceiq.com/cloudbreak-deployer/latest/">here</a></p>
-<h2 id="requirements">Requirements</h2>
-<p>Currently only <strong>Linux</strong> and <strong>OSX</strong> 64 bit binaries are released for Cloudbreak Deployer. For anything else we will create a special Docker container.
-The deployment itself needs only <strong>Docker 1.7.0</strong> or later.
-Your firewall must be configured to let docker containers talk to each other, this is especially important on CentOS 7 where firewalld blocks some connections by default.</p>
+<h2 id="overview">Overview</h2>
+<p>Cloudbreak is a cloud agnostic Hadoop as a Service API. Abstracts the provisioning and ease management and monitoring of on-demand HDP clusters in different virtual environments. Once it is deployed in your favorite servlet container exposes a REST API allowing to span up Hadoop clusters of arbitrary sizes on your selected cloud provider. Provisioning Hadoop has never been easier.
+Cloudbreak is built on the foundation of cloud providers API (Microsoft Azure, Amazon AWS, Google Cloud Platform, OpenStack), Apache Ambari, Docker containers, Swarm and Consul.</p>
+<p>For a detailed overview please follow this <a href="overview.md">link</a></p>
+<p>Cloudbreak has two main components - the <a href="http://sequenceiq.com/cloudbreak-deployer">Cloudbreak deployer</a> and the Cloudbreak application, which is made up from Microservices (Cloudbreak, Uluwatu, Sultans, ...). Cloudbreak deployer helps you to deploy the Cloudbreak application automatically in environments with Docker support. Once the Cloudbreak application is deployed you can use it to provision HDP clusters in different cloud environments.</p>
+<h2 id="technology">Technology</h2>
+<p>For an architectural overview of the <a href="http://sequenceiq.com/cloudbreak-deployer">Cloudbreak deployer</a> and the Cloudbreak application please follow this <a href="technology/">link</a>.</p>
+<h2 id="process-overview">Process Overview</h2>
+<p>The full proceess to be able to use an HDP cluster includes the following steps:</p>
+<ul>
+<li><strong>Cloudbreak Deployer Installation</strong>: You need to install Cloudbreak Deployer which is a small cli tool called
+<code>cbd</code>. It will help you to deploy the CloudBreak Application consisting several Docker containers. You have
+finished this step if you can issue <code>cbd --version</code>.</li>
+<li><strong>CloudBreak Deployment</strong>: Once you have installed Cloudbreak Deployer (cbd), it will start up several
+Docker containers: CloudBreak API, CloudBreak UI (called Uluwatu), Identity Server, and supporting databases.
+You have finished this step, if you are able to login in your browser to Cloudbreak UI (Uluwatu).</li>
+<li><strong>HDP Cluster Provisioning</strong>: To be able to provision a HDP cluster, you will use the browser, to:</li>
+<li>Create Credentials: You give access to Cloudbreak, to act on behalf of you, and start resources on the
+    cloud provider.</li>
+<li>Create Resources: Optionally you can define infrastructure parameters, such as, instance type,
+    memory size, disk type/size, network ...</li>
+<li>Blueprint configuration: You can choose which Ambari Blueprint you want to use (or upload a custom one)
+    and assign hostgroups to resource types (created in the previous step)</li>
+<li>Create Cluster: You define the region, where you want to create the HDP cluster. Once Cloudbreak
+    recognize that Ambari Server is up and running, it posts the configured blueprint to it, which
+    triggers a cluster wide HDP component installation process.</li>
+</ul>
 <h2 id="installation">Installation</h2>
-<p>To install Cloudbreak Deployer, you just have to unzip the platform specific
-single binary to your PATH. The one-liner way is:</p>
-<pre><code>curl https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/install | sh &amp;&amp; cbd --version
-</code></pre>
-
-<h2 id="usage">Usage</h2>
-<p><strong>cbd</strong> will generate some config files, and will download supporting binaries. It is
-advised that you create a dedicated directory for it:</p>
-<pre><code>mkdir cloudbreak-deployment
-cd cloudbreak-deployment
-</code></pre>
-
-<h3 id="initialize-profile">Initialize Profile</h3>
-<p>First initialize your directory by creating a <code>Profile</code> file:</p>
-<pre><code>cbd init
-</code></pre>
-
-<p>It will create a <code>Profile</code> file in the current directory. The only required
-configuration is the <code>PUBLIC_IP</code>. This IP will be used for the Cloudbreak UI
-(called Uluwatu). In some case the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
-<h3 id="deploy-cloudbreak">Deploy Cloudbreak</h3>
-<p>To start all the containers run:</p>
-<pre><code>cbd start
-</code></pre>
-
-<p>At the first time it will take more time, as it does additional steps:
-- download all the docker images, neded by Cloudbreak.
-- create <strong>docker-compose.yml</strong>: Full confirguration of containers needed for Cloudbreak deployment.
-- create <strong>uaa.yml</strong>: Identity Server configuration. (For example default user/password in the last line)</p>
-<h3 id="watch-the-logs">Watch the logs</h3>
-<pre><code>cbd logs
-</code></pre>
-
-<h3 id="pull-docker-images">Pull Docker images</h3>
-<p>All Cloudbreak components and the backend database is running inside containers.
-The <strong>pull command is optional</strong> but you can run it prior to <code>cbd start</code></p>
-<pre><code>cbd pull
-</code></pre>
-
-<p>It will take some time, depending on your network connection, so you can grab a cup of coffee.</p>
-<h2 id="default-credentials">Default Credentials</h2>
-<p>The default credentials can be revealed by <code>cbd login</code></p>
-<p>These values are used in the <code>uaa.yml</code> end section. To change these values, add 2 lines into your Profile:</p>
-<pre><code>export UAA_DEFAULT_USER_EMAIL=myself@example.com
-export UAA_DEFAULT_USER_PW=demo123
-</code></pre>
-
-<p>and than you need to recreate configs:</p>
-<pre><code>rm *.yml
-cbd generate
-</code></pre>
-
-<h2 id="cloud-provider-configuration">Cloud Provider configuration</h2>
-<p>In order to be able to assume roles on AWS you need to set up your AWS keys in the Profile file:</p>
-<pre><code>export AWS_ACCESS_KEY_ID=AKIA**************W7SA
-export AWS_SECRET_ACCESS_KEY=RWCT4Cs8******************/*skiOkWD
-</code></pre>
-
-<p>If you do not have plans to launch clusters in AWS, then you can safely skip these settings.</p>
-<p>For more details regarding accounts please check <a href="http://sequenceiq.com/cloudbreak/#accounts">Cloudbreak documentation</a>.</p>
-<h2 id="debug">Debug</h2>
-<p>If you want to have more detailed output set the <code>DEBUG</code> env variable to non-zero:</p>
-<pre><code>DEBUG=1 cbd some_command
-</code></pre>
-
-<p>You can also use the <code>doctor</code> command to diagnose your environment:</p>
-<pre><code>cbd doctor
-</code></pre>
-
-<h2 id="update">Update</h2>
-<p>The tool is capable to upgrade itself to a newer version.</p>
-<pre><code>cbd update
-</code></pre>
-
-<h2 id="credits">Credits</h2>
+<p>Currently only <strong>Linux</strong> and <strong>OSX</strong> 64 bit binaries are released for Cloudbreak Deployer. For anything else we can create a special Docker container - please contact us. The deployment itself needs only <strong>Docker 1.7.0</strong> or later. You can install the Cloudbreak installation anywhere (on-prem or cloud VMs), however we suggest to installed it as close to the desired HDP clusters as possible. For further information check the <strong>Provider</strong> section of the documentation.</p>
+<p><strong>On-prem installation</strong></p>
+<p>For on premise installations of the Cloudbreak application please follow the <a href="onprem.md">link</a></p>
+<p><strong>AWS based installation</strong></p>
+<p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
+<p>You can follow the AWS provider specific documentation using this <a href="aws/">link</a></p>
+<p><strong>Azure based installation</strong></p>
+<p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
+<p>You can follow the Azure provider specific documentation using this <a href="azure/">link</a></p>
+<p><strong>GCP based installation</strong></p>
+<p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
+<p>You can follow the GCP provider specific documentation using this <a href="gcp/">link</a></p>
+<p><strong>OpenStack based installation</strong></p>
+<p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
+<p>You can follow the OpenStack provider specific documentation using this <a href="openstack/">link</a></p>
+<h2 id="release-notes-110">Release notes - 1.1.0</h2>
+<table>
+<thead>
+<tr>
+<th>Components</th>
+<th align="center">GA</th>
+<th align="right">Tech preview</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AWS</td>
+<td align="center">yes</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>Azure ARM</td>
+<td align="center">yes</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>Azure ARM</td>
+<td align="center">yes</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>GCP</td>
+<td align="center">yes</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>OpenStack Juno</td>
+<td align="center"></td>
+<td align="right">yes</td>
+</tr>
+<tr>
+<td>SPI interface</td>
+<td align="center"></td>
+<td align="right">yes</td>
+</tr>
+<tr>
+<td>CLI/shell</td>
+<td align="center">yes</td>
+<td align="right"></td>
+</tr>
+<tr>
+<td>Recipes</td>
+<td align="center"></td>
+<td align="right">yes</td>
+</tr>
+<tr>
+<td>Kerberos</td>
+<td align="center"></td>
+<td align="right">yes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Credits</strong></p>
 <p>This tool, and the PR driven release, is inspired from <a href="https://github.com/gliderlabs/glidergun">glidergun</a>. Actually it
 could be a fork of it. The reason it’s not a fork, because we wanted to have our own binary with all modules
 built in, so only a single binary is needed.</p></div>
@@ -264,7 +484,7 @@ built in, so only a single binary is needed.</p></div>
         <footer class="col-md-12">
             <hr>
             
-            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+            <center>Documentation built with <a href="https://gliderlabs.com/pagebuilder">Pagebuilder</a>.</center>
         </footer>
 
         <script src="./js/jquery-1.10.2.min.js"></script>
@@ -314,5 +534,5 @@ built in, so only a single binary is needed.</p></div>
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2015-11-03 09:52:18.679910
+Build Date UTC : 2015-11-03 13:24:33.789941
 -->

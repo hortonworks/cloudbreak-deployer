@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/architecture/">
+        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/kerberos/">
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Architecture - Cloudbreak Deployer</title>
+	<title>Kerberos - Cloudbreak Deployer</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -54,8 +54,197 @@
                 <ul class="nav navbar-nav">
                 
                 
-                    <li >
-                        <a href="..">Home</a>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Home <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="..">Overview</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../technology/">Technology</a>
+</li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">Installation</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../aws/">AWS</a>
+</li>
+
+        
+            
+<li >
+    <a href="../azure/">Azure</a>
+</li>
+
+        
+            
+<li >
+    <a href="../gcp/">GCP</a>
+</li>
+
+        
+            
+<li >
+    <a href="../openstack/">OpenStack</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Providers <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">AWS</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../aws/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="../aws_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="../aws_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li >
+    <a href="../aws_cb_shell/">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">Azure</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../azure/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="../azure_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="../azure_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li >
+    <a href="../azure_cb_shell/">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">GCP</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../gcp/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="../gcp_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="../gcp_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li >
+    <a href="../gcp_cb_shell/">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">OpenStack</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../openstack/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="../openstack_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="../openstack_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li >
+    <a href="../openstack_cb_shell/">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                        </ul>
                     </li>
                 
                 
@@ -65,20 +254,50 @@
                         <ul class="dropdown-menu">
                         
                             
+<li >
+    <a href="../api/">API</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../shell/">Shell</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../recipes/">Recipes</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../spi/">SPI</a>
+</li>
+
+                        
+                            
 <li class="active">
-    <a href="./">Architecture</a>
+    <a href="./">Kerberos</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../insights/">Insights</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../database/">Migration</a>
 </li>
 
                         
                             
 <li >
     <a href="../configuration/">Configuration</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../database/">Database</a>
 </li>
 
                         
@@ -115,12 +334,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="..">
+                        <a rel="next" href="../spi/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../configuration/">
+                        <a rel="prev" href="../insights/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -136,36 +355,22 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#core-cloudbreak-containers">Core Cloudbreak Containers</a></li>
-        
-    
-        <li class="main "><a href="#system-level-containers">System Level Containers</a></li>
+        <li class="main active"><a href="#kerberos-security">Kerberos security</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h2 id="core-cloudbreak-containers">Core Cloudbreak Containers</h2>
-<ul>
-<li><strong>uaa</strong>: OAuth Identity Server</li>
-<li><strong>cloudbreak</strong> - the Cloudbreak app</li>
-<li><strong>periscope</strong> - the Periscope app</li>
-<li><strong>uluwatu</strong> - Cloudbreak UI</li>
-<li><strong>sultans</strong> - user management</li>
-</ul>
-<h2 id="system-level-containers">System Level Containers</h2>
-<ul>
-<li>consul: Service Registry</li>
-<li>registrator: automatically registers/unregisters containers with Consul</li>
-</ul></div>
+<h2 id="kerberos-security">Kerberos security</h2>
+<p>Cloudbreak supports Kerberos security for Ambari internal communication. To activate Kerberos with Cloudbreak you have enable security option and fill the <code>kerberos master key</code>, <code>kerberos admin</code> and <code>kerberos password</code> fields too on web interface or shell during cluster creation. To run a job on the cluster, you can use one of the default Hadoop users, like <code>ambari-qa</code>, as usual. Current implementation of Kerberos security doesn't contain Active Directory support or any other third party user authentication method. If you want to use custom user, you have to create users with the same name on all Ambari containers on each node manually.</p></div>
             
         </div>
 
         <footer class="col-md-12">
             <hr>
             
-            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+            <center>Documentation built with <a href="https://gliderlabs.com/pagebuilder">Pagebuilder</a>.</center>
         </footer>
 
         <script src="../js/jquery-1.10.2.min.js"></script>

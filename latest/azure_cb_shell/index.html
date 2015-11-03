@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/azure_cb_shell/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+
+	<title>Provisioning - CLI - Cloudbreak Deployer</title>
+
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation" background="red">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <img class="navbar-logo" src="http://docs.hortonworks.com/HDPDocuments/Ambari-2.1.0.0/bk_Installing_HDP_AMB/common/images/hortonworks-logo.png" alt="Hortonworks Documentation" width="132" height="52">
+            <a class="navbar-brand" href="..">Cloudbreak Deployer</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Home <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="..">Overview</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../technology/">Technology</a>
+</li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">Installation</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../aws/">AWS</a>
+</li>
+
+        
+            
+<li >
+    <a href="../azure/">Azure</a>
+</li>
+
+        
+            
+<li >
+    <a href="../gcp/">GCP</a>
+</li>
+
+        
+            
+<li >
+    <a href="../openstack/">OpenStack</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Providers <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">AWS</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../aws/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="../aws_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="../aws_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li >
+    <a href="../aws_cb_shell/">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">Azure</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../azure/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="../azure_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="../azure_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li class="active">
+    <a href="./">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">GCP</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../gcp/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="../gcp_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="../gcp_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li >
+    <a href="../gcp_cb_shell/">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">OpenStack</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../openstack/">Deployment</a>
+</li>
+
+        
+            
+<li >
+    <a href="../openstack_pre_prov/">Provisioning prerequisites</a>
+</li>
+
+        
+            
+<li >
+    <a href="../openstack_cb_ui/">Provisioning - UI</a>
+</li>
+
+        
+            
+<li >
+    <a href="../openstack_cb_shell/">Provisioning - CLI</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Docs <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../api/">API</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../shell/">Shell</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../recipes/">Recipes</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../spi/">SPI</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../kerberos/">Kerberos</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../insights/">Insights</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../database/">Migration</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../configuration/">Configuration</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../development/">Development</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../changelog/">Changelog</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Versions <b class="caret"></b></a>
+                    <ul class="dropdown-menu" id="versions-dropdown">
+                    </ul>
+                </li>
+                
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../azure_cb_ui/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../gcp/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#interactive-mode">Interactive mode</a></li>
+        
+            <li><a href="#create-a-cloud-credential">Create a cloud credential</a></li>
+        
+            <li><a href="#create-a-template">Create a template</a></li>
+        
+            <li><a href="#create-a-hadoop-cluster">Create a Hadoop cluster</a></li>
+        
+    
+        <li class="main "><a href="#silent-mode">Silent mode</a></li>
+        
+    
+        <li class="main "><a href="#example">Example</a></li>
+        
+            <li><a href="#next-steps">Next steps</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="interactive-mode">Interactive mode</h1>
+<p>Start the shell with <code>cbd util cloudbreak-shell</code>. This will launch the Cloudbreak shell inside a Docker container and you are ready to start using it.</p>
+<p>You have to copy files into the cbd working directory, which you would like to use from shell. For example if your <code>cbd</code> working directory is <code>~/prj/cbd</code> then copy your blueprint and public ssh key file into this directory. You can refer to these files with their names from the shell.</p>
+<h2 id="create-a-cloud-credential">Create a cloud credential</h2>
+<pre><code>credential create --AZURE --description &quot;credential description&quot; --name myazurecredential --subscriptionId &lt;your Azure subscription id&gt; --appId &lt;your Azure application id&gt; --tenantId &lt;your tenant id&gt; --password &lt;your Azure application password&gt; --sshKeyPath &lt;path of your public SSH key file&gt;
+</code></pre>
+
+<blockquote>
+<p>Cloudbreak is supporting simple rsa public key instead of X509 certificate file after 1.0.4 version</p>
+</blockquote>
+<p>Alternatively you can upload your public key from an url as well, by using the <code>—sshKeyUrl</code> switch. You can check whether the credential was creates successfully by using the <code>credential list</code> command.
+You can switch between your cloud credential - when you’d like to use one and act with that you will have to use:</p>
+<pre><code>credential select --name myazurecredential
+</code></pre>
+
+<p>You can delete your cloud credential - when you’d like to delete one you will have to use:</p>
+<pre><code>credential delete --name myazurecredential
+</code></pre>
+
+<p>You can show your cloud credential - when you’d like to show one you will have to use:</p>
+<pre><code>credential show --name myazurecredential
+</code></pre>
+
+<h2 id="create-a-template">Create a template</h2>
+<p>A template gives developers and systems administrators an easy way to create and manage a collection of cloud infrastructure related resources, maintaining and updating them in an orderly and predictable fashion. A template can be used repeatedly to create identical copies of the same stack (or to use as a foundation to start a new stack).</p>
+<pre><code>template create --AZURE --name azuretemplate --description azure-template --instanceType STANDARD_D3 --volumeSize 100 --volumeCount 2
+</code></pre>
+
+<p>You can check whether the template was created successfully by using the <code>template list</code> or <code>template show</code> command.</p>
+<p>You can delete your cloud template - when you’d like to delete one you will have to use:</p>
+<pre><code>template delete --name azuretemplate
+</code></pre>
+
+<h3 id="create-or-select-a-blueprint">Create or select a blueprint</h3>
+<p>You can define Ambari blueprints with cloudbreak-shell:</p>
+<pre><code>blueprint add --name myblueprint --description myblueprint-description --file &lt;the path of the blueprint&gt;
+</code></pre>
+
+<p>Other available options:</p>
+<p><code>--url</code> the url of the blueprint</p>
+<p><code>--publicInAccount</code> flags if the network is public in the account</p>
+<p>We ship default Ambari blueprints with Cloudbreak. You can use these blueprints or add yours. To see the available blueprints and use one of them please use:</p>
+<pre><code>blueprint list
+
+blueprint select --name hdp-small-default
+</code></pre>
+
+<h3 id="create-a-network">Create a network</h3>
+<p>A network gives developers and systems administrators an easy way to create and manage a collection of cloud infrastructure related networking, maintaining and updating them in an orderly and predictable fashion. A network can be used repeatedly to create identical copies of the same stack (or to use as a foundation to start a new stack).</p>
+<pre><code>network create --AZURE --name azurenetwork --description azure-network --subnet 10.0.0.0/16 --addressPrefix 10.0.0.0/8
+</code></pre>
+
+<p>Other available options:</p>
+<p><code>--publicInAccount</code> flags if the network is public in the account</p>
+<p>There is a default network with name <code>default-azure-network</code> with 10.0.0.0/16 subnet and 10.0.0.0/8 addressPrefix.</p>
+<p>You can check whether the network was created successfully by using the <code>network list</code> command. Check the network and select it if you are happy with it:</p>
+<pre><code>network show --name azurenetwork
+
+network select --name azurenetwork
+</code></pre>
+
+<h3 id="create-a-security-group">Create a security group</h3>
+<p>A security group gives developers and systems administrators an easy way to create and manage a collection of cloud infrastructure related security rules.</p>
+<pre><code>securitygroup create --name secgroup_example --description securitygroup-example --rules 0.0.0.0/0:tcp:8080,9090;10.0.33.0/24:tcp:1234,1235
+</code></pre>
+
+<p>You can check whether the security group was created successfully by using the <code>securitygroup list</code> command. Check the security group and select it if you are happy with it:</p>
+<pre><code>securitygroup show --name secgroup_example
+
+securitygroup select --name secgroup_example
+</code></pre>
+
+<p>There are two default security groups defined: <code>all-services-port</code> and <code>only-ssh-and-ssl</code></p>
+<p><code>only-ssh-and-ssl:</code> all ports are locked down (you can't access Hadoop services outside of the VPN)</p>
+<ul>
+<li>SSH (22)</li>
+<li>HTTPS (443)</li>
+</ul>
+<p><code>all-services-port:</code> all Hadoop services + SSH/HTTP are accessible by default:</p>
+<ul>
+<li>SSH (22)</li>
+<li>HTTPS (443)</li>
+<li>Ambari (8080)</li>
+<li>Consul (8500)</li>
+<li>NN (50070)</li>
+<li>RM Web (8088)</li>
+<li>Scheduler (8030RM)</li>
+<li>IPC (8050RM)</li>
+<li>Job history server (19888)</li>
+<li>HBase master (60000)</li>
+<li>HBase master web (60010)</li>
+<li>HBase RS (16020)</li>
+<li>HBase RS info (60030)</li>
+<li>Falcon (15000)</li>
+<li>Storm (8744)</li>
+<li>Hive metastore (9083)</li>
+<li>Hive server (10000)</li>
+<li>Hive server HTTP (10001)</li>
+<li>Accumulo master (9999)</li>
+<li>Accumulo Tserver (9997)</li>
+<li>Atlas (21000)</li>
+<li>KNOX (8443)</li>
+<li>Oozie (11000)</li>
+<li>Spark HS (18080)</li>
+<li>NM Web (8042)</li>
+<li>Zeppelin WebSocket (9996)</li>
+<li>Zeppelin UI (9995)</li>
+<li>Kibana (3080)</li>
+<li>Elasticsearch (9200)</li>
+</ul>
+<h3 id="configure-instance-groups">Configure instance groups</h3>
+<p>You have to configure the instancegroups before the provisioning. An instancegroup is defining a group of your nodes with a specified template. Usually we create instancegroups for the hostgroups defined in the blueprints.</p>
+<pre><code>instancegroup configure --instanceGroup host_group_slave_1 --nodecount 3 --templateName minviable-azure
+</code></pre>
+
+<p>Other available options:</p>
+<p><code>--templateId</code> Id of the template</p>
+<h2 id="create-a-hadoop-cluster">Create a Hadoop cluster</h2>
+<p>You are almost done - two more command and this will create your Hadoop cluster on your favorite cloud provider. Same as the API, or UI this will use your <code>credential</code>, <code>instancegroups</code>, <code>network</code>, <code>securitygroup</code>, and by using Azure ResourceManager will launch a cloud stack</p>
+<pre><code>stack create --name my-first-stack --region WEST_US
+</code></pre>
+
+<p>Once the <code>stack</code> is up and running (cloud provisioning is done) it will use your selected <code>blueprint</code> and install your custom Hadoop cluster with the selected components and services.</p>
+<pre><code>cluster create --description &quot;my first cluster&quot;
+</code></pre>
+
+<p>You are done - you can check the progress through the Ambari UI. If you log back to Cloudbreak UI you can check the progress over there as well, and learn the IP address of Ambari.</p>
+<h1 id="silent-mode">Silent mode</h1>
+<p>With Cloudbreak shell you can execute script files as well. A script file contains cloudbreak shell commands and can be executed with the <code>script</code> cloudbreak shell command</p>
+<pre><code>script &lt;your script file&gt;
+</code></pre>
+
+<p>or with the <code>cbd util cloudbreak-shell-quiet</code> cbd command:</p>
+<pre><code>cbd util cloudbreak-shell-quiet &lt; example.sh
+</code></pre>
+
+<h1 id="example">Example</h1>
+<p>The following example creates a hadoop cluster with <code>hdp-small-default</code> blueprint on STANDARD_D3 instances with 2X100G attached disks on <code>default-azure-network</code> network using <code>all-services-port</code> security group. You should copy your ssh public key file into your cbd working directory with name <code>id_rsa.pub</code> and change the <code>&lt;...&gt;</code> parts with your azure credential details.</p>
+<pre><code>credential create --AZURE --description &quot;credential description&quot; --name myazurecredential --subscriptionId &lt;your Azure subscription id&gt; --appId &lt;your Azure application id&gt; --tenantId &lt;your tenant id&gt; --password &lt;your Azure application password&gt; --sshKeyPath id_rsa.pub
+credential select --name myazurecredential
+template create --AZURE --name azuretemplate --description azure-template --instanceType STANDARD_D3 --volumeSize 100 --volumeCount 2
+blueprint select --name hdp-small-default
+instancegroup configure --instanceGroup cbgateway --nodecount 1 --templateName azuretemplate
+instancegroup configure --instanceGroup host_group_master_1 --nodecount 1 --templateName azuretemplate
+instancegroup configure --instanceGroup host_group_master_2 --nodecount 1 --templateName azuretemplate
+instancegroup configure --instanceGroup host_group_master_3 --nodecount 1 --templateName azuretemplate
+instancegroup configure --instanceGroup host_group_client_1  --nodecount 1 --templateName azuretemplate
+instancegroup configure --instanceGroup host_group_slave_1 --nodecount 3 --templateName azuretemplate
+network select --name default-azure-network
+securitygroup select --name all-services-port
+stack create --name my-first-stack --region WEST_US
+cluster create --description &quot;My first cluster&quot;
+</code></pre>
+
+<h2 id="next-steps">Next steps</h2>
+<p>Congrats! Your cluster should now be up and running. To learn more about it we have some <a href="../insights/">interesting insights</a> about Cloudbreak clusters.</p></div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <center>Documentation built with <a href="https://gliderlabs.com/pagebuilder">Pagebuilder</a>.</center>
+        </footer>
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script>
+        <script>var base_url = '..';</script>
+        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+        <script src="../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <script>
+           $( document ).ready(function() {
+               $.getJSON("http://sequenceiq.com/cloudbreak-deployer/versions.json", function(data) {
+               $("#versions-dropdown").append('<li><a href="http://sequenceiq.com/cloudbreak-deployer/latest">latest ('+data.latest+')</a></li>');
+                $.each(data.versions, function( index, value ) {
+                  $("#versions-dropdown").append('<li><a href="http://sequenceiq.com/cloudbreak-deployer/'+value+'">'+value+'</a></li>');
+                });
+               });
+           });
+         </script>
+    </body>
+</html>
