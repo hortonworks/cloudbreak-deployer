@@ -389,7 +389,7 @@
 <p>You have to copy files into the cbd working directory, which you would like to use from shell. For example if your <code>cbd</code> working directory is <code>~/prj/cbd</code> then copy your blueprint and public ssh key file into this directory. You can refer to these files with their names from the shell.</p>
 <h3 id="create-a-cloud-credential">Create a cloud credential</h3>
 <p>In order to start using Cloudbreak you will need to have an AWS cloud credential configured. Note that Cloudbreak <strong>does not</strong> store your cloud user details - we work around the concept of <a href="http://aws.amazon.com/iam/">IAM</a> - on Amazon (or other cloud providers) you will have to create an IAM role, a policy and associate that with your Cloudbreak account.</p>
-<pre><code>credential create --EC2 --description &quot;description&quot; --name my-aws-credential --roleArn &lt;arn role&gt; --sshKeyFile &lt;path of your AWS public key&gt;
+<pre><code>credential create --EC2 --description &quot;description&quot; --name my-aws-credential --roleArn &lt;arn role&gt; --sshKeyPath &lt;path of your AWS public key&gt;
 </code></pre>
 
 <p>Alternatively you can upload your public key from an url as well, by using the <code>—sshKeyUrl</code> switch. You can check whether the credential was created successfully by using the <code>credential list</code> command. You can switch between your cloud credentials - when you’d like to use one and act with that you will have to use:</p>
