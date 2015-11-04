@@ -392,14 +392,14 @@
 </code></pre>
 
 <p>This command has optional parameters:</p>
-<p><code>--description</code> "string" description of the recipe
-<code>--timeout</code> "integer" timeout of the script execution
-<code>--publicInAccount</code> "flag" flags if the template is public in the account</p>
+<p><code>--description</code> "string" description of the recipe</p>
+<p><code>--timeout</code> "integer" timeout of the script execution</p>
+<p><code>--publicInAccount</code> "flag" flags if the template is public in the account</p>
 <p>In the background Cloudbreak pushes recipe to Consul key/value store during cluster creation.</p>
-<p>Stored recipes has limitation on size, because they are stored in Consul key/value store, the base64 encoded content of the scripts must be less than 512kB.</p>
+<p><strong>Note</strong> Stored recipes has limitation on size, because they are stored in Consul key/value store, the base64 encoded content of the scripts must be less than 512kB.</p>
 <h2 id="downloadable-recipes">Downloadable recipes</h2>
 <p>A downloadable recipe should be available on HTTP, HTTPS protocols optionally with basic authentication, or any kind of public Git repository.</p>
-<p>This kind of recipe must contain a plugin.toml file, with some basic information about the recipe. Besides this at least a recipe-pre-install or recipe-post-install script.</p>
+<p>This kind of recipe must contain a plugin.toml file, with some basic information about the recipe. Besides this at least a recipe-pre-install or a recipe-post-install script.</p>
 <p>Content of plugin.toml:</p>
 <pre><code>[plugin]
 name = &quot;[recipe-name]&quot;
@@ -427,8 +427,8 @@ website_url = &quot;[website-url]&quot;
 </code></pre>
 
 <p>At this point we need to understand some element of the JSON above.</p>
-<p>First of all properties. Properties are saved to Consul key/value store, and they are available from the pre or post script by fetching http://localhost:8500/v1/kv/[key]?raw url. The limitation of the value's base64 representation is 512kB. This option is a good choice if you want to write reusable recipes.</p>
-<p>The next one is plugins. As you read before we support a few kind of protocols, and each of them has their own limitations:</p>
+<p>First of all <code>properties</code>. Properties are saved to Consul key/value store, and they are available from the pre or post script by fetching http://localhost:8500/v1/kv/[key]?raw. The limitation of the value's base64 representation is 512kB. This option is a good choice if you want to write reusable recipes.</p>
+<p>The next one is <code>plugins</code>. As you read before we support a few kind of protocols, and each of them has their own limitations:</p>
 <ul>
 <li>
 <p>Git</p>
@@ -462,13 +462,11 @@ website_url = &quot;[website-url]&quot;
 </code></pre>
 
 <p>Add command has an optional parameter</p>
-<ul>
-<li>--publicInAccount, flags if the template is public in the account.</li>
-</ul>
+<p><code>--publicInAccount</code> is checked all the users belonging to your account will be able to use this recipe for create clusters, but cannot delete it.</p>
 <h2 id="sample-recipe-for-ranger">Sample recipe for Ranger</h2>
 <p>To be able to install Ranger from a blueprint, a database must be running when Ambari starts to install Ranger Admin. With Cloudbreak a database can be configured and started from a recipe. We've created a sample recipe that can be used to initialize and start a PostgreSQL database that will be able to accept connections from Ranger and store its data. Add the <code>ONE_NODE</code> recipe from <a href="https://github.com/sequenceiq/consul-plugins-ranger-db.git">this URL</a> on the Cloudbreak UI:</p>
 <p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/ranger-recipe.png" /></p>
-<p>And add this recipe to the same hostgroup where Ranger Admin is installed under 'Show Advanced Options' when creating a new cluster:</p>
+<p>And add this recipe to the same hostgroup where Ranger Admin is installed on the 'Choose Blueprint' when creating a new cluster:</p>
 <p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/ranger-hostgroup.png" /></p>
 <p>Ranger installation also has some required properties that must be added to the blueprint. We've created a sample one-node blueprint with the necessary configurations to install Ranger Admin and Ranger Usersync. The configuration values in this blueprint match the sample recipe above - they are set to use a PostgreSQL database on the same host where Ranger Admin is installed. Usersync is configured to use UNIX as the authentication method and it should also be installed on the same host where Ranger Admin is installed.</p>
 <pre><code>{
@@ -823,7 +821,7 @@ website_url = &quot;[website-url]&quot;
 }
 </code></pre>
 
-<p><em>Notes</em></p>
+<p><strong>Notes</strong></p>
 <ul>
 <li>Ranger plugins cannot be enabled by default in a blueprint due to some Ambari restrictions, so properties like <code>ranger-hdfs-plugin-enabled</code> must be set to <em>No</em> and the plugins must be enabled from the Ambari UI with the checkboxes and by restarting the necessary services.</li>
 <li>If using the UNIX user sync, it may be necessary in some cases to restart the Ranger Usersync Services after the blueprint installation finished if the UNIX users cannot be seen on the Ranger Admin UI.</li>
