@@ -77,12 +77,6 @@
         
             
 <li >
-    <a href="onprem/">On-prem</a>
-</li>
-
-        
-            
-<li >
     <a href="aws/">AWS</a>
 </li>
 
@@ -102,6 +96,12 @@
             
 <li >
     <a href="openstack/">OpenStack</a>
+</li>
+
+        
+            
+<li >
+    <a href="onprem/">On-prem</a>
 </li>
 
         
@@ -363,24 +363,20 @@
     
         <li class="main active"><a href="#overview">Overview</a></li>
         
-    
-        <li class="main "><a href="#technology">Technology</a></li>
+            <li><a href="#technology">Technology</a></li>
         
-    
-        <li class="main "><a href="#process-overview">Process Overview</a></li>
+            <li><a href="#process-overview">Process Overview</a></li>
         
-    
-        <li class="main "><a href="#installation">Installation</a></li>
+            <li><a href="#installation">Installation</a></li>
         
-    
-        <li class="main "><a href="#release-notes-110">Release notes - 1.1.0</a></li>
+            <li><a href="#release-notes-110">Release notes - 1.1.0</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h2 id="overview">Overview</h2>
+<h1 id="overview">Overview</h1>
 <p>Cloudbreak is a cloud agnostic Hadoop as a Service API. Abstracts the provisioning and ease management and monitoring of on-demand HDP clusters in different virtual environments. Once it is deployed in your favorite servlet container exposes a REST API allowing to span up Hadoop clusters of arbitrary sizes on your selected cloud provider. Provisioning Hadoop has never been easier.
 Cloudbreak is built on the foundation of cloud providers API (Microsoft Azure, Amazon AWS, Google Cloud Platform, OpenStack), Apache Ambari, Docker containers, Swarm and Consul.</p>
 <p>Cloudbreak has two main components - the Cloudbreak deployer and the Cloudbreak application, which is made up from Microservices (Cloudbreak, Uluwatu, Sultans, ...). Cloudbreak deployer helps you to deploy the Cloudbreak application automatically in environments with Docker support. Once the Cloudbreak application is deployed you can use it to provision HDP clusters in different cloud environments.</p>
@@ -408,8 +404,6 @@ You have finished this step, if you are able to login in your browser to Cloudbr
 </ul>
 <h2 id="installation">Installation</h2>
 <p>Currently only <strong>Linux</strong> and <strong>OSX</strong> 64 bit binaries are released for Cloudbreak Deployer. For anything else we can create a special Docker container - please contact us. The deployment itself needs only <strong>Docker 1.7.0</strong> or later. You can install the Cloudbreak installation anywhere (on-prem or cloud VMs), however we suggest to installed it as close to the desired HDP clusters as possible. For further information check the <strong>Provider</strong> section of the documentation.</p>
-<p><strong>On-prem installation</strong></p>
-<p>For on premise installations of the Cloudbreak application please follow the <a href="onprem/">link</a></p>
 <p><strong>AWS based installation</strong></p>
 <p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
 <p>You can follow the AWS provider specific documentation using this <a href="aws/">link</a></p>
@@ -422,6 +416,8 @@ You have finished this step, if you are able to login in your browser to Cloudbr
 <p><strong>OpenStack based installation</strong></p>
 <p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
 <p>You can follow the OpenStack provider specific documentation using this <a href="openstack/">link</a></p>
+<p><strong>On-prem installation</strong></p>
+<p>For on premise installations of the Cloudbreak application please follow the <a href="onprem/">link</a></p>
 <h2 id="release-notes-110">Release notes - 1.1.0</h2>
 <table>
 <thead>
@@ -539,5 +535,5 @@ built in, so only a single binary is needed.</p></div>
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2015-11-04 13:02:33.180077
+Build Date UTC : 2015-11-04 13:16:28.707449
 -->
