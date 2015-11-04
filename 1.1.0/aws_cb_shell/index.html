@@ -448,12 +448,12 @@ securitygroup select --name secgroup_example
 </code></pre>
 
 <p>There are two default security groups defined: <code>all-services-port</code> and <code>only-ssh-and-ssl</code></p>
-<p><code>only-ssh-and-ssl:</code> all ports are locked down (you can't access Hadoop services outside of the VPN)</p>
+<p><code>only-ssh-and-ssl:</code> all ports are locked down except for SSH and gateway HTTPS (you can't access Hadoop services outside of the VPC)</p>
 <ul>
 <li>SSH (22)</li>
 <li>HTTPS (443)</li>
 </ul>
-<p><code>all-services-port:</code> all Hadoop services + SSH/HTTP are accessible by default:</p>
+<p><code>all-services-port:</code> all Hadoop services and SSH/gateway HTTPS are accessible by default:</p>
 <ul>
 <li>SSH (22)</li>
 <li>HTTPS (443)</li>
@@ -490,7 +490,7 @@ securitygroup select --name secgroup_example
 <pre><code>instancegroup configure --instanceGroup host_group_slave_1 --nodecount 3 --templateName minviable-aws
 </code></pre>
 
-<p>Other available options:</p>
+<p>Other available option:</p>
 <p><code>--templateId</code> Id of the template</p>
 <h2 id="create-a-hadoop-cluster">Create a Hadoop cluster</h2>
 <p>You are almost done - two more command and this will create your Hadoop cluster on your favorite cloud provider. Same as the API, or UI this will use your <code>credential</code>, <code>instancegroups</code>, <code>network</code>, <code>securitygroup</code>, and by using CloudFormation will launch a cloud stack</p>
