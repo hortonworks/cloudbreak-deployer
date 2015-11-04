@@ -77,6 +77,12 @@
         
             
 <li >
+    <a href="../onprem/">On-prem</a>
+</li>
+
+        
+            
+<li >
     <a href="../aws/">AWS</a>
 </li>
 
@@ -385,18 +391,16 @@
 <pre><code>recipe store --name [recipe-name] --executionType [ONE_NODE|ALL_NODES] --preInstallScriptFile /path/of/the/pre-install-script --postInstallScriptFile /path/of/the/post-install-script
 </code></pre>
 
-<p>This command has two optional parameters:</p>
-<ul>
-<li>--description "string": description of the recipe</li>
-<li>--timeout "integer": timeout of the script execution</li>
-<li>--publicInAccount "flag": flags if the template is public in the account</li>
-</ul>
+<p>This command has optional parameters:</p>
+<p><code>--description</code> "string" description of the recipe
+<code>--timeout</code> "integer" timeout of the script execution
+<code>--publicInAccount</code> "flag" flags if the template is public in the account</p>
 <p>In the background Cloudbreak pushes recipe to Consul key/value store during cluster creation.</p>
-<p>Stored recipes has limitation on size, because they are stored in Consul key/value store, the base64 encoded content of the scripts must be less then 512kB.</p>
+<p>Stored recipes has limitation on size, because they are stored in Consul key/value store, the base64 encoded content of the scripts must be less than 512kB.</p>
 <h2 id="downloadable-recipes">Downloadable recipes</h2>
 <p>A downloadable recipe should be available on HTTP, HTTPS protocols optionally with basic authentication, or any kind of public Git repository.</p>
-<p>This kind of recipe must contain a plugin.toml file, with some basic information about the recipe, and at least a recipe-pre-install or recipe-post-install script.
-Content of plugin.toml:</p>
+<p>This kind of recipe must contain a plugin.toml file, with some basic information about the recipe. Besides this at least a recipe-pre-install or recipe-post-install script.</p>
+<p>Content of plugin.toml:</p>
 <pre><code>[plugin]
 name = &quot;[recipe-name]&quot;
 description = &quot;[description-of-the-recipe]&quot;

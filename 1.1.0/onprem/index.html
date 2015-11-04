@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/aws/">
+        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/onprem/">
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Deployment - Cloudbreak Deployer</title>
+	<title>On-prem - Cloudbreak Deployer</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -54,7 +54,7 @@
                 <ul class="nav navbar-nav">
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Home <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -76,14 +76,14 @@
     <ul class="dropdown-menu">
         
             
-<li >
-    <a href="../onprem/">On-prem</a>
+<li class="active">
+    <a href="./">On-prem</a>
 </li>
 
         
             
 <li >
-    <a href="./">AWS</a>
+    <a href="../aws/">AWS</a>
 </li>
 
         
@@ -114,7 +114,7 @@
                 
                 
                 
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Providers <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -124,8 +124,8 @@
     <ul class="dropdown-menu">
         
             
-<li class="active">
-    <a href="./">Deployment</a>
+<li >
+    <a href="../aws/">Deployment</a>
 </li>
 
         
@@ -340,12 +340,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../openstack/">
+                        <a rel="next" href="../technology/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../aws_pre_prov/">
+                        <a rel="prev" href="../aws/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -361,70 +361,66 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#aws-deployment">AWS Deployment</a></li>
+        <li class="main active"><a href="#launchconfigure-your-instance">Launch/configure your instance</a></li>
         
-            <li><a href="#initialize-your-profile">Initialize your Profile</a></li>
+            <li><a href="#selinux-firewalls">SELinux, firewalls</a></li>
         
-            <li><a href="#generate-your-profile">Generate your Profile</a></li>
+            <li><a href="#install-cloudbreak-deployer">Install Cloudbreak deployer</a></li>
         
-            <li><a href="#start-cloudbreak">Start Cloudbreak</a></li>
+            <li><a href="#initialize-profile">Initialize Profile</a></li>
         
-            <li><a href="#next-steps">Next steps</a></li>
+            <li><a href="#pull-docker-images">Pull Docker images</a></li>
+        
+    
+        <li class="main "><a href="#configure-cloudbreak-deployer">Configure Cloudbreak deployer</a></li>
+        
+    
+        <li class="main "><a href="#use-cloudbreak">Use Cloudbreak</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="aws-deployment">AWS Deployment</h1>
-<p>If you already have cloudbreak-deployer installed you can start to setup the Cloudbreak application.</p>
-<p>Create a cloudbreak-deployment directory for the config files and the supporting binaries that will be downloaded by cloudbreak-deployer:</p>
-<pre><code>mkdir cloudbreak-deployer
+<h1 id="launchconfigure-your-instance">Launch/configure your instance</h1>
+<p>To install Cloudbreak Deployer on your selected environment you have to follow the steps below.</p>
+<h4 id="selinux-firewalls">SELinux, firewalls</h4>
+<p>Make sure that SELinux is disabled and if there is a firewall installed than allows communication between Docker Containers</p>
+<h4 id="install-cloudbreak-deployer">Install Cloudbreak deployer</h4>
+<p>Install the Cloudbreak deployer and unzip the platform specific single binary to your PATH. The one-liner way is:</p>
+<pre><code>curl https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/install | sh &amp;&amp; cbd --version
+</code></pre>
+
+<p>Once the Cloudbreak deployer is installed it will generate some config files and will download supporting binaries. It is
+advised that you create a dedicated directory for it:</p>
+<pre><code>mkdir cloudbreak-deployment
 cd cloudbreak-deployment
 </code></pre>
 
-<h2 id="initialize-your-profile">Initialize your Profile</h2>
-<p>First initialize cbd by creating a <code>Profile</code> file:</p>
+<p>All Cloudbreak components and the backend database is running inside containers.
+The <strong>pull command is optional</strong> but you can run it prior to <code>cbd start</code></p>
+<pre><code>cbd pull
+</code></pre>
+
+<h4 id="initialize-profile">Initialize Profile</h4>
+<p>First initialize your directory by creating a <code>Profile</code> file:</p>
 <pre><code>cbd init
 </code></pre>
 
-<p>It will create a <code>Profile</code> file in the current directory. Please edit the file - one of the required configurations is the <code>PUBLIC_IP</code>.
-This IP will be used to access the Cloudbreak UI (called Uluwatu). In some cases the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
-<p>The other required configuration in the <code>Profile</code> are the AWS keys belonging to the AWS account used by the Cloudbreak application.
-In order for Cloudbreak to be able to launch clusters on AWS on your behalf you need to set your AWS keys in the <code>Profile</code> file.
-We suggest to use the keys of an <em>IAM User</em> here. The IAM User's policies must be configured to have permission to assume roles (<code>sts:AssumeRole</code>) on all (<code>*</code>) resources.</p>
-<pre><code>export AWS_ACCESS_KEY_ID=AKIA**************W7SA
-export AWS_SECRET_ACCESS_KEY=RWCT4Cs8******************/*skiOkWD
+<p>It will create a <code>Profile</code> file in the current directory. Please edit the file - the only required
+configuration is the <code>PUBLIC_IP</code>. This IP will be used to access the Cloudbreak UI
+(called Uluwatu). In some cases the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
+<h4 id="pull-docker-images">Pull Docker images</h4>
+<p>All Cloudbreak components and the backend database is running inside containers.
+The <strong>pull command is optional</strong> but you can run it prior to <code>cbd start</code></p>
+<pre><code>cbd pull
 </code></pre>
 
-<p>You can learn more about the concepts used by Cloudbreak with AWS accounts in the <a href="../aws_pre_prov/">prerequisites chapter</a> </p>
-<h2 id="generate-your-profile">Generate your Profile</h2>
-<p>You are done with the initialization of Cloudbreak deployer. The last thing you have to do is to regenerate the configurations in order to take effect.</p>
-<pre><code>rm *.yml
-cbd generate
-</code></pre>
-
-<h2 id="start-cloudbreak">Start Cloudbreak</h2>
-<p>To start the Cloudbreak application use the following command.
-This will start all the Docker containers and initialize the application. It will take a few minutes until all the services start.</p>
-<pre><code>cbd start
-</code></pre>
-
-<p>Launching it the first time will take more time as it does some additional steps:</p>
-<ul>
-<li>downloads all the docker images needed by Cloudbreak.</li>
-<li>creates the <strong>docker-compose.yml</strong> file that describes the configuration of all the Docker containers needed for the Cloudbreak deployment.</li>
-<li>creates the <strong>uaa.yml</strong> file that holds the configuration of the identity server used to authenticate users to Cloudbreak.</li>
-</ul>
-<p>After the <code>cbd generate</code> command finishes you can check the logs of the Cloudbreak server with this command:</p>
-<pre><code>cbd logs cloudbreak
-</code></pre>
-
-<blockquote>
-<p>Cloudbreak server should start within a minute - you should see a line like this: <code>Started CloudbreakApplication in 36.823 seconds</code></p>
-</blockquote>
-<h2 id="next-steps">Next steps</h2>
-<p>Once Cloudbreak is up and running you should check out the <a href="../aws_pre_prov/">prerequisites</a> needed to create AWS clusters with Cloudbreak.</p></div>
+<p>It will take some time - depending on your network connection - so you can grab a cup of coffee.</p>
+<h1 id="configure-cloudbreak-deployer">Configure Cloudbreak deployer</h1>
+<p>Now that you all pre-requisites for Cloudbreak are in place you can follow with the <strong>cloud provider specific</strong> configuration. Based on the location where you plan to launch HDP clusters select one of the providers documentation and follow the steps from the  <strong>Configure Cloudbreak deployer</strong> section.</p>
+<h1 id="use-cloudbreak">Use Cloudbreak</h1>
+<p>Now that you are ready to provision clusters you can follow with the <strong>cloud provider specific</strong> documentation. Based on the location where you plan to launch HDP clusters select one of the providers documentation and follow the steps from the  <strong>Use Cloudbreak</strong> section.</p></div>
             
         </div>
 
