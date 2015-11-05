@@ -406,8 +406,9 @@ It can reveal some common problems with your docker or boot2docker configuration
 <pre><code>cbd update
 </code></pre>
 
+<hr />
 <h2 id="cloudbreak-application">Cloudbreak application</h2>
-<p><strong>SSH to the hosts</strong></p>
+<h3 id="ssh-to-the-hosts">SSH to the hosts</h3>
 <p>In the current version of Cloudbreak all the nodes have a public IP address and all the nodes are accessible via SSH.
 The public IP addresses of a running cluster can be checked on the Cloudbreak UI under the <em>Nodes</em> tab.
 Only key-based authentication is supported - the public key can be specified when creating a credential.</p>
@@ -421,13 +422,13 @@ It means that after <code>ssh</code> the client services won't be available inst
 Inside the container everything works the same way as expected.
 To check the containers running on the host enter:</p>
 <pre><code>[cloudbreak@vmhostgroupclient11 ~]$ sudo docker ps
-CONTAINER ID        IMAGE                                      COMMAND                  CREATED             STATUS              PORTS               NAMES
-1098ca778176        sequenceiq/baywatch-client:v1.0.0          &quot;/etc/bootstrap.sh -d&quot;   4 hours ago         Up 4 hours                              baywatch-client-14454170059514
-f4097c52fda5        sequenceiq/logrotate:v0.5.1                &quot;/start.sh&quot;              4 hours ago         Up 4 hours                              logrotate-14454169954830
-7b94aedaab30        sequenceiq/docker-consul-watch-plugn:1.0   &quot;/start.sh consul://1&quot;   4 hours ago         Up 4 hours                              consul-watch-14454169884044
-d8128b001427        sequenceiq/ambari:2.1.2-v2                 &quot;/start-agent&quot;           4 hours ago         Up 4 hours                              ambari-agent-14454169805924
-a8ec90037aaf        swarm:0.4.0                                &quot;/swarm join --addr=1&quot;   4 hours ago         Up 4 hours          2375/tcp            vmhostgroupmaster12-swarm-agent
-ef02b43eacee        sequenceiq/consul:v0.5.0-v5                &quot;/bin/start&quot;             4 hours ago         Up 4 hours                              vmhostgroupmaster12-consul
+CONTAINER ID   IMAGE                                    COMMAND                CREATED      STATUS      PORTS     NAMES
+1098ca778176   sequenceiq/baywatch-client:v1.0.0        &quot;/etc/bootstrap.sh -d&quot; 4 hours ago  Up 4 hours            baywatch-client-14454170059514
+f4097c52fda5   sequenceiq/logrotate:v0.5.1              &quot;/start.sh&quot;            4 hours ago  Up 4 hours            logrotate-14454169954830
+7b94aedaab30   sequenceiq/docker-consul-watch-plugn:1.0 &quot;/start.sh consul://1&quot; 4 hours ago  Up 4 hours            consul-watch-14454169884044
+d8128b001427   sequenceiq/ambari:2.1.2-v2               &quot;/start-agent&quot;         4 hours ago  Up 4 hours            ambari-agent-14454169805924
+a8ec90037aaf   swarm:0.4.0                              &quot;/swarm join --addr=1&quot; 4 hours ago  Up 4 hours  2375/tcp  vmhostgroupmaster12-swarm-agent
+ef02b43eacee   sequenceiq/consul:v0.5.0-v5              &quot;/bin/start&quot;           4 hours ago  Up 4 hours            vmhostgroupmaster12-consul
 </code></pre>
 
 <p>You should see the ambari-agent container running. Copy its id or name and <code>exec</code> into the container:</p>
