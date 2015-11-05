@@ -374,8 +374,15 @@
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h2 id="kerberos-security">Kerberos security</h2>
-<p>Cloudbreak supports Kerberos security for Ambari internal communication. To activate Kerberos with Cloudbreak you have enable security option and fill the <code>kerberos master key</code>, <code>kerberos admin</code> and <code>kerberos password</code> fields too on web interface or shell during cluster creation. To run a job on the cluster, you can use one of the default Hadoop users, like <code>ambari-qa</code>, as usual. Current implementation of Kerberos security doesn't contain Active Directory support or any other third party user authentication method. If you want to use custom user, you have to create users with the same name on all Ambari containers on each node manually.</p></div>
+<h1 id="kerberos-security">Kerberos security</h1>
+<p>Cloudbreak supports Kerberos security for Ambari internal communication. To activate Kerberos with Cloudbreak you should enable security option and fill the</p>
+<ul>
+<li><code>kerberos master key</code></li>
+<li><code>kerberos admin</code></li>
+<li><code>kerberos password</code></li>
+</ul>
+<p>fields too on web interface or shell during cluster creation. To run a job on the cluster, you can use one of the default Hadoop users, like <code>ambari-qa</code>, as usual.</p>
+<p><strong>Note</strong> Current implementation of Kerberos security doesn't contain Active Directory support or any other third party user authentication method. If you want to use custom user, you have to create users manually with the same name on all Ambari containers on each node.</p></div>
             
         </div>
 
