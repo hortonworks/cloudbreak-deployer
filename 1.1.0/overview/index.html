@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/openstack/">
+        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/overview/">
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Deployment - Cloudbreak Deployer</title>
+	<title>Benefits - Cloudbreak Deployer</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -54,7 +54,7 @@
                 <ul class="nav navbar-nav">
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Home <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -101,7 +101,7 @@
         
             
 <li >
-    <a href="./">OpenStack</a>
+    <a href="../openstack/">OpenStack</a>
 </li>
 
         
@@ -110,8 +110,8 @@
 
                         
                             
-<li >
-    <a href="../overview/">Benefits</a>
+<li class="active">
+    <a href="./">Benefits</a>
 </li>
 
                         
@@ -120,7 +120,7 @@
                 
                 
                 
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Providers <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -229,8 +229,8 @@
     <ul class="dropdown-menu">
         
             
-<li class="active">
-    <a href="./">Deployment</a>
+<li >
+    <a href="../openstack/">Deployment</a>
 </li>
 
         
@@ -346,12 +346,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../gcp_cb_shell/">
+                        <a rel="next" href="../openstack/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../openstack_pre_prov/">
+                        <a rel="prev" href="../aws/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -367,92 +367,60 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#openstack-deployment">OpenStack deployment</a></li>
+        <li class="main active"><a href="#benefits">Benefits</a></li>
         
-            <li><a href="#supported-openstack-version">Supported OpenStack version</a></li>
+            <li><a href="#secure">Secure</a></li>
         
-            <li><a href="#download-the-cloudbreak-image">Download the Cloudbreak image</a></li>
+            <li><a href="#elastic">Elastic</a></li>
         
-            <li><a href="#import-the-image-into-openstack">Import the image into OpenStack</a></li>
+            <li><a href="#scalable">Scalable</a></li>
         
-            <li><a href="#usage">Usage</a></li>
+            <li><a href="#declarative-hadoop-clusters">Declarative Hadoop clusters</a></li>
         
-            <li><a href="#initialize-your-profile">Initialize your Profile</a></li>
+            <li><a href="#flexible">Flexible</a></li>
         
-            <li><a href="#generate-your-profile">Generate your Profile</a></li>
-        
-            <li><a href="#start-cloudbreak">Start Cloudbreak</a></li>
-        
-            <li><a href="#next-steps">Next steps</a></li>
+            <li><a href="#how-it-works">How it works?</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="openstack-deployment">OpenStack deployment</h1>
-<h2 id="supported-openstack-version">Supported OpenStack version</h2>
-<p>Cloudbreak currently only supports the <code>OpenStack Juno</code> release.</p>
-<h2 id="download-the-cloudbreak-image">Download the Cloudbreak image</h2>
-<p>You can download the latest Cloudbreak OpenStack image with the following commands</p>
-<pre><code>LATEST_IMAGE=&quot;cb-openstack-images/cb-centos71-amb212-2015-10-09.img&quot;
-LOCAL_IMAGE_NAME=&quot;...&quot;
-aws s3 cp &quot;s3://$LATEST_IMAGE&quot; &quot;$LOCAL_IMAGE_NAME&quot; --region eu-west-1
-</code></pre>
+<h1 id="benefits">Benefits</h1>
+<h2 id="secure">Secure</h2>
+<p>Supports basic, token based and OAuth2 authentication model. The cluster is provisioned in a logically isolated network (Virtual Private Cloud) of your favorite cloud provider. Cloudbreak does not store or manage your cloud credentials - it is the end user's responsibility to link the Cloudbreak user with her/his cloud account.</p>
+<h2 id="elastic">Elastic</h2>
+<p>Using Cloudbreak API you can provision an arbitrary number of Hadoop nodes - the API does the hard work for you, and span up the infrastructure, configure the network and the selected Hadoop components and services without any user interaction. POST once and use it anytime after.</p>
+<h2 id="scalable">Scalable</h2>
+<p>As your workload changes, the API allows you to add or remove nodes on the fly. Cloudbreak does the hard work of reconfiguring the infrastructure, provision or decommission Hadoop nodes and let the cluster be continuously operational. Once provisioned, new nodes will take up the load and increase the cluster throughput.</p>
+<h2 id="declarative-hadoop-clusters">Declarative Hadoop clusters</h2>
+<p>We support declarative Hadoop cluster creation - using blueprints. Blueprints are a declarative definition of your stack, the component/services layout and the configurations to materialize a Hadoop cluster instance.</p>
+<h2 id="flexible">Flexible</h2>
+<p>You have the option to choose your favorite cloud provider and their different pricing models. The API translates the calls towards different vendors. Nevertheless you integrate and use one common API, there is no need to rewrite your code when changing between cloud providers.</p>
+<!--overview.md-->
 
-<h2 id="import-the-image-into-openstack">Import the image into OpenStack</h2>
-<pre><code>export OS_IMAGE_NAME=&quot;name_in_openstack&quot;
-export OS_USERNAME=...
-export OS_AUTH_URL=&quot;http://.../v2.0&quot;
-export OS_TENANT_NAME=...
-glance image-create --name &quot;$OS_IMAGE_NAME&quot; --file &quot;$LOCAL_IMAGE_NAME&quot; --disk-format qcow2 --container-format bare --progress
-</code></pre>
+<!--howitworks.md-->
 
-<h2 id="usage">Usage</h2>
-<p>Once the Cloudbreak deployer is installed it will generate some config files and will download supporting binaries. It is
-advised that you create a dedicated directory for it:</p>
-<pre><code>mkdir -p cloudbreak-deployment
-cd cloudbreak-deployment
-</code></pre>
-
-<h2 id="initialize-your-profile">Initialize your Profile</h2>
-<p>First initialize your directory by creating a <code>Profile</code> file:</p>
-<pre><code>cbd init
-</code></pre>
-
-<p>It will create a <code>Profile</code> file in the current directory. Please edit the file - one of the required configurations is the <code>PUBLIC_IP</code>.
-This IP will be used to access the Cloudbreak UI (called Uluwatu). In some cases the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
-<p>The other required configuration in the <code>Profile</code> is the name of the Cloudbreak image you uploaded to your OpenStack cloud.</p>
-<pre><code>export CB_OPENSTACK_IMAGE=&quot;$OS_IMAGE_NAME&quot;
-</code></pre>
-
-<h2 id="generate-your-profile">Generate your Profile</h2>
-<p>You are done with the configuration of Cloudbreak deployer. The last thing you have to do is to regenerate the configurations in order to take effect.</p>
-<pre><code>rm *.yml
-cbd generate
-</code></pre>
-
-<h2 id="start-cloudbreak">Start Cloudbreak</h2>
-<p>To start the Cloudbreak application use the following command.
-This will start all the Docker containers and initialize the application. It will take a few minutes until all the services start.</p>
-<pre><code>cbd start
-</code></pre>
-
-<p>Launching it the first time will take more time as it does some additional steps:</p>
-<ul>
-<li>downloads all the docker images needed by Cloudbreak.</li>
-<li>creates the <strong>docker-compose.yml</strong> file that describes the configuration of all the Docker containers needed for the Cloudbreak deployment.</li>
-<li>creates the <strong>uaa.yml</strong> file that holds the configuration of the identity server used to authenticate users to Cloudbreak.</li>
-</ul>
-<p>After the <code>cbd generate</code> command finishes you can check the logs of the Cloudbreak server with this command:</p>
-<pre><code>cbd logs cloudbreak
-</code></pre>
-
-<blockquote>
-<p>Cloudbreak server should start within a minute - you should see a line like this: <code>Started CloudbreakApplication in 36.823 seconds</code></p>
-</blockquote>
-<h2 id="next-steps">Next steps</h2>
-<p>Once Cloudbreak is up and running you should check out the <a href="../openstack_pre_prov/">prerequisites</a> needed to create OpenStack clusters with Cloudbreak.</p></div>
+<h2 id="how-it-works">How it works?</h2>
+<p>Cloudbreak launches on-demand Hadoop clusters on your favorite cloud provider in minutes. We have introduced 4 main notions - the core building blocks of the REST API.</p>
+<h3 id="templates">Templates</h3>
+<p>A template gives developers and systems administrators an easy way to create and manage a collection of cloud infrastructure related <code>resources</code>, maintaining and updating them in an orderly and predictable fashion.
+Templates are cloud specific - and on top of the infrastructural setup they collect the information such as the used machine images, the datacenter location, instance types, and can capture and control region-specific infrastructure variations. We support heterogenous clusters - this means that one Hadoop cluster can be built by combining different templates.</p>
+<p>A template can be used repeatedly to create identical copies of the same stack (or to use as a foundation to start a new stack).</p>
+<p>The infrastructure specific configuration is available under the Cloudbreak <a href="https://github.com/sequenceiq/cloudbreak/blob/master/src/main/resources/templates">resources</a>.
+As an example for Amazon EC2, we use <a href="http://aws.amazon.com/cloudformation/">AWS Cloudformation</a> to define the cloud infrastructure.</p>
+<p>For further information please visit our <a href="https://cloudbreak-api.sequenceiq.com/api/index.html#/templates">API documentation</a>.</p>
+<h3 id="stacks">Stacks</h3>
+<p>Stacks are template <code>instances</code> - a running cloud infrastructure created based on a template. Stacks are always launched on behalf of a cloud user account. Stacks support a wide range of resources, allowing you to build a highly available, reliable, and scalable infrastructure for your application needs.</p>
+<p>For further information please visit our <a href="https://cloudbreak-api.sequenceiq.com/api/index.html#/stack">API documentation</a>.</p>
+<h3 id="blueprints">Blueprints</h3>
+<p>Ambari Blueprints are a declarative definition of a Hadoop cluster. With a Blueprint, you specify a stack, the component layout and the configurations to materialize a Hadoop cluster instance. Hostgroups defined in blueprints can be associated to different templates, thus you can spin up a highly available cluster running on different instance types. This will give you the option to group your Hadoop services based on resource needs (e.g. high I/O, CPU or memory) and create an infrastructure which fits your workload best.</p>
+<p>We have a few default blueprints available from multinode, streaming to analytic ones.</p>
+<p>For further information please visit our <a href="https://cloudbreak-api.sequenceiq.com/api/index.html#/blueprints">API documentation</a>.</p>
+<h3 id="cluster">Cluster</h3>
+<p>Clusters are materialized Hadoop services on a given infrastructure. They are built based on a Blueprint (running the components and services specified) and on a configured infrastructure Stack.
+Once a cluster is created and launched, it can be used the usual way as any Hadoop cluster. We suggest to start with the Cluster's Ambari UI for an overview of your cluster.</p>
+<p>For further information please visit our <a href="https://cloudbreak-api.sequenceiq.com/api/index.html#/cluster">API documentation</a>.</p></div>
             
         </div>
 

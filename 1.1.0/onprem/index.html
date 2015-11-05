@@ -76,6 +76,12 @@
     <ul class="dropdown-menu">
         
             
+<li class="active">
+    <a href="./">On-prem</a>
+</li>
+
+        
+            
 <li >
     <a href="../aws/">AWS</a>
 </li>
@@ -99,14 +105,14 @@
 </li>
 
         
-            
-<li class="active">
-    <a href="./">On-prem</a>
-</li>
-
-        
     </ul>
   </li>
+
+                        
+                            
+<li >
+    <a href="../overview/">Benefits</a>
+</li>
 
                         
                         </ul>
@@ -340,7 +346,7 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../openstack/">
+                        <a rel="next" href="../technology/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
@@ -361,11 +367,11 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#launchconfigure-your-instance">Launch/configure your instance</a></li>
+        <li class="main active"><a href="#install-cloudbreak-deployer">Install Cloudbreak deployer</a></li>
         
             <li><a href="#selinux-firewalls">SELinux, firewalls</a></li>
         
-            <li><a href="#install-cloudbreak-deployer">Install Cloudbreak deployer</a></li>
+            <li><a href="#install-cloudbreak-deployer_1">Install Cloudbreak deployer</a></li>
         
             <li><a href="#initialize-profile">Initialize Profile</a></li>
         
@@ -380,11 +386,11 @@
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="launchconfigure-your-instance">Launch/configure your instance</h1>
+<h1 id="install-cloudbreak-deployer">Install Cloudbreak deployer</h1>
 <p>To install Cloudbreak Deployer on your selected environment you have to follow the steps below.</p>
 <h2 id="selinux-firewalls">SELinux, firewalls</h2>
 <p>Make sure that SELinux is disabled and if there is a firewall installed than allows communication between Docker Containers</p>
-<h2 id="install-cloudbreak-deployer">Install Cloudbreak deployer</h2>
+<h2 id="install-cloudbreak-deployer_1">Install Cloudbreak deployer</h2>
 <p>Install the Cloudbreak deployer and unzip the platform specific single binary to your PATH. The one-liner way is:</p>
 <pre><code>curl https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/install | sh &amp;&amp; cbd --version
 </code></pre>
