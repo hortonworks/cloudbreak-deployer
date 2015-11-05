@@ -377,13 +377,7 @@
         
             <li><a href="#usage">Usage</a></li>
         
-            <li><a href="#initialize-your-profile">Initialize your Profile</a></li>
-        
-            <li><a href="#generate-your-profile">Generate your Profile</a></li>
-        
-            <li><a href="#start-cloudbreak">Start Cloudbreak</a></li>
-        
-            <li><a href="#next-steps">Next steps</a></li>
+            <li><a href="#setup-cloudbreak-deployer">Setup Cloudbreak deployer</a></li>
         
     
     </ul>
@@ -409,13 +403,15 @@ glance image-create --name &quot;$OS_IMAGE_NAME&quot; --file &quot;$LOCAL_IMAGE_
 </code></pre>
 
 <h2 id="usage">Usage</h2>
-<p>Once the Cloudbreak deployer is installed it will generate some config files and will download supporting binaries. It is
-advised that you create a dedicated directory for it:</p>
-<pre><code>mkdir -p cloudbreak-deployment
-cd cloudbreak-deployment
+<p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the configuration then launch. If you do not have installed Cloudbreak eployer, you can <a href="../onprem/">install this on premise</a>.</p>
+<h2 id="setup-cloudbreak-deployer">Setup Cloudbreak deployer</h2>
+<p>If you already have Cloudbreak deployer installed you can start to setup the Cloudbreak application.</p>
+<p>Open the <code>cloudbreak-deployment</code> directory:</p>
+<pre><code>cd cloudbreak-deployment
 </code></pre>
 
-<h2 id="initialize-your-profile">Initialize your Profile</h2>
+<p>This is the directory of the config files and the supporting binaries that will be downloaded by Cloudbreak deployer.</p>
+<h3 id="initialize-your-profile">Initialize your Profile</h3>
 <p>First initialize your directory by creating a <code>Profile</code> file:</p>
 <pre><code>cbd init
 </code></pre>
@@ -426,13 +422,13 @@ This IP will be used to access the Cloudbreak UI (called Uluwatu). In some cases
 <pre><code>export CB_OPENSTACK_IMAGE=&quot;$OS_IMAGE_NAME&quot;
 </code></pre>
 
-<h2 id="generate-your-profile">Generate your Profile</h2>
+<h3 id="generate-your-profile">Generate your Profile</h3>
 <p>You are done with the configuration of Cloudbreak deployer. The last thing you have to do is to regenerate the configurations in order to take effect.</p>
 <pre><code>rm *.yml
 cbd generate
 </code></pre>
 
-<h2 id="start-cloudbreak">Start Cloudbreak</h2>
+<h3 id="start-cloudbreak">Start Cloudbreak</h3>
 <p>To start the Cloudbreak application use the following command.
 This will start all the Docker containers and initialize the application. It will take a few minutes until all the services start.</p>
 <pre><code>cbd start
@@ -451,7 +447,7 @@ This will start all the Docker containers and initialize the application. It wil
 <blockquote>
 <p>Cloudbreak server should start within a minute - you should see a line like this: <code>Started CloudbreakApplication in 36.823 seconds</code></p>
 </blockquote>
-<h2 id="next-steps">Next steps</h2>
+<h3 id="next-steps">Next steps</h3>
 <p>Once Cloudbreak is up and running you should check out the <a href="../openstack_pre_prov/">prerequisites</a> needed to create OpenStack clusters with Cloudbreak.</p></div>
             
         </div>

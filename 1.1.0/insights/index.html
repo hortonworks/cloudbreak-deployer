@@ -378,20 +378,20 @@
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h2 id="insights">Insights</h2>
-<h4 id="cloudbreak-deployer">Cloudbreak deployer</h4>
-<p><strong>Debug</strong></p>
+<h1 id="insights">Insights</h1>
+<h2 id="cloudbreak-deployer">Cloudbreak deployer</h2>
+<h3 id="debug">Debug</h3>
 <p>If you want to have more detailed output set the <code>DEBUG</code> env variable to non-zero:</p>
 <pre><code>DEBUG=1 cbd some_command
 </code></pre>
 
-<p><strong>Troubleshoot</strong></p>
+<h3 id="troubleshoot">Troubleshoot</h3>
 <p>You can use the <code>doctor</code> command to diagnose your environment.
 It can reveal some common problems with your docker or boot2docker configuration and it also checks the cbd versions.</p>
 <pre><code>cbd doctor
 </code></pre>
 
-<p><strong>Logs</strong></p>
+<h3 id="logs">Logs</h3>
 <p>The aggregated logs of all the Cloudbreak components can be checked with:</p>
 <pre><code>cbd logs
 </code></pre>
@@ -401,12 +401,12 @@ It can reveal some common problems with your docker or boot2docker configuration
 </code></pre>
 
 <p>You can also check the individual logs of <code>uluwatu</code>, <code>periscope</code>, and <code>identity</code>.</p>
-<p><strong>Update</strong></p>
+<h3 id="update">Update</h3>
 <p>The cloudbreak-deployer tool is capable of upgrading itself to a newer version.</p>
 <pre><code>cbd update
 </code></pre>
 
-<h4 id="cloudbreak-application">Cloudbreak application</h4>
+<h2 id="cloudbreak-application">Cloudbreak application</h2>
 <p><strong>SSH to the hosts</strong></p>
 <p>In the current version of Cloudbreak all the nodes have a public IP address and all the nodes are accessible via SSH.
 The public IP addresses of a running cluster can be checked on the Cloudbreak UI under the <em>Nodes</em> tab.
@@ -415,7 +415,7 @@ Only key-based authentication is supported - the public key can be specified whe
 </code></pre>
 
 <p>The default user is <code>cloudbreak</code> except on EC2 where it is <code>ec2-user</code>.</p>
-<p><strong>Accessing HDP client services</strong></p>
+<h3 id="accessing-hdp-client-services">Accessing HDP client services</h3>
 <p>The main difference between general HDP clusters and Cloudbreak-installed HDP clusters is that each host runs an Ambari server or agent Docker container and the HDP services will be installed in this container as well.
 It means that after <code>ssh</code> the client services won't be available instantly, first you'll have to enter the ambari-agent container.
 Inside the container everything works the same way as expected.
@@ -440,7 +440,7 @@ ef02b43eacee        sequenceiq/consul:v0.5.0-v5                &quot;/bin/start&
 [root@docker-ambari tmp]#
 </code></pre>
 
-<p><strong>Data volumes</strong></p>
+<h3 id="data-volumes">Data volumes</h3>
 <p>The disks that are attached to the instances are automatically mounted to <code>/hadoopfs/fs1</code>, <code>/hadoopfs/fs2</code>, ... <code>/hadoopfs/fsN</code> respectively.
 These directories are mounted from the host into the ambari-agent container under the same name so these can be accessed from inside.
 It means that if you'd like to move some data to the instances you can use these volumes and the data will be available from the container instantly to work on it.</p>
@@ -456,19 +456,19 @@ drwxr-xr-x   - hdfs supergroup          0 2015-10-21 13:46 /tmp/data
 drwx-wx-wx   - hive supergroup          0 2015-10-21 08:51 /tmp/hive
 </code></pre>
 
-<p><strong>Internal hostnames</strong></p>
+<h3 id="internal-hostnames">Internal hostnames</h3>
 <p>After a cluster is created with Cloudbreak, the nodes will have internal hostnames like this:</p>
 <p><code>vmhostgroupclient11.node.dc1.consul</code></p>
 <p>This is because Cloudbreak uses <a href="https://www.consul.io">Consul</a> to provide DNS services.
 It means that you won't see entries to the other nodes inside the <code>/etc/hosts</code> file, because nodes are registered inside Consul and the hostnames are resolved by Consul as well.</p>
 <p>In the current version the <code>node.dc1.consul</code> domain is hardcoded and cannot be changed.</p>
-<p><strong>Accessing Ambari server from the other nodes</strong></p>
+<h3 id="accessing-ambari-server-from-the-other-nodes">Accessing Ambari server from the other nodes</h3>
 <p>Ambari server is registered as a service in Consul, so it can always be accessed through its domain name <code>ambari-8080.service.consul</code> from the other ambari containers.
 It can be tried by pinging it from one of the <code>ambari-agent</code> containers:</p>
 <pre><code>ping ambari-8080.service.consul
 </code></pre>
 
-<p><strong>Cloudbreak gateway node</strong></p>
+<h3 id="cloudbreak-gateway-node">Cloudbreak gateway node</h3>
 <p>With every Cloudbreak cluster installation there is a special node called <em>cbgateway</em> started that won't run an ambari-agent container so it won't run HDP services either.
 It can be seen on the Cloudbreak UI among the hostgroups when creating a cluster, but its node count cannot be changed from 1 and it shouldn't be there in the Ambari blueprint.
 It is by design because this instance has some special tasks:</p>
@@ -479,9 +479,9 @@ It is by design because this instance has some special tasks:</p>
 <li>it runs the Baywatch server that is responsible for collecting the operational logs from the cluster</li>
 <li>it runs a Kerberos KDC container if Kerberos is configured</li>
 </ul>
-<p><strong>Hadoop logs</strong></p>
+<h3 id="hadoop-logs">Hadoop logs</h3>
 <p>Hadoop logs are available from the host and from the container as well in the <code>/hadoopfs/fs1/logs</code> directory.</p>
-<p><strong>Ambari db</strong></p>
+<h3 id="ambari-db">Ambari db</h3>
 <p>Ambari's database runs on the <code>cbgateway</code> node inside a PostgreSQL docker container. To access it ssh to the gateway node and run the following command:</p>
 <pre><code>[cloudbreak@vmcbgateway0 ~]$ sudo docker exec -it ambari_db psql -U postgres
 </code></pre></div>

@@ -375,7 +375,11 @@
         
             <li><a href="#installation">Installation</a></li>
         
+            <li><a href="#setup">Setup</a></li>
+        
             <li><a href="#release-notes-110">Release notes - 1.1.0</a></li>
+        
+            <li><a href="#credits">Credits</a></li>
         
     
     </ul>
@@ -403,19 +407,17 @@ Cloudbreak is built on the foundation of cloud providers API (Microsoft Azure, A
 </ul>
 <h2 id="installation">Installation</h2>
 <p>Currently only <strong>Linux</strong> and <strong>OSX</strong> 64 bit binaries are released for Cloudbreak Deployer. For anything else we can create a special Docker container - please contact us. The deployment itself needs only <strong>Docker 1.7.0</strong> or later. You can install the Cloudbreak installation anywhere (on-prem or cloud VMs), however we suggest to installed it as close to the desired HDP clusters as possible. For further information check the <strong>Provider</strong> section of the documentation.</p>
-<p><strong>On-prem installation</strong></p>
+<h3 id="on-prem-installation">On-prem installation</h3>
 <p>For on premise installations of the Cloudbreak application please follow the <a href="onprem/">link</a></p>
-<p><strong>AWS based installation</strong></p>
+<h2 id="setup">Setup</h2>
 <p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
+<h3 id="aws">AWS</h3>
 <p>You can follow the AWS provider specific documentation using this <a href="aws/">link</a></p>
-<p><strong>Azure based installation</strong></p>
-<p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
+<h3 id="azure">Azure</h3>
 <p>You can follow the Azure provider specific documentation using this <a href="azure/">link</a></p>
-<p><strong>GCP based installation</strong></p>
-<p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
+<h3 id="gcp">GCP</h3>
 <p>You can follow the GCP provider specific documentation using this <a href="gcp/">link</a></p>
-<p><strong>OpenStack based installation</strong></p>
-<p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
+<h3 id="openstack">OpenStack</h3>
 <p>You can follow the OpenStack provider specific documentation using this <a href="openstack/">link</a></p>
 <h2 id="release-notes-110">Release notes - 1.1.0</h2>
 <table>
@@ -474,7 +476,7 @@ Cloudbreak is built on the foundation of cloud providers API (Microsoft Azure, A
 </tr>
 </tbody>
 </table>
-<p><strong>Credits</strong></p>
+<h2 id="credits">Credits</h2>
 <p>This tool, and the PR driven release, is inspired from <a href="https://github.com/gliderlabs/glidergun">glidergun</a>. Actually it
 could be a fork of it. The reason it’s not a fork, because we wanted to have our own binary with all modules
 built in, so only a single binary is needed.</p></div>
@@ -534,5 +536,5 @@ built in, so only a single binary is needed.</p></div>
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2015-11-05 09:40:27.007540
+Build Date UTC : 2015-11-05 10:27:21.335455
 -->
