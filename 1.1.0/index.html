@@ -60,7 +60,7 @@
                         
                             
 <li class="active">
-    <a href=".">Overview</a>
+    <a href=".">Introduction</a>
 </li>
 
                         
@@ -273,7 +273,7 @@
                         
                             
 <li >
-    <a href="shell/">Shell</a>
+    <a href="shell/">CLI</a>
 </li>
 
                         
@@ -367,9 +367,11 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#overview">Overview</a></li>
+        <li class="main active"><a href="#introduction">Introduction</a></li>
         
             <li><a href="#technology">Technology</a></li>
+        
+            <li><a href="#system-requirements">System Requirements</a></li>
         
             <li><a href="#process-overview">Process Overview</a></li>
         
@@ -379,19 +381,33 @@
         
             <li><a href="#release-notes-110">Release notes - 1.1.0</a></li>
         
-            <li><a href="#credits">Credits</a></li>
-        
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="overview">Overview</h1>
-<p>Cloudbreak is a cloud agnostic Hadoop as a Service API. Abstracts the provisioning and ease management and monitoring of on-demand HDP clusters in different virtual environments. Once it is deployed in your favorite servlet container exposes a REST API allowing to span up Hadoop clusters of arbitrary sizes on your selected cloud provider. Provisioning Hadoop has never been easier.
-Cloudbreak is built on the foundation of cloud providers API (Microsoft Azure, Amazon AWS, Google Cloud Platform, OpenStack), Apache Ambari, Docker containers, Swarm and Consul.</p>
-<p>Cloudbreak has two main components - the Cloudbreak deployer and the Cloudbreak application, which is made up from Microservices (Cloudbreak, Uluwatu, Sultans, ...). Cloudbreak deployer helps you to deploy the Cloudbreak application automatically in environments with Docker support. Once the Cloudbreak application is deployed you can use it to provision HDP clusters in different cloud environments.</p>
+<h1 id="introduction">Introduction</h1>
+<p>Cloudbreak simplifies the provisioning, management and monitoring of on-demand HDP clusters in virtual and cloud environments. Cloudbreak leverages the cloud infrastructure platforms to create host instances, uses Docker technology to deploy the requisite containers cloud-agnostically, and uses Apache Ambari (via Ambari Blueprints) to install and manage the HDP cluster.</p>
+<p>Use the Cloudbreak UI or CLI to launch HDP clusters on public cloud infrastructure platforms such as Microsoft Azure, Amazon Web Services (AWS), and Google Cloud Platform (GCP) and the private cloud infrastructure platform OpenStack (available as Technical Preview).</p>
 <h2 id="technology">Technology</h2>
+<p>Cloudbreak has two main components: the <strong>Cloudbreak Application</strong> and the <strong>Cloudbreak Deployer</strong>.</p>
+<p>The <strong>Cloudbreak Application</strong> is made up from microservices (Cloudbreak, Uluwatu, Sultans, ...). The <strong>Cloudbreak 
+Deployer</strong> helps you to deploy the Cloudbreak application automatically in environments with Docker support. Once the Cloudbreak Application is deployed you can use it to provision HDP clusters in different cloud environments.</p>
+<blockquote>
+<p>For an architectural overview of the <a href="http://sequenceiq.com/cloudbreak-deployer">Cloudbreak Deployer</a>, the Cloudbreak Application, Apache Ambari, Docker and the rest of the Cloudbreak components, please follow this <a href="technology/">link</a>.</p>
+</blockquote>
 <p>For an architectural overview of the Cloudbreak deployer and the Cloudbreak application please follow this <a href="technology/">link</a>.</p>
+<h2 id="system-requirements">System Requirements</h2>
+<p>To run the Cloudbreak Deployer and install the Cloudbreak Application, you must meet the following system requirements:</p>
+<ul>
+<li>RHEL / CentOS / Oracle Linux 6 (64-bit)</li>
+<li>Docker 1.6.0 (or later)</li>
+<li><a href="http://docs.docker.com/engine/installation/rhel/">Docker for RHEL</a></li>
+<li><a href="https://docs.docker.com/installation/centos/">Docker for CentOS</a></li>
+</ul>
+<blockquote>
+<p>You can install Cloudbreak on Mac OS X "Darwin" for <strong>evaluation purposes only</strong>. This operating system is not supported for a production deployment of Cloudbreak.</p>
+</blockquote>
 <h2 id="process-overview">Process Overview</h2>
 <p>The full proceess to be able to use an HDP cluster includes the following steps:</p>
 <ul>
@@ -475,11 +491,7 @@ Cloudbreak is built on the foundation of cloud providers API (Microsoft Azure, A
 <td align="right">yes</td>
 </tr>
 </tbody>
-</table>
-<h2 id="credits">Credits</h2>
-<p>This tool, and the PR driven release, is inspired from <a href="https://github.com/gliderlabs/glidergun">glidergun</a>. Actually it
-could be a fork of it. The reason it’s not a fork, because we wanted to have our own binary with all modules
-built in, so only a single binary is needed.</p></div>
+</table></div>
             
         </div>
 
@@ -556,5 +568,5 @@ built in, so only a single binary is needed.</p></div>
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2015-11-06 15:53:51.988298
+Build Date UTC : 2015-11-06 16:41:19.588721
 -->
