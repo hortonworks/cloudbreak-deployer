@@ -416,31 +416,31 @@ You'll be asked to enter a passphrase, but you can leave it empty.
 <ol>
 <li>
 <p>Go to <code>manage.windowsazure.com</code> &gt; <code>Active Directory</code>
-<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure1.png" /></p>
+<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/azure1.png" /></p>
 </li>
 <li>
 <p>You can configure your AD users on <code>Your active directory</code> &gt; <code>Users</code> menu
-<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure2.png" /></p>
+<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/azure2.png" /></p>
 </li>
 <li>
 <p>Here you can add the new user to AD. Simply click on <code>Add User</code> on the bottom of the page
-<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure3.png" /></p>
+<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/azure3.png" /></p>
 </li>
 <li>
 <p>Type the new user name into the box
-<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure4.png" /></p>
+<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/azure4.png" /></p>
 </li>
 <li>
 <p>You will see the new user in the list. You have got a temporary password so you have to change it before you start using the new user.
-<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure5.png" /></p>
+<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/azure5.png" /></p>
 </li>
 <li>
 <p>After you add the user to the AD you need to add your AD user to the <code>manage.windowsazure.com</code> &gt; <code>Settings</code> &gt; <code>Administrators</code>
-<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure6.png" /></p>
+<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/azure6.png" /></p>
 </li>
 <li>
 <p>Here you can add the new user to Administrators. Simply click on <code>Add</code> on the bottom of the page
-<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/azure7.png" /></p>
+<img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/azure7.png" /></p>
 </li>
 </ol>
 <h2 id="azure-application-setup-with-cloudbreak-deployer">Azure application setup with Cloudbreak Deployer</h2>
@@ -471,7 +471,7 @@ When WASB is used as a Hadoop filesystem the files are full-value blobs in a sto
 To bypass those limits Microsoft created a small service called <a href="https://github.com/MicrosoftDX/Dash">DASH</a>. DASH itself is a service that imitates the API of the Azure Blob Storage API and it can be deployed as a Microsoft Azure Cloud Service. Because its API is the same as the standard blob storage API it can be used <em>almost</em> in the same way as the default WASB filesystem from a Hadoop deployment.
 DASH works by sharding the storage access across multiple storage accounts. It can be configured to distribute storage account load to at most 15 <strong>scaleout</strong> storage accounts. It needs one more <strong>namespace</strong> storage account where it keeps track of where the data is stored.
 When configuring a WASB filesystem with Hadoop, the only required config entries are the ones where the access details are described. To access a storage account Azure generates an access key that is displayed on the Azure portal or can be queried through the API while the account name is the name of the storage account itself. A DASH service has a similar account name and key, those can be configured in the configuration file while deploying the cloud service.</p>
-<p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/docsupdate/docs/images/dash.png" /></p>
+<p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/dash.png" /></p>
 <h3 id="deploying-a-dash-service-with-cloudbreak-deployer">Deploying a DASH service with Cloudbreak deployer</h3>
 <p>We have automated the deployment of a DASH service in cloudbreak-deployer. After cbd is installed, simply run the following command to deploy a DASH cloud service with 5 scale out storage accounts:</p>
 <pre><code>cbd azure deploy-dash --accounts 5 --prefix dash --location &quot;West Europe&quot; --instances 3
