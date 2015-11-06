@@ -369,21 +369,14 @@
     
         <li class="main active"><a href="#cloudbreak-shell">Cloudbreak Shell</a></li>
         
-    
-        <li class="main "><a href="#install-and-start-cloudbreak-shell">Install and start Cloudbreak shell</a></li>
-        
-            <li><a href="#starting-cloudbreak-shell-using-cloudbreak-deployer">Starting cloudbreak shell using cloudbreak deployer</a></li>
-        
-            <li><a href="#starting-cloudbreak-shell-with-our-prepared-docker-image">Starting Cloudbreak shell with our prepared docker image</a></li>
-        
-            <li><a href="#build-from-source">Build from source</a></li>
+            <li><a href="#install-and-start-cloudbreak-shell">Install and start Cloudbreak shell</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h2 id="cloudbreak-shell">Cloudbreak Shell</h2>
+<h1 id="cloudbreak-shell">Cloudbreak Shell</h1>
 <p>The goal with the CLI was to provide an interactive command line tool which supports:</p>
 <ul>
 <li>all functionality available through the REST API or Cloudbreak web UI</li>
@@ -405,7 +398,7 @@
 <p>Start the shell with <code>cbd util cloudbreak-shell</code>. This will launch the Cloudbreak shell inside a Docker container and you are ready to start using it.</p>
 <p><a name="dockerimage"></a></p>
 <h3 id="starting-cloudbreak-shell-with-our-prepared-docker-image">Starting Cloudbreak shell with our prepared docker image</h3>
-<p>You can find the docker image and its documentation <a href="https://github.com/sequenceiq/docker-cb-shell">here</a>.</p>
+<p><i class="icon-folder-open"></i> You can find the docker image and its documentation <a href="https://github.com/sequenceiq/docker-cb-shell">here</a>.</p>
 <p><a name="fromsource"></a></p>
 <h3 id="build-from-source">Build from source</h3>
 <p>If want to use the code or extend it with new commands follow the steps below. You will need:
@@ -415,7 +408,10 @@ cd cloudbreak-shell
 ./gradlew clean build
 </code></pre>
 
-<p><em>Note: In case you use the hosted version of Cloudbreak you should use the <code>latest-release.sh</code> to get the right version of the CLI.</em></p>
+<blockquote>
+<p><strong>Note</strong>
+In case you use the hosted version of Cloudbreak you should use the <code>latest-release.sh</code> to get the right version of the CLI.</p>
+</blockquote>
 <p><strong>Start Cloudbreak-shell from the built source</strong></p>
 <pre><code>Usage:
   java -jar cloudbreak-shell-0.5-SNAPSHOT.jar                  : Starts Cloudbreak Shell in interactive mode.
@@ -431,8 +427,12 @@ Note:
   You should specify at least your username and password.
 </code></pre>
 
-<p>Once you are connected you can start to create a cluster. If you are lost and need guidance through the process you can use <code>hint</code>. You can always use <code>TAB</code> for completion. Note that all commands are <code>context aware</code> - they are available only when it makes sense - this way you are never confused and guided by the system on the right path.</p>
-<p>You can find the provider specific documentations here:</p>
+<p>Once you are connected you can start to create a cluster. If you are lost and need guidance through the process you can use <code>hint</code>. You can always use <code>TAB</code> for completion.</p>
+<blockquote>
+<p><strong>Note</strong>
+All commands are <code>context aware</code> - they are available only when it makes sense - this way you are never confused and guided by the system on the right path.</p>
+</blockquote>
+<p><strong>Provider specific documentations</strong></p>
 <ul>
 <li><a href="../aws_cb_shell/">AWS</a></li>
 <li><a href="../azure_cb_shell/">Azure</a></li>
