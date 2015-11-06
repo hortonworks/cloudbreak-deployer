@@ -529,6 +529,26 @@ built in, so only a single binary is needed.</p></div>
                   $("#versions-dropdown").append('<li><a href="http://sequenceiq.com/cloudbreak-deployer/'+value+'">'+value+'</a></li>');
                 });
                });
+
+               <!--AWS Table-->
+               $.getJSON("/aws.json", function(data) {
+               $("#aws-images").append('<table cellspacing="20" cellpadding="20">');
+                 $("#aws-images").append('<thead>');
+                  $("#aws-images").append('<tr>');
+                   $("#aws-images").append('<th text-align="center" style="font-size: 20px">' + "Region" + '</th>');
+                   $("#aws-images").append('<th text-align="center" style="font-size: 20px">' + "Image Name" + '</th>');
+                  $("#aws-images").append('</tr>');
+                 $("#aws-images").append('</thead>');
+                $("#aws-images").append('<tbody>');
+                 $.each(data.aws, function( index, value ) {
+                  $("#aws-images").append('<tr>');
+                   $("#aws-images").append('<td text-align="left" style="font-size: 20px">' + index + '</td>');
+                   $("#aws-images").append('<td text-align="right" style="font-size: 20px">' + value + '</td>');
+                  $("#aws-images").append('</tr>');
+                 });
+                $("#aws-images").append('</tbody>');
+               $("#aws-images").append('</table>');
+               });
            });
          </script>
     </body>
@@ -536,5 +556,5 @@ built in, so only a single binary is needed.</p></div>
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2015-11-06 09:13:11.885108
+Build Date UTC : 2015-11-06 15:53:51.988298
 -->
