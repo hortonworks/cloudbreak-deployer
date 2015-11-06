@@ -243,6 +243,7 @@ cloudbreak-generate-cert() {
       mv "${CBD_CERT_ROOT_PATH}/ca-key.pem" "${CBD_CERT_ROOT_PATH}/client-ca-key.pem"
       debug "Certificates successfully generated."
     fi
+    mkdir -p "${CBD_CERT_ROOT_PATH}/trusted"
 }
 
 generate_uaa_check_diff() {

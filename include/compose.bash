@@ -326,7 +326,8 @@ sultans:
     ports:
         - 3001:3000
     volumes:
-        - $SULTANS_VOLUME_HOST:$SULTANS_VOLUME_CONTAINER
+        - "$SULTANS_VOLUME_HOST:$SULTANS_VOLUME_CONTAINER"
+        - "$CBD_CERT_ROOT_PATH:/certs"
     dns: $PRIVATE_IP
     image: sequenceiq/sultans-bin:$DOCKER_TAG_SULTANS
 
@@ -349,7 +350,8 @@ uluwatu:
     ports:
         - 3000:3000
     volumes:
-        - $ULUWATU_VOLUME_HOST:$ULUWATU_VOLUME_CONTAINER
+        - "$ULUWATU_VOLUME_HOST:$ULUWATU_VOLUME_CONTAINER"
+        - "$CBD_CERT_ROOT_PATH:/certs"
     dns: $PRIVATE_IP
     image: sequenceiq/uluwatu-bin:$DOCKER_TAG_ULUWATU
 
