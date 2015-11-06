@@ -400,7 +400,7 @@ This description details the AWS setup - if you'd like to use a different cloud 
 The credentials can be configured on the "manage credentials".</p>
 <p>Add a <code>name</code> and a <code>description</code> for the credential, copy your IAM role's Amazon Resource Name (ARN) to the corresponding field (<code>IAM Role ARN</code>) and copy your SSH public key to the <code>SSH public key</code> field.
 To learn more about how to setup the IAM Role on your AWS account check out the <a href="../aws_pre_prov/">prerequisites</a>.</p>
-<p>The SSH public key must be in OpenSSH format and it's private keypair can be used later to SSH onto every instance of every cluster you'll create with this credential.
+<p>The SSH public key must be in OpenSSH format and it's private keypair can be used later to <a href="http://sequenceiq.com/cloudbreak-deployer/1.1.0/insights/#ssh-to-the-host">SSH onto every instance</a> of every cluster you'll create with this credential.
 The SSH username for the EC2 instances is <strong>ec2-user</strong>.</p>
 <p>There is a last option called <code>Public in account</code> - it means that all the users belonging to your account will be able to use this credential to create clusters, but cannot delete or modify it.</p>
 <p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/aws-credential.png" /></p>
