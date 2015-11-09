@@ -388,10 +388,9 @@
 <h2 id="supported-openstack-version">Supported OpenStack version</h2>
 <p>Cloudbreak currently only supports the <code>OpenStack Juno</code> release.</p>
 <h2 id="download-the-cloudbreak-image">Download the Cloudbreak image</h2>
-<p>You can download the latest Cloudbreak OpenStack image with the following commands</p>
-<pre><code>LATEST_IMAGE=&quot;cb-openstack-images/cb-centos71-amb212-2015-10-09.img&quot;
-LOCAL_IMAGE_NAME=&quot;...&quot;
-aws s3 cp &quot;s3://$LATEST_IMAGE&quot; &quot;$LOCAL_IMAGE_NAME&quot; --region eu-west-1
+<p>You can download the latest Cloudbreak OpenStack image with below command.</p>
+<h3 id="openstack-image-details">OpenStack image details</h3>
+<pre><code>curl -L  https://atlas.hashicorp.com/api/v1/artifacts/sequenceiq/cloudbreak/openstack.image/$VERSION/file | tar -xz
 </code></pre>
 
 <h2 id="import-the-image-into-openstack">Import the image into OpenStack</h2>
@@ -399,7 +398,7 @@ aws s3 cp &quot;s3://$LATEST_IMAGE&quot; &quot;$LOCAL_IMAGE_NAME&quot; --region 
 export OS_USERNAME=...
 export OS_AUTH_URL=&quot;http://.../v2.0&quot;
 export OS_TENANT_NAME=...
-glance image-create --name &quot;$OS_IMAGE_NAME&quot; --file &quot;$LOCAL_IMAGE_NAME&quot; --disk-format qcow2 --container-format bare --progress
+glance image-create --name &quot;$OS_IMAGE_NAME&quot; --file &quot;$LATEST_IMAGE&quot; --disk-format qcow2 --container-format bare --progress
 </code></pre>
 
 <h2 id="usage">Usage</h2>
@@ -502,6 +501,7 @@ This will start all the Docker containers and initialize the application. It wil
                <!--AWS Table-->
                $.getJSON("https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/mkdocs_theme/aws.json", function(data) {
                $("#images").append('<br>');
+               $("#images").append('<br>');
                $("#images").append('<table>');
                  $("#images").append('<col width="290">');
                  $("#images").append('<col width="290">');
@@ -520,6 +520,22 @@ This will start all the Docker containers and initialize the application. It wil
                  });
                 $("#images").append('</tbody>');
                $("#images").append('</table>');
+               });
+
+               <!--OpenStack-->
+               $.getJSON("https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/mkdocs_theme/openstack.json", function(data) {
+               $("#openstack-image-details").append('<br>');
+               $("#openstack-image-details").append('<br>');
+               $("#openstack-image-details").append('<p style="font-size: 15px"> VERSION: ' + data.version + '</p>');
+               $("#openstack-image-details").append('<p style="font-size: 15px"> LATEST_IMAGE: ' + data.id + '</p>');
+               });
+
+               <!--GCP-->
+               $.getJSON("https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/mkdocs_theme/gcp.json", function(data) {
+               $("#gcp-image-details").append('<br>');
+               $("#gcp-image-details").append('<br>');
+               $("#gcp-image-details").append('<p style="font-size: 15px"> SOURCE_IMAGE: ' + data.gce.source_image + '</p>');
+               $("#gcp-image-details").append('<pre><code>'+ data.gce.import_script +'</code></pre>');
                });
            });
          </script>
