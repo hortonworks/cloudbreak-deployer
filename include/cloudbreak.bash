@@ -117,6 +117,10 @@ cloudbreak-conf-db() {
 cloudbreak-conf-cert() {
     declare desc="Declares cloudbreak cert config"
     env-import CBD_CERT_ROOT_PATH "${PWD}/certs"
+    env-import CBD_MAIL_CERT_ROOT_PATH "${PWD}/mail_certs"
+    env-import SL_SMTP_TLS_CA_FILE_NAME ""
+    env-import SL_SMTP_TLS_KEY_FILE_NAME ""
+    env-import SL_SMTP_TLS_CERT_FILE_NAME ""
 }
 
 cloudbreak-delete-dbs() {

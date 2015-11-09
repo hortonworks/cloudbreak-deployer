@@ -303,6 +303,7 @@ cloudbreak:
         - 8080:8080
     volumes:
         - "$CBD_CERT_ROOT_PATH:/certs"
+        - "$CBD_MAIL_CERT_ROOT_PATH:/certs/trusted"
     dns: $PRIVATE_IP
     image: sequenceiq/cloudbreak:$DOCKER_TAG_CLOUDBREAK
     command: bash
@@ -322,11 +323,15 @@ sultans:
         - SL_CB_ADDRESS=$ULU_HOST_ADDRESS
         - SL_ADDRESS=$ULU_SULTANS_ADDRESS
         - SL_ADDRESS_RESOLVING_TIMEOUT=$ADDRESS_RESOLVING_TIMEOUT
+        - SL_SMTP_TLS_CA_FILE_NAME=$SL_SMTP_TLS_CA_FILE_NAME
+        - SL_SMTP_TLS_CERT_FILE_NAME=$SL_SMTP_TLS_CERT_FILE_NAME
+        - SL_SMTP_TLS_KEY_FILE_NAME=$SL_SMTP_TLS_KEY_FILE_NAME
         - SL_UAA_SERVICEID=identity.service.consul
     ports:
         - 3001:3000
     volumes:
         - $SULTANS_VOLUME_HOST:$SULTANS_VOLUME_CONTAINER
+        - "$CBD_MAIL_CERT_ROOT_PATH:/certs/trusted"
     dns: $PRIVATE_IP
     image: sequenceiq/sultans-bin:$DOCKER_TAG_SULTANS
 
@@ -396,6 +401,7 @@ periscope:
     dns: $PRIVATE_IP
     volumes:
         - "$CBD_CERT_ROOT_PATH:/certs"
+        - "$CBD_MAIL_CERT_ROOT_PATH:/certs/trusted"
     image: sequenceiq/periscope:$DOCKER_TAG_PERISCOPE
 
 EOF
