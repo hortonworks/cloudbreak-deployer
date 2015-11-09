@@ -388,7 +388,7 @@
 <h2 id="supported-openstack-version">Supported OpenStack version</h2>
 <p>Cloudbreak currently only supports the <code>OpenStack Juno</code> release.</p>
 <h2 id="download-the-cloudbreak-image">Download the Cloudbreak image</h2>
-<p>You can download the latest Cloudbreak OpenStack image with below command.</p>
+<p>You can download the latest pre-configured Cloudbreak Deployer OpenStack image with the following script.</p>
 <h3 id="openstack-image-details">OpenStack image details</h3>
 <pre><code>curl -L  https://atlas.hashicorp.com/api/v1/artifacts/sequenceiq/cloudbreak/openstack.image/$VERSION/file | tar -xz
 </code></pre>
@@ -500,26 +500,26 @@ This will start all the Docker containers and initialize the application. It wil
 
                <!--AWS Table-->
                $.getJSON("https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/mkdocs_theme/aws.json", function(data) {
-               $("#images").append('<br>');
-               $("#images").append('<br>');
-               $("#images").append('<table>');
-                 $("#images").append('<col width="290">');
-                 $("#images").append('<col width="290">');
-                 $("#images").append('<thead>');
-                  $("#images").append('<tr>');
-                   $("#images").append('<th text-align="center" style="font-size: 20px">' + "Region" + '</th>');
-                   $("#images").append('<th text-align="center" style="font-size: 20px">' + "Image Name" + '</th>');
-                  $("#images").append('</tr>');
-                 $("#images").append('</thead>');
-                $("#images").append('<tbody>');
+               $("#aws-image-details").append('<br>');
+               $("#aws-image-details").append('<br>');
+               $("#aws-image-details").append('<table>');
+                 $("#aws-image-details").append('<col width="290">');
+                 $("#aws-image-details").append('<col width="290">');
+                 $("#aws-image-details").append('<thead>');
+                  $("#aws-image-details").append('<tr>');
+                   $("#aws-image-details").append('<th text-align="center" style="font-size: 20px">' + "Region" + '</th>');
+                   $("#aws-image-details").append('<th text-align="center" style="font-size: 20px">' + "Image Name" + '</th>');
+                  $("#aws-image-details").append('</tr>');
+                 $("#aws-image-details").append('</thead>');
+                $("#aws-image-details").append('<tbody>');
                  $.each(data.aws, function( index, value ) {
-                  $("#images").append('<tr>');
-                   $("#images").append('<td text-align="left" style="font-size: 20px">' + index + '</td>');
-                   $("#images").append('<td text-align="right" style="font-size: 20px">' + value + '</td>');
-                  $("#images").append('</tr>');
+                  $("#aws-image-details").append('<tr>');
+                   $("#aws-image-details").append('<td text-align="left" style="font-size: 20px">' + index + '</td>');
+                   $("#aws-image-details").append('<td text-align="right" style="font-size: 20px">' + value + '</td>');
+                  $("#aws-image-details").append('</tr>');
                  });
-                $("#images").append('</tbody>');
-               $("#images").append('</table>');
+                $("#aws-image-details").append('</tbody>');
+               $("#aws-image-details").append('</table>');
                });
 
                <!--OpenStack-->
