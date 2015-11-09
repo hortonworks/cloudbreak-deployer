@@ -436,7 +436,10 @@ In this case you'll have to create a different network template for every one of
 For example you can create 3 different clusters with 3 different network templates for the subnets <code>10.0.0.0/24</code>, <code>10.0.1.0/24</code>, <code>10.0.2.0/24</code> but with the same VPC and IGW identifiers.</p>
 <p><strong>Important!</strong> Please make sure that the subnet you define here doesn't overlap with any of your already deployed subnets in the VPC because the validation only happens after the cluster creation starts.</p>
 <p>If <code>Public in account</code> is checked all the users belonging to your account will be able to use this network template to create clusters, but cannot delete or modify it.</p>
-<p><strong>Note</strong> that the VPCs, IGWs and/or subnets are <em>not created</em> on AWS after the <code>Create Network</code> button is pushed, only after the cluster provisioning starts with the selected network template.</p>
+<blockquote>
+<p><strong>Note</strong> that the VPCs, IGWs and/or subnets are <em>not created</em> on AWS after the <code>Create Network</code> button is pushed, 
+only after the cluster provisioning starts with the selected network template.</p>
+</blockquote>
 <p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/aws-network.png" /></p>
 <p><strong>Security groups</strong></p>
 <p>Security group templates are very similar to the security groups on the AWS Console.
@@ -483,7 +486,10 @@ This may change in a later release.</p>
 <li>Elasticsearch (9200)</li>
 </ul>
 <p>If <code>Public in account</code> is checked all the users belonging to your account will be able to use this security group template to create clusters, but cannot delete or modify it.</p>
-<p><strong>Note</strong> that the security groups are <em>not created</em> on AWS after the <code>Create Security Group</code> button is pushed, only after the cluster provisioning starts with the selected security group template.</p>
+<blockquote>
+<p><strong>Note</strong> that the security groups are <em>not created</em> on AWS after the <code>Create Security Group</code> button is pushed, only 
+after the cluster provisioning starts with the selected security group template.</p>
+</blockquote>
 <p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/ui-secgroup.png" /></p>
 <h2 id="defining-cluster-services">Defining cluster services</h2>
 <p><strong>Blueprints</strong></p>
@@ -574,22 +580,24 @@ Instances are started in an Auto Scaling Group so they may be restarted if you t
 
                <!--AWS Table-->
                $.getJSON("/aws.json", function(data) {
-               $("#aws-images").append('<table cellspacing="20" cellpadding="20">');
-                 $("#aws-images").append('<thead>');
-                  $("#aws-images").append('<tr>');
-                   $("#aws-images").append('<th text-align="center" style="font-size: 20px">' + "Region" + '</th>');
-                   $("#aws-images").append('<th text-align="center" style="font-size: 20px">' + "Image Name" + '</th>');
-                  $("#aws-images").append('</tr>');
-                 $("#aws-images").append('</thead>');
-                $("#aws-images").append('<tbody>');
+               $("#awsimages").append('<table>');
+                 $("#awsimages").append('<col width="200">');
+                 $("#awsimages").append('<col width="130">');
+                 $("#awsimages").append('<thead>');
+                  $("#awsimages").append('<tr>');
+                   $("#awsimages").append('<th text-align="center" style="font-size: 20px">' + "Region" + '</th>');
+                   $("#awsimages").append('<th text-align="center" style="font-size: 20px">' + "Image Name" + '</th>');
+                  $("#awsimages").append('</tr>');
+                 $("#awsimages").append('</thead>');
+                $("#awsimages").append('<tbody>');
                  $.each(data.aws, function( index, value ) {
-                  $("#aws-images").append('<tr>');
-                   $("#aws-images").append('<td text-align="left" style="font-size: 20px">' + index + '</td>');
-                   $("#aws-images").append('<td text-align="right" style="font-size: 20px">' + value + '</td>');
-                  $("#aws-images").append('</tr>');
+                  $("#awsimages").append('<tr>');
+                   $("#awsimages").append('<td text-align="left" style="font-size: 20px">' + index + '</td>');
+                   $("#awsimages").append('<td text-align="right" style="font-size: 20px">' + value + '</td>');
+                  $("#awsimages").append('</tr>');
                  });
-                $("#aws-images").append('</tbody>');
-               $("#aws-images").append('</table>');
+                $("#awsimages").append('</tbody>');
+               $("#awsimages").append('</table>');
                });
            });
          </script>

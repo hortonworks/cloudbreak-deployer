@@ -400,9 +400,11 @@ Deployer</strong> helps you to deploy the Cloudbreak application automatically i
 <p>To run the Cloudbreak Deployer and install the Cloudbreak Application, you must meet the following system requirements:</p>
 <ul>
 <li>RHEL / CentOS / Oracle Linux 6 (64-bit)</li>
-<li>Docker 1.6.0 (or later)</li>
+<li>Docker 1.6.0 (or later)<ul>
 <li><a href="http://docs.docker.com/engine/installation/rhel/">Docker for RHEL</a></li>
 <li><a href="https://docs.docker.com/installation/centos/">Docker for CentOS</a></li>
+</ul>
+</li>
 </ul>
 <blockquote>
 <p>You can install Cloudbreak on Mac OS X "Darwin" for <strong>evaluation purposes only</strong>. This operating system is not supported for a production deployment of Cloudbreak.</p>
@@ -543,22 +545,24 @@ Deployer</strong> helps you to deploy the Cloudbreak application automatically i
 
                <!--AWS Table-->
                $.getJSON("/aws.json", function(data) {
-               $("#aws-images").append('<table cellspacing="20" cellpadding="20">');
-                 $("#aws-images").append('<thead>');
-                  $("#aws-images").append('<tr>');
-                   $("#aws-images").append('<th text-align="center" style="font-size: 20px">' + "Region" + '</th>');
-                   $("#aws-images").append('<th text-align="center" style="font-size: 20px">' + "Image Name" + '</th>');
-                  $("#aws-images").append('</tr>');
-                 $("#aws-images").append('</thead>');
-                $("#aws-images").append('<tbody>');
+               $("#awsimages").append('<table>');
+                 $("#awsimages").append('<col width="200">');
+                 $("#awsimages").append('<col width="130">');
+                 $("#awsimages").append('<thead>');
+                  $("#awsimages").append('<tr>');
+                   $("#awsimages").append('<th text-align="center" style="font-size: 20px">' + "Region" + '</th>');
+                   $("#awsimages").append('<th text-align="center" style="font-size: 20px">' + "Image Name" + '</th>');
+                  $("#awsimages").append('</tr>');
+                 $("#awsimages").append('</thead>');
+                $("#awsimages").append('<tbody>');
                  $.each(data.aws, function( index, value ) {
-                  $("#aws-images").append('<tr>');
-                   $("#aws-images").append('<td text-align="left" style="font-size: 20px">' + index + '</td>');
-                   $("#aws-images").append('<td text-align="right" style="font-size: 20px">' + value + '</td>');
-                  $("#aws-images").append('</tr>');
+                  $("#awsimages").append('<tr>');
+                   $("#awsimages").append('<td text-align="left" style="font-size: 20px">' + index + '</td>');
+                   $("#awsimages").append('<td text-align="right" style="font-size: 20px">' + value + '</td>');
+                  $("#awsimages").append('</tr>');
                  });
-                $("#aws-images").append('</tbody>');
-               $("#aws-images").append('</table>');
+                $("#awsimages").append('</tbody>');
+               $("#awsimages").append('</table>');
                });
            });
          </script>
@@ -567,5 +571,5 @@ Deployer</strong> helps you to deploy the Cloudbreak application automatically i
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2015-11-07 00:03:45.149632
+Build Date UTC : 2015-11-09 10:57:15.254106
 -->

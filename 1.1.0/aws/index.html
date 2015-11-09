@@ -382,7 +382,7 @@
 <p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration then launch. If you do not have installed Cloudbreak deployer, you can <a href="../onprem/">install this on premise</a>.</p>
 <h2 id="configured-images">Configured images</h2>
 <p>You can find the pre-configured AWS images as:</p>
-<h4 id="aws-images">AWS Images</h4>
+<h3 id="awsimages">awsimages</h3>
 <h2 id="setup-cloudbreak-deployer">Setup Cloudbreak deployer</h2>
 <p>If you already have cloudbreak-deployer installed you can start to setup the Cloudbreak application.</p>
 <p>Open the <code>cloudbreak-deployment</code> directory:</p>
@@ -484,22 +484,24 @@ This will start all the Docker containers and initialize the application. It wil
 
                <!--AWS Table-->
                $.getJSON("/aws.json", function(data) {
-               $("#aws-images").append('<table cellspacing="20" cellpadding="20">');
-                 $("#aws-images").append('<thead>');
-                  $("#aws-images").append('<tr>');
-                   $("#aws-images").append('<th text-align="center" style="font-size: 20px">' + "Region" + '</th>');
-                   $("#aws-images").append('<th text-align="center" style="font-size: 20px">' + "Image Name" + '</th>');
-                  $("#aws-images").append('</tr>');
-                 $("#aws-images").append('</thead>');
-                $("#aws-images").append('<tbody>');
+               $("#awsimages").append('<table>');
+                 $("#awsimages").append('<col width="200">');
+                 $("#awsimages").append('<col width="130">');
+                 $("#awsimages").append('<thead>');
+                  $("#awsimages").append('<tr>');
+                   $("#awsimages").append('<th text-align="center" style="font-size: 20px">' + "Region" + '</th>');
+                   $("#awsimages").append('<th text-align="center" style="font-size: 20px">' + "Image Name" + '</th>');
+                  $("#awsimages").append('</tr>');
+                 $("#awsimages").append('</thead>');
+                $("#awsimages").append('<tbody>');
                  $.each(data.aws, function( index, value ) {
-                  $("#aws-images").append('<tr>');
-                   $("#aws-images").append('<td text-align="left" style="font-size: 20px">' + index + '</td>');
-                   $("#aws-images").append('<td text-align="right" style="font-size: 20px">' + value + '</td>');
-                  $("#aws-images").append('</tr>');
+                  $("#awsimages").append('<tr>');
+                   $("#awsimages").append('<td text-align="left" style="font-size: 20px">' + index + '</td>');
+                   $("#awsimages").append('<td text-align="right" style="font-size: 20px">' + value + '</td>');
+                  $("#awsimages").append('</tr>');
                  });
-                $("#aws-images").append('</tbody>');
-               $("#aws-images").append('</table>');
+                $("#awsimages").append('</tbody>');
+               $("#awsimages").append('</table>');
                });
            });
          </script>

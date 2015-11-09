@@ -398,7 +398,7 @@
 <p>Start the shell with <code>cbd util cloudbreak-shell</code>. This will launch the Cloudbreak shell inside a Docker container and you are ready to start using it.</p>
 <p><a name="dockerimage"></a></p>
 <h3 id="starting-cloudbreak-shell-with-our-prepared-docker-image">Starting Cloudbreak shell with our prepared docker image</h3>
-<p>:open_file_folder: You can find the docker image and its documentation <a href="https://github.com/sequenceiq/docker-cb-shell">here</a>.</p>
+<p>You can find the docker image and its documentation <a href="https://github.com/sequenceiq/docker-cb-shell">here</a>.</p>
 <p><a name="fromsource"></a></p>
 <h3 id="build-from-source">Build from source</h3>
 <p>If want to use the code or extend it with new commands follow the steps below. You will need:
@@ -491,22 +491,24 @@ All commands are <code>context aware</code> - they are available only when it ma
 
                <!--AWS Table-->
                $.getJSON("/aws.json", function(data) {
-               $("#aws-images").append('<table cellspacing="20" cellpadding="20">');
-                 $("#aws-images").append('<thead>');
-                  $("#aws-images").append('<tr>');
-                   $("#aws-images").append('<th text-align="center" style="font-size: 20px">' + "Region" + '</th>');
-                   $("#aws-images").append('<th text-align="center" style="font-size: 20px">' + "Image Name" + '</th>');
-                  $("#aws-images").append('</tr>');
-                 $("#aws-images").append('</thead>');
-                $("#aws-images").append('<tbody>');
+               $("#awsimages").append('<table>');
+                 $("#awsimages").append('<col width="200">');
+                 $("#awsimages").append('<col width="130">');
+                 $("#awsimages").append('<thead>');
+                  $("#awsimages").append('<tr>');
+                   $("#awsimages").append('<th text-align="center" style="font-size: 20px">' + "Region" + '</th>');
+                   $("#awsimages").append('<th text-align="center" style="font-size: 20px">' + "Image Name" + '</th>');
+                  $("#awsimages").append('</tr>');
+                 $("#awsimages").append('</thead>');
+                $("#awsimages").append('<tbody>');
                  $.each(data.aws, function( index, value ) {
-                  $("#aws-images").append('<tr>');
-                   $("#aws-images").append('<td text-align="left" style="font-size: 20px">' + index + '</td>');
-                   $("#aws-images").append('<td text-align="right" style="font-size: 20px">' + value + '</td>');
-                  $("#aws-images").append('</tr>');
+                  $("#awsimages").append('<tr>');
+                   $("#awsimages").append('<td text-align="left" style="font-size: 20px">' + index + '</td>');
+                   $("#awsimages").append('<td text-align="right" style="font-size: 20px">' + value + '</td>');
+                  $("#awsimages").append('</tr>');
                  });
-                $("#aws-images").append('</tbody>');
-               $("#aws-images").append('</table>');
+                $("#awsimages").append('</tbody>');
+               $("#awsimages").append('</table>');
                });
            });
          </script>

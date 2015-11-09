@@ -369,15 +369,13 @@
     
         <li class="main active"><a href="#configuration">Configuration</a></li>
         
-    
-        <li class="main "><a href="#env-specific-profile">Env specific Profile</a></li>
+            <li><a href="#env-specific-profile">Env specific Profile</a></li>
         
-    
-        <li class="main "><a href="#available-configurations">Available Configurations</a></li>
-        
-            <li><a href="#smtp">SMTP</a></li>
+            <li><a href="#available-configurations">Available Configurations</a></li>
         
             <li><a href="#consul">Consul</a></li>
+        
+            <li><a href="#list-of-configurations">List of configurations</a></li>
         
             <li><a href="#azure-resource-manager-command">Azure Resource manager command</a></li>
         
@@ -401,7 +399,7 @@ in a file called <code>Profile</code>.</p>
 export OTHER_VAR=dunno
 </code></pre>
 
-<h1 id="env-specific-profile">Env specific Profile</h1>
+<h2 id="env-specific-profile">Env specific Profile</h2>
 <p>Let’s say you want to use a different version of Cloudbreak for <strong>prod</strong> and <strong>qa</strong> profile.
 You can specify the Docker image tag via: <code>DOCKER_TAG_CLOUDBREAK</code>.
 <code>Profile</code> is always sourced, so you will have two env specific configurations:
@@ -418,8 +416,8 @@ You can specify the Docker image tag via: <code>DOCKER_TAG_CLOUDBREAK</code>.
 </code></pre>
 
 <p>For permanent setting you can <code>export CBD_DEFAULT_PROFILE=prod</code> in your <code>.bash_profile</code>.</p>
-<h1 id="available-configurations">Available Configurations</h1>
-<h2 id="smtp">SMTP</h2>
+<h2 id="available-configurations">Available Configurations</h2>
+<h3 id="smtp">SMTP</h3>
 <p>If you want to change SMTP parameters, put the corresponding lines into your <code>Profile</code>. You can also see the default values of the parameters in the following box.</p>
 <pre><code>export CLOUDBREAK_SMTP_SENDER_USERNAME=
 export CLOUDBREAK_SMTP_SENDER_PASSWORD=
@@ -431,14 +429,14 @@ export CB_MAIL_SMTP_STARTTLS_ENABLE=true
 </code></pre>
 
 <h2 id="consul">Consul</h2>
-<p><a href="http://consul.io">Consul</a> is used for dns resolution. All Cloudbreak related services are registered as
-<strong>someservice.service.consul</strong>. Consul’s built in dns server is able to “fall-back” on an other dns server.
-This option is called <code>-recursor</code>. Clodbreak Deployer first tries to discover the dns settings of the host,
+<p><a href="http://consul.io">Consul</a> is used for DNS resolution. All Cloudbreak related services are registered as
+<strong>someservice.service.consul</strong>. Consul’s built in DNS server is able to “fall-back” on an other DNS server.
+This option is called <code>-recursor</code>. Clodbreak Deployer first tries to discover the DNS settings of the host,
 by looking for <strong>nameserver</strong> entry in <code>/etc/resolv.conf</code>. If it finds one consul will use it as a recursor,
 otherwise <strong>8.8.8.8</strong> will be used.</p>
-<p>For a full list of available consul config options, see the <a href="https://consul.io/docs/agent/options.html">docs</a></p>
+<p>For a full list of available consul config options, see the <a href="https://consul.io/docs/agent/options.html">docs</a>.</p>
 <p>You can pass any additional consul configuration by defining a <code>DOCKER_CONSUL_OPTIONS</code> in <code>Profile</code>.</p>
-<h3 id="list-of-configurations">List of configurations</h3>
+<h2 id="list-of-configurations">List of configurations</h2>
 <ul>
 <li><strong>CB_AWS_AMI_MAP</strong> : tbd</li>
 <li><strong>CB_AZURE_IMAGE_URI</strong> : tbd</li>
@@ -466,11 +464,11 @@ otherwise <strong>8.8.8.8</strong> will be used.</p>
 <ul>
 <li><strong>cbd azure configure-arm</strong></li>
 <li><strong>cbd azure deploy-dash</strong>
-See the documentation here</li>
+See the documentation <a href="../azure_pre_prov/#azure-application-setup-with-cloudbreak-deployer">here</a>.</li>
 </ul>
 <h2 id="caveats">Caveats</h2>
-<p>The <strong>Cloudbreak Deployer</strong> tool opens a clean bash subshell, without inheriting environment vars.
-Actually the following environment vars <em>are</em> inherited:</p>
+<p>The <strong>Cloudbreak Deployer</strong> tool opens a clean bash subshell, without inheriting environment variables.</p>
+<p>Only the following environment variables <em>are</em> inherited:</p>
 <ul>
 <li><code>HOME</code></li>
 <li><code>DEBUG</code></li>
@@ -530,22 +528,24 @@ Actually the following environment vars <em>are</em> inherited:</p>
 
                <!--AWS Table-->
                $.getJSON("/aws.json", function(data) {
-               $("#aws-images").append('<table cellspacing="20" cellpadding="20">');
-                 $("#aws-images").append('<thead>');
-                  $("#aws-images").append('<tr>');
-                   $("#aws-images").append('<th text-align="center" style="font-size: 20px">' + "Region" + '</th>');
-                   $("#aws-images").append('<th text-align="center" style="font-size: 20px">' + "Image Name" + '</th>');
-                  $("#aws-images").append('</tr>');
-                 $("#aws-images").append('</thead>');
-                $("#aws-images").append('<tbody>');
+               $("#awsimages").append('<table>');
+                 $("#awsimages").append('<col width="200">');
+                 $("#awsimages").append('<col width="130">');
+                 $("#awsimages").append('<thead>');
+                  $("#awsimages").append('<tr>');
+                   $("#awsimages").append('<th text-align="center" style="font-size: 20px">' + "Region" + '</th>');
+                   $("#awsimages").append('<th text-align="center" style="font-size: 20px">' + "Image Name" + '</th>');
+                  $("#awsimages").append('</tr>');
+                 $("#awsimages").append('</thead>');
+                $("#awsimages").append('<tbody>');
                  $.each(data.aws, function( index, value ) {
-                  $("#aws-images").append('<tr>');
-                   $("#aws-images").append('<td text-align="left" style="font-size: 20px">' + index + '</td>');
-                   $("#aws-images").append('<td text-align="right" style="font-size: 20px">' + value + '</td>');
-                  $("#aws-images").append('</tr>');
+                  $("#awsimages").append('<tr>');
+                   $("#awsimages").append('<td text-align="left" style="font-size: 20px">' + index + '</td>');
+                   $("#awsimages").append('<td text-align="right" style="font-size: 20px">' + value + '</td>');
+                  $("#awsimages").append('</tr>');
                  });
-                $("#aws-images").append('</tbody>');
-               $("#aws-images").append('</table>');
+                $("#awsimages").append('</tbody>');
+               $("#awsimages").append('</table>');
                });
            });
          </script>
