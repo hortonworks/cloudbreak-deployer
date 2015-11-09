@@ -508,7 +508,10 @@ After you've selected a <code>Blueprint</code> as well you should be able to con
 <p>If <code>Public in account</code> is checked all the users belonging to your account will be able to see the newly created cluster on the UI, but cannot delete or modify it.</p>
 <p>If <code>Enable security</code> is checked as well, Cloudbreak will install Key Distribution Center (KDC) and the cluster will be Kerberized. See more about it in the <a href="../kerberos/">Kerberos</a> section of this documentation.</p>
 <p>After the <code>create and start cluster</code> button is pushed Cloudbreak will start to create resources on your OpenStack.</p>
-<p><strong>Important!</strong> Always use Cloudbreak to delete the cluster. If that fails for some reason, always try to delete via OpenStack Dashboard.</p>
+<blockquote>
+<p><strong>Important</strong> Always use Cloudbreak to delete the cluster. If that fails for some reason, always try to delete via 
+OpenStack Dashboard.</p>
+</blockquote>
 <p><strong>Advanced options</strong>:</p>
 <p><code>Consul server count:</code> the number of Consul servers (add number), by default is 3. It varies with the cluster size.</p>
 <p><code>Platform variant:</code> Cloudbreak provides two implementation for creating OpenStack cluster</p>

@@ -400,7 +400,11 @@
 <p>Start the shell with <code>cbd util cloudbreak-shell</code>. This will launch the Cloudbreak shell inside a Docker container and you are ready to start using it.</p>
 <p>You have to copy files into the cbd working directory, which you would like to use from shell. For example if your <code>cbd</code> working directory is <code>~/prj/cbd</code> then copy your blueprint and public ssh key file into this directory. You can refer to these files with their names from the shell.</p>
 <h3 id="create-a-cloud-credential">Create a cloud credential</h3>
-<p>In order to start using Cloudbreak you will need to have an AWS cloud credential configured. Note that Cloudbreak <strong>does not</strong> store your cloud user details - we work around the concept of <a href="http://aws.amazon.com/iam/">IAM</a> - on Amazon (or other cloud providers) you will have to create an IAM role, a policy and associate that with your Cloudbreak account.</p>
+<p>In order to start using Cloudbreak you will need to have an AWS cloud credential configured.</p>
+<blockquote>
+<p><strong>Note</strong> that Cloudbreak <strong>does not</strong> store your cloud user details - we work around the concept of <a href="http://aws
+.amazon.com/iam/">IAM</a> - on Amazon (or other cloud providers) you will have to create an IAM role, a policy and associate that with your Cloudbreak account.</p>
+</blockquote>
 <pre><code>credential create --EC2 --description &quot;description&quot; --name my-aws-credential --roleArn &lt;arn role&gt; --sshKeyPath &lt;path of your AWS public key&gt;
 </code></pre>
 

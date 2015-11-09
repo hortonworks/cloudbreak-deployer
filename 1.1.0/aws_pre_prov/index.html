@@ -383,7 +383,9 @@
 <h1 id="provision-prerequisites">Provision prerequisites</h1>
 <h2 id="iam-role-setup">IAM role setup</h2>
 <p>Cloudbreak works by connecting your AWS account through so called <em>Credentials</em>, and then uses these credentials to create resources on your behalf.</p>
-<p><strong>Important!</strong> Cloudbreak deployment uses two different AWS accounts for two different purposes:</p>
+<blockquote>
+<p><strong>Important</strong> Cloudbreak deployment uses two different AWS accounts for two different purposes:</p>
+</blockquote>
 <ul>
 <li>The account belonging to the <em>Cloudbreak webapp</em> itself that acts as a <em>third party</em> that creates resources on the account of the <em>end-user</em>. This account is configured at server-deployment time.</li>
 <li>The account belonging to the <em>end user</em> who uses the UI or the Shell to create clusters. This account is configured when setting up credentials.</li>
