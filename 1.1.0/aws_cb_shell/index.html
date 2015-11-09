@@ -518,6 +518,43 @@ securitygroup select --name secgroup_example
 </code></pre>
 
 <p>You are done - you can check the progress through the Ambari UI. If you log back to Cloudbreak UI you can check the progress over there as well, and learn the IP address of Ambari.</p>
+<h3 id="stopping-and-restarting-a-stack-or-a-cluster">Stopping and restarting a stack or a cluster</h3>
+<p>After a stack is created, its virtual machines can be stopped by running:</p>
+<pre><code>stack stop
+</code></pre>
+
+<p>A stopped stack can be restarted with:</p>
+<pre><code>stack start
+</code></pre>
+
+<p>You can start or stop a cluster with:</p>
+<pre><code>cluster start
+</code></pre>
+
+<p>or</p>
+<pre><code>cluster stop
+</code></pre>
+
+<h3 id="upscaling-and-downscaling-a-stack-or-a-cluster">Upscaling and downscaling a stack or a cluster</h3>
+<pre><code>stack node --ADD --instanceGroup host_group_slave_1 --adjustment 2
+</code></pre>
+
+<p>Other available options:</p>
+<p><code>--withClusterUpScale</code> indicates cluster upscale after stack upscale</p>
+<p>or</p>
+<pre><code>stack node --REMOVE  --instanceGroup host_group_slave_1 --adjustment -2
+</code></pre>
+
+<p>You can also upscale or downscale your cluster:</p>
+<pre><code>cluster node --ADD --hostgroup host_group_slave_1 --adjustment 2
+</code></pre>
+
+<p>or</p>
+<pre><code>cluster node --REMOVE  --hostgroup host_group_slave_1 --adjustment -2
+</code></pre>
+
+<p>Other available options:</p>
+<p><code>--withStackDownScale</code> indicates stack downscale after the cluster downscale</p>
 <h1 id="silent-mode">Silent mode</h1>
 <p>With Cloudbreak shell you can execute script files as well. A script file contains cloudbreak shell commands and can be executed with the <code>script</code> cloudbreak shell command</p>
 <pre><code>script &lt;your script file&gt;
