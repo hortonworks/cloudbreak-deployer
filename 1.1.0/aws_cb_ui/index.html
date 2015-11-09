@@ -403,7 +403,7 @@ To learn more about how to setup the IAM Role on your AWS account check out the 
 <p>The SSH public key must be in OpenSSH format and it's private keypair can be used later to <a href="http://sequenceiq.com/cloudbreak-deployer/1.1.0/insights/#ssh-to-the-host">SSH onto every instance</a> of every cluster you'll create with this credential.
 The SSH username for the EC2 instances is <strong>ec2-user</strong>.</p>
 <p>There is a last option called <code>Public in account</code> - it means that all the users belonging to your account will be able to use this credential to create clusters, but cannot delete or modify it.</p>
-<p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/aws-credential.png" /></p>
+<p><img alt="" src="../images/aws-credential.png" /></p>
 <h2 id="infrastructure-templates">Infrastructure templates</h2>
 <p>After your AWS account is linked to Cloudbreak you can start creating templates that describe your clusters' infrastructure:</p>
 <ul>
@@ -424,7 +424,7 @@ For example you may want to attach multiple large disks to the datanodes or have
 <li><code>EBS encryption</code> is supported for all volume types. If this option is checked then all the attached disks <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">will be encrypted</a> by Amazon using the AWS KMS master keys.</li>
 <li>If <code>Public in account</code> is checked all the users belonging to your account will be able to use this resource to create clusters, but cannot delete or modify it.</li>
 </ul>
-<p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/aws-resources.png" /></p>
+<p><img alt="" src="../images/aws-resources.png" /></p>
 <p><strong>Networks</strong></p>
 <p>Your clusters can be created in their own Virtual Private Cloud (VPC) or in one of your already existing VPCs.
 Currently Cloudbreak creates a new subnet in both cases, in a later release it may change.
@@ -440,7 +440,7 @@ For example you can create 3 different clusters with 3 different network templat
 <p><strong>Note</strong> that the VPCs, IGWs and/or subnets are <em>not created</em> on AWS after the <code>Create Network</code> button is pushed, 
 only after the cluster provisioning starts with the selected network template.</p>
 </blockquote>
-<p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/aws-network.png" /></p>
+<p><img alt="" src="../images/aws-network.png" /></p>
 <p><strong>Security groups</strong></p>
 <p>Security group templates are very similar to the security groups on the AWS Console.
 They describe the allowed inbound traffic to the instances in the cluster.
@@ -490,7 +490,7 @@ This may change in a later release.</p>
 <p><strong>Note</strong> that the security groups are <em>not created</em> on AWS after the <code>Create Security Group</code> button is pushed, only 
 after the cluster provisioning starts with the selected security group template.</p>
 </blockquote>
-<p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/ui-secgroup.png" /></p>
+<p><img alt="" src="../images/ui-secgroup.png" /></p>
 <h2 id="defining-cluster-services">Defining cluster services</h2>
 <p><strong>Blueprints</strong></p>
 <p>Blueprints are your declarative definition of a Hadoop cluster. These are the same blueprints that are <a href="https://cwiki.apache.org/confluence/display/AMBARI/Blueprints">used by Ambari</a>.</p>
@@ -500,7 +500,7 @@ Blueprints can be added from an URL (an example <a href="https://github.com/sequ
 It is not necessary to define all the configuration fields in the blueprints - if a configuration is missing, Ambari will fill that with a default value.
 The configurations defined in the blueprint can also be modified later from the Ambari UI.</p>
 <p>If <code>Public in account</code> is checked all the users belonging to your account will be able to use this blueprint to create clusters, but cannot delete or modify it.</p>
-<p><img alt="" src="https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/docs/images/ui-blueprints.png" /></p>
+<p><img alt="" src="../images/ui-blueprints.png" /></p>
 <p>A blueprint can be exported from a running Ambari cluster that can be reused in Cloudbreak with slight modifications.
 There is no automatic way to modify an exported blueprint and make it instantly usable in Cloudbreak, the modifications have to be done manually.
 When the blueprint is exported some configurations will have hardcoded for example domain names, or memory configurations that won't be applicable to the Cloudbreak cluster.</p>
