@@ -404,19 +404,19 @@ configuration is the <code>PUBLIC_IP</code>. This IP will be used to access the 
 cbd generate
 </code></pre>
 
+<p>This command applies the following steps: </p>
+<ul>
+<li>creates the <strong>docker-compose.yml</strong> file that describes the configuration of all the Docker containers needed for the Cloudbreak deployment.</li>
+<li>creates the <strong>uaa.yml</strong> file that holds the configuration of the identity server used to authenticate users to Cloudbreak.</li>
+</ul>
 <h3 id="start-cloudbreak">Start Cloudbreak</h3>
 <p>To start the Cloudbreak application use the following command.
 This will start all the Docker containers and initialize the application. It will take a few minutes until all the services start.</p>
 <pre><code>cbd start
 </code></pre>
 
-<p>Launching it the first time will take more time as it does some additional steps:</p>
-<ul>
-<li>downloads all the docker images needed by Cloudbreak.</li>
-<li>creates the <strong>docker-compose.yml</strong> file that describes the configuration of all the Docker containers needed for the Cloudbreak deployment.</li>
-<li>creates the <strong>uaa.yml</strong> file that holds the configuration of the identity server used to authenticate users to Cloudbreak.</li>
-</ul>
-<p>After the <code>cbd generate</code> command finishes you can check the logs of the Cloudbreak server with this command:</p>
+<p>Launching it the first will take more time as it downloads all the docker images needed by Cloudbreak.</p>
+<p>After the <code>cbd start</code> command finishes you can check the logs of the Cloudbreak server with this command:</p>
 <pre><code>cbd logs cloudbreak
 </code></pre>
 
