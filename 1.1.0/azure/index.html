@@ -496,8 +496,7 @@ EOF
 </code></pre>
 
 <p>Download <strong>cloudbreak-deployer</strong>:</p>
-<pre><code>mkdir -p cloudbreak-deployer &amp;&amp; cd cloudbreak-deployer &amp;&amp; curl https://raw.githubusercontent
-.com/sequenceiq/cloudbreak-deployer/master/install | sh &amp;&amp; cbd --version
+<pre><code>mkdir -p cloudbreak-deployer &amp;&amp; cd cloudbreak-deployer &amp;&amp; curl https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/install-latest | sh &amp;&amp; cbd --version
 </code></pre>
 
 <h3 id="initialize-your-profile">Initialize your Profile</h3>
@@ -514,7 +513,7 @@ configuration is the <code>PUBLIC_IP</code>. This IP will be used to access the 
 cbd generate
 </code></pre>
 
-<p>This command applies the following steps: </p>
+<p>This command applies the following steps:</p>
 <ul>
 <li>creates the <strong>docker-compose.yml</strong> file that describes the configuration of all the Docker containers needed for the Cloudbreak deployment.</li>
 <li>creates the <strong>uaa.yml</strong> file that holds the configuration of the identity server used to authenticate users to Cloudbreak.</li>
@@ -536,7 +535,7 @@ This will start all the Docker containers and initialize the application. It wil
 <p>Cloudbreak server should start within a minute - you should see a line like this: <code>Started CloudbreakApplication in 36.823 seconds</code></p>
 </blockquote>
 <h3 id="next-steps">Next steps</h3>
-<p>Once Cloudbreak is up and running you should check out the <a href="../azure_pre_prov/">prerequisites</a> needed to create Azure 
+<p>Once Cloudbreak is up and running you should check out the <a href="../azure_pre_prov/">prerequisites</a> needed to create Azure
 clusters with Cloudbreak. Besides these you can check out some useful <a href="../configuration/">configurations for Cloudbreak deployer</a>.</p></div>
             
         </div>
