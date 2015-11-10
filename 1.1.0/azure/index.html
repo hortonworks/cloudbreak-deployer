@@ -525,7 +525,9 @@ This will start all the Docker containers and initialize the application. It wil
 <pre><code>cbd start
 </code></pre>
 
+<blockquote>
 <p>Launching it first will take more time as it downloads all the docker images needed by Cloudbreak.</p>
+</blockquote>
 <p>After the <code>cbd start</code> command finishes you can check the logs of the Cloudbreak server with this command:</p>
 <pre><code>cbd logs cloudbreak
 </code></pre>
@@ -621,8 +623,8 @@ This will start all the Docker containers and initialize the application. It wil
                $.getJSON("https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/mkdocs_theme/gcp.json", function(data) {
                $("#gcp-image-details").append('<br>');
                $("#gcp-image-details").append('<br>');
-               $("#gcp-image-details").append('<p style="font-size: 15px"> SOURCE_IMAGE: ' + data.gce.source_image + '</p>');
-               $("#gcp-image-details").append('<pre><code>'+ data.gce.import_script +'</code></pre>');
+               $("#gcp-image-details").append('<p style="font-size: 12pt"><code>SOURCE_IMAGE:</code>' + data.gce.source_image + '</p>');
+               $("#gcp-image-details").append('<pre><code style="font-size: 12pt;color:#333333">'+ data.gce.import_script +'</code></pre>');
                });
            });
          </script>

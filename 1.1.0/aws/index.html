@@ -381,7 +381,9 @@
 <h1 id="aws-deployment">AWS deployment</h1>
 <p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration then launch. If you do not have installed Cloudbreak deployer, you can <a href="../onprem/">install this on premise</a>.</p>
 <h2 id="configured-images">Configured images</h2>
-<p>You can find the latest pre-configured Cloudbreak Deployer AWS images below.</p>
+<p>You can launch the latest Cloudbreak deployer image based on your region at the <a href="https://aws
+.amazon.com/console/">AWS Management Console</a>.</p>
+<p>You can check the name of the available images in the following section.</p>
 <h3 id="aws-image-details">AWS image details</h3>
 <h2 id="setup-cloudbreak-deployer">Setup Cloudbreak deployer</h2>
 <p>If you already have cloudbreak-deployer installed you can start to setup the Cloudbreak application.</p>
@@ -422,7 +424,9 @@ This will start all the Docker containers and initialize the application. It wil
 <pre><code>cbd start
 </code></pre>
 
+<blockquote>
 <p>Launching it first will take more time as it downloads all the docker images needed by Cloudbreak.</p>
+</blockquote>
 <p>After the <code>cbd start</code> command finishes you can check the logs of the Cloudbreak server with this command:</p>
 <pre><code>cbd logs cloudbreak
 </code></pre>
@@ -518,8 +522,8 @@ This will start all the Docker containers and initialize the application. It wil
                $.getJSON("https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/mkdocs_theme/gcp.json", function(data) {
                $("#gcp-image-details").append('<br>');
                $("#gcp-image-details").append('<br>');
-               $("#gcp-image-details").append('<p style="font-size: 15px"> SOURCE_IMAGE: ' + data.gce.source_image + '</p>');
-               $("#gcp-image-details").append('<pre><code>'+ data.gce.import_script +'</code></pre>');
+               $("#gcp-image-details").append('<p style="font-size: 12pt"><code>SOURCE_IMAGE:</code>' + data.gce.source_image + '</p>');
+               $("#gcp-image-details").append('<pre><code style="font-size: 12pt;color:#333333">'+ data.gce.import_script +'</code></pre>');
                });
            });
          </script>
