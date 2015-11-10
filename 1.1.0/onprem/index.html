@@ -369,11 +369,13 @@
     
         <li class="main active"><a href="#install-cloudbreak-deployer">Install Cloudbreak deployer</a></li>
         
-            <li><a href="#selinux-firewalls">SELinux, firewalls</a></li>
-        
             <li><a href="#install-cloudbreak-deployer_1">Install Cloudbreak deployer</a></li>
         
-            <li><a href="#setup-cloudbreak-deployer">Setup Cloudbreak deployer</a></li>
+            <li><a href="#initialize-your-profile">Initialize your Profile</a></li>
+        
+            <li><a href="#generate-your-profile">Generate your Profile</a></li>
+        
+            <li><a href="#start-cloudbreak">Start Cloudbreak</a></li>
         
             <li><a href="#next-steps">Next steps</a></li>
         
@@ -383,20 +385,106 @@
                 <div class="col-md-9" role="main">
 
 <h1 id="install-cloudbreak-deployer">Install Cloudbreak deployer</h1>
-<p>To install Cloudbreak Deployer on your selected environment you have to follow the steps below.</p>
-<h2 id="selinux-firewalls">SELinux, firewalls</h2>
-<p>Make sure that SELinux is disabled and if there is a firewall installed than allows communication between Docker Containers</p>
+<p>To install Cloudbreak Deployer on your selected environment you have to follow the steps below (The instruction describe a CentOS based installation).
+Make sure you opened the <strong>22</strong> port for SSH and <strong>3000</strong> and <strong>3001</strong> for our UI.</p>
+<p>Assume <strong>root</strong> privileges with this command:</p>
+<pre><code>sudo su
+</code></pre>
+
+<p>To permanently disable <strong>SELinux</strong> set SELINUX=disabled in /etc/selinux/config This ensures that SELinux does not turn itself on after you reboot the machine:</p>
+<pre><code>setenforce 0 &amp;&amp; sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+</code></pre>
+
+<p>You need to install iptables-services, otherwise the 'iptables save' command will not be available:</p>
+<pre><code>yum -y install iptables-services net-tools unzip
+</code></pre>
+
+<p>Please configure you iptables on your machine:</p>
+<pre><code>iptables --flush INPUT &amp;&amp; \
+iptables --flush FORWARD &amp;&amp; \
+service iptables save &amp;&amp; \
+sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/g' /etc/sysctl.conf
+</code></pre>
+
+<p>Configure a custom Docker repository for installing the correct version of Docker:</p>
+<pre><code>cat &gt; /etc/yum.repos.d/docker.repo &lt;&lt;&quot;EOF&quot;
+[dockerrepo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/7
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg
+EOF
+</code></pre>
+
+<p>Then you are able to install the Docker service:</p>
+<pre><code>yum install -y docker-engine-1.8.3
+</code></pre>
+
+<p>Configure your installed Docker service:</p>
+<pre><code>cat &gt; /usr/lib/systemd/system/docker.service &lt;&lt;&quot;EOF&quot;
+[Unit]
+Description=Docker Application Container Engine
+Documentation=https://docs.docker.com
+After=network.target docker.socket cloud-final.service
+Requires=docker.socket
+Wants=cloud-final.service
+
+[Service]
+ExecStart=/usr/bin/docker -d -H fd:// -H tcp://0.0.0.0:2376 --selinux-enabled=false --storage-driver=devicemapper --storage-opt=dm.basesize=30G
+MountFlags=slave
+LimitNOFILE=200000
+LimitNPROC=16384
+LimitCORE=infinity
+
+[Install]
+WantedBy=multi-user.target
+EOF
+</code></pre>
+
+<p>Remove docker folder and restart Docker service:</p>
+<pre><code>rm -rf /var/lib/docker &amp;&amp; systemctl daemon-reload &amp;&amp; service docker start &amp;&amp; systemctl enable docker.service
+</code></pre>
+
 <h2 id="install-cloudbreak-deployer_1">Install Cloudbreak deployer</h2>
 <p>Install the Cloudbreak deployer and unzip the platform specific single binary to your PATH. The one-liner way is:</p>
-<pre><code>curl https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/install | sh &amp;&amp; cbd --version
+<pre><code>mkdir -p cloudbreak-deployer &amp;&amp; cd cloudbreak-deployer &amp;&amp; curl https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/install | sh &amp;&amp; cbd --version
 </code></pre>
 
 <p>Once the Cloudbreak deployer is installed, you can start to setup the Cloudbreak application.</p>
-<h2 id="setup-cloudbreak-deployer">Setup Cloudbreak deployer</h2>
-<p>Create a cloudbreak-deployment directory for the config files and the supporting binaries that will be downloaded by cloudbreak-deployer:</p>
-<pre><code>mkdir cloudbreak-deployer
+<h2 id="initialize-your-profile">Initialize your Profile</h2>
+<p>First initialize cbd by creating a <code>Profile</code> file:</p>
+<pre><code>cbd init
 </code></pre>
 
+<p>It will create a <code>Profile</code> file in the current directory. Please edit the file - the only required
+configuration is the <code>PUBLIC_IP</code>. This IP will be used to access the Cloudbreak UI
+(called Uluwatu). In some cases the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
+<h2 id="generate-your-profile">Generate your Profile</h2>
+<p>You are done with the configuration of Cloudbreak deployer. The last thing you have to do is to regenerate the configurations in order to take effect.</p>
+<pre><code>rm *.yml
+cbd generate
+</code></pre>
+
+<p>This command applies the following steps:</p>
+<ul>
+<li>creates the <strong>docker-compose.yml</strong> file that describes the configuration of all the Docker containers needed for the Cloudbreak deployment.</li>
+<li>creates the <strong>uaa.yml</strong> file that holds the configuration of the identity server used to authenticate users to Cloudbreak.</li>
+</ul>
+<h2 id="start-cloudbreak">Start Cloudbreak</h2>
+<p>To start the Cloudbreak application use the following command.
+This will start all the Docker containers and initialize the application. It will take a few minutes until all the services start.</p>
+<pre><code>cbd start
+</code></pre>
+
+<p>Launching it first will take more time as it downloads all the docker images needed by Cloudbreak.</p>
+<p>After the <code>cbd start</code> command finishes you can check the logs of the Cloudbreak server with this command:</p>
+<pre><code>cbd logs cloudbreak
+</code></pre>
+
+<blockquote>
+<p>Cloudbreak server should start within a minute - you should see a line like this: <code>Started CloudbreakApplication in 36.823 seconds</code></p>
+</blockquote>
 <h2 id="next-steps">Next steps</h2>
 <p>Now that you all pre-requisites for Cloudbreak are in place you can follow with the <strong>cloud provider specific</strong> configuration. Based on the location where you plan to launch HDP clusters select one of the providers documentation and follow the steps from the <strong>Deployment</strong> section.</p>
 <p>You can find the provider specific documentations here:</p>
