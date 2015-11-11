@@ -544,7 +544,7 @@ Deployer</strong> helps you to deploy the Cloudbreak application automatically i
                });
 
                <!--AWS Table-->
-               $.getJSON("https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/mkdocs_theme/aws.json", function(data) {
+               $.getJSON("../aws.json", function(data) {
                $("#aws-image-details").append('<br>');
                $("#aws-image-details").append('<br>');
                $("#aws-image-details").append('<table>');
@@ -557,11 +557,14 @@ Deployer</strong> helps you to deploy the Cloudbreak application automatically i
                   $("#aws-image-details").append('</tr>');
                  $("#aws-image-details").append('</thead>');
                 $("#aws-image-details").append('<tbody>');
-                 $.each(data.aws, function( index, value ) {
+                 $.each(data.metadata, function( index, value ) {
+                 if (index.indexOf("region.") === 0) {
+                   shortIndex = index.substring(7)
                   $("#aws-image-details").append('<tr>');
-                   $("#aws-image-details").append('<td halign="center" valign="center" text-align="left" style="font-size: 12pt;border:none;border-bottom:solid #DDDDDD 1.5pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">' + index + '</td>');
+                   $("#aws-image-details").append('<td halign="center" valign="center" text-align="left" style="font-size: 12pt;border:none;border-bottom:solid #DDDDDD 1.5pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">' + shortIndex + '</td>');
                    $("#aws-image-details").append('<td halign="center" valign="center" text-align="right" style="font-size: 12pt;border:none;border-bottom:solid #DDDDDD 1.5pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">' + value + '</td>');
                   $("#aws-image-details").append('</tr>');
+                  }
                  });
                 $("#aws-image-details").append('</tbody>');
                $("#aws-image-details").append('</table>');
@@ -589,5 +592,5 @@ Deployer</strong> helps you to deploy the Cloudbreak application automatically i
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2015-11-11 15:42:58.085070
+Build Date UTC : 2015-11-11 16:54:50.151758
 -->
