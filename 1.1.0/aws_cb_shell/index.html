@@ -383,20 +383,29 @@
         
             <li><a href="#create-a-hadoop-cluster">Create a Hadoop cluster</a></li>
         
+            <li><a href="#stopping-and-restarting-a-stack">Stopping and restarting a stack</a></li>
+        
+            <li><a href="#stopping-and-restarting-a-cluster">Stopping and restarting a cluster</a></li>
+        
+            <li><a href="#upscaling-and-downscaling-a-stack">Upscaling and downscaling a stack</a></li>
+        
+            <li><a href="#upscaling-and-downscaling-a-cluster">Upscaling and downscaling a cluster</a></li>
+        
     
         <li class="main "><a href="#silent-mode">Silent mode</a></li>
         
     
         <li class="main "><a href="#example">Example</a></li>
         
-            <li><a href="#next-steps">Next steps</a></li>
+    
+        <li class="main "><a href="#next-steps">Next steps</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="interactive-mode">Interactive mode</h1>
+<h2 id="interactive-mode">Interactive mode</h2>
 <p>Start the shell with <code>cbd util cloudbreak-shell</code>. This will launch the Cloudbreak shell inside a Docker container and you are ready to start using it.</p>
 <p>You have to copy files into the cbd working directory, which you would like to use from shell. For example if your <code>cbd</code> working directory is <code>~/prj/cbd</code> then copy your blueprint and public ssh key file into this directory. You can refer to these files with their names from the shell.</p>
 <h3 id="create-a-cloud-credential">Create a cloud credential</h3>
@@ -508,7 +517,7 @@ securitygroup select --name secgroup_example
 
 <p>Other available option:</p>
 <p><code>--templateId</code> Id of the template</p>
-<h2 id="create-a-hadoop-cluster">Create a Hadoop cluster</h2>
+<h3 id="create-a-hadoop-cluster">Create a Hadoop cluster</h3>
 <p>You are almost done - two more command and this will create your Hadoop cluster on your favorite cloud provider. Same as the API, or UI this will use your <code>credential</code>, <code>instancegroups</code>, <code>network</code>, <code>securitygroup</code>, and by using CloudFormation will launch a cloud stack</p>
 <pre><code>stack create --name my-first-stack --region US_EAST_1
 </code></pre>
@@ -518,24 +527,38 @@ securitygroup select --name secgroup_example
 </code></pre>
 
 <p>You are done - you can check the progress through the Ambari UI. If you log back to Cloudbreak UI you can check the progress over there as well, and learn the IP address of Ambari.</p>
-<h3 id="stopping-and-restarting-a-stack-or-a-cluster">Stopping and restarting a stack or a cluster</h3>
-<p>After a stack is created, its virtual machines can be stopped by running:</p>
+<h3 id="stopping-and-restarting-a-stack">Stopping and restarting a stack</h3>
+<p>You have the ability to stop your existing stack in case if you want to suspend the work on it.</p>
+<p>Select a stack for example with its name:</p>
+<pre><code>stack select --name my-stack
+</code></pre>
+
+<p>Other available option to define a stack is its <code>--id</code> (instead of the <code>--name</code>).</p>
+<p>Apply the following command to <strong>stop the previously selected stack</strong>:</p>
 <pre><code>stack stop
 </code></pre>
 
-<p>A stopped stack can be restarted with:</p>
+<p>Apply the following command to <strong>start the previously selected and stopped stack</strong>:</p>
 <pre><code>stack start
 </code></pre>
 
-<p>You can start or stop a cluster with:</p>
-<pre><code>cluster start
+<h3 id="stopping-and-restarting-a-cluster">Stopping and restarting a cluster</h3>
+<p>You also have the ability to stop your existing cluster in case if you want to suspend the work on it.</p>
+<p>Select a cluster for example with its name:</p>
+<pre><code>cluster select --name my-cluster
 </code></pre>
 
-<p>or</p>
+<p>Other available option to define a cluster is its <code>--id</code> (instead of the <code>--name</code>).</p>
+<p>Apply the following command to <strong>stop the previously selected cluster</strong>:</p>
 <pre><code>cluster stop
 </code></pre>
 
-<h3 id="upscaling-and-downscaling-a-stack-or-a-cluster">Upscaling and downscaling a stack or a cluster</h3>
+<p>Apply the following command to <strong>start the previously selected and stopped cluster</strong>:</p>
+<pre><code>cluster start
+</code></pre>
+
+<h3 id="upscaling-and-downscaling-a-stack">Upscaling and downscaling a stack</h3>
+<p>You can upscale or downscale your selected stack:</p>
 <pre><code>stack node --ADD --instanceGroup host_group_slave_1 --adjustment 2
 </code></pre>
 
@@ -545,7 +568,8 @@ securitygroup select --name secgroup_example
 <pre><code>stack node --REMOVE  --instanceGroup host_group_slave_1 --adjustment -2
 </code></pre>
 
-<p>You can also upscale or downscale your cluster:</p>
+<h3 id="upscaling-and-downscaling-a-cluster">Upscaling and downscaling a cluster</h3>
+<p>You can also upscale or downscale your selected cluster:</p>
 <pre><code>cluster node --ADD --hostgroup host_group_slave_1 --adjustment 2
 </code></pre>
 
@@ -555,7 +579,7 @@ securitygroup select --name secgroup_example
 
 <p>Other available options:</p>
 <p><code>--withStackDownScale</code> indicates stack downscale after the cluster downscale</p>
-<h1 id="silent-mode">Silent mode</h1>
+<h2 id="silent-mode">Silent mode</h2>
 <p>With Cloudbreak shell you can execute script files as well. A script file contains cloudbreak shell commands and can be executed with the <code>script</code> cloudbreak shell command</p>
 <pre><code>script &lt;your script file&gt;
 </code></pre>
@@ -564,7 +588,7 @@ securitygroup select --name secgroup_example
 <pre><code>cbd util cloudbreak-shell-quiet &lt; example.sh
 </code></pre>
 
-<h1 id="example">Example</h1>
+<h2 id="example">Example</h2>
 <p>The following example creates a hadoop cluster with <code>hdp-small-default</code> blueprint on M3Xlarge instances with 2X100G attached disks on <code>default-aws-network</code> network using <code>all-services-port</code> security group. You should copy your ssh public key file into your cbd working directory with name <code>id_rsa.pub</code> and change the <code>&lt;arn role&gt;</code> part with your arn role.</p>
 <pre><code>credential create --EC2 --description description --name my-aws-credential --roleArn &lt;arn role&gt; --sshKeyPath id_rsa.pub
 credential select --name my-aws-credential
