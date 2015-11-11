@@ -369,6 +369,10 @@
     
         <li class="main active"><a href="#kerberos-security">Kerberos security</a></li>
         
+            <li><a href="#test">Test</a></li>
+        
+            <li><a href="#createadd-custom-users">Create/add custom users</a></li>
+        
     
     </ul>
 </div></div>
@@ -382,6 +386,49 @@
 <li><code>kerberos password</code></li>
 </ul>
 <p>fields too on web interface or shell during cluster creation. To run a job on the cluster, you can use one of the default Hadoop users, like <code>ambari-qa</code>, as usual.</p>
+<h3 id="test">Test</h3>
+<p>Once kerberos is enabled you need a <code>ticket</code> to execute any job on the cluster. Here's an example to get a ticket:</p>
+<pre><code>kinit -V -kt /etc/security/keytabs/smokeuser.headless.keytab ambari-qa-sparktest-rec@NODE.DC1.CONSUL
+</code></pre>
+
+<p>Example job:</p>
+<pre><code class="java">export HADOOP_LIBS=/usr/hdp/current/hadoop-mapreduce-client
+export JAR_EXAMPLES=$HADOOP_LIBS/hadoop-mapreduce-examples.jar
+export JAR_JOBCLIENT=$HADOOP_LIBS/hadoop-mapreduce-client-jobclient.jar
+
+hadoop jar $JAR_EXAMPLES teragen 10000000 /user/ambari-qa/terasort-input
+
+hadoop jar $JAR_JOBCLIENT mrbench -baseDir /user/ambari-qa/smallJobsBenchmark -numRuns 5 -maps 10 -reduces 5 -inputLines 10 -inputType ascending
+</code></pre>
+
+<h3 id="createadd-custom-users">Create/add custom users</h3>
+<p>To create custom users please follow the steps below.</p>
+<ul>
+<li>Log in via SSH to the Cloudbreak gateway node (IP address is the same as the Ambari UI)</li>
+</ul>
+<pre><code>sudo docker exec -i kerberos bash
+kadmin -p [admin_user]/[admin_user]@NODE.DC1.CONSUL (type admin password)
+addprinc custom-user (type user password twice)
+</code></pre>
+
+<ul>
+<li>Log in via SSH to all other nodes</li>
+</ul>
+<pre><code>sudo docker exec -i $(docker ps | grep ambari-warmup | cut -d&quot; &quot; -f 1) bash
+useradd custom-user
+</code></pre>
+
+<ul>
+<li>Log in via SSH to one of the nodes</li>
+</ul>
+<p>```
+sudo docker exec -i $(docker ps | grep ambari-warmup | cut -d" " -f 1) bash
+su custom-user
+kinit -p custom-user (type user password)
+hdfs dfs -mkdir input
+hdfs dfs -put /tmp/wait-for-host-number.sh input
+yarn jar $(find /usr/hdp -name hadoop-mapreduce-examples.jar) wordcount input output
+hdfs dfs -cat output/*</p>
 <p><strong>Note</strong> Current implementation of Kerberos security doesn't contain Active Directory support or any other third party user authentication method. If you want to use custom user, you have to create users manually with the same name on all Ambari containers on each node.</p></div>
             
         </div>
