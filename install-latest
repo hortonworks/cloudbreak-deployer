@@ -3,7 +3,6 @@ CBD_DIR=cloudbreak-deployer
 : ${GIT_PROJECT:=cloudbreak-deployer}
 
 main() {
-    mkdir -p cloudbreak-deployer
     mkdir -p $CBD_DIR && cd $_
     local redirect=$(
     curl -s \

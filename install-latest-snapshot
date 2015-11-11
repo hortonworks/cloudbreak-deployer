@@ -1,0 +1,21 @@
+declare dest=/bin
+declare user=sequenceiq
+declare project=cloudbreak-deployer
+declare branch=master
+
+hash -r > /dev/null
+if (command -v cbd > /dev/null); then
+    declare existing=$(command -v cbd)
+    dest=${existing%/*}
+else
+    if echo "$PATH" | grep -q '/usr/local/bin' ; then
+        dest=/usr/local/bin
+    fi
+fi
+latest=$(curl -s -G -d circle-token=da6ded628881d187fdab480349807c929b6af287 -H "Accept: application/json" "https://circleci.com/api/v1/project/$user/$project/tree/$branch?filter=completed&limit=1"| sed -e 's/^.*"build_num":\([^"]*\),.*$/\1/')
+echo latest snapshot build number is: $latest
+opt=$(echo $(uname)|sed "s/D/d/g"|sed "s/L/l/g")
+url=$(curl -s -G -d circle-token=da6ded628881d187fdab480349807c929b6af287 -H "Accept: application/json" "https://circleci.com/api/v1/project/$user/$project/$latest/artifacts" |sed -e 's/^.*"url":"\([^"]*\)".*$/\1/' | sed "s/linux/$opt/g" | sed "s/darwin/$opt/g")
+echo latest snapshot build url is: $url
+curl -Ls $url | tar -xz -C ${dest}
+echo "---> cbd installed into ${dest}"
