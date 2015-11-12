@@ -406,7 +406,7 @@
 <pre><code>yum -y install iptables-services net-tools unzip
 </code></pre>
 
-<p>Please configure you iptables on your machine:</p>
+<p>Please configure your iptables on your machine:</p>
 <pre><code>iptables --flush INPUT &amp;&amp; \
 iptables --flush FORWARD &amp;&amp; \
 service iptables save &amp;&amp; \
@@ -455,7 +455,7 @@ EOF
 
 <h2 id="install-cloudbreak-deployer_1">Install Cloudbreak deployer</h2>
 <p>Install the Cloudbreak deployer and unzip the platform specific single binary to your PATH. The one-liner way is:</p>
-<pre><code>mkdir -p cloudbreak-deployer &amp;&amp; cd cloudbreak-deployer &amp;&amp; curl https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/install-latest | sh &amp;&amp; cbd --version
+<pre><code>curl https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/install-latest | sh &amp;&amp; cbd --version
 </code></pre>
 
 <p>Once the Cloudbreak deployer is installed, you can start to setup the Cloudbreak application.</p>
