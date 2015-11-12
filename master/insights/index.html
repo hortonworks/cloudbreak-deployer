@@ -367,18 +367,18 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#insights">Insights</a></li>
+        <li class="main active"><a href="#operations">Operations</a></li>
         
             <li><a href="#cloudbreak-deployer">Cloudbreak deployer</a></li>
         
-            <li><a href="#cloudbreak-application">Cloudbreak application</a></li>
+            <li><a href="#cloudbreak-application_1">Cloudbreak application</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="insights">Insights</h1>
+<h1 id="operations">Operations</h1>
 <h2 id="cloudbreak-deployer">Cloudbreak deployer</h2>
 <h3 id="debug">Debug</h3>
 <p>If you want to have more detailed output set the <code>DEBUG</code> env variable to non-zero:</p>
@@ -406,21 +406,39 @@ It can reveal some common problems with your docker or boot2docker configuration
 <pre><code>cbd update
 </code></pre>
 
-<hr />
-<h2 id="cloudbreak-application">Cloudbreak application</h2>
+<h3 id="cloudbreak-application">Cloudbreak application</h3>
+<h2 id="cloudbreak-application_1">Cloudbreak application</h2>
 <h3 id="ssh-to-the-hosts">SSH to the hosts</h3>
 <p>In the current version of Cloudbreak all the nodes have a public IP address and all the nodes are accessible via SSH.
 The public IP addresses of a running cluster can be checked on the Cloudbreak UI under the <em>Nodes</em> tab.
-Only key-based authentication is supported - the public key can be specified when creating a credential.</p>
+Only key-based authentication is supported - the public key can be specified when creating a cloud credential.</p>
 <pre><code>ssh -i ~/.ssh/private-key.pem cloudbreak@&lt;public-ip&gt;
 </code></pre>
 
 <p>The default user is <code>cloudbreak</code> except on EC2 where it is <code>ec2-user</code>.</p>
 <h3 id="accessing-hdp-client-services">Accessing HDP client services</h3>
 <p>The main difference between general HDP clusters and Cloudbreak-installed HDP clusters is that each host runs an Ambari server or agent Docker container and the HDP services will be installed in this container as well.
-It means that after <code>ssh</code> the client services won't be available instantly, first you'll have to enter the ambari-agent container.
-Inside the container everything works the same way as expected.
-To check the containers running on the host enter:</p>
+It means that after <code>ssh</code> the client services won't be available instantly, first you'll have to <code>enter</code> the ambari-agent container.
+Inside the container everything works the same way as expected. In order to do so there are a few options.</p>
+<p><em>Helper functions</em></p>
+<p>We have created a few helper functions in order to help operations. Once yoy SSH into the host you should a message as such:</p>
+<pre><code>You are now logged in to the docker host ...
+Getting started with docker:
+
+  docker ps                : Listing running containers
+  docker logs -f &lt;ID&gt;      : Star tail -f on container stdout/stderr
+  docker exec -it &lt;ID&gt; sh  : Entering the container (instead of ssh)
+
+Helper commands:
+
+  h                        : prints this message
+  ambari-enter             : Enters the ambari container
+  ambari-log               : Watches the ambari logs
+</code></pre>
+
+<p>You can enter into the container where the HDP services are running using the <code>ambari-enter</code> functions.</p>
+<p><em>Docker exec</em></p>
+<p>To check the containers running on the host enter:</p>
 <pre><code>[cloudbreak@vmhostgroupclient11 ~]$ sudo docker ps
 CONTAINER ID   IMAGE                                    COMMAND                CREATED      STATUS      PORTS     NAMES
 1098ca778176   sequenceiq/baywatch-client:v1.0.0        &quot;/etc/bootstrap.sh -d&quot; 4 hours ago  Up 4 hours            baywatch-client-14454170059514
@@ -431,7 +449,7 @@ a8ec90037aaf   swarm:0.4.0                              &quot;/swarm join --addr
 ef02b43eacee   sequenceiq/consul:v0.5.0-v5              &quot;/bin/start&quot;           4 hours ago  Up 4 hours            vmhostgroupmaster12-consul
 </code></pre>
 
-<p>You should see the ambari-agent container running. Copy its id or name and <code>exec</code> into the container:</p>
+<p>You should see the <code>ambari-agent</code> container running. Copy its id or name and <code>exec</code> into the container:</p>
 <pre><code>[cloudbreak@vmhostgroupclient11 ~]$ sudo docker exec -it ambari-agent-14454169805924 bash
 [root@docker-ambari tmp]#
 </code></pre>
@@ -480,10 +498,13 @@ It is by design because this instance has some special tasks:</p>
 <li>it runs the Baywatch server that is responsible for collecting the operational logs from the cluster</li>
 <li>it runs a Kerberos KDC container if Kerberos is configured</li>
 </ul>
-<h3 id="hadoop-logs">Hadoop logs</h3>
+<p><strong>Logs</strong></p>
+<p><em>Hadoop logs</em></p>
 <p>Hadoop logs are available from the host and from the container as well in the <code>/hadoopfs/fs1/logs</code> directory.</p>
-<h3 id="ambari-db">Ambari db</h3>
-<p>Ambari's database runs on the <code>cbgateway</code> node inside a PostgreSQL docker container. To access it ssh to the gateway node and run the following command:</p>
+<p><em>Ambari logs</em></p>
+<p>For Ambari logs you can use our helper function, <code>ambari-log</code>. For further information please check the <em>Helper functions</em> section. Alternatively you watch the Ambari logs on the host instance as well under the <code>`/hadoopfs/fs1/logs</code> folder as well.</p>
+<p><strong>Ambari database</strong></p>
+<p>Ambari's database runs on the <code>cbgateway</code> node inside a PostgreSQL docker container. To access it SSH to the <code>gateway</code> node and run the following command:</p>
 <pre><code>[cloudbreak@vmcbgateway0 ~]$ sudo docker exec -it ambari_db psql -U postgres
 </code></pre></div>
             
