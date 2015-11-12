@@ -422,13 +422,14 @@ export CLOUDBREAK_SMTP_SENDER_PORT=25
 export CLOUDBREAK_SMTP_SENDER_FROM=
 export CB_MAIL_SMTP_AUTH=true
 export CB_MAIL_SMTP_STARTTLS_ENABLE=true
+export CB_MAIL_SMTP_TYPE=smtp
 </code></pre>
 
 <h3 id="identity-with-custom-domain">Identity with custom domain</h3>
-<p>The Cloudbreak deployer uses UAA as identity provider, it supports multi tenancy. This is referred to as 
-identity zones. An identity zone is accessed through a unique subdomain. If the standard UAA responds to <a href="https://uaa.10.244.0.34.xip.io">https://uaa.10.244.0.34.xip.io</a> a zone on this UAA would be accessed 
+<p>The Cloudbreak deployer uses UAA as identity provider, it supports multi tenancy. This is referred to as
+identity zones. An identity zone is accessed through a unique subdomain. If the standard UAA responds to <a href="https://uaa.10.244.0.34.xip.io">https://uaa.10.244.0.34.xip.io</a> a zone on this UAA would be accessed
  through <a href="https://testzone1.uaa.10.244.0.34.xip.io">https://testzone1.uaa.10.244.0.34.xip.io</a>.</p>
-<p>If you want to use a custom domain for your identity or deployment, put the <code>UAA_ZONE_DOMAIN</code> line into your 
+<p>If you want to use a custom domain for your identity or deployment, put the <code>UAA_ZONE_DOMAIN</code> line into your
 <code>Profile</code>. You can see an example in the following box:</p>
 <pre><code>export UAA_ZONE_DOMAIN=my-subdomain.example.com
 </code></pre>
