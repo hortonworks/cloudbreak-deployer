@@ -379,7 +379,15 @@
 <h1 id="azure-deployment">Azure deployment</h1>
 <h2 id="setup-cloudbreak-deployer">Setup Cloudbreak deployer</h2>
 <p>If you want to use our cloudbreak-deployer on Azure then please follow the steps below.
-Start an <a href="https://azure.microsoft.com/en-in/marketplace/partners/openlogic/centosbased71/">OpenLogic 7.1</a> on Azure. Make sure you opened the <strong>22</strong> port for SSH and <strong>3000</strong> and <strong>3001</strong> for our UI.</p>
+Start an <a href="https://azure.microsoft.com/en-in/marketplace/partners/openlogic/centosbased71/">OpenLogic 7.1</a> on Azure.</p>
+<p>Make sure you opened the following ports:</p>
+<ul>
+<li>SSH (22)</li>
+<li>Ambari (8080)</li>
+<li>Identity server (8089)</li>
+<li>Cloudbreak GUI (3000)</li>
+<li>User authentication (3001)</li>
+</ul>
 <p>Please log in to the machine with SSH or use username and password authentication (the following example shows how to ssh into the machine):</p>
 <pre><code>ssh -i &lt;azure-ssh-pem-file&gt; &lt;username&gt;@&lt;virtual-machine-ip&gt;
 </code></pre>

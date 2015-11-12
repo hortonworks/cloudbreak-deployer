@@ -385,8 +385,15 @@
                 <div class="col-md-9" role="main">
 
 <h1 id="install-cloudbreak-deployer">Install Cloudbreak deployer</h1>
-<p>To install Cloudbreak Deployer on your selected environment you have to follow the steps below (The instruction describe a CentOS based installation).
-Make sure you opened the <strong>22</strong> port for SSH and <strong>3000</strong> and <strong>3001</strong> for our UI.</p>
+<p>To install Cloudbreak Deployer on your selected environment you have to follow the steps below (The instruction describe a CentOS based installation).</p>
+<p>Make sure you opened the following ports:</p>
+<ul>
+<li>SSH (22)</li>
+<li>Ambari (8080)</li>
+<li>Identity server (8089)</li>
+<li>Cloudbreak GUI (3000)</li>
+<li>User authentication (3001)</li>
+</ul>
 <p>Assume <strong>root</strong> privileges with this command:</p>
 <pre><code>sudo su
 </code></pre>

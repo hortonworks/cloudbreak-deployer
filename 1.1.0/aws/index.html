@@ -383,7 +383,14 @@
 <h2 id="configured-images">Configured images</h2>
 <p>You can launch the latest Cloudbreak deployer image based on your region at the <a href="https://aws
 .amazon.com/console/">AWS Management Console</a>.</p>
-<p>You can check the name of the available images in the following section.</p>
+<p>Please make sure you opened the following ports on your virtual machine:</p>
+<ul>
+<li>SSH (22)</li>
+<li>Ambari (8080)</li>
+<li>Identity server (8089)</li>
+<li>Cloudbreak GUI (3000)</li>
+<li>User authentication (3001)</li>
+</ul>
 <h3 id="aws-image-details">AWS image details</h3>
 <h2 id="setup-cloudbreak-deployer">Setup Cloudbreak deployer</h2>
 <p>If you already have cloudbreak-deployer installed you can start to setup the Cloudbreak application.</p>

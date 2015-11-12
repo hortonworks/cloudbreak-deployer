@@ -390,6 +390,14 @@
 <h2 id="download-the-cloudbreak-image">Download the Cloudbreak image</h2>
 <p>You can download the latest pre-configured Cloudbreak deployer image for OpenStack with the following script in the 
 following section.</p>
+<p>Please make sure you opened the following ports on your virtual machine:</p>
+<ul>
+<li>SSH (22)</li>
+<li>Ambari (8080)</li>
+<li>Identity server (8089)</li>
+<li>Cloudbreak GUI (3000)</li>
+<li>User authentication (3001)</li>
+</ul>
 <h3 id="openstack-image-details">OpenStack image details</h3>
 <h2 id="import-the-image-into-openstack">Import the image into OpenStack</h2>
 <pre><code>export OS_IMAGE_NAME=&quot;name_in_openstack&quot;
