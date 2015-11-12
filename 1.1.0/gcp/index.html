@@ -381,10 +381,12 @@
 <h1 id="google-cloud-deployment">Google Cloud deployment</h1>
 <p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration then launch. If you do not have installed Cloudbreak deployer, you can <a href="../onprem/">install this on premise</a>.</p>
 <h2 id="configured-image">Configured image</h2>
-<p>You can create the latest Cloudbreak deployer Google Compute Engine image with the help of the <a href="https://cloud.google.com/compute/docs/gcloud-compute/">gcloud command-line 
-tool</a> and the script in the following section.</p>
+<p>You can create the latest Cloudbreak deployer image on the <a href="https://console.developers.google.com/">Google Developers Console</a> with the help
+ of the <a href="https://cloud.google.com/cloud-shell/docs/">Google Cloud Shell</a>.</p>
+<p><img alt="" src="../images/google-cloud-shell-launch.png" /></p>
 <p>Images are global resources, so they can be used across zones and projects.</p>
 <h3 id="gcp-image-details">GCP image details</h3>
+<p><img alt="" src="../images/google-cloud-shell.png" /></p>
 <h2 id="setup-cloudbreak-deployer">Setup Cloudbreak deployer</h2>
 <p>If you already have cloudbreak-deployer installed you can start to setup the Cloudbreak application.</p>
 <p>Open the <code>cloudbreak-deployment</code> directory:</p>
@@ -480,7 +482,7 @@ This will start all the Docker containers and initialize the application. It wil
                });
 
                <!--AWS Table-->
-               $.getJSON("../aws.json", function(data) {
+               $.getJSON("../providers/aws.json", function(data) {
                $("#aws-image-details").append('<br>');
                $("#aws-image-details").append('<br>');
                $("#aws-image-details").append('<table>');
@@ -507,19 +509,19 @@ This will start all the Docker containers and initialize the application. It wil
                });
 
                <!--OpenStack-->
-               $.getJSON("https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/mkdocs_theme/openstack.json", function(data) {
+               $.getJSON("../providers/openstack.json", function(data) {
                $("#openstack-image-details").append('<br>');
                $("#openstack-image-details").append('<br>');
-               $("#openstack-image-details").append('<p style="font-size: 12pt"><code>VERSION:</code>' + data.version + '</p>');
-               $("#openstack-image-details").append('<p style="font-size: 12pt"><code>LATEST_IMAGE:</code>' + data.id + '</p>');
+               $("#openstack-image-details").append('<p style="font-size: 12pt"><code>LATEST_IMAGE:</code>' + data.metadata.filename + '</p>');
+               $("#openstack-image-details").append('<pre><code style="font-size: 12pt;color:#333333">curl -L  https://atlas.hashicorp.com/api/v1/artifacts/sequenceiq/cloudbreak/openstack.image/' + data.version + '/file | tar -xz</code></pre>');
                });
 
                <!--GCP-->
-               $.getJSON("https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/1.1.0/mkdocs_theme/gcp.json", function(data) {
+               $.getJSON("../providers/gcp.json", function(data) {
                $("#gcp-image-details").append('<br>');
                $("#gcp-image-details").append('<br>');
-               $("#gcp-image-details").append('<p style="font-size: 12pt"><code>SOURCE_IMAGE:</code>' + data.gce.source_image + '</p>');
-               $("#gcp-image-details").append('<pre><code style="font-size: 12pt;color:#333333">'+ data.gce.import_script +'</code></pre>');
+               $("#gcp-image-details").append('<p style="font-size: 12pt"><code>SOURCE_IMAGE:</code>' + data.metadata.source_image + '</p>');
+               $("#gcp-image-details").append('<pre><code style="font-size: 12pt;color:#333333">'+ data.metadata.import_script +'</code></pre>');
                });
            });
          </script>
