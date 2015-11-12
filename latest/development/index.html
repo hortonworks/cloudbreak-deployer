@@ -358,6 +358,9 @@
         <li class="main active"><a href="#contribution">Contribution</a></li>
         
     
+        <li class="main "><a href="#snapshots">Snapshots</a></li>
+        
+    
         <li class="main "><a href="#testing">Testing</a></li>
         
     
@@ -388,6 +391,16 @@ make install
 
 <p>If you want to test the binary CircleCI build from your branch named <code>fix-something</code>, to validate the PR binary <code>cbd</code> tool will be tested. It is built by CircleCI for each branch.</p>
 <pre><code>cbd update fix-something
+</code></pre>
+
+<h2 id="snapshots">Snapshots</h2>
+<p>We recommend to always use the latest release, but you might want to check new features or bugfixes.
+All successful builds from master are uploaded to the public s3 bucker. You can download it:</p>
+<pre><code>curl -L public-repo-1.hortonworks.com/HDP/cloudbreak/cbd-snapshot-$(uname).tgz | tar -xz
+</code></pre>
+
+<p>Instead of overwriting the released version, download it to a <strong>local directory</strong> and useit by refering as <code>./cbd</code></p>
+<pre><code>./cbd --version
 </code></pre>
 
 <h2 id="testing">Testing</h2>
