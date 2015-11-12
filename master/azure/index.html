@@ -77,6 +77,12 @@
         
             
 <li >
+    <a href="../onprem/">On-prem</a>
+</li>
+
+        
+            
+<li >
     <a href="../aws/">AWS</a>
 </li>
 
@@ -101,6 +107,12 @@
         
     </ul>
   </li>
+
+                        
+                            
+<li >
+    <a href="../overview/">Benefits</a>
+</li>
 
                         
                         </ul>
@@ -357,13 +369,7 @@
     
         <li class="main active"><a href="#azure-deployment">Azure deployment</a></li>
         
-            <li><a href="#initialize-your-profile">Initialize your Profile</a></li>
-        
-            <li><a href="#generate-your-profile">Generate your Profile</a></li>
-        
-            <li><a href="#start-cloudbreak">Start Cloudbreak</a></li>
-        
-            <li><a href="#next-steps">Next steps</a></li>
+            <li><a href="#setup-cloudbreak-deployer">Setup Cloudbreak deployer</a></li>
         
     
     </ul>
@@ -371,13 +377,137 @@
                 <div class="col-md-9" role="main">
 
 <h1 id="azure-deployment">Azure deployment</h1>
-<p>If you already have cloudbreak-deployer installed you can start to setup the Cloudbreak application.</p>
-<p>Create a cloudbreak-deployment directory for the config files and the supporting binaries that will be downloaded by cloudbreak-deployer:</p>
-<pre><code>mkdir -p cloudbreak-deployer
-cd cloudbreak-deployer
+<h2 id="setup-cloudbreak-deployer">Setup Cloudbreak deployer</h2>
+<p>If you want to use our cloudbreak-deployer on Azure then please follow the steps below.
+Start an <a href="https://azure.microsoft.com/en-in/marketplace/partners/openlogic/centosbased71/">OpenLogic 7.1</a> on Azure.</p>
+<p>Make sure you opened the following ports:</p>
+<ul>
+<li>SSH (22)</li>
+<li>Ambari (8080)</li>
+<li>Identity server (8089)</li>
+<li>Cloudbreak GUI (3000)</li>
+<li>User authentication (3001)</li>
+</ul>
+<p>Please log in to the machine with SSH or use username and password authentication (the following example shows how to ssh into the machine):</p>
+<pre><code>ssh -i &lt;azure-ssh-pem-file&gt; &lt;username&gt;@&lt;virtual-machine-ip&gt;
 </code></pre>
 
-<h2 id="initialize-your-profile">Initialize your Profile</h2>
+<p>Assume <strong>root</strong> privileges with this command:</p>
+<pre><code>sudo su
+</code></pre>
+
+<p>Configure the correct yum repository on the machine:</p>
+<pre><code>cat &gt; /etc/yum.repos.d/CentOS-Base.repo &lt;&lt;&quot;EOF&quot;
+# CentOS-Base.repo
+#
+# The mirror system uses the connecting IP address of the client and the
+# update status of each mirror to pick mirrors that are updated to and
+# geographically close to the client.  You should use this for CentOS updates
+# unless you are manually picking other mirrors.
+#
+# If the mirrorlist= does not work for you, as a fall back you can try the
+# remarked out baseurl= line instead.
+#
+#
+
+[base]
+name=CentOS-$releasever - Base
+mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=os&amp;infra=$infra
+#baseurl=http://mirror.centos.org/centos/$releasever/os/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+#released updates
+[updates]
+name=CentOS-$releasever - Updates
+mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=updates&amp;infra=$infra
+#baseurl=http://mirror.centos.org/centos/$releasever/updates/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+#additional packages that may be useful
+[extras]
+name=CentOS-$releasever - Extras
+mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=extras&amp;infra=$infra
+#baseurl=http://mirror.centos.org/centos/$releasever/extras/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+#additional packages that extend functionality of existing packages
+[centosplus]
+name=CentOS-$releasever - Plus
+mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=centosplus&amp;infra=$infra
+#baseurl=http://mirror.centos.org/centos/$releasever/centosplus/$basearch/
+gpgcheck=1
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+EOF
+</code></pre>
+
+<p>Install the correct version of <strong>kernel</strong>, <strong>kernel-tools</strong> and <strong>systemd</strong>:</p>
+<pre><code>yum install -y kernel-3.10.0-229.14.1.el7 kernel-tools-3.10.0-229.14.1.el7 systemd-208-20.el7_1.6
+</code></pre>
+
+<p>To permanently disable <strong>SELinux</strong> set SELINUX=disabled in /etc/selinux/config This ensures that SELinux does not turn itself on after you reboot the machine:</p>
+<pre><code>setenforce 0 &amp;&amp; sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+</code></pre>
+
+<p>You need to install <code>iptables-services</code>, otherwise the <code>iptables save</code> command will not be available:</p>
+<pre><code>yum -y install iptables-services net-tools unzip
+</code></pre>
+
+<p>Please configure your <code>iptables</code> on your machine:</p>
+<pre><code>iptables --flush INPUT &amp;&amp; \
+iptables --flush FORWARD &amp;&amp; \
+service iptables save &amp;&amp; \
+sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/g' /etc/sysctl.conf
+</code></pre>
+
+<p>Configure a custom Docker repository for installing the correct version of Docker:</p>
+<pre><code>cat &gt; /etc/yum.repos.d/docker.repo &lt;&lt;&quot;EOF&quot;
+[dockerrepo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/7
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg
+EOF
+</code></pre>
+
+<p>Then you are able to install the Docker service:</p>
+<pre><code>yum install -y docker-engine-1.8.3
+</code></pre>
+
+<p>Configure your installed Docker service:</p>
+<pre><code>cat &gt; /usr/lib/systemd/system/docker.service &lt;&lt;&quot;EOF&quot;
+[Unit]
+Description=Docker Application Container Engine
+Documentation=https://docs.docker.com
+After=network.target docker.socket cloud-final.service
+Requires=docker.socket
+Wants=cloud-final.service
+
+[Service]
+ExecStart=/usr/bin/docker -d -H fd:// -H tcp://0.0.0.0:2376 --selinux-enabled=false --storage-driver=devicemapper --storage-opt=dm.basesize=30G
+MountFlags=slave
+LimitNOFILE=200000
+LimitNPROC=16384
+LimitCORE=infinity
+
+[Install]
+WantedBy=multi-user.target
+EOF
+</code></pre>
+
+<p>Remove docker folder and restart Docker service:</p>
+<pre><code>rm -rf /var/lib/docker &amp;&amp; systemctl daemon-reload &amp;&amp; service docker start &amp;&amp; systemctl enable docker.service
+</code></pre>
+
+<p>Download <strong>cloudbreak-deployer</strong>:</p>
+<pre><code>curl https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/install-latest | sh &amp;&amp; cbd --version
+</code></pre>
+
+<h3 id="initialize-your-profile">Initialize your Profile</h3>
 <p>First initialize cbd by creating a <code>Profile</code> file:</p>
 <pre><code>cbd init
 </code></pre>
@@ -385,33 +515,36 @@ cd cloudbreak-deployer
 <p>It will create a <code>Profile</code> file in the current directory. Please edit the file - the only required
 configuration is the <code>PUBLIC_IP</code>. This IP will be used to access the Cloudbreak UI
 (called Uluwatu). In some cases the <code>cbd</code> tool tries to guess it, if can't than will give a hint.</p>
-<h2 id="generate-your-profile">Generate your Profile</h2>
+<h3 id="generate-your-profile">Generate your Profile</h3>
 <p>You are done with the configuration of Cloudbreak deployer. The last thing you have to do is to regenerate the configurations in order to take effect.</p>
 <pre><code>rm *.yml
 cbd generate
 </code></pre>
 
-<h2 id="start-cloudbreak">Start Cloudbreak</h2>
+<p>This command applies the following steps:</p>
+<ul>
+<li>creates the <strong>docker-compose.yml</strong> file that describes the configuration of all the Docker containers needed for the Cloudbreak deployment.</li>
+<li>creates the <strong>uaa.yml</strong> file that holds the configuration of the identity server used to authenticate users to Cloudbreak.</li>
+</ul>
+<h3 id="start-cloudbreak">Start Cloudbreak</h3>
 <p>To start the Cloudbreak application use the following command.
 This will start all the Docker containers and initialize the application. It will take a few minutes until all the services start.</p>
 <pre><code>cbd start
 </code></pre>
 
-<p>Launching it the first time will take more time as it does some additional steps:</p>
-<ul>
-<li>downloads all the docker images needed by Cloudbreak.</li>
-<li>creates the <strong>docker-compose.yml</strong> file that describes the configuration of all the Docker containers needed for the Cloudbreak deployment.</li>
-<li>creates the <strong>uaa.yml</strong> file that holds the configuration of the identity server used to authenticate users to Cloudbreak.</li>
-</ul>
-<p>After the <code>cbd generate</code> command finishes you can check the logs of the Cloudbreak server with this command:</p>
+<blockquote>
+<p>Launching it first will take more time as it downloads all the docker images needed by Cloudbreak.</p>
+</blockquote>
+<p>After the <code>cbd start</code> command finishes you can check the logs of the Cloudbreak server with this command:</p>
 <pre><code>cbd logs cloudbreak
 </code></pre>
 
 <blockquote>
 <p>Cloudbreak server should start within a minute - you should see a line like this: <code>Started CloudbreakApplication in 36.823 seconds</code></p>
 </blockquote>
-<h2 id="next-steps">Next steps</h2>
-<p>Once Cloudbreak is up and running you should check out the <a href="../azure_pre_prov/">prerequisites</a> needed to create Azure clusters with Cloudbreak.</p></div>
+<h3 id="next-steps">Next steps</h3>
+<p>Once Cloudbreak is up and running you should check out the <a href="../azure_pre_prov/">prerequisites</a> needed to create Azure
+clusters with Cloudbreak. Besides these you can check out some useful <a href="../configuration/">configurations for Cloudbreak deployer</a>.</p></div>
             
         </div>
 
@@ -460,6 +593,48 @@ This will start all the Docker containers and initialize the application. It wil
                 $.each(data.versions, function( index, value ) {
                   $("#versions-dropdown").append('<li><a href="http://sequenceiq.com/cloudbreak-deployer/'+value+'">'+value+'</a></li>');
                 });
+               });
+
+               <!--AWS Table-->
+               $.getJSON("../providers/aws.json", function(data) {
+               $("#aws-image-details").append('<br>');
+               $("#aws-image-details").append('<br>');
+               $("#aws-image-details").append('<table>');
+                 $("#aws-image-details").append('<col width="290">');
+                 $("#aws-image-details").append('<col width="290">');
+                 $("#aws-image-details").append('<thead>');
+                  $("#aws-image-details").append('<tr>');
+                   $("#aws-image-details").append('<th halign="center" style="font-size: 14pt;border:none;border-bottom:solid #DDDDDD 1.5pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">' + "Region" + '</th>');
+                   $("#aws-image-details").append('<th halign="center" style="font-size: 14pt;border:none;border-bottom:solid #DDDDDD 1.5pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">' + "Image Name" + '</th>');
+                  $("#aws-image-details").append('</tr>');
+                 $("#aws-image-details").append('</thead>');
+                $("#aws-image-details").append('<tbody>');
+                 $.each(data.metadata, function( index, value ) {
+                 if (index.indexOf("region.") === 0) {
+                   shortIndex = index.substring(7)
+                  $("#aws-image-details").append('<tr>');
+                   $("#aws-image-details").append('<td halign="center" valign="center" text-align="left" style="font-size: 12pt;border:none;border-bottom:solid #DDDDDD 1.5pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">' + shortIndex + '</td>');
+                   $("#aws-image-details").append('<td halign="center" valign="center" text-align="right" style="font-size: 12pt;border:none;border-bottom:solid #DDDDDD 1.5pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">' + value + '</td>');
+                  $("#aws-image-details").append('</tr>');
+                  }
+                 });
+                $("#aws-image-details").append('</tbody>');
+               $("#aws-image-details").append('</table>');
+               });
+
+               <!--OpenStack-->
+               $.getJSON("../providers/openstack.json", function(data) {
+               $("#openstack-image-details").append('<br>');
+               $("#openstack-image-details").append('<br>');
+               $("#openstack-image-details").append('<p style="font-size: 12pt"><code>LATEST_IMAGE:</code>' + data.id + '</p>');
+               $("#openstack-image-details").append('<pre><code style="font-size: 12pt;color:#333333">curl -L  https://atlas.hashicorp.com/api/v1/artifacts/sequenceiq/cloudbreak/openstack.image/' + data.version + '/file | tar -xz</code></pre>');
+               });
+
+               <!--GCP-->
+               $.getJSON("../providers/gcp.json", function(data) {
+               $("#gcp-image-details").append('<br>');
+               $("#gcp-image-details").append('<br>');
+               $("#gcp-image-details").append('<pre><code style="font-size: 12pt;color:#333333">gcloud compute images create ' + data.gcp.id + ' --source-uri gs://' + data.gcp.source_image + '</code></pre>');
                });
            });
          </script>

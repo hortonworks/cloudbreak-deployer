@@ -77,6 +77,12 @@
         
             
 <li >
+    <a href="../onprem/">On-prem</a>
+</li>
+
+        
+            
+<li >
     <a href="../aws/">AWS</a>
 </li>
 
@@ -101,6 +107,12 @@
         
     </ul>
   </li>
+
+                        
+                            
+<li >
+    <a href="../overview/">Benefits</a>
+</li>
 
                         
                         </ul>
@@ -371,20 +383,29 @@
         
             <li><a href="#create-a-hadoop-cluster">Create a Hadoop cluster</a></li>
         
+            <li><a href="#stopping-and-restarting-a-stack">Stopping and restarting a stack</a></li>
+        
+            <li><a href="#stopping-and-restarting-a-cluster">Stopping and restarting a cluster</a></li>
+        
+            <li><a href="#upscaling-and-downscaling-a-stack">Upscaling and downscaling a stack</a></li>
+        
+            <li><a href="#upscaling-and-downscaling-a-cluster">Upscaling and downscaling a cluster</a></li>
+        
     
         <li class="main "><a href="#silent-mode">Silent mode</a></li>
         
     
         <li class="main "><a href="#example">Example</a></li>
         
-            <li><a href="#next-steps">Next steps</a></li>
+    
+        <li class="main "><a href="#next-steps">Next steps</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="interactive-mode">Interactive mode</h1>
+<h2 id="interactive-mode">Interactive mode</h2>
 <p>Start the shell with <code>cbd util cloudbreak-shell</code>. This will launch the Cloudbreak shell inside a Docker container and you are ready to start using it.</p>
 <p>You have to copy files into the cbd working directory, which you would like to use from shell. For example if your <code>cbd</code> working directory is <code>~/prj/cbd</code> then copy your blueprint and public ssh key file into this directory. You can refer to these files with their names from the shell.</p>
 <h3 id="create-a-cloud-credential">Create a cloud credential</h3>
@@ -488,7 +509,7 @@ securitygroup select --name secgroup_example
 
 <p>Other available options:</p>
 <p><code>--templateId</code> Id of the template</p>
-<h2 id="create-a-hadoop-cluster">Create a Hadoop cluster</h2>
+<h3 id="create-a-hadoop-cluster">Create a Hadoop cluster</h3>
 <p>You are almost done - two more command and this will create your Hadoop cluster on your favorite cloud provider. Same as the API, or UI this will use your <code>credential</code>, <code>instancegroups</code>, <code>network</code>, <code>securitygroup</code>, and by using OpenStack Heat will launch a cloud stack</p>
 <pre><code>stack create --name my-first-stack --region local
 </code></pre>
@@ -498,7 +519,59 @@ securitygroup select --name secgroup_example
 </code></pre>
 
 <p>You are done - you can check the progress through the Ambari UI. If you log back to Cloudbreak UI you can check the progress over there as well, and learn the IP address of Ambari.</p>
-<h1 id="silent-mode">Silent mode</h1>
+<h3 id="stopping-and-restarting-a-stack">Stopping and restarting a stack</h3>
+<p>You have the ability to stop your existing stack in case if you want to suspend the work on it.</p>
+<p>Select a stack for example with its name:</p>
+<pre><code>stack select --name my-stack
+</code></pre>
+
+<p>Other available option to define a stack is its <code>--id</code> (instead of the <code>--name</code>).</p>
+<p>Apply the following command to <strong>stop the previously selected stack</strong>:</p>
+<pre><code>stack stop
+</code></pre>
+
+<p>Apply the following command to <strong>start the previously selected and stopped stack</strong>:</p>
+<pre><code>stack start
+</code></pre>
+
+<h3 id="stopping-and-restarting-a-cluster">Stopping and restarting a cluster</h3>
+<p>You also have the ability to stop your existing cluster in case if you want to suspend the work on it.</p>
+<p>Select a cluster for example with its name:</p>
+<pre><code>cluster select --name my-cluster
+</code></pre>
+
+<p>Other available option to define a cluster is its <code>--id</code> (instead of the <code>--name</code>).</p>
+<p>Apply the following command to <strong>stop the previously selected cluster</strong>:</p>
+<pre><code>cluster stop
+</code></pre>
+
+<p>Apply the following command to <strong>start the previously selected and stopped cluster</strong>:</p>
+<pre><code>cluster start
+</code></pre>
+
+<h3 id="upscaling-and-downscaling-a-stack">Upscaling and downscaling a stack</h3>
+<p>You can upscale or downscale your selected stack:</p>
+<pre><code>stack node --ADD --instanceGroup host_group_slave_1 --adjustment 2
+</code></pre>
+
+<p>Other available options:</p>
+<p><code>--withClusterUpScale</code> indicates cluster upscale after stack upscale</p>
+<p>or</p>
+<pre><code>stack node --REMOVE  --instanceGroup host_group_slave_1 --adjustment -2
+</code></pre>
+
+<h3 id="upscaling-and-downscaling-a-cluster">Upscaling and downscaling a cluster</h3>
+<p>You can also upscale or downscale your selected cluster:</p>
+<pre><code>cluster node --ADD --hostgroup host_group_slave_1 --adjustment 2
+</code></pre>
+
+<p>or</p>
+<pre><code>cluster node --REMOVE  --hostgroup host_group_slave_1 --adjustment -2
+</code></pre>
+
+<p>Other available options:</p>
+<p><code>--withStackDownScale</code> indicates stack downscale after the cluster downscale</p>
+<h2 id="silent-mode">Silent mode</h2>
 <p>With Cloudbreak shell you can execute script files as well. A script file contains cloudbreak shell commands and can be executed with the <code>script</code> cloudbreak shell command</p>
 <pre><code>script &lt;your script file&gt;
 </code></pre>
@@ -507,7 +580,7 @@ securitygroup select --name secgroup_example
 <pre><code>cbd util cloudbreak-shell-quiet &lt; example.sh
 </code></pre>
 
-<h1 id="example">Example</h1>
+<h2 id="example">Example</h2>
 <p>The following example creates a hadoop cluster with <code>hdp-small-default</code> blueprint on <code>m1.large</code> instances with 2X100G attached disks on <code>osnetwork</code> network using <code>all-services-port</code> security group. You should copy your ssh public key file into your cbd working directory with name <code>id_rsa.pub</code> and change the <code>&lt;...&gt;</code> parts with your openstack credential and network details.</p>
 <pre><code>credential create --OPENSTACK --name my-os-credential --description &quot;credentail description&quot; --userName &lt;OpenStack username&gt; --password &lt;OpenStack password&gt; --tenantName &lt;OpenStack tenant name&gt; --endPoint &lt;OpenStack Identity Service (Keystone) endpoint&gt; --sshKeyPath &lt;path of your public SSH key file&gt;
 credential select --name my-os-credential
@@ -576,6 +649,48 @@ cluster create --description &quot;My first cluster&quot;
                 $.each(data.versions, function( index, value ) {
                   $("#versions-dropdown").append('<li><a href="http://sequenceiq.com/cloudbreak-deployer/'+value+'">'+value+'</a></li>');
                 });
+               });
+
+               <!--AWS Table-->
+               $.getJSON("../providers/aws.json", function(data) {
+               $("#aws-image-details").append('<br>');
+               $("#aws-image-details").append('<br>');
+               $("#aws-image-details").append('<table>');
+                 $("#aws-image-details").append('<col width="290">');
+                 $("#aws-image-details").append('<col width="290">');
+                 $("#aws-image-details").append('<thead>');
+                  $("#aws-image-details").append('<tr>');
+                   $("#aws-image-details").append('<th halign="center" style="font-size: 14pt;border:none;border-bottom:solid #DDDDDD 1.5pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">' + "Region" + '</th>');
+                   $("#aws-image-details").append('<th halign="center" style="font-size: 14pt;border:none;border-bottom:solid #DDDDDD 1.5pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">' + "Image Name" + '</th>');
+                  $("#aws-image-details").append('</tr>');
+                 $("#aws-image-details").append('</thead>');
+                $("#aws-image-details").append('<tbody>');
+                 $.each(data.metadata, function( index, value ) {
+                 if (index.indexOf("region.") === 0) {
+                   shortIndex = index.substring(7)
+                  $("#aws-image-details").append('<tr>');
+                   $("#aws-image-details").append('<td halign="center" valign="center" text-align="left" style="font-size: 12pt;border:none;border-bottom:solid #DDDDDD 1.5pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">' + shortIndex + '</td>');
+                   $("#aws-image-details").append('<td halign="center" valign="center" text-align="right" style="font-size: 12pt;border:none;border-bottom:solid #DDDDDD 1.5pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">' + value + '</td>');
+                  $("#aws-image-details").append('</tr>');
+                  }
+                 });
+                $("#aws-image-details").append('</tbody>');
+               $("#aws-image-details").append('</table>');
+               });
+
+               <!--OpenStack-->
+               $.getJSON("../providers/openstack.json", function(data) {
+               $("#openstack-image-details").append('<br>');
+               $("#openstack-image-details").append('<br>');
+               $("#openstack-image-details").append('<p style="font-size: 12pt"><code>LATEST_IMAGE:</code>' + data.id + '</p>');
+               $("#openstack-image-details").append('<pre><code style="font-size: 12pt;color:#333333">curl -L  https://atlas.hashicorp.com/api/v1/artifacts/sequenceiq/cloudbreak/openstack.image/' + data.version + '/file | tar -xz</code></pre>');
+               });
+
+               <!--GCP-->
+               $.getJSON("../providers/gcp.json", function(data) {
+               $("#gcp-image-details").append('<br>');
+               $("#gcp-image-details").append('<br>');
+               $("#gcp-image-details").append('<pre><code style="font-size: 12pt;color:#333333">gcloud compute images create ' + data.gcp.id + ' --source-uri gs://' + data.gcp.source_image + '</code></pre>');
                });
            });
          </script>

@@ -77,6 +77,12 @@
         
             
 <li >
+    <a href="../onprem/">On-prem</a>
+</li>
+
+        
+            
+<li >
     <a href="../aws/">AWS</a>
 </li>
 
@@ -101,6 +107,12 @@
         
     </ul>
   </li>
+
+                        
+                            
+<li >
+    <a href="../overview/">Benefits</a>
+</li>
 
                         
                         </ul>
@@ -355,27 +367,26 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#contribution">Contribution</a></li>
+        <li class="main active"><a href="#development">Development</a></li>
         
-    
-        <li class="main "><a href="#snapshots">Snapshots</a></li>
+            <li><a href="#contribution">Contribution</a></li>
         
-    
-        <li class="main "><a href="#testing">Testing</a></li>
+            <li><a href="#snapshots">Snapshots</a></li>
         
-    
-        <li class="main "><a href="#release-process-of-the-clodbreak-deployer-tool">Release Process of the Clodbreak Deployer tool</a></li>
+            <li><a href="#testing">Testing</a></li>
+        
+            <li><a href="#release-process-of-the-clodbreak-deployer-tool">Release Process of the Clodbreak Deployer tool</a></li>
         
             <li><a href="#acceptance">Acceptance</a></li>
         
-    
-        <li class="main "><a href="#custom-domains">Custom domains</a></li>
+            <li><a href="#custom-domains">Custom domains</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
+<h1 id="development">Development</h1>
 <h2 id="contribution">Contribution</h2>
 <p>Development process should happen on separate branches. Then a pull-request should be opened as usual.</p>
 <p>To build the project</p>
@@ -404,7 +415,8 @@ All successful builds from master are uploaded to the public s3 bucker. You can 
 </code></pre>
 
 <h2 id="testing">Testing</h2>
-<p>Shell scripts shouldn’t raise exceptions when it comes to unit testing. <a href="https://github.com/progrium/basht">basht</a> is used for testing. See the reasoning: <a href="https://github.com/progrium/basht#why-not-bats-or-shunit2">why not bats or shunit2</a></p>
+<p>Shell scripts shouldn’t raise exceptions when it comes to unit testing. <a href="https://github.com/progrium/basht">basht</a> is
+ used for testing. See the reasoning: <a href="https://github.com/progrium/basht#why-not-bats-or-shunit2">why not bats or shunit2</a>.</p>
 <p>Please cover your bash functions with unit tests and run test with:</p>
 <pre><code>make tests
 </code></pre>
@@ -417,24 +429,27 @@ When you wan’t a new release, all you have to do:</p>
 
 <p><code>make release-next-ver</code> performs the following steps:</p>
 <ul>
-<li>on the <code>master</code> branch:</li>
+<li>On the <code>master</code> branch:<ul>
 <li>Updates the <code>VERSION</code> file by increasing the <strong>patch</strong> version number (for example from 0.5.2 to 0.5.3)</li>
 <li>Updates <code>CHANGELOG.md</code> with the release date</li>
-<li>
-<p>Creates a new <strong>Unreleased</strong> section in top of <code>CHANGELOG.md</code></p>
+<li>Creates a new <strong>Unreleased</strong> section in top of <code>CHANGELOG.md</code></li>
+</ul>
 </li>
-<li>
-<p>Creates a PullRequest for the release branch:</p>
-</li>
+<li>Creates a PullRequest for the release branch:<ul>
 <li>create a new branch with a name like <code>release-0.5.x</code></li>
 <li>this branch should be the same as <code>origin/master</code></li>
 <li>create a pull request into <code>release</code> branch</li>
 </ul>
-<h3 id="acceptance">Acceptance</h3>
+</li>
+</ul>
+<h2 id="acceptance">Acceptance</h2>
 <p>Now you should test this release. You can get it by <code>cbd update release-x.y.z</code>. Comment with LGTM (Looking Good To Me).</p>
-<p>Once the PR is merged, CircleCI will:
-- create a new release on <a href="https://github.com/sequenceiq/cloudbreak-deployer/releases">GitHub releases tab</a>, with the help of <a href="https://github.com/progrium/gh-release">gh-release</a>.
-- it will create the git tag with <code>v</code> prefix like: <code>v0.0.3</code></p>
+<p>Once the PR is merged, CircleCI will:</p>
+<ul>
+<li>create a new release on <a href="https://github.com/sequenceiq/cloudbreak-deployer/releases">GitHub releases tab</a>, with the
+ help of <a href="https://github.com/progrium/gh-release">gh-release</a>.</li>
+<li>it will create the git tag with <code>v</code> prefix like: <code>v0.0.3</code></li>
+</ul>
 <h2 id="custom-domains">Custom domains</h2>
 <p>In case of using custom domains the 'UAA_ZONE_DOMAIN' variable should be set in the profile to the exact domain name of the identity server. For example in our hosted deployment the 'identity.sequenceiq.com' domain refers to our identity server and the 'UAA_ZONE_DOMAIN' variable has to be set to that domain. This variable is neccessary for UAA to identify which zone provider should handle the requests that arrives to the given domain.</p></div>
             
@@ -485,6 +500,48 @@ When you wan’t a new release, all you have to do:</p>
                 $.each(data.versions, function( index, value ) {
                   $("#versions-dropdown").append('<li><a href="http://sequenceiq.com/cloudbreak-deployer/'+value+'">'+value+'</a></li>');
                 });
+               });
+
+               <!--AWS Table-->
+               $.getJSON("../providers/aws.json", function(data) {
+               $("#aws-image-details").append('<br>');
+               $("#aws-image-details").append('<br>');
+               $("#aws-image-details").append('<table>');
+                 $("#aws-image-details").append('<col width="290">');
+                 $("#aws-image-details").append('<col width="290">');
+                 $("#aws-image-details").append('<thead>');
+                  $("#aws-image-details").append('<tr>');
+                   $("#aws-image-details").append('<th halign="center" style="font-size: 14pt;border:none;border-bottom:solid #DDDDDD 1.5pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">' + "Region" + '</th>');
+                   $("#aws-image-details").append('<th halign="center" style="font-size: 14pt;border:none;border-bottom:solid #DDDDDD 1.5pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">' + "Image Name" + '</th>');
+                  $("#aws-image-details").append('</tr>');
+                 $("#aws-image-details").append('</thead>');
+                $("#aws-image-details").append('<tbody>');
+                 $.each(data.metadata, function( index, value ) {
+                 if (index.indexOf("region.") === 0) {
+                   shortIndex = index.substring(7)
+                  $("#aws-image-details").append('<tr>');
+                   $("#aws-image-details").append('<td halign="center" valign="center" text-align="left" style="font-size: 12pt;border:none;border-bottom:solid #DDDDDD 1.5pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">' + shortIndex + '</td>');
+                   $("#aws-image-details").append('<td halign="center" valign="center" text-align="right" style="font-size: 12pt;border:none;border-bottom:solid #DDDDDD 1.5pt;padding:6.0pt 6.0pt 6.0pt 6.0pt">' + value + '</td>');
+                  $("#aws-image-details").append('</tr>');
+                  }
+                 });
+                $("#aws-image-details").append('</tbody>');
+               $("#aws-image-details").append('</table>');
+               });
+
+               <!--OpenStack-->
+               $.getJSON("../providers/openstack.json", function(data) {
+               $("#openstack-image-details").append('<br>');
+               $("#openstack-image-details").append('<br>');
+               $("#openstack-image-details").append('<p style="font-size: 12pt"><code>LATEST_IMAGE:</code>' + data.id + '</p>');
+               $("#openstack-image-details").append('<pre><code style="font-size: 12pt;color:#333333">curl -L  https://atlas.hashicorp.com/api/v1/artifacts/sequenceiq/cloudbreak/openstack.image/' + data.version + '/file | tar -xz</code></pre>');
+               });
+
+               <!--GCP-->
+               $.getJSON("../providers/gcp.json", function(data) {
+               $("#gcp-image-details").append('<br>');
+               $("#gcp-image-details").append('<br>');
+               $("#gcp-image-details").append('<pre><code style="font-size: 12pt;color:#333333">gcloud compute images create ' + data.gcp.id + ' --source-uri gs://' + data.gcp.source_image + '</code></pre>');
                });
            });
          </script>
