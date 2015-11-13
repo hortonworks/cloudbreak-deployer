@@ -383,9 +383,9 @@
         
             <li><a href="#create-a-hadoop-cluster">Create a Hadoop cluster</a></li>
         
-            <li><a href="#stop-restart-cluster-and-stack">Stop / Restart cluster and stack</a></li>
+            <li><a href="#stoprestart-cluster-and-stack">Stop/Restart cluster and stack</a></li>
         
-            <li><a href="#upscale-downscaling-cluster-and-stack">Upscale / Downscaling cluster and stack</a></li>
+            <li><a href="#upscaledownscale-cluster-and-stack">Upscale/Downscale cluster and stack</a></li>
         
     
         <li class="main "><a href="#silent-mode">Silent mode</a></li>
@@ -529,7 +529,7 @@ securitygroup select --name secgroup_example
 </code></pre>
 
 <p>You are done - you can check the progress through the Ambari UI. If you log back to Cloudbreak UI you can check the progress over there as well, and learn the IP address of Ambari.</p>
-<h3 id="stop-restart-cluster-and-stack">Stop / Restart cluster and stack</h3>
+<h3 id="stoprestart-cluster-and-stack">Stop/Restart cluster and stack</h3>
 <p>You have the ability to <strong>stop your existing stack then its cluster</strong> if you want to suspend the work on it.</p>
 <p>Select a stack for example with its name:</p>
 <pre><code>stack select --name my-stack
@@ -552,7 +552,7 @@ stack stop
 <pre><code>cluster start
 </code></pre>
 
-<h3 id="upscale-downscaling-cluster-and-stack">Upscale / Downscaling cluster and stack</h3>
+<h3 id="upscaledownscale-cluster-and-stack">Upscale/Downscale cluster and stack</h3>
 <p>You can <strong>upscale your selected stack</strong> if you need more instances to your infrastructure:</p>
 <pre><code>stack node --ADD --instanceGroup host_group_slave_1 --adjustment 2
 </code></pre>
