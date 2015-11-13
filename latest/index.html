@@ -393,7 +393,7 @@
 <p>Cloudbreak has two main components: the <strong>Cloudbreak Application</strong> and the <strong>Cloudbreak Deployer</strong>.</p>
 <p>The <strong>Cloudbreak Application</strong> is made up from microservices (Cloudbreak, Uluwatu, Sultans, ...). The <strong>Cloudbreak Deployer</strong> helps you to deploy the Cloudbreak application automatically in environments with Docker support. Once the Cloudbreak Application is deployed you can use it to provision HDP clusters in different cloud environments.</p>
 <blockquote>
-<p>For an architectural overview of the <a href="http://sequenceiq.com/cloudbreak-deployer">Cloudbreak Deployer</a>, the Cloudbreak Application, Apache Ambari, Docker and the rest of the Cloudbreak components, please follow this <a href="technology/">link</a>.</p>
+<p>For an architectural overview of the Cloudbreak Deployer, the Cloudbreak Application, Apache Ambari, Docker and the rest of the Cloudbreak components, please follow this <a href="technology/">link</a>.</p>
 </blockquote>
 <h2 id="system-requirements">System Requirements</h2>
 <p>To run the Cloudbreak Deployer and install the Cloudbreak Application, you must meet the following system requirements:</p>
@@ -574,7 +574,7 @@
                $("#openstack-image-details").append('<br>');
                $("#openstack-image-details").append('<br>');
                $("#openstack-image-details").append('<p style="font-size: 12pt"><code>LATEST_IMAGE:</code>' + data.id + '</p>');
-               $("#openstack-image-details").append('<pre><code style="font-size: 12pt;color:#333333">curl -L  https://atlas.hashicorp.com/api/v1/artifacts/sequenceiq/cloudbreak/openstack.image/' + data.version + '/file | tar -xz</code></pre>');
+               $("#openstack-image-details").append('<pre><code style="font-size: 12pt;color:#333333">curl -L  https://atlas.hashicorp.com/api/v1/artifacts/sequenceiq/cbd/openstack.image/' + data.version + '/file | tar -xz</code></pre>');
                });
 
                <!--GCP-->
@@ -590,5 +590,5 @@
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2015-11-13 12:17:56.771182
+Build Date UTC : 2015-11-13 13:20:13.390271
 -->
