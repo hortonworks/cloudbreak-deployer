@@ -78,6 +78,12 @@
     </url>
         
     <url>
+     <loc>http://sequenceiq.com/cloudbreak-deployer/periscope/</loc>
+     <lastmod>2015-11-17</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
      <loc>http://sequenceiq.com/cloudbreak-deployer/recipes/</loc>
      <lastmod>2015-11-17</lastmod>
      <changefreq>daily</changefreq>
@@ -91,6 +97,12 @@
         
     <url>
      <loc>http://sequenceiq.com/cloudbreak-deployer/spi/</loc>
+     <lastmod>2015-11-17</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>http://sequenceiq.com/cloudbreak-deployer/operations/</loc>
      <lastmod>2015-11-17</lastmod>
      <changefreq>daily</changefreq>
     </url>

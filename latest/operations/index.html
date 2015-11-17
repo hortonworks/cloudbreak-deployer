@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/spi/">
+        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/operations/">
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>SPI - Cloudbreak</title>
+	<title>Operations - Cloudbreak</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -296,14 +296,14 @@
 
                         
                             
-<li class="active">
-    <a href="./">SPI</a>
+<li >
+    <a href="../spi/">SPI</a>
 </li>
 
                         
                             
-<li >
-    <a href="../operations/">Operations</a>
+<li class="active">
+    <a href="./">Operations</a>
 </li>
 
                         
@@ -352,12 +352,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../kerberos/">
+                        <a rel="next" href="../spi/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../operations/">
+                        <a rel="prev" href="../database/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -373,91 +373,145 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#service-provider-interface-spi">Service Provider Interface (SPI)</a></li>
+        <li class="main active"><a href="#operations">Operations</a></li>
         
-            <li><a href="#resource-management">Resource management</a></li>
+            <li><a href="#cloudbreak-deployer">Cloudbreak deployer</a></li>
         
-            <li><a href="#template-based-deployments">Template based deployments</a></li>
-        
-            <li><a href="#individual-resource-based-deployments">Individual resource based deployments</a></li>
-        
-            <li><a href="#variants">Variants</a></li>
-        
-            <li><a href="#development">Development</a></li>
+            <li><a href="#cloudbreak-application">Cloudbreak application</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="service-provider-interface-spi">Service Provider Interface (SPI)</h1>
-<p>Cloudbreak already supports multiple cloud platforms and provides an easy way to integrate a new provider trough <a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-api">Cloudbreak's Service Provider Interface (SPI)</a> which is a plugin mechanism to enable a seamless integration of any cloud provider.</p>
-<p>The SPI plugin mechanism has been used to integrate all existing providers to Cloudbreak, therefore if a new provider is integrated it immediately becomes a first class citizen in Cloudbreak.</p>
-<ul>
-<li><a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-aws">cloud-aws</a> module integrates Amazon Web Services</li>
-<li><a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-gcp">cloud-gcp</a> module integrates Google Cloud Platform</li>
-<li><a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-arm">cloud-arm</a> module integrates Microsoft Azure</li>
-<li><a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-openstack">cloud-openstack</a> module integrates OpenStack</li>
-</ul>
-<p>The SPI interface is event based, scales well and decoupled from Cloudbreak. The core of Cloudbreak is communicating trough <a href="http://projectreactor.io/">EventBus</a> with providers, but the complexity of Event handling is hidden from the provider implementation.</p>
-<h2 id="resource-management">Resource management</h2>
-<p>There are two kind of deployment/resource management method is supported by cloud providers:</p>
-<ul>
-<li>template based deployments</li>
-<li>individual resource based deployments</li>
-</ul>
-<p>Cloudbreak's SPI supports both way of resource management. It provides a well defined interfaces, abstract classes and helper classes like scheduling and polling of resources to aid the integration and to avoid any boilerplate code in the module of cloud provider.</p>
-<h2 id="template-based-deployments">Template based deployments</h2>
-<p>Providers with template based deployments like <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a>, <a href="https://azure.microsoft.com/en-us/documentation/articles/resource-group-overview/#">Azure ARM</a> or <a href="https://wiki.openstack.org/wiki/Heat">OpenStack Heat</a> have the ability to create and manage a collection of related cloud resources, provisioning and updating them in an orderly and predictable fashion. This means that Cloudbreak needs a reference to the template itself and every change in the infrastructure (e.g creating new instance or deleting one) is managed through this templating mechanism.</p>
-<p>If the provider has templating support then the provider's <a href="http://gradle.org/">gradle</a> module shall depend on the <a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-api">cloud-api</a> module.</p>
-<pre><code>apply plugin: 'java'
-
-sourceCompatibility = 1.7
-
-repositories {
-    mavenCentral()
-}
-
-jar {
-    baseName = 'cloud-new-provider'
-}
-
-dependencies {
-
-    compile project(':cloud-api')
-
-}
+<h1 id="operations">Operations</h1>
+<h2 id="cloudbreak-deployer">Cloudbreak deployer</h2>
+<h3 id="debug">Debug</h3>
+<p>If you want to have more detailed output set the <code>DEBUG</code> env variable to non-zero:</p>
+<pre><code>DEBUG=1 cbd some_command
 </code></pre>
 
-<p>The entry point of the provider is the  <a href="https://github.com/sequenceiq/cloudbreak/blob/master/cloud-api/src/main/java/com/sequenceiq/cloudbreak/cloud/CloudConnector.java">CloudConnector</a> interface and every interface that needs to be implemented is reachable trough this interface.</p>
-<h2 id="individual-resource-based-deployments">Individual resource based deployments</h2>
-<p>Providers like GCP that does not support suitable templating mechanism or for customisable providers like OpenStack where the Heat Orchestration (templating) component optional the individual resources needs to be handlet separately. This means that resources like networks, discs and compute instances needs to be created and managed with an ordered sequence of API calls and Cloudbreak shall provide a solution to manage the collection of related cloud resources together.</p>
-<p>If the provider has no templating support then the provider's <a href="http://gradle.org/">gradle</a> module shall depend on the <a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-template">cloud-template</a> module, that includes Cloudbreak defined abstract template. This template is a set of abstract and utility classes to support provisioning and updating related resources in an orderly and predictable manner trough ordered sequences of cloud API calls.</p>
-<pre><code>apply plugin: 'java'
-
-sourceCompatibility = 1.7
-
-repositories {
-    mavenCentral()
-}
-
-jar {
-    baseName = 'cloud-new-provider'
-}
-
-dependencies {
-
-    compile project(':cloud-template')
-
-}
+<h3 id="troubleshoot">Troubleshoot</h3>
+<p>You can use the <code>doctor</code> command to diagnose your environment.
+It can reveal some common problems with your docker or boot2docker configuration and it also checks the cbd versions.</p>
+<pre><code>cbd doctor
 </code></pre>
 
-<h2 id="variants">Variants</h2>
-<p>OpenStack is very modular and allows to install different components for e.g. volume storage or different components for networking (e.g. Nova networking or Neutron) or even you have a chance that some components like Heat are not installed at all.</p>
-<p>Cloudbreak's SPI interface reflects this flexibility using so called variants. This means that if some part of cloud provider (typically OpenStack) is using different component you don't need re-implement the complete stack but just use a different variant and re-implement the part what is different.</p>
-<p>The reference implementation for this feature can be found in  <a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-openstack">cloud-openstack</a> module which support a HEAT and NATIVE variants. The HEAT variant utilizes the Heat templating to launch a stack, but the NATIVE variant starts the cluster by using a sequence of API calls without Heat to achieve the same result, although both of them are using the same authentication and credential management.</p>
-<h2 id="development">Development</h2>
-<p>In order to set up a development environment please take a look at <a href="https://github.com/sequenceiq/cloudbreak/blob/master/docs/dev/development.md">Local Development Setup</a> documentation.</p></div>
+<h3 id="logs">Logs</h3>
+<p>The aggregated logs of all the Cloudbreak components can be checked with:</p>
+<pre><code>cbd logs
+</code></pre>
+
+<p>It can also be used to check the logs of an individual docker container. To see only the logs of the Cloudbreak backend:</p>
+<pre><code>cbd logs cloudbreak
+</code></pre>
+
+<p>You can also check the individual logs of <code>uluwatu</code>, <code>periscope</code>, and <code>identity</code>.</p>
+<h3 id="update">Update</h3>
+<p>The cloudbreak-deployer tool is capable of upgrading itself to a newer version.</p>
+<pre><code>cbd update
+</code></pre>
+
+<h2 id="cloudbreak-application">Cloudbreak application</h2>
+<h3 id="ssh-to-the-hosts">SSH to the hosts</h3>
+<p>In the current version of Cloudbreak all the nodes have a public IP address and all the nodes are accessible via SSH.
+The public IP addresses of a running cluster can be checked on the Cloudbreak UI under the <em>Nodes</em> tab.
+Only key-based authentication is supported - the public key can be specified when creating a cloud credential.</p>
+<pre><code>ssh -i ~/.ssh/private-key.pem cloudbreak@&lt;public-ip&gt;
+</code></pre>
+
+<p>The default user is <code>cloudbreak</code> except on EC2 where it is <code>ec2-user</code>.</p>
+<h3 id="accessing-hdp-client-services">Accessing HDP client services</h3>
+<p>The main difference between general HDP clusters and Cloudbreak-installed HDP clusters is that each host runs an Ambari server or agent Docker container and the HDP services will be installed in this container as well.
+It means that after <code>ssh</code> the client services won't be available instantly, first you'll have to <code>enter</code> the ambari-agent container.
+Inside the container everything works the same way as expected. In order to do so there are a few options.</p>
+<p><em>Helper functions</em></p>
+<p>We have created a few helper functions in order to help operations. Once yoy SSH into the host you should a message as such:</p>
+<pre><code>You are now logged in to the docker host ...
+Getting started with docker:
+
+  docker ps                : Listing running containers
+  docker logs -f &lt;ID&gt;      : Star tail -f on container stdout/stderr
+  docker exec -it &lt;ID&gt; sh  : Entering the container (instead of ssh)
+
+Helper commands:
+
+  h                        : prints this message
+  ambari-enter             : Enters the ambari container
+  ambari-log               : Watches the ambari logs
+</code></pre>
+
+<p>You can enter into the container where the HDP services are running using the <code>ambari-enter</code> functions.</p>
+<p><em>Docker exec</em></p>
+<p>To check the containers running on the host enter:</p>
+<pre><code>[cloudbreak@vmhostgroupclient11 ~]$ sudo docker ps
+CONTAINER ID   IMAGE                                    COMMAND                CREATED      STATUS      PORTS     NAMES
+1098ca778176   sequenceiq/baywatch-client:v1.0.0        &quot;/etc/bootstrap.sh -d&quot; 4 hours ago  Up 4 hours            baywatch-client-14454170059514
+f4097c52fda5   sequenceiq/logrotate:v0.5.1              &quot;/start.sh&quot;            4 hours ago  Up 4 hours            logrotate-14454169954830
+7b94aedaab30   sequenceiq/docker-consul-watch-plugn:1.0 &quot;/start.sh consul://1&quot; 4 hours ago  Up 4 hours            consul-watch-14454169884044
+d8128b001427   sequenceiq/ambari:2.1.2-v2               &quot;/start-agent&quot;         4 hours ago  Up 4 hours            ambari-agent-14454169805924
+a8ec90037aaf   swarm:0.4.0                              &quot;/swarm join --addr=1&quot; 4 hours ago  Up 4 hours  2375/tcp  vmhostgroupmaster12-swarm-agent
+ef02b43eacee   sequenceiq/consul:v0.5.0-v5              &quot;/bin/start&quot;           4 hours ago  Up 4 hours            vmhostgroupmaster12-consul
+</code></pre>
+
+<p>You should see the <code>ambari-agent</code> container running. Copy its id or name and <code>exec</code> into the container:</p>
+<pre><code>[cloudbreak@vmhostgroupclient11 ~]$ sudo docker exec -it ambari-agent-14454169805924 bash
+[root@docker-ambari tmp]#
+</code></pre>
+
+<p>Or you can use this one-step command as well:</p>
+<pre><code>[cloudbreak@vmhostgroupclient11 ~]$ sudo docker exec -it $(sudo docker ps -f=name=ambari-agent -q) bash
+[root@docker-ambari tmp]#
+</code></pre>
+
+<h3 id="data-volumes">Data volumes</h3>
+<p>The disks that are attached to the instances are automatically mounted to <code>/hadoopfs/fs1</code>, <code>/hadoopfs/fs2</code>, ... <code>/hadoopfs/fsN</code> respectively.
+These directories are mounted from the host into the ambari-agent container under the same name so these can be accessed from inside.
+It means that if you'd like to move some data to the instances you can use these volumes and the data will be available from the container instantly to work on it.</p>
+<p>An <code>scp</code> Example:</p>
+<pre><code>$ scp -qr -i ~/.ssh/private-key.pem ~/tmp/data cloudbreak@&lt;client-node&gt;:/hadoopfs/fs1
+$ ssh -i ~/.ssh/private-key.pem cloudbreak@&lt;client-node&gt;
+[cloudbreak@vmhostgroupclient11 ~]$ sudo docker exec -it $(sudo docker ps -f=name=ambari-agent -q) bash
+[root@docker-ambari tmp]# su hdfs
+[hdfs@docker-ambari tmp]# hadoop fs -put /hadoopfs/fs1/data /tmp
+[hdfs@docker-ambari tmp]# hadoop fs -ls /tmp
+Found 2 items
+drwxr-xr-x   - hdfs supergroup          0 2015-10-21 13:46 /tmp/data
+drwx-wx-wx   - hive supergroup          0 2015-10-21 08:51 /tmp/hive
+</code></pre>
+
+<h3 id="internal-hostnames">Internal hostnames</h3>
+<p>After a cluster is created with Cloudbreak, the nodes will have internal hostnames like this:</p>
+<p><code>vmhostgroupclient11.node.dc1.consul</code></p>
+<p>This is because Cloudbreak uses <a href="https://www.consul.io">Consul</a> to provide DNS services.
+It means that you won't see entries to the other nodes inside the <code>/etc/hosts</code> file, because nodes are registered inside Consul and the hostnames are resolved by Consul as well.</p>
+<p>In the current version the <code>node.dc1.consul</code> domain is hardcoded and cannot be changed.</p>
+<h3 id="accessing-ambari-server-from-the-other-nodes">Accessing Ambari server from the other nodes</h3>
+<p>Ambari server is registered as a service in Consul, so it can always be accessed through its domain name <code>ambari-8080.service.consul</code> from the other ambari containers.
+It can be tried by pinging it from one of the <code>ambari-agent</code> containers:</p>
+<pre><code>ping ambari-8080.service.consul
+</code></pre>
+
+<h3 id="cloudbreak-gateway-node">Cloudbreak gateway node</h3>
+<p>With every Cloudbreak cluster installation there is a special node called <em>cbgateway</em> started that won't run an ambari-agent container so it won't run HDP services either.
+It can be seen on the Cloudbreak UI among the hostgroups when creating a cluster, but its node count cannot be changed from 1 and it shouldn't be there in the Ambari blueprint.
+It is by design because this instance has some special tasks:</p>
+<ul>
+<li>it runs the Ambari server and its database inside Docker containers</li>
+<li>it runs an nginx proxy that is used by the Cloudbreak API to communicate with the cluster securely</li>
+<li>it runs the Swarm manager that orchestrates the Docker containers on the whole cluster</li>
+<li>it runs the Baywatch server that is responsible for collecting the operational logs from the cluster</li>
+<li>it runs a Kerberos KDC container if Kerberos is configured</li>
+</ul>
+<p><strong>Logs</strong></p>
+<p><em>Hadoop logs</em></p>
+<p>Hadoop logs are available from the host and from the container as well in the <code>/hadoopfs/fs1/logs</code> directory.</p>
+<p><em>Ambari logs</em></p>
+<p>For Ambari logs you can use our helper function, <code>ambari-log</code>. For further information please check the <em>Helper functions</em> section. Alternatively you watch the Ambari logs on the host instance as well under the <code>`/hadoopfs/fs1/logs</code> folder as well.</p>
+<p><strong>Ambari database</strong></p>
+<p>Ambari's database runs on the <code>cbgateway</code> node inside a PostgreSQL docker container. To access it SSH to the <code>gateway</code> node and run the following command:</p>
+<pre><code>[cloudbreak@vmcbgateway0 ~]$ sudo docker exec -it ambari_db psql -U postgres
+</code></pre></div>
             
         </div>
 

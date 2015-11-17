@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/spi/">
+        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/periscope/">
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>SPI - Cloudbreak</title>
+	<title>Periscope - Cloudbreak</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -278,8 +278,8 @@
 
                         
                             
-<li >
-    <a href="../periscope/">Periscope</a>
+<li class="active">
+    <a href="./">Periscope</a>
 </li>
 
                         
@@ -296,8 +296,8 @@
 
                         
                             
-<li class="active">
-    <a href="./">SPI</a>
+<li >
+    <a href="../spi/">SPI</a>
 </li>
 
                         
@@ -352,12 +352,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../kerberos/">
+                        <a rel="next" href="../shell/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../operations/">
+                        <a rel="prev" href="../recipes/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -373,91 +373,71 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#service-provider-interface-spi">Service Provider Interface (SPI)</a></li>
+        <li class="main active"><a href="#periscope">Periscope</a></li>
         
-            <li><a href="#resource-management">Resource management</a></li>
-        
-            <li><a href="#template-based-deployments">Template based deployments</a></li>
-        
-            <li><a href="#individual-resource-based-deployments">Individual resource based deployments</a></li>
-        
-            <li><a href="#variants">Variants</a></li>
-        
-            <li><a href="#development">Development</a></li>
+            <li><a href="#how-it-works">How it works</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="service-provider-interface-spi">Service Provider Interface (SPI)</h1>
-<p>Cloudbreak already supports multiple cloud platforms and provides an easy way to integrate a new provider trough <a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-api">Cloudbreak's Service Provider Interface (SPI)</a> which is a plugin mechanism to enable a seamless integration of any cloud provider.</p>
-<p>The SPI plugin mechanism has been used to integrate all existing providers to Cloudbreak, therefore if a new provider is integrated it immediately becomes a first class citizen in Cloudbreak.</p>
+<h1 id="periscope">Periscope</h1>
+<p>The purpose of Periscope is to bring metrics based <code>autoscaling</code> to a multi-tenant Hadoop cluster and applying SLA scaling policies. Due to the flexibility supported by cloud based Hadoop deployments Periscope can work with any Hadoop cluster provisioned with Cloudbreak and can apply SLA policies to these clusters.</p>
+<h2 id="how-it-works">How it works</h2>
+<p>Periscope is based on <a href="https://cwiki.apache.org/confluence/display/AMBARI/Metrics">Ambari metrics</a> - and <a href="https://cwiki.apache.org/confluence/display/AMBARI/Alerts">Ambari alerts</a>. Based on the Blueprint used and the running services we pull all the available metrics from the subsystem and Periscope can define <code>alerts</code> based on this.</p>
+<p>Beside the default Ambari metrics we have added two custom metrics - <code>Pending YARN containers</code> and <code>Pending applications</code>. These two custom metrics works with the YARN subsystem in order to bring <code>application</code> level QoS to the cluster. As the Ambari metrics subsystem can be extended, custom metrics can be brought under Periscope's management.</p>
+<p>Periscope requires no installation - in order to use the <code>autoscaling</code> feature with Cloudbreak you will have to enable from the UI or shell.</p>
+<p><img alt="" src="../images/enable_periscope.png" /></p>
+<h4 id="alerts">Alerts</h4>
+<p>Periscope supports two <strong>Alert</strong> types - <code>metric</code> and <code>time</code> based ones.</p>
+<p><strong>Metric based alerts</strong></p>
+<p>Metric based alerts are using the default (or custom) Ambari metrics. These metrics have a default <code>Threshold</code> value configured in Ambari - nevertheless these thresholds can be configured, changed or altered in Ambari. In order to change the default threshold for a metric please go to Ambari UI and select the <code>Alerts</code> tab and the metric. The values can be changed in the <code>Threshold</code> section.</p>
+<p><img alt="" src="../images/ambari_threshold.png" /></p>
+<p>Metric alerts have a few configurable fields.</p>
 <ul>
-<li><a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-aws">cloud-aws</a> module integrates Amazon Web Services</li>
-<li><a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-gcp">cloud-gcp</a> module integrates Google Cloud Platform</li>
-<li><a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-arm">cloud-arm</a> module integrates Microsoft Azure</li>
-<li><a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-openstack">cloud-openstack</a> module integrates OpenStack</li>
+<li><code>alert name</code> - name of the alert</li>
+<li><code>description</code> - description of the alert</li>
+<li><code>metric - desired state</code> - the Ambari metrics based on the installed services and their <em>state</em> (OK, WARN, CRITICAL), based on the <em>threshold</em> value</li>
+<li><code>period</code> - for how many <em>minutes</em> the metric state has to be sustained in order for an alert to be triggered</li>
 </ul>
-<p>The SPI interface is event based, scales well and decoupled from Cloudbreak. The core of Cloudbreak is communicating trough <a href="http://projectreactor.io/">EventBus</a> with providers, but the complexity of Event handling is hidden from the provider implementation.</p>
-<h2 id="resource-management">Resource management</h2>
-<p>There are two kind of deployment/resource management method is supported by cloud providers:</p>
+<p><img alt="" src="../images/metric_alert.png" /></p>
+<p><strong>Time based alerts</strong></p>
+<p>Time based alerts are based on <code>cron</code> expressions and allow alerts to be triggered based on time.</p>
+<p>Time alerts have a few configurable fields.</p>
 <ul>
-<li>template based deployments</li>
-<li>individual resource based deployments</li>
+<li><code>alert name</code> - name of the alert</li>
+<li><code>description</code> - description of the alert</li>
+<li><code>time zone</code> - the time zone</li>
+<li><code>crom expression</code> - the <em>cron</em> expression to be used for the alert</li>
 </ul>
-<p>Cloudbreak's SPI supports both way of resource management. It provides a well defined interfaces, abstract classes and helper classes like scheduling and polling of resources to aid the integration and to avoid any boilerplate code in the module of cloud provider.</p>
-<h2 id="template-based-deployments">Template based deployments</h2>
-<p>Providers with template based deployments like <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a>, <a href="https://azure.microsoft.com/en-us/documentation/articles/resource-group-overview/#">Azure ARM</a> or <a href="https://wiki.openstack.org/wiki/Heat">OpenStack Heat</a> have the ability to create and manage a collection of related cloud resources, provisioning and updating them in an orderly and predictable fashion. This means that Cloudbreak needs a reference to the template itself and every change in the infrastructure (e.g creating new instance or deleting one) is managed through this templating mechanism.</p>
-<p>If the provider has templating support then the provider's <a href="http://gradle.org/">gradle</a> module shall depend on the <a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-api">cloud-api</a> module.</p>
-<pre><code>apply plugin: 'java'
-
-sourceCompatibility = 1.7
-
-repositories {
-    mavenCentral()
-}
-
-jar {
-    baseName = 'cloud-new-provider'
-}
-
-dependencies {
-
-    compile project(':cloud-api')
-
-}
-</code></pre>
-
-<p>The entry point of the provider is the  <a href="https://github.com/sequenceiq/cloudbreak/blob/master/cloud-api/src/main/java/com/sequenceiq/cloudbreak/cloud/CloudConnector.java">CloudConnector</a> interface and every interface that needs to be implemented is reachable trough this interface.</p>
-<h2 id="individual-resource-based-deployments">Individual resource based deployments</h2>
-<p>Providers like GCP that does not support suitable templating mechanism or for customisable providers like OpenStack where the Heat Orchestration (templating) component optional the individual resources needs to be handlet separately. This means that resources like networks, discs and compute instances needs to be created and managed with an ordered sequence of API calls and Cloudbreak shall provide a solution to manage the collection of related cloud resources together.</p>
-<p>If the provider has no templating support then the provider's <a href="http://gradle.org/">gradle</a> module shall depend on the <a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-template">cloud-template</a> module, that includes Cloudbreak defined abstract template. This template is a set of abstract and utility classes to support provisioning and updating related resources in an orderly and predictable manner trough ordered sequences of cloud API calls.</p>
-<pre><code>apply plugin: 'java'
-
-sourceCompatibility = 1.7
-
-repositories {
-    mavenCentral()
-}
-
-jar {
-    baseName = 'cloud-new-provider'
-}
-
-dependencies {
-
-    compile project(':cloud-template')
-
-}
-</code></pre>
-
-<h2 id="variants">Variants</h2>
-<p>OpenStack is very modular and allows to install different components for e.g. volume storage or different components for networking (e.g. Nova networking or Neutron) or even you have a chance that some components like Heat are not installed at all.</p>
-<p>Cloudbreak's SPI interface reflects this flexibility using so called variants. This means that if some part of cloud provider (typically OpenStack) is using different component you don't need re-implement the complete stack but just use a different variant and re-implement the part what is different.</p>
-<p>The reference implementation for this feature can be found in  <a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-openstack">cloud-openstack</a> module which support a HEAT and NATIVE variants. The HEAT variant utilizes the Heat templating to launch a stack, but the NATIVE variant starts the cluster by using a sequence of API calls without Heat to achieve the same result, although both of them are using the same authentication and credential management.</p>
-<h2 id="development">Development</h2>
-<p>In order to set up a development environment please take a look at <a href="https://github.com/sequenceiq/cloudbreak/blob/master/docs/dev/development.md">Local Development Setup</a> documentation.</p></div>
+<p><img alt="" src="../images/time_alert.png" /></p>
+<h4 id="scaling-policies">Scaling Policies</h4>
+<p>Scaling is the ability to increase or decrease the capacity of the Hadoop cluster or application based on an alert.
+When scaling policies are used, the capacity is automatically increased or decreased according to the conditions defined.
+Periscope will do the heavy lifting and based on the alerts and the scaling policy linked to them it executes the associated policy. We scaling granularity is at the <code>hostgroup</code> level - thus you have the option to scale services or components only, not the whole cluster.</p>
+<p>Scaling policies have a few configurable fields.</p>
+<ul>
+<li><code>policy name</code> - name of the scaling policy</li>
+<li><code>scaling adjustment</code> - the number of added or removed noded based on <code>node count</code> (the number of nodes), <code>percentage</code> (computed percentage adjustment based on the cluster size) and <code>exact</code> (a given exact size of the cluster)</li>
+<li><code>host group</code> - the Ambari hostgroup to be scaled</li>
+<li><code>alert</code> - the triggered alert based on that the scaling policy applies</li>
+</ul>
+<p><img alt="" src="../images/policy.png" /></p>
+<h4 id="cluster-scaling-configurations">Cluster scaling configurations</h4>
+<p>An SLA scaling policy can contain multiple alerts. When an alert is triggered a <code>scaling adjustment</code> is applied, however to keep the cluster size within boundaries a <code>cluster size min.</code> and <code>cluster size max.</code> is attached to the cluster - thus a scaling policy can never over or undersize a cluster. Also in order to avoid stressing the cluster we have introduced a <code>cooldown time</code> period (minutes) - though an alert is raised and there is an associated scaling policy, the system will not apply the policy within the configured timeframe. In an SLA scaling policy the triggered rules are applied in order.</p>
+<ul>
+<li><code>cooldown time</code> - period (minutes) between two scaling events while the cluster is locked from adjustments</li>
+<li><code>cluster size min.</code> - size will never go under the minimum value, despite scaling adjustments</li>
+<li><code>cluster size max.</code> - size will never go above the maximum value, despite scaling adjustments</li>
+</ul>
+<p><img alt="" src="../images/scaling_config.png" /></p>
+<p><strong>Downscale scaling considerations</strong></p>
+<p>Periscope will try to keep a healthy cluster, thus does several background checks during <code>downscale</code>.</p>
+<ul>
+<li>We never remove <code>Application master nodes</code> from a cluster. In order to make sure that a node running AM is not removed Periscope has to be able to access the YARN Resource Manager - when creating a cluster using the <code>default</code> secure network template please make sure that the RM's port is open on the node</li>
+<li>In order to keep a healthy HDFS during downscale we always keep the configured <code>replication</code> factor and make sure there is enough <code>space</code> on HDFS to rebalance data. Also during downscale in order to minimize the rebalancing, replication and HDFS storms we check block locations and compute the least costly operations.</li>
+</ul></div>
             
         </div>
 
