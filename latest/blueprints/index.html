@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/kerberos/">
+        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/blueprints/">
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Kerberos - Cloudbreak</title>
+	<title>Blueprints - Cloudbreak</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -260,8 +260,8 @@
                         <ul class="dropdown-menu">
                         
                             
-<li >
-    <a href="../blueprints/">Blueprints</a>
+<li class="active">
+    <a href="./">Blueprints</a>
 </li>
 
                         
@@ -284,8 +284,8 @@
 
                         
                             
-<li class="active">
-    <a href="./">Kerberos</a>
+<li >
+    <a href="../kerberos/">Kerberos</a>
 </li>
 
                         
@@ -340,12 +340,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../recipes/">
+                        <a rel="next" href="../openstack_cb_shell/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../spi/">
+                        <a rel="prev" href="../api/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -361,69 +361,145 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#kerberos-security">Kerberos security</a></li>
+        <li class="main active"><a href="#blueprints">Blueprints</a></li>
         
-            <li><a href="#test">Test</a></li>
-        
-            <li><a href="#createadd-custom-users">Create/add custom users</a></li>
+            <li><a href="#components">Components</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="kerberos-security">Kerberos security</h1>
-<p>Cloudbreak supports Kerberos security for Ambari internal communication. To activate Kerberos with Cloudbreak you should enable security option and fill the</p>
+<h1 id="blueprints">Blueprints</h1>
+<p>We provide a list of default Hadoop cluster Blueprints for your convenience, however you can always build and use your own Blueprint.</p>
 <ul>
-<li><code>kerberos master key</code></li>
-<li><code>kerberos admin</code></li>
-<li><code>kerberos password</code></li>
+<li>hdp-small-default - HDP 2.3 blueprint</li>
 </ul>
-<p>fields too on web interface or shell during cluster creation. To run a job on the cluster, you can use one of the default Hadoop users, like <code>ambari-qa</code>, as usual.</p>
-<h3 id="test">Test</h3>
-<p>Once kerberos is enabled you need a <code>ticket</code> to execute any job on the cluster. Here's an example to get a ticket:</p>
-<pre><code>kinit -V -kt /etc/security/keytabs/smokeuser.headless.keytab ambari-qa-sparktest-rec@NODE.DC1.CONSUL
-</code></pre>
-
-<p>Example job:</p>
-<pre><code class="java">export HADOOP_LIBS=/usr/hdp/current/hadoop-mapreduce-client
-export JAR_EXAMPLES=$HADOOP_LIBS/hadoop-mapreduce-examples.jar
-export JAR_JOBCLIENT=$HADOOP_LIBS/hadoop-mapreduce-client-jobclient.jar
-
-hadoop jar $JAR_EXAMPLES teragen 10000000 /user/ambari-qa/terasort-input
-
-hadoop jar $JAR_JOBCLIENT mrbench -baseDir /user/ambari-qa/smallJobsBenchmark -numRuns 5 -maps 10 -reduces 5 -inputLines 10 -inputType ascending
-</code></pre>
-
-<h3 id="createadd-custom-users">Create/add custom users</h3>
-<p>To create custom users please follow the steps below.</p>
+<p>This is a complex <a href="https://raw.githubusercontent.com/sequenceiq/cloudbreak/master/core/src/main/resources/defaults/blueprints/hdp-small-default.bp">Blueprint</a> which allows you to launch a multi node, fully distributed HDP 2.3 Cluster in the cloud.</p>
+<p>It allows you to use the following services: HDFS, YARN, MAPREDUCE2, KNOX, HBASE, HIVE, HCATALOG, WEBHCAT, SLIDER, OOZIE, PIG, SQOOP, METRICS, TEZ, FALCON, ZOOKEEPER.</p>
 <ul>
-<li>Log in via SSH to the Cloudbreak gateway node (IP address is the same as the Ambari UI)</li>
+<li>hdp-streaming-cluster - HDP 2.3 blueprint</li>
 </ul>
-<pre><code>sudo docker exec -i kerberos bash
-kadmin -p [admin_user]/[admin_user]@NODE.DC1.CONSUL (type admin password)
-addprinc custom-user (type user password twice)
-</code></pre>
-
+<p>This is a streaming <a href="https://raw.githubusercontent.com/sequenceiq/cloudbreak/master/core/src/main/resources/defaults/blueprints/hdp-streaming-cluster.bp">Blueprint</a> which allows you to launch a multi node, fully distributed HDP 2.3 Cluster in the cloud, optimized for streaming jobs.</p>
+<p>It allows you to use the following services: HDFS, YARN, MAPREDUCE2, STORM, KNOX, HBASE, HIVE, HCATALOG, WEBHCAT, SLIDER, OOZIE, PIG, SQOOP, METRICS, TEZ, FALCON, ZOOKEEPER.</p>
 <ul>
-<li>Log in via SSH to all other nodes</li>
+<li>hdp-spark-cluster - HDP 2.3 blueprint</li>
 </ul>
-<pre><code>sudo docker exec -i $(docker ps | grep ambari-warmup | cut -d&quot; &quot; -f 1) bash
-useradd custom-user
-</code></pre>
-
-<ul>
-<li>Log in via SSH to one of the nodes</li>
-</ul>
-<p>```
-sudo docker exec -i $(docker ps | grep ambari-warmup | cut -d" " -f 1) bash
-su custom-user
-kinit -p custom-user (type user password)
-hdfs dfs -mkdir input
-hdfs dfs -put /tmp/wait-for-host-number.sh input
-yarn jar $(find /usr/hdp -name hadoop-mapreduce-examples.jar) wordcount input output
-hdfs dfs -cat output/*</p>
-<p><strong>Note</strong> Current implementation of Kerberos security doesn't contain Active Directory support or any other third party user authentication method. If you want to use custom user, you have to create users manually with the same name on all Ambari containers on each node.</p></div>
+<p>This is an analytics <a href="https://raw.githubusercontent.com/sequenceiq/cloudbreak/master/core/src/main/resources/defaults/blueprints/hdp-spark-cluster.bp">Blueprint</a> which allows you to launch a multi node, fully distributed HDP 2.3 Cluster in the cloud, optimized for analytic jobs.</p>
+<p>It allows you to use the following services: HDFS, YARN, MAPREDUCE2, SPARK, ZEPPELIN, KNOX, HBASE, HIVE, HCATALOG, WEBHCAT, SLIDER, OOZIE, PIG, SQOOP, METRICS, TEZ, FALCON, ZOOKEEPER.</p>
+<h2 id="components">Components</h2>
+<p>Ambari supports the concept of stacks and associated services in a stack definition. By leveraging the stack definition, Ambari has a consistent and defined interface to install, manage and monitor a set of services and provides extensibility model for new stacks and services to be introduced.</p>
+<p>At high level the supported list of components can be grouped into main categories: Master and Slave - and bundling them together form a Hadoop Service.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Services</th>
+<th align="left">Components</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">HDFS</td>
+<td align="left">DATANODE, HDFS_CLIENT, JOURNALNODE, NAMENODE, SECONDARY_NAMENODE, ZKFC</td>
+</tr>
+<tr>
+<td align="left">YARN</td>
+<td align="left">APP_TIMELINE_SERVER, NODEMANAGER, RESOURCEMANAGER, YARN_CLIENT</td>
+</tr>
+<tr>
+<td align="left">MAPREDUCE2</td>
+<td align="left">HISTORYSERVER, MAPREDUCE2_CLIENT</td>
+</tr>
+<tr>
+<td align="left">GANGLIA</td>
+<td align="left">GANGLIA_MONITOR, GANGLIA_SERVER</td>
+</tr>
+<tr>
+<td align="left">HBASE</td>
+<td align="left">HBASE_CLIENT, HBASE_MASTER, HBASE_REGIONSERVER</td>
+</tr>
+<tr>
+<td align="left">HIVE</td>
+<td align="left">HIVE_CLIENT, HIVE_METASTORE, HIVE_SERVER, MYSQL_SERVER</td>
+</tr>
+<tr>
+<td align="left">HCATALOG</td>
+<td align="left">HCAT</td>
+</tr>
+<tr>
+<td align="left">WEBHCAT</td>
+<td align="left">WEBHCAT_SERVER</td>
+</tr>
+<tr>
+<td align="left">OOZIE</td>
+<td align="left">OOZIE_CLIENT, OOZIE_SERVER</td>
+</tr>
+<tr>
+<td align="left">PIG</td>
+<td align="left">PIG</td>
+</tr>
+<tr>
+<td align="left">SQOOP</td>
+<td align="left">SQOOP</td>
+</tr>
+<tr>
+<td align="left">STORM</td>
+<td align="left">DRPC_SERVER, NIMBUS, STORM_REST_API, STORM_UI_SERVER, SUPERVISOR</td>
+</tr>
+<tr>
+<td align="left">TEZ</td>
+<td align="left">TEZ_CLIENT</td>
+</tr>
+<tr>
+<td align="left">FALCON</td>
+<td align="left">FALCON_CLIENT, FALCON_SERVER</td>
+</tr>
+<tr>
+<td align="left">ZOOKEEPER</td>
+<td align="left">ZOOKEEPER_CLIENT, ZOOKEEPER_SERVER</td>
+</tr>
+<tr>
+<td align="left">SPARK</td>
+<td align="left">SPARK_JOBHISTORYSERVER, SPARK_CLIENT</td>
+</tr>
+<tr>
+<td align="left">RANGER</td>
+<td align="left">RANGER_USERSYNC, RANGER_ADMIN</td>
+</tr>
+<tr>
+<td align="left">AMBARI_METRICS</td>
+<td align="left">AMBARI_METRICS, METRICS_COLLECTOR, METRICS_MONITOR</td>
+</tr>
+<tr>
+<td align="left">KERBEROS</td>
+<td align="left">KERBEROS_CLIENT</td>
+</tr>
+<tr>
+<td align="left">FLUME</td>
+<td align="left">FLUME_HANDLER</td>
+</tr>
+<tr>
+<td align="left">KAFKA</td>
+<td align="left">KAFKA_BROKER</td>
+</tr>
+<tr>
+<td align="left">KNOX</td>
+<td align="left">KNOX_GATEWAY</td>
+</tr>
+<tr>
+<td align="left">NAGIOS</td>
+<td align="left">NAGIOS_SERVER</td>
+</tr>
+<tr>
+<td align="left">ATLAS</td>
+<td align="left">ATLAS</td>
+</tr>
+<tr>
+<td align="left">CLOUDBREAK</td>
+<td align="left">CLOUDBREAK</td>
+</tr>
+</tbody>
+</table></div>
             
         </div>
 

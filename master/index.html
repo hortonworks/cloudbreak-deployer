@@ -9,7 +9,7 @@
         <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/">
         <link rel="shortcut icon" href="./img/favicon.ico">
 
-	<title>Cloudbreak Deployer</title>
+	<title>Cloudbreak</title>
 
         <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -44,7 +44,7 @@
 
             <!-- Main title -->
             <img class="navbar-logo" src="http://docs.hortonworks.com/HDPDocuments/Ambari-2.1.0.0/bk_Installing_HDP_AMB/common/images/hortonworks-logo.png" alt="Hortonworks Documentation" width="132" height="52">
-            <a class="navbar-brand" href=".">Cloudbreak Deployer</a>
+            <a class="navbar-brand" href=".">Cloudbreak</a>
         </div>
 
         <!-- Expanded navigation -->
@@ -66,7 +66,7 @@
                         
                             
 <li >
-    <a href="technology/">Technology</a>
+    <a href="architecture/">Architecture</a>
 </li>
 
                         
@@ -77,31 +77,25 @@
         
             
 <li >
-    <a href="onprem/">On-prem</a>
+    <a href="onprem/">Cloudbreak Deployer</a>
 </li>
 
         
             
 <li >
-    <a href="aws/">AWS</a>
+    <a href="aws-image/">AWS Cloud Images</a>
 </li>
 
         
             
 <li >
-    <a href="azure/">Azure</a>
+    <a href="gcp-image/">GCP Cloud Images</a>
 </li>
 
         
             
 <li >
-    <a href="gcp/">GCP</a>
-</li>
-
-        
-            
-<li >
-    <a href="openstack/">OpenStack</a>
+    <a href="openstack-image/">OpenStack Cloud Images</a>
 </li>
 
         
@@ -111,7 +105,7 @@
                         
                             
 <li >
-    <a href="overview/">Benefits</a>
+    <a href="releasenotes/">Release Notes</a>
 </li>
 
                         
@@ -121,7 +115,7 @@
                 
                 
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Providers <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cloud Providers <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             
@@ -131,13 +125,13 @@
         
             
 <li >
-    <a href="aws/">Deployment</a>
+    <a href="aws/">Setup</a>
 </li>
 
         
             
 <li >
-    <a href="aws_pre_prov/">Provisioning prerequisites</a>
+    <a href="aws_pre_prov/">Provisioning Prerequisites</a>
 </li>
 
         
@@ -164,13 +158,13 @@
         
             
 <li >
-    <a href="azure/">Deployment</a>
+    <a href="azure/">Setup</a>
 </li>
 
         
             
 <li >
-    <a href="azure_pre_prov/">Provisioning prerequisites</a>
+    <a href="azure_pre_prov/">Provisioning Prerequisites</a>
 </li>
 
         
@@ -197,13 +191,13 @@
         
             
 <li >
-    <a href="gcp/">Deployment</a>
+    <a href="gcp/">Setup</a>
 </li>
 
         
             
 <li >
-    <a href="gcp_pre_prov/">Provisioning prerequisites</a>
+    <a href="gcp_pre_prov/">Provisioning Prerequisites</a>
 </li>
 
         
@@ -230,13 +224,13 @@
         
             
 <li >
-    <a href="openstack/">Deployment</a>
+    <a href="openstack/">Setup</a>
 </li>
 
         
             
 <li >
-    <a href="openstack_pre_prov/">Provisioning prerequisites</a>
+    <a href="openstack_pre_prov/">Provisioning Prerequisites</a>
 </li>
 
         
@@ -262,8 +256,14 @@
                 
                 
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Docs <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="blueprints/">Blueprints</a>
+</li>
+
                         
                             
 <li >
@@ -273,13 +273,7 @@
                         
                             
 <li >
-    <a href="shell/">CLI</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="periscope/">Periscope</a>
+    <a href="shell/">CLI/Shell</a>
 </li>
 
                         
@@ -291,19 +285,13 @@
                         
                             
 <li >
-    <a href="spi/">SPI</a>
-</li>
-
-                        
-                            
-<li >
     <a href="kerberos/">Kerberos</a>
 </li>
 
                         
                             
 <li >
-    <a href="operations/">Operations</a>
+    <a href="spi/">SPI</a>
 </li>
 
                         
@@ -315,7 +303,7 @@
                         
                             
 <li >
-    <a href="configuration/">Configuration</a>
+    <a href="configuration/">Advanced Configuration</a>
 </li>
 
                         
@@ -357,7 +345,7 @@
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="technology/">
+                        <a rel="prev" href="architecture/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -375,17 +363,9 @@
     
         <li class="main active"><a href="#introduction">Introduction</a></li>
         
-            <li><a href="#technology">Technology</a></li>
-        
-            <li><a href="#system-requirements">System Requirements</a></li>
-        
-            <li><a href="#process-overview">Process Overview</a></li>
-        
             <li><a href="#installation">Installation</a></li>
         
-            <li><a href="#setup">Setup</a></li>
-        
-            <li><a href="#release-notes-110">Release notes - 1.1.0</a></li>
+            <li><a href="#learn-more">Learn More</a></li>
         
     
     </ul>
@@ -395,106 +375,88 @@
 <h1 id="introduction">Introduction</h1>
 <p>Cloudbreak simplifies the provisioning, management and monitoring of on-demand HDP clusters in virtual and cloud environments. Cloudbreak leverages the cloud infrastructure platforms to create host instances, uses Docker technology to deploy the requisite containers cloud-agnostically, and uses Apache Ambari (via Ambari Blueprints) to install and manage the HDP cluster.</p>
 <p>Use the Cloudbreak UI or CLI to launch HDP clusters on public cloud infrastructure platforms such as Microsoft Azure, Amazon Web Services (AWS), and Google Cloud Platform (GCP) and the private cloud infrastructure platform OpenStack (available as Technical Preview).</p>
-<h2 id="technology">Technology</h2>
 <p>Cloudbreak has two main components: the <strong>Cloudbreak Application</strong> and the <strong>Cloudbreak Deployer</strong>.</p>
 <p>The <strong>Cloudbreak Application</strong> is made up from microservices (Cloudbreak, Uluwatu, Sultans, ...). The <strong>Cloudbreak Deployer</strong> helps you to deploy the Cloudbreak application automatically in environments with Docker support. Once the Cloudbreak Application is deployed you can use it to provision HDP clusters in different cloud environments.</p>
 <blockquote>
-<p>For an architectural overview of the Cloudbreak Deployer, the Cloudbreak Application, Apache Ambari, Docker and the rest of the Cloudbreak components, please follow this <a href="technology/">link</a>.</p>
+<p>For an architectural overview of the Cloudbreak Deployer, the Cloudbreak Application, Apache Ambari, Docker and the rest of the Cloudbreak components, please follow this <a href="architecture/">link</a>.</p>
 </blockquote>
-<h2 id="system-requirements">System Requirements</h2>
-<p>To run the Cloudbreak Deployer and install the Cloudbreak Application, you must meet the following system requirements:</p>
-<ul>
-<li>RHEL / CentOS / Oracle Linux 6 (64-bit)</li>
-<li>Docker 1.6.0 (or later)<ul>
-<li><a href="http://docs.docker.com/engine/installation/rhel/">Docker for RHEL</a></li>
-<li><a href="https://docs.docker.com/installation/centos/">Docker for CentOS</a></li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>You can install Cloudbreak on Mac OS X "Darwin" for <strong>evaluation purposes only</strong>. This operating system is not supported for a production deployment of Cloudbreak.</p>
-</blockquote>
-<h2 id="process-overview">Process Overview</h2>
-<p>The full proceess to be able to use an HDP cluster includes the following steps:</p>
-<ul>
-<li><strong>Cloudbreak Deployer Installation</strong>: You need to install Cloudbreak Deployer which is a small cli tool called <code>cbd</code>. It will help you to deploy the Cloudbreak Application consisting several Docker containers. You have finished this step if you can issue <code>cbd --version</code>.</li>
-<li><strong>Cloudbreak Deployment</strong>: Once you have installed Cloudbreak Deployer (cbd), it will start up several Docker containers: Cloudbreak API, Cloudbreak UI (called Uluwatu), Identity Server, and supporting databases. You have finished this step, if you are able to login in your browser to Cloudbreak UI (Uluwatu).</li>
-<li><strong>HDP Cluster Provisioning</strong>: To be able to provision a HDP cluster, you will use the browser, to:<ul>
-<li>Create Credentials: You give access to Cloudbreak, to act on behalf of you, and start resources on the cloud provider.</li>
-<li>Create Resources: Optionally you can define infrastructure parameters, such as, instance type, memory size, disk type/size, network...</li>
-<li>Blueprint configuration: You can choose which Ambari Blueprint you want to use (or upload a custom one) and assign hostgroups to resource types (created in the previous step)</li>
-<li>Create Cluster: You define the region, where you want to create the HDP cluster. Once Cloudbreak recognize that Ambari Server is up and running, it posts the configured blueprint to it, which triggers a cluster wide HDP component installation process.</li>
-</ul>
-</li>
-</ul>
 <h2 id="installation">Installation</h2>
-<p>Currently only <strong>Linux</strong> and <strong>OSX</strong> 64 bit binaries are released for Cloudbreak Deployer. For anything else we can create a special Docker container - please contact us. The deployment itself needs only <strong>Docker 1.7.0</strong> or later. You can install the Cloudbreak installation anywhere (on-prem or cloud VMs), however we suggest to installed it as close to the desired HDP clusters as possible. For further information check the <strong>Provider</strong> section of the documentation.</p>
-<h3 id="on-prem-installation">On-prem installation</h3>
-<p>For on premise installations of the Cloudbreak application please follow the <a href="onprem/">link</a></p>
-<h2 id="setup">Setup</h2>
-<p>We have pre-built custom cloud images with Cloudbreak deployer pre-configured. Following the steps will guide you through the provider specific configuration and launching clusters using that provider.</p>
-<h3 id="aws">AWS</h3>
-<p>You can follow the AWS provider specific documentation using this <a href="aws/">link</a></p>
-<h3 id="azure">Azure</h3>
-<p>You can follow the Azure provider specific documentation using this <a href="azure/">link</a></p>
-<h3 id="gcp">GCP</h3>
-<p>You can follow the GCP provider specific documentation using this <a href="gcp/">link</a></p>
-<h3 id="openstack">OpenStack</h3>
-<p>You can follow the OpenStack provider specific documentation using this <a href="openstack/">link</a></p>
-<h2 id="release-notes-110">Release notes - 1.1.0</h2>
+<p>The high-level process to be able to use Cloudbreak to install an HDP cluster includes the following steps:</p>
+<ol>
+<li><strong>Install the Cloudbreak Deployer</strong> by either: <a href="#install-deployer">installing the Cloudbreak Deployer</a>; or instantiating one of the <a href="#pre-built-images">pre-built cloud images
+that includes Cloudbreak Deployer</a> pre-installed.</li>
+<li><strong>Configure the Cloudbreak Deployer and install the Cloudbreak Application</strong>. Once you have installed Cloudbreak Deployer (cbd), it will start up several Docker containers: Cloudbreak API, Cloudbreak UI (called Uluwatu), Identity Server, and supporting databases. You have finished this step, if you are able to login in your browser to Cloudbreak UI (Uluwatu).</li>
+<li><strong>Provision an HDP Cluster</strong> using the Cloudbreak Application.</li>
+</ol>
+<div id="install-deployer"></div>
+
+<h3 id="installing-the-cloudbreak-deployer">Installing the Cloudbreak Deployer</h3>
+<p>You can install the Cloudbreak Deployer on your own VM manually. Once installed, you will use the deployer to setup
+the Cloudbreak Application. We suggest you install the Cloudbreak Application as close to the
+desired HDP clusters as possible. For example, if you plan to launch clusters on AWS, install the Cloudbreak Application in AWS.</p>
+<p>Follow the instructions for <a href="onprem/">installing the Cloudbreak Deployer</a>. Alternatively, you can consider using one of the <a href="#pre-built-images">pre-built cloud images that includes Cloudbreak Deployer</a> pre-installed.</p>
+<blockquote>
+<p><strong>IMPORTANT:</strong> If you plan to use Cloudbreak on Azure, you <strong>must</strong> use the <a href="azure/">Azure Setup</a> instructions to install and configure the Cloudbreak.</p>
+</blockquote>
+<div id="pre-built-images"></div>
+
+<h3 id="using-the-pre-built-cloud-images">Using the Pre-Built Cloud Images</h3>
+<p>We have pre-built cloud images with Cloudbreak Deployer pre-installed. Following the steps will guide you through the provider specific configuration and launching clusters using that cloud provider.</p>
 <table>
 <thead>
 <tr>
-<th>Components</th>
-<th align="center">GA</th>
-<th align="right">Tech preview</th>
+<th>Cloud</th>
+<th>Cloud Image</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>AWS</td>
-<td align="center">yes</td>
-<td align="right"></td>
+<td>You can follow the AWS instructions using this <a href="aws-image/">link</a>.</td>
 </tr>
 <tr>
-<td>Azure ARM</td>
-<td align="center">yes</td>
-<td align="right"></td>
+<td>Azure</td>
+<td>There are no pre-built cloud images available for Azure. See <a href="azure/">Azure Setup</a> to get the Cloudbreak Deployer installed and configured.</td>
 </tr>
 <tr>
 <td>GCP</td>
-<td align="center">yes</td>
-<td align="right"></td>
+<td>You can follow the GCP instructions using this <a href="gcp-image/">link</a></td>
 </tr>
 <tr>
-<td>OpenStack Juno</td>
-<td align="center">yes</td>
-<td align="right"></td>
+<td>OpenStack</td>
+<td>You can follow the OpenStack instructions using this <a href="openstack-image/">link</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="learn-more">Learn More</h2>
+<p>For more information on Cloudbreak, Docker, Ambari and Ambari Blueprints, see:</p>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="http://hortonworks.com/hadoop/cloudbreak/">Cloudbreak Project</a></td>
+<td>Cloudbreak is a tool to help simplify the provisioning of HDP clusters in virtual and cloud environments.</td>
 </tr>
 <tr>
-<td>SPI interface</td>
-<td align="center"></td>
-<td align="right">yes</td>
+<td><a href="./hortonworks.com/community/forums/forum/cloudbreak/">Cloudbreak Forums</a></td>
+<td>Get connected with the community in the Cloudbreak Forums.</td>
 </tr>
 <tr>
-<td>CLI/shell</td>
-<td align="center">yes</td>
-<td align="right"></td>
+<td><a href="http://hortonworks.com/hadoop/ambari/">Apache Ambari Project</a></td>
+<td>Apache Ambari is an operational platform for provisioning, managing, and monitoring Apache Hadoop clusters. Ambari exposes a robust set of REST APIs and a rich Web interface for cluster management.</td>
 </tr>
 <tr>
-<td>Recipes</td>
-<td align="center">yes</td>
-<td align="right"></td>
+<td><a href="https://cwiki.apache.org/confluence/display/AMBARI/Blueprints">Ambari Blueprints</a></td>
+<td>Ambari Blueprints are a declarative definition of a Hadoop cluster that Ambari can use to create Hadoop clusters.</td>
 </tr>
 <tr>
-<td>Kerberos</td>
-<td align="center"></td>
-<td align="right">yes</td>
-</tr>
-<tr>
-<td>Recipes</td>
-<td align="center">yes</td>
-<td align="right"></td>
+<td><a href="https://www.docker.com/">Docker</a></td>
+<td>Docker is an open platform for developers and system administrators to build, ship, and run distributed applications.</td>
 </tr>
 </tbody>
 </table></div>
@@ -596,5 +558,5 @@
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2015-11-16 18:42:58.393631
+Build Date UTC : 2015-11-17 14:22:17.994967
 -->

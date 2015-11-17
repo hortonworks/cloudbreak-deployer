@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         
-        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/operations/">
+        <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/gcp-image/">
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Operations - Cloudbreak Deployer</title>
+	<title>GCP Cloud Images - Cloudbreak</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -44,7 +44,7 @@
 
             <!-- Main title -->
             <img class="navbar-logo" src="http://docs.hortonworks.com/HDPDocuments/Ambari-2.1.0.0/bk_Installing_HDP_AMB/common/images/hortonworks-logo.png" alt="Hortonworks Documentation" width="132" height="52">
-            <a class="navbar-brand" href="..">Cloudbreak Deployer</a>
+            <a class="navbar-brand" href="..">Cloudbreak</a>
         </div>
 
         <!-- Expanded navigation -->
@@ -54,7 +54,7 @@
                 <ul class="nav navbar-nav">
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Home <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -66,7 +66,7 @@
                         
                             
 <li >
-    <a href="../technology/">Technology</a>
+    <a href="../architecture/">Architecture</a>
 </li>
 
                         
@@ -77,31 +77,25 @@
         
             
 <li >
-    <a href="../onprem/">On-prem</a>
+    <a href="../onprem/">Cloudbreak Deployer</a>
 </li>
 
         
             
 <li >
-    <a href="../aws/">AWS</a>
+    <a href="../aws-image/">AWS Cloud Images</a>
+</li>
+
+        
+            
+<li class="active">
+    <a href="./">GCP Cloud Images</a>
 </li>
 
         
             
 <li >
-    <a href="../azure/">Azure</a>
-</li>
-
-        
-            
-<li >
-    <a href="../gcp/">GCP</a>
-</li>
-
-        
-            
-<li >
-    <a href="../openstack/">OpenStack</a>
+    <a href="../openstack-image/">OpenStack Cloud Images</a>
 </li>
 
         
@@ -111,7 +105,7 @@
                         
                             
 <li >
-    <a href="../overview/">Benefits</a>
+    <a href="../releasenotes/">Release Notes</a>
 </li>
 
                         
@@ -121,7 +115,7 @@
                 
                 
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Providers <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cloud Providers <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             
@@ -131,13 +125,13 @@
         
             
 <li >
-    <a href="../aws/">Deployment</a>
+    <a href="../aws/">Setup</a>
 </li>
 
         
             
 <li >
-    <a href="../aws_pre_prov/">Provisioning prerequisites</a>
+    <a href="../aws_pre_prov/">Provisioning Prerequisites</a>
 </li>
 
         
@@ -164,13 +158,13 @@
         
             
 <li >
-    <a href="../azure/">Deployment</a>
+    <a href="../azure/">Setup</a>
 </li>
 
         
             
 <li >
-    <a href="../azure_pre_prov/">Provisioning prerequisites</a>
+    <a href="../azure_pre_prov/">Provisioning Prerequisites</a>
 </li>
 
         
@@ -197,13 +191,13 @@
         
             
 <li >
-    <a href="../gcp/">Deployment</a>
+    <a href="../gcp/">Setup</a>
 </li>
 
         
             
 <li >
-    <a href="../gcp_pre_prov/">Provisioning prerequisites</a>
+    <a href="../gcp_pre_prov/">Provisioning Prerequisites</a>
 </li>
 
         
@@ -230,13 +224,13 @@
         
             
 <li >
-    <a href="../openstack/">Deployment</a>
+    <a href="../openstack/">Setup</a>
 </li>
 
         
             
 <li >
-    <a href="../openstack_pre_prov/">Provisioning prerequisites</a>
+    <a href="../openstack_pre_prov/">Provisioning Prerequisites</a>
 </li>
 
         
@@ -261,9 +255,15 @@
                 
                 
                 
-                    <li class="dropdown active">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Docs <b class="caret"></b></a>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../blueprints/">Blueprints</a>
+</li>
+
                         
                             
 <li >
@@ -273,13 +273,7 @@
                         
                             
 <li >
-    <a href="../shell/">CLI</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../periscope/">Periscope</a>
+    <a href="../shell/">CLI/Shell</a>
 </li>
 
                         
@@ -291,19 +285,13 @@
                         
                             
 <li >
-    <a href="../spi/">SPI</a>
-</li>
-
-                        
-                            
-<li >
     <a href="../kerberos/">Kerberos</a>
 </li>
 
                         
                             
-<li class="active">
-    <a href="./">Operations</a>
+<li >
+    <a href="../spi/">SPI</a>
 </li>
 
                         
@@ -315,7 +303,7 @@
                         
                             
 <li >
-    <a href="../configuration/">Configuration</a>
+    <a href="../configuration/">Advanced Configuration</a>
 </li>
 
                         
@@ -352,12 +340,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../kerberos/">
+                        <a rel="next" href="../aws-image/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../database/">
+                        <a rel="prev" href="../openstack-image/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -373,145 +361,39 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#operations">Operations</a></li>
+        <li class="main active"><a href="#google-cloud-images">Google Cloud Images</a></li>
         
-            <li><a href="#cloudbreak-deployer">Cloudbreak deployer</a></li>
+            <li><a href="#configured-image">Configured Image</a></li>
         
-            <li><a href="#cloudbreak-application">Cloudbreak application</a></li>
+            <li><a href="#setup-cloudbreak-deployer">Setup Cloudbreak Deployer</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="operations">Operations</h1>
-<h2 id="cloudbreak-deployer">Cloudbreak deployer</h2>
-<h3 id="debug">Debug</h3>
-<p>If you want to have more detailed output set the <code>DEBUG</code> env variable to non-zero:</p>
-<pre><code>DEBUG=1 cbd some_command
-</code></pre>
-
-<h3 id="troubleshoot">Troubleshoot</h3>
-<p>You can use the <code>doctor</code> command to diagnose your environment.
-It can reveal some common problems with your docker or boot2docker configuration and it also checks the cbd versions.</p>
-<pre><code>cbd doctor
-</code></pre>
-
-<h3 id="logs">Logs</h3>
-<p>The aggregated logs of all the Cloudbreak components can be checked with:</p>
-<pre><code>cbd logs
-</code></pre>
-
-<p>It can also be used to check the logs of an individual docker container. To see only the logs of the Cloudbreak backend:</p>
-<pre><code>cbd logs cloudbreak
-</code></pre>
-
-<p>You can also check the individual logs of <code>uluwatu</code>, <code>periscope</code>, and <code>identity</code>.</p>
-<h3 id="update">Update</h3>
-<p>The cloudbreak-deployer tool is capable of upgrading itself to a newer version.</p>
-<pre><code>cbd update
-</code></pre>
-
-<h2 id="cloudbreak-application">Cloudbreak application</h2>
-<h3 id="ssh-to-the-hosts">SSH to the hosts</h3>
-<p>In the current version of Cloudbreak all the nodes have a public IP address and all the nodes are accessible via SSH.
-The public IP addresses of a running cluster can be checked on the Cloudbreak UI under the <em>Nodes</em> tab.
-Only key-based authentication is supported - the public key can be specified when creating a cloud credential.</p>
-<pre><code>ssh -i ~/.ssh/private-key.pem cloudbreak@&lt;public-ip&gt;
-</code></pre>
-
-<p>The default user is <code>cloudbreak</code> except on EC2 where it is <code>ec2-user</code>.</p>
-<h3 id="accessing-hdp-client-services">Accessing HDP client services</h3>
-<p>The main difference between general HDP clusters and Cloudbreak-installed HDP clusters is that each host runs an Ambari server or agent Docker container and the HDP services will be installed in this container as well.
-It means that after <code>ssh</code> the client services won't be available instantly, first you'll have to <code>enter</code> the ambari-agent container.
-Inside the container everything works the same way as expected. In order to do so there are a few options.</p>
-<p><em>Helper functions</em></p>
-<p>We have created a few helper functions in order to help operations. Once yoy SSH into the host you should a message as such:</p>
-<pre><code>You are now logged in to the docker host ...
-Getting started with docker:
-
-  docker ps                : Listing running containers
-  docker logs -f &lt;ID&gt;      : Star tail -f on container stdout/stderr
-  docker exec -it &lt;ID&gt; sh  : Entering the container (instead of ssh)
-
-Helper commands:
-
-  h                        : prints this message
-  ambari-enter             : Enters the ambari container
-  ambari-log               : Watches the ambari logs
-</code></pre>
-
-<p>You can enter into the container where the HDP services are running using the <code>ambari-enter</code> functions.</p>
-<p><em>Docker exec</em></p>
-<p>To check the containers running on the host enter:</p>
-<pre><code>[cloudbreak@vmhostgroupclient11 ~]$ sudo docker ps
-CONTAINER ID   IMAGE                                    COMMAND                CREATED      STATUS      PORTS     NAMES
-1098ca778176   sequenceiq/baywatch-client:v1.0.0        &quot;/etc/bootstrap.sh -d&quot; 4 hours ago  Up 4 hours            baywatch-client-14454170059514
-f4097c52fda5   sequenceiq/logrotate:v0.5.1              &quot;/start.sh&quot;            4 hours ago  Up 4 hours            logrotate-14454169954830
-7b94aedaab30   sequenceiq/docker-consul-watch-plugn:1.0 &quot;/start.sh consul://1&quot; 4 hours ago  Up 4 hours            consul-watch-14454169884044
-d8128b001427   sequenceiq/ambari:2.1.2-v2               &quot;/start-agent&quot;         4 hours ago  Up 4 hours            ambari-agent-14454169805924
-a8ec90037aaf   swarm:0.4.0                              &quot;/swarm join --addr=1&quot; 4 hours ago  Up 4 hours  2375/tcp  vmhostgroupmaster12-swarm-agent
-ef02b43eacee   sequenceiq/consul:v0.5.0-v5              &quot;/bin/start&quot;           4 hours ago  Up 4 hours            vmhostgroupmaster12-consul
-</code></pre>
-
-<p>You should see the <code>ambari-agent</code> container running. Copy its id or name and <code>exec</code> into the container:</p>
-<pre><code>[cloudbreak@vmhostgroupclient11 ~]$ sudo docker exec -it ambari-agent-14454169805924 bash
-[root@docker-ambari tmp]#
-</code></pre>
-
-<p>Or you can use this one-step command as well:</p>
-<pre><code>[cloudbreak@vmhostgroupclient11 ~]$ sudo docker exec -it $(sudo docker ps -f=name=ambari-agent -q) bash
-[root@docker-ambari tmp]#
-</code></pre>
-
-<h3 id="data-volumes">Data volumes</h3>
-<p>The disks that are attached to the instances are automatically mounted to <code>/hadoopfs/fs1</code>, <code>/hadoopfs/fs2</code>, ... <code>/hadoopfs/fsN</code> respectively.
-These directories are mounted from the host into the ambari-agent container under the same name so these can be accessed from inside.
-It means that if you'd like to move some data to the instances you can use these volumes and the data will be available from the container instantly to work on it.</p>
-<p>An <code>scp</code> Example:</p>
-<pre><code>$ scp -qr -i ~/.ssh/private-key.pem ~/tmp/data cloudbreak@&lt;client-node&gt;:/hadoopfs/fs1
-$ ssh -i ~/.ssh/private-key.pem cloudbreak@&lt;client-node&gt;
-[cloudbreak@vmhostgroupclient11 ~]$ sudo docker exec -it $(sudo docker ps -f=name=ambari-agent -q) bash
-[root@docker-ambari tmp]# su hdfs
-[hdfs@docker-ambari tmp]# hadoop fs -put /hadoopfs/fs1/data /tmp
-[hdfs@docker-ambari tmp]# hadoop fs -ls /tmp
-Found 2 items
-drwxr-xr-x   - hdfs supergroup          0 2015-10-21 13:46 /tmp/data
-drwx-wx-wx   - hive supergroup          0 2015-10-21 08:51 /tmp/hive
-</code></pre>
-
-<h3 id="internal-hostnames">Internal hostnames</h3>
-<p>After a cluster is created with Cloudbreak, the nodes will have internal hostnames like this:</p>
-<p><code>vmhostgroupclient11.node.dc1.consul</code></p>
-<p>This is because Cloudbreak uses <a href="https://www.consul.io">Consul</a> to provide DNS services.
-It means that you won't see entries to the other nodes inside the <code>/etc/hosts</code> file, because nodes are registered inside Consul and the hostnames are resolved by Consul as well.</p>
-<p>In the current version the <code>node.dc1.consul</code> domain is hardcoded and cannot be changed.</p>
-<h3 id="accessing-ambari-server-from-the-other-nodes">Accessing Ambari server from the other nodes</h3>
-<p>Ambari server is registered as a service in Consul, so it can always be accessed through its domain name <code>ambari-8080.service.consul</code> from the other ambari containers.
-It can be tried by pinging it from one of the <code>ambari-agent</code> containers:</p>
-<pre><code>ping ambari-8080.service.consul
-</code></pre>
-
-<h3 id="cloudbreak-gateway-node">Cloudbreak gateway node</h3>
-<p>With every Cloudbreak cluster installation there is a special node called <em>cbgateway</em> started that won't run an ambari-agent container so it won't run HDP services either.
-It can be seen on the Cloudbreak UI among the hostgroups when creating a cluster, but its node count cannot be changed from 1 and it shouldn't be there in the Ambari blueprint.
-It is by design because this instance has some special tasks:</p>
+<h1 id="google-cloud-images">Google Cloud Images</h1>
+<p>We have pre-built cloud images for GCP with the Cloudbreak Deployer pre-installed. Following the steps will guide you through the provider specific configuration then launch.</p>
+<blockquote>
+<p>Alternatively, instead of using the pre-built cloud images, you can install Cloudbreak Deployer on your own VM. See <a href="../onprem/">install the Cloudbreak Deployer</a> for more information.</p>
+</blockquote>
+<h2 id="configured-image">Configured Image</h2>
+<p>You can create the latest Cloudbreak deployer image on the <a href="https://console.developers.google.com/">Google Developers Console</a> with the help
+ of the <a href="https://cloud.google.com/cloud-shell/docs/">Google Cloud Shell</a>.</p>
+<p><img alt="" src="../images/google-cloud-shell-launch.png" /></p>
+<p>Images are global resources, so they can be used across zones and projects.</p>
+<h3 id="gcp-image-details">GCP Image Details</h3>
+<p><img alt="" src="../images/google-cloud-shell.png" /></p>
+<p>Please make sure you opened the following ports on your virtual machine:</p>
 <ul>
-<li>it runs the Ambari server and its database inside Docker containers</li>
-<li>it runs an nginx proxy that is used by the Cloudbreak API to communicate with the cluster securely</li>
-<li>it runs the Swarm manager that orchestrates the Docker containers on the whole cluster</li>
-<li>it runs the Baywatch server that is responsible for collecting the operational logs from the cluster</li>
-<li>it runs a Kerberos KDC container if Kerberos is configured</li>
+<li>SSH (22)</li>
+<li>Ambari (8080)</li>
+<li>Identity server (8089)</li>
+<li>Cloudbreak GUI (3000)</li>
+<li>User authentication (3001)</li>
 </ul>
-<p><strong>Logs</strong></p>
-<p><em>Hadoop logs</em></p>
-<p>Hadoop logs are available from the host and from the container as well in the <code>/hadoopfs/fs1/logs</code> directory.</p>
-<p><em>Ambari logs</em></p>
-<p>For Ambari logs you can use our helper function, <code>ambari-log</code>. For further information please check the <em>Helper functions</em> section. Alternatively you watch the Ambari logs on the host instance as well under the <code>`/hadoopfs/fs1/logs</code> folder as well.</p>
-<p><strong>Ambari database</strong></p>
-<p>Ambari's database runs on the <code>cbgateway</code> node inside a PostgreSQL docker container. To access it SSH to the <code>gateway</code> node and run the following command:</p>
-<pre><code>[cloudbreak@vmcbgateway0 ~]$ sudo docker exec -it ambari_db psql -U postgres
-</code></pre></div>
+<h2 id="setup-cloudbreak-deployer">Setup Cloudbreak Deployer</h2>
+<p>Once you have the Cloudbreak Deployer installed, proceed to <a href="../gcp/">Setup Cloudbreak Deployer</a>.</p></div>
             
         </div>
 
