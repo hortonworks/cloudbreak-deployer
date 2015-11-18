@@ -261,12 +261,6 @@
                         
                             
 <li >
-    <a href="../blueprints/">Blueprints</a>
-</li>
-
-                        
-                            
-<li >
     <a href="../api/">API</a>
 </li>
 
@@ -279,13 +273,19 @@
                         
                             
 <li >
-    <a href="../periscope/">Periscope</a>
+    <a href="../periscope/">Auto-Scaling</a>
 </li>
 
                         
                             
 <li >
     <a href="../recipes/">Recipes</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../blueprints/">Blueprints</a>
 </li>
 
                         
@@ -352,7 +352,7 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../recipes/">
+                        <a rel="next" href="../blueprints/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
@@ -385,13 +385,16 @@
                 <div class="col-md-9" role="main">
 
 <h1 id="kerberos-security">Kerberos security</h1>
-<p>Cloudbreak supports Kerberos security for Ambari internal communication. To activate Kerberos with Cloudbreak you should enable security option and fill the</p>
+<p>Cloudbreak supports Kerberos security for Ambari internal communication. To activate Kerberos with Cloudbreak you should enable security option and
+fill the following fields in the UI or via the Shell during cluster creation. To run a job on the cluster, you can use one of the default Hadoop users, like <code>ambari-qa</code>, as usual.</p>
 <ul>
 <li><code>kerberos master key</code></li>
 <li><code>kerberos admin</code></li>
 <li><code>kerberos password</code></li>
 </ul>
-<p>fields too on web interface or shell during cluster creation. To run a job on the cluster, you can use one of the default Hadoop users, like <code>ambari-qa</code>, as usual.</p>
+<blockquote>
+<p>This feature is currently <code>TECHNICAL PREVIEW</code>.</p>
+</blockquote>
 <h3 id="test">Test</h3>
 <p>Once kerberos is enabled you need a <code>ticket</code> to execute any job on the cluster. Here's an example to get a ticket:</p>
 <pre><code>kinit -V -kt /etc/security/keytabs/smokeuser.headless.keytab ambari-qa-sparktest-rec@NODE.DC1.CONSUL
@@ -435,7 +438,7 @@ hdfs dfs -mkdir input
 hdfs dfs -put /tmp/wait-for-host-number.sh input
 yarn jar $(find /usr/hdp -name hadoop-mapreduce-examples.jar) wordcount input output
 hdfs dfs -cat output/*</p>
-<p><strong>Note</strong> Current implementation of Kerberos security doesn't contain Active Directory support or any other third party user authentication method. If you want to use custom user, you have to create users manually with the same name on all Ambari containers on each node.</p></div>
+<p><strong>Note</strong> Current implementation of Kerberos security does not contain Active Directory support or any other third party user authentication method. If you want to use custom user, you have to create users manually with the same name on all Ambari containers on each node.</p></div>
             
         </div>
 

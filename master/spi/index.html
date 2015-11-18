@@ -261,12 +261,6 @@
                         
                             
 <li >
-    <a href="../blueprints/">Blueprints</a>
-</li>
-
-                        
-                            
-<li >
     <a href="../api/">API</a>
 </li>
 
@@ -279,13 +273,19 @@
                         
                             
 <li >
-    <a href="../periscope/">Periscope</a>
+    <a href="../periscope/">Auto-Scaling</a>
 </li>
 
                         
                             
 <li >
     <a href="../recipes/">Recipes</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../blueprints/">Blueprints</a>
 </li>
 
                         
@@ -400,6 +400,9 @@
 <li><a href="https://github.com/sequenceiq/cloudbreak/tree/master/cloud-openstack">cloud-openstack</a> module integrates OpenStack</li>
 </ul>
 <p>The SPI interface is event based, scales well and decoupled from Cloudbreak. The core of Cloudbreak is communicating trough <a href="http://projectreactor.io/">EventBus</a> with providers, but the complexity of Event handling is hidden from the provider implementation.</p>
+<blockquote>
+<p>Use of the SPI is currently <code>TECHNICAL PREVIEW</code>.</p>
+</blockquote>
 <h2 id="resource-management">Resource management</h2>
 <p>There are two kind of deployment/resource management method is supported by cloud providers:</p>
 <ul>

@@ -9,7 +9,7 @@
         <link rel="canonical" href="http://sequenceiq.com/cloudbreak-deployer/periscope/">
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Periscope - Cloudbreak</title>
+	<title>Auto-Scaling - Cloudbreak</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -261,12 +261,6 @@
                         
                             
 <li >
-    <a href="../blueprints/">Blueprints</a>
-</li>
-
-                        
-                            
-<li >
     <a href="../api/">API</a>
 </li>
 
@@ -279,13 +273,19 @@
                         
                             
 <li class="active">
-    <a href="./">Periscope</a>
+    <a href="./">Auto-Scaling</a>
 </li>
 
                         
                             
 <li >
     <a href="../recipes/">Recipes</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../blueprints/">Blueprints</a>
 </li>
 
                         
@@ -373,25 +373,31 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#periscope">Periscope</a></li>
+        <li class="main active"><a href="#auto-scaling">Auto-Scaling</a></li>
         
-            <li><a href="#how-it-works">How it works</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="periscope">Periscope</h1>
-<p>The purpose of Periscope is to bring metrics based <code>autoscaling</code> to a multi-tenant Hadoop cluster and applying SLA scaling policies. Due to the flexibility supported by cloud based Hadoop deployments Periscope can work with any Hadoop cluster provisioned with Cloudbreak and can apply SLA policies to these clusters.</p>
-<h2 id="how-it-works">How it works</h2>
-<p>Periscope is based on <a href="https://cwiki.apache.org/confluence/display/AMBARI/Metrics">Ambari metrics</a> - and <a href="https://cwiki.apache.org/confluence/display/AMBARI/Alerts">Ambari alerts</a>. Based on the Blueprint used and the running services we pull all the available metrics from the subsystem and Periscope can define <code>alerts</code> based on this.</p>
-<p>Beside the default Ambari metrics we have added two custom metrics - <code>Pending YARN containers</code> and <code>Pending applications</code>. These two custom metrics works with the YARN subsystem in order to bring <code>application</code> level QoS to the cluster. As the Ambari metrics subsystem can be extended, custom metrics can be brought under Periscope's management.</p>
-<p>Periscope requires no installation - in order to use the <code>autoscaling</code> feature with Cloudbreak you will have to enable from the UI or shell.</p>
+<h1 id="auto-scaling">Auto-Scaling</h1>
+<p>The purpose of <code>auto-scaling</code> is to apply SLA scaling policies to a Cloudbreak-managed Hadoop cluster.</p>
+<blockquote>
+<p>This feature is currently <code>TECHNICAL PREVIEW</code>.</p>
+</blockquote>
+<h2 id="how-it-works">How It Works</h2>
+<p>The auto-scaling capabilities is based on <a href="https://cwiki.apache.org/confluence/display/AMBARI/Metrics">Ambari Metrics</a> - and <a href="https://cwiki.apache.org/confluence/display/AMBARI/Alerts">Ambari Alerts</a>. Based on the Blueprint
+used and the running services, Cloudbreak can access all the available metrics from the subsystem and define <code>alerts</code> based on this information.</p>
+<p>Beside the default Ambari Metrics, Cloudbreak includes two custom metrics: <code>Pending YARN containers</code> and <code>Pending applications</code>. These two custom metrics works with the YARN subsystem in order to bring <code>application</code> level QoS to the cluster.</p>
+<blockquote>
+<p>In order to use the <code>autoscaling</code> feature with Cloudbreak you will have to enable from the UI or shell.</p>
+</blockquote>
 <p><img alt="" src="../images/enable_periscope.png" /></p>
 <h4 id="alerts">Alerts</h4>
-<p>Periscope supports two <strong>Alert</strong> types - <code>metric</code> and <code>time</code> based ones.</p>
-<p><strong>Metric based alerts</strong></p>
+<p>Auto-scaling supports two <strong>Alert</strong> types: <code>metric</code> and <code>time</code> based.</p>
+<p><strong>Metric-based Alerts</strong></p>
 <p>Metric based alerts are using the default (or custom) Ambari metrics. These metrics have a default <code>Threshold</code> value configured in Ambari - nevertheless these thresholds can be configured, changed or altered in Ambari. In order to change the default threshold for a metric please go to Ambari UI and select the <code>Alerts</code> tab and the metric. The values can be changed in the <code>Threshold</code> section.</p>
 <p><img alt="" src="../images/ambari_threshold.png" /></p>
 <p>Metric alerts have a few configurable fields.</p>
@@ -402,7 +408,7 @@
 <li><code>period</code> - for how many <em>minutes</em> the metric state has to be sustained in order for an alert to be triggered</li>
 </ul>
 <p><img alt="" src="../images/metric_alert.png" /></p>
-<p><strong>Time based alerts</strong></p>
+<p><strong>Time-based Alerts</strong></p>
 <p>Time based alerts are based on <code>cron</code> expressions and allow alerts to be triggered based on time.</p>
 <p>Time alerts have a few configurable fields.</p>
 <ul>
@@ -415,7 +421,7 @@
 <h4 id="scaling-policies">Scaling Policies</h4>
 <p>Scaling is the ability to increase or decrease the capacity of the Hadoop cluster or application based on an alert.
 When scaling policies are used, the capacity is automatically increased or decreased according to the conditions defined.
-Periscope will do the heavy lifting and based on the alerts and the scaling policy linked to them it executes the associated policy. We scaling granularity is at the <code>hostgroup</code> level - thus you have the option to scale services or components only, not the whole cluster.</p>
+Cloudbreak will do the heavy lifting and based on the alerts and the scaling policy linked to them it executes the associated policy. We scaling granularity is at the <code>hostgroup</code> level - thus you have the option to scale services or components only, not the whole cluster.</p>
 <p>Scaling policies have a few configurable fields.</p>
 <ul>
 <li><code>policy name</code> - name of the scaling policy</li>
@@ -424,7 +430,7 @@ Periscope will do the heavy lifting and based on the alerts and the scaling poli
 <li><code>alert</code> - the triggered alert based on that the scaling policy applies</li>
 </ul>
 <p><img alt="" src="../images/policy.png" /></p>
-<h4 id="cluster-scaling-configurations">Cluster scaling configurations</h4>
+<h4 id="cluster-scaling-configuration">Cluster Scaling Configuration</h4>
 <p>An SLA scaling policy can contain multiple alerts. When an alert is triggered a <code>scaling adjustment</code> is applied, however to keep the cluster size within boundaries a <code>cluster size min.</code> and <code>cluster size max.</code> is attached to the cluster - thus a scaling policy can never over or undersize a cluster. Also in order to avoid stressing the cluster we have introduced a <code>cooldown time</code> period (minutes) - though an alert is raised and there is an associated scaling policy, the system will not apply the policy within the configured timeframe. In an SLA scaling policy the triggered rules are applied in order.</p>
 <ul>
 <li><code>cooldown time</code> - period (minutes) between two scaling events while the cluster is locked from adjustments</li>
@@ -432,10 +438,10 @@ Periscope will do the heavy lifting and based on the alerts and the scaling poli
 <li><code>cluster size max.</code> - size will never go above the maximum value, despite scaling adjustments</li>
 </ul>
 <p><img alt="" src="../images/scaling_config.png" /></p>
-<p><strong>Downscale scaling considerations</strong></p>
-<p>Periscope will try to keep a healthy cluster, thus does several background checks during <code>downscale</code>.</p>
+<p><strong>Downscale Scaling Considerations</strong></p>
+<p>Cloudbreak auto-scaling will try to keep a healthy cluster, thus does several background checks during <code>downscale</code>.</p>
 <ul>
-<li>We never remove <code>Application master nodes</code> from a cluster. In order to make sure that a node running AM is not removed Periscope has to be able to access the YARN Resource Manager - when creating a cluster using the <code>default</code> secure network template please make sure that the RM's port is open on the node</li>
+<li>We never remove <code>Application master nodes</code> from a cluster. In order to make sure that a node running AM is not removed, Cloudbreak has to be able to access the YARN Resource Manager - when creating a cluster using the <code>default</code> secure network template please make sure that the RM's port is open on the node</li>
 <li>In order to keep a healthy HDFS during downscale we always keep the configured <code>replication</code> factor and make sure there is enough <code>space</code> on HDFS to rebalance data. Also during downscale in order to minimize the rebalancing, replication and HDFS storms we check block locations and compute the least costly operations.</li>
 </ul></div>
             
