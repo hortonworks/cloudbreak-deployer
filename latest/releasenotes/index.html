@@ -439,8 +439,32 @@
 </thead>
 <tbody>
 <tr>
-<td>X</td>
-<td>X</td>
+<td>UI changes</td>
+<td>Cluster creation is based on a step-by-step wizard. Steps can be</td>
+</tr>
+<tr>
+<td>Custom Security Groups</td>
+<td>Ability to define and create custom security groups and rules.</td>
+</tr>
+<tr>
+<td>Azure ARM support</td>
+<td>With this release we have switched to the new <a href="https://azure.microsoft.com/en-us/documentation/articles/resource-group-overview/">Azure ARM API</a> aka <strong>Azure API v2</strong>. Using the old API is not supported anymore - users have the option to <strong>terminate only</strong> clusters lunched with the old API. All new clusters are lunched with the new API.</td>
+</tr>
+<tr>
+<td>WASB support</td>
+<td>For clusters launched on Microsoft Azure the default file system in use will be <a href="http://blogs.msdn.com/b/cindygross/archive/2015/02/04/understanding-wasb-and-hadoop-storage-in-azure.aspx">WASB</a>. Users will still have to option to use local HDFS with attached disk but the recommended file system will be WASB. See <a href="../azure_pre_prov/">Filesystem configuration</a> for more information.</td>
+</tr>
+<tr>
+<td>DASH support for WASB</td>
+<td>When WASB is used as a Hadoop filesystem the files are full-value blobs in a storage account. It means better performance compared to the data disks and the WASB filesystem can be configured very easily but Azure storage accounts have their own <a href="https://azure.microsoft.com/en-us/documentation/articles/azure-subscription-service-limits/#storage-limits">limitations</a> as well. There is a space limitation for TB per storage account (500 TB) as well but the real bottleneck is the total request rate that is only 20000 IOPS where Azure will start to throw errors when trying to do an I/O operation. To bypass those limits Microsoft created a small service called <a href="https://github.com/MicrosoftDX/Dash">DASH</a>. See <a href="../azure_pre_prov/">Filesystem configuration</a> for more information.</td>
+</tr>
+<tr>
+<td>Support for new regions</td>
+<td>On AWS we added support for <strong>Frankfurt</strong>. On GCP we added support for <strong>us-east-1</strong>.</td>
+</tr>
+<tr>
+<td>UAA zones</td>
+<td>Updated to UAA 2.7.1 version, which introduced the concept of <strong>zones</strong>. See <a href="../configuration/">Access from custom domains</a> for more information.</td>
 </tr>
 </tbody>
 </table>
