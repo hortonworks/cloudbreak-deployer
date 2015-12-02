@@ -9,9 +9,9 @@ S3_TARGET?=s3://public-repo-1.hortonworks.com/HDP/cloudbreak/
 #S3_TARGET=s3://public-repo.sequenceiq.com
 
 ifeq ($(GIT_BRANCH), release)
-FLAGS="-X main.Version $(VERSION)"
+FLAGS="-X main.Version=$(VERSION)"
 else
-FLAGS="-X main.Version $(VERSION) -X main.GitRevision $(GIT_BRANCH)-$(GIT_REV)"
+FLAGS="-X main.Version=$(VERSION) -X main.GitRevision=$(GIT_BRANCH)-$(GIT_REV)"
 endif
 
 build: bindata
@@ -36,7 +36,7 @@ deps:
 	go get -u github.com/progrium/gh-release/...
 	go get github.com/progrium/basht
 	go get github.com/github/hub
-	go get || true
+	go get || :
 
 tests:
 	basht include/*.bash test/*.bash
