@@ -217,10 +217,10 @@ main() {
 	set -eo pipefail; [[ "$TRACE" ]] && set -x
 
     cbd-find-root
-    deps-init
 	color-init
-    deps-require sed
     load-profile "$@"
+    deps-init
+    deps-require sed
 
     circle-init
     compose-init
