@@ -14,7 +14,7 @@ To run the Cloudbreak Deployer and install the Cloudbreak Application, you must 
 > You can install Cloudbreak on Mac OS X "Darwin" for **evaluation purposes only**. This operating system is not supported for a production deployment of Cloudbreak.
 
 Make sure you opened the following ports:
- 
+
  * SSH (22)
  * Ambari (8080)
  * Identity server (8089)
@@ -42,9 +42,6 @@ yum -y install iptables-services net-tools unzip
 Please configure your iptables on your machine:
 
 ```
-iptables --flush INPUT && \
-iptables --flush FORWARD && \
-service iptables save && \
 sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/g' /etc/sysctl.conf
 ```
 
@@ -74,16 +71,12 @@ cat > /usr/lib/systemd/system/docker.service <<"EOF"
 [Unit]
 Description=Docker Application Container Engine
 Documentation=https://docs.docker.com
-After=network.target docker.socket cloud-final.service
+After=network.target docker.socket
 Requires=docker.socket
-Wants=cloud-final.service
 
 [Service]
 ExecStart=/usr/bin/docker -d -H fd:// -H tcp://0.0.0.0:2376 --selinux-enabled=false --storage-driver=devicemapper --storage-opt=dm.basesize=30G
 MountFlags=slave
-LimitNOFILE=200000
-LimitNPROC=16384
-LimitCORE=infinity
 
 [Install]
 WantedBy=multi-user.target
@@ -93,7 +86,7 @@ EOF
 Remove docker folder and restart Docker service:
 
 ```
-rm -rf /var/lib/docker && systemctl daemon-reload && service docker start && systemctl enable docker.service
+systemctl daemon-reload && service docker start && systemctl enable docker.service
 ```
 
 ## Install Cloudbreak deployer
