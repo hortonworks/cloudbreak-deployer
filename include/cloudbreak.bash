@@ -34,7 +34,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_SULTANS 1.2.0-dev.8
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.0.3
-    env-import DOCKER_TAG_CLOUDBREAK_SHELL 1.2.0-dev.259
+    env-import DOCKER_TAG_CLOUDBREAK_SHELL 1.2.0-dev.269
 
     env-import CB_DOCKER_CONTAINER_AMBARI ""
     env-import CB_DOCKER_CONTAINER_AMBARI_WARM ""
