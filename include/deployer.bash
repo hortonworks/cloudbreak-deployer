@@ -104,9 +104,14 @@ cbd-update-snap() {
 }
 
 latest-version() {
-  #curl -Ls https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/VERSION
-  curl -I https://github.com/sequenceiq/cloudbreak-deployer/releases/latest 2>&1 \
-      |sed -n "s/^Location:.*tag.v\([0-9\.]*\).*/\1/p"
+    local latest_url=https://github.com/sequenceiq/cloudbreak-deployer/releases/latest
+    {
+        curl -I -m 1 -f $latest_url 2>&1 |sed -n "s/^Location:.*tag.v\([0-9\.]*\).*/\1/p"
+    } || {
+        echo "Could not reach github.com."
+        _exit 1
+    }
+    #curl -Ls https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/VERSION
 }
 
 init-profile() {
@@ -184,6 +189,7 @@ doctor() {
     declare desc="Deployer doctor: Checks your environment, and reports a diagnose."
 
     info "===> $desc"
+    network-doctor
     cbd-version
     if [[ "$(uname)" == "Darwin" ]]; then
         debug "checking OSX specific dependencies..."
@@ -199,6 +205,37 @@ doctor() {
     docker-check-version
     compose-generate-check-diff verbose
     generate_uaa_check_diff verbose
+}
+
+network-doctor() {
+    ping -c 1 -W 5000 8.8.8.8 &> /dev/null
+    if [[ "$?" -ne "0" ]]; then
+        error "[ERROR] Could not reach 8.8.8.8."
+        _exit 1   
+    else 
+        info "ping 8.8.8.8 on host OK"    
+    fi
+    ping -c 1 -W 5000 github.com &> /dev/null
+    if [[ "$?" -ne "0" ]]; then
+        error "[ERROR] Could not reach github.com."
+        _exit 1 
+    else 
+        info "ping github.com on host OK"      
+    fi
+    docker run --label cbreak.sidekick=true alpine sh -c 'ping -c 1 -W 5000 8.8.8.8' &> /dev/null
+    if [[ "$?" -ne "0" ]]; then
+        error "[ERROR] Could not reach 8.8.8.8 inside a container."
+        _exit 1   
+    else 
+        info "ping 8.8.8.8 in container OK"       
+    fi
+    docker run --label cbreak.sidekick=true alpine sh -c 'ping -c 1 -W 5000 github.com' &> /dev/null
+    if [[ "$?" -ne "0" ]]; then
+        error "[ERROR] Could not reach 8.8.8.8 inside a container."
+        _exit 1  
+     else 
+        info "ping github.com in container OK"     
+    fi
 }
 
 cbd-find-root() {
