@@ -45,6 +45,10 @@ error() {
     echo "[ERROR] $*" | red 1>&2
 }
 
+command_exists() {
+	command -v "$@" > /dev/null 2>&1
+}
+
 cbd-version() {
     declare desc="Displays the version of Cloudbreak Deployer"
     echo -n "local version:"
@@ -55,7 +59,7 @@ cbd-version() {
     local releaseVer=$(latest-version)
     echo "$releaseVer" | green
 
-    if [ $(version-compare $localVer $releaseVer) -lt 0 ]; then
+    if [ $(version-compare ${localVer#v} $releaseVer) -lt 0 ]; then
         warn "!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         warn "Your version is outdated"
         warn "!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -382,7 +386,7 @@ main() {
     cmd-export cbd-update update
     cmd-export doctor doctor
     cmd-export init-profile init
-
+    cmd-export cmd-bash-complete bash-complete
     cmd-export-ns env "Environment namespace"
     cmd-export env-show
     cmd-export env-export

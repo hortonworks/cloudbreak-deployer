@@ -74,14 +74,6 @@ docker-getversion() {
 }
 
 docker-check-client-version() {
-
-    docker --version &> /dev/null || local missing=1
-    if [[ "$missing" ]]; then
-        error "docker command not found, please install docker. https://docs.docker.com/installation/"
-        _exit 127
-    fi
-    info "docker command: OK"
-
     local ver=$(docker --version 2> /dev/null)
     local numver=$(docker-getversion $ver)
     
@@ -93,41 +85,48 @@ docker-check-client-version() {
         echo "  sudo curl -Lo $target https://get.docker.com/builds/$(uname -s)/$(uname -m)/docker-latest ; chmod +x $target" | blue
         _exit 1
     fi
-    info "docker client version: OK"
+
+    echo-n "docker client version: "
+    docker version -f '{{.Client.Version}}' | green
+
 }
 
 docker-check-server-version() {
-    docker version &> $TEMP_DIR/cbd.log || noserver=1
-    if [[ "$noserver" ]]; then
-        error "docker version returned an error"
-        cat $TEMP_DIR/cbd.log | yellow
-        _exit 127
-    fi
-
     local numserver
     # since docker 1.8.1 docker version supports --format
     if docker version --help | grep -q -- '--format'; then
         local serverVer=$(docker version -f "{{.Server.Version}}")
         debug "serverVer=$serverVer"
-        numserver=$(sed "s/\.//g" <<< "${serverVer}")
-
+        if [ $(version-compare "${serverVer}" "1.8.0") -lt 0 ]; then
+            error "Please upgrade your docker version to 1.8.0 or latest"
+            warn "your local docker seems to be fine, only the server version is outdated"
+            _exit 1
+        fi
     else
         local serverVer=$(docker version 2> /dev/null | grep "Server version")
         debug "serverVer=$serverVer"
         numserver=$(docker-getversion $serverVer)
+        if [ $numserver -lt 180 ]; then
+            error "Please upgrade your docker version to 1.8.0 or latest"
+            warn "your local docker seems to be fine, only the server version is outdated"
+            _exit 1
+        fi
     fi
 
-
-    if [ $numserver -lt 180 ]; then
-        error "Please upgrade your docker version to 1.8.0 or latest"
-        warn "your local docker seems to be fine, only the server version is outdated"
-        _exit 1
-    fi
-    info "docker server version: OK"
+    echo-n "docker client version: "
+    docker version -f '{{.Server.Version}}' | green
 }
 
 docker-check-version() {
     declare desc="Checks if docker is at least 1.8.0"
+
+    echo-n "docker command exists: "
+    if command_exists docker; then
+        info "OK"
+    else
+        error
+        exit 1
+    fi
 
     docker-check-client-version
     docker-check-server-version
