@@ -129,19 +129,19 @@ init-profile() {
     else
         if is_linux; then
             # on amazon
-            if curl -m 1 -f -s 169.254.169.254/latest/ &>/dev/null ; then
-                echo "export PUBLIC_IP=$(curl 169.254.169.254/latest/meta-data/public-hostname)" > $CBD_PROFILE
+            if curl -4 -m 1 -f -s 169.254.169.254/latest/ &>/dev/null ; then
+                echo 'export PUBLIC_IP=$(curl -4fs 169.254.169.254/latest/meta-data/public-hostname)' > $CBD_PROFILE
                 #echo "export PRIVATE_IP=$(curl 169.254.169.254/latest/meta-data/local-ipv4)" >> $CBD_PROFILE
             fi
 
             # on openstack
-            if curl -m 1 -f -s 169.254.169.254/latest/meta-data/public-hostname | grep -q novalocal ; then
-                echo "export PUBLIC_IP=$(curl 169.254.169.254/latest/meta-data/public-ipv4)" > $CBD_PROFILE
+            if curl -4 -m 1 -f -s 169.254.169.254/latest/meta-data/public-hostname | grep -q novalocal ; then
+                echo 'export PUBLIC_IP=$(curl -4fs 169.254.169.254/latest/meta-data/public-ipv4)' > $CBD_PROFILE
             fi
             
             # on gce
-            if curl -m 1 -f -s -H "Metadata-Flavor: Google" 169.254.169.254/computeMetadata/v1/ &>/dev/null ; then
-                echo "export PUBLIC_IP=$(curl -f -H "Metadata-Flavor: Google" 169.254.169.254/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip)" > $CBD_PROFILE
+            if curl -4 -m 1 -f -s -H "Metadata-Flavor: Google" 169.254.169.254/computeMetadata/v1/ &>/dev/null ; then
+                echo 'export PUBLIC_IP=$(curl -4fs -H "Metadata-Flavor: Google" 169.254.169.254/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip)' > $CBD_PROFILE
             fi
 
             # if Profile is still not created, give some hint:
@@ -151,8 +151,8 @@ init-profile() {
             fi
         else
             if [[ "$(boot2docker status)" == "running" ]]; then
-                echo "export PUBLIC_IP=$(boot2docker ip)" > $CBD_PROFILE
-                echo "export PRIVATE_IP=$(boot2docker ip)" >> $CBD_PROFILE
+                echo 'export PUBLIC_IP=$(boot2docker ip)' > $CBD_PROFILE
+                echo 'export PRIVATE_IP=$(boot2docker ip)' >> $CBD_PROFILE
                 boot2docker shellinit 2>/dev/null >> $CBD_PROFILE
             else
                 echo "boot2docker isn't running, please start it, with the following 2 commands:" | red
