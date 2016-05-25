@@ -130,8 +130,13 @@ init-profile() {
         if is_linux; then
             # on amazon
             if curl -m 1 -f -s 169.254.169.254/latest/ &>/dev/null ; then
-                echo "export PUBLIC_IP=$(curl 169.254.169.254/latest/meta-data/public-hostname)" > $CBD_PROFILE
-                #echo "export PRIVATE_IP=$(curl 169.254.169.254/latest/meta-data/local-ipv4)" >> $CBD_PROFILE
+                hostname=$(curl -fs 169.254.169.254/latest/meta-data/public-hostname)
+                if [[ -n $hostname ]]; then
+                    echo "export PUBLIC_IP=$hostname" > $CBD_PROFILE
+                else
+                    warn "Public hostname not found setting up private IP as public"
+                    echo "export PUBLIC_IP=$(curl 169.254.169.254/latest/meta-data/local-ipv4)" > $CBD_PROFILE
+                fi
             fi
 
             # on openstack
