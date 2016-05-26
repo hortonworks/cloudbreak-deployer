@@ -7,7 +7,7 @@ docker-check-boot2docker() {
     fi
 
     : << "UNTIL-BOOT2DOCKER-CLI-366-GET-MERGED"
-    if [[ "$(boot2docker status)" == "running" ]]; then
+    if is_boot2docker_running; then
         if [[ "$(boot2docker shellinit 2>/dev/null)" == "" ]];then
             info "boot2docker shellinit: OK"
         else
@@ -21,7 +21,7 @@ docker-check-boot2docker() {
         _exit 126
     fi
 UNTIL-BOOT2DOCKER-CLI-366-GET-MERGED
-    if [[ "$(boot2docker status)" == "running" ]]; then
+    if is_boot2docker_running; then
         if [[ "$DOCKER_HOST" != "" ]] && [[ "$DOCKER_CERT_PATH" != "" ]] && [[ "$DOCKER_TLS_VERIFY" != "" ]]; then
             info "boot2docker shellinit: OK"
         else
@@ -64,8 +64,8 @@ docker-check-docker-machine() {
         echo "  brew install docker-machine" | blue
         _exit 127
     fi
-    if [[ "$(docker-machine status)" == "Running" ]]; then
-      if [[ "$(docker-machine active)" == "$DOCKER_MACHINE" ]]; then
+    if is_machine_running; then
+      if [[ "$(docker-machine active 2>/dev/null)" == "$DOCKER_MACHINE" ]]; then
           info "docker-machine env init: OK"
       else
           error "docker-machine env is not set correctly, please run:"

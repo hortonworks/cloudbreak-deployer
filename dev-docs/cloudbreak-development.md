@@ -4,10 +4,10 @@ To make local development easier we introduced some environment configuration at
 
 ## Docker-machine
 
-If you want to use cloudbreak deployer with docker-machine, please edit Profile by adding the line below:
+If you want to use cloudbreak deployer with docker-machine, please execute `cbd init` by passing DOCKER_MACHINE environment variable.
 
 ```
-export DOCKER_MACHINE=name_of_the_docker_machine
+DOCKER_MACHINE=name_of_the_docker_machine cbd init
 ```
 
 ## Uluwatu

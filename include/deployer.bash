@@ -120,6 +120,25 @@ latest-version() {
 init-profile() {
     declare desc="Creates Profile if missing"
 
+    if ! is_linux ; then
+        if [[ "$DOCKER_MACHINE" ]]; then
+            if ! is_machine_running ; then
+                echo "docker-machine is not running, please start it, with one of the following 2 commands:" | red
+                echo "docker-machine create $DOCKER_MACHINE --driver virtualbox" | blue
+                echo "docker-machine start $DOCKER_MACHINE" | blue
+                _exit 2
+            fi
+        else
+            if ! is_boot2docker_running ; then
+                echo "boot2docker isn't running, please start it, with the following 3 commands:" | red
+                echo "boot2docker init" | blue
+                echo "boot2docker start" | blue
+                echo 'eval "$(boot2docker shellinit)"' | blue
+                _exit 2
+            fi
+        fi
+    fi
+    
     CBD_PROFILE="Profile"
 
     # if the profile exist
@@ -127,26 +146,25 @@ init-profile() {
         info "$CBD_PROFILE already exists, now you are ready to run:"
         echo "cbd generate" | blue
     else
-        ipcommand=$(public-ip-resolver-command)
+        ipcommand="$(public-ip-resolver-command)"
         if [[ "$ipcommand" ]]; then
             PUBLIC_IP=$(eval "$ipcommand")
             echo "export PUBLIC_IP=\$($ipcommand)" > $CBD_PROFILE
-            if ! is_linux && [[ "$(boot2docker status)" == "running" ]]; then
-                boot2docker shellinit 2>/dev/null >> $CBD_PROFILE
-            fi
         else
-            if ! is_linux && [[ "$(boot2docker status)" != "running" ]]; then
-                echo "boot2docker isn't running, please start it, with the following 2 commands:" | red
-                echo "boot2docker start" | blue
-                echo 'eval "$(boot2docker shellinit)"' | blue
-            else
-                warn "We can not guess your PUBLIC_IP, please run the following command: (replace 1.2.3.4 with a real IP)"
-                echo "echo export PUBLIC_IP=1.2.3.4 > $CBD_PROFILE" | blue
-            fi    
+            warn "We can not guess your PUBLIC_IP, please run the following command: (replace 1.2.3.4 with a real IP)"
+            echo "echo export PUBLIC_IP=1.2.3.4 > $CBD_PROFILE" | blue
             _exit 2
         fi
     fi
 
+    if ! is_linux ; then
+        if [[ "$DOCKER_MACHINE" ]]; then
+            echo "export DOCKER_MACHINE=$DOCKER_MACHINE" >> $CBD_PROFILE
+        else
+            boot2docker shellinit 2>/dev/null >> $CBD_PROFILE
+        fi
+    fi
+    
     doctor
 }
 
@@ -178,7 +196,10 @@ public-ip-resolver-command() {
             return
         fi
     else
-        if [[ "$(boot2docker status)" == "running" ]]; then
+        if [[ "$DOCKER_MACHINE" ]]; then
+            echo "echo $(docker-machine ip $DOCKER_MACHINE)"
+            return
+        else
             echo "echo $(boot2docker ip)"
             return
         fi
@@ -214,7 +235,7 @@ doctor() {
     echo-n "uname: "
     uname -a | green
     cbd-version
-    if [[ "$(uname)" == "Darwin" ]]; then
+    if ! is_linux; then
         debug "checking OSX specific dependencies..."
         if [[ "$DOCKER_MACHINE" ]]; then
           docker-check-docker-machine

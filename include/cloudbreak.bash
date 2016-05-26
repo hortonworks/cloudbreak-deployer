@@ -100,6 +100,14 @@ is_linux() {
     [[ "$(uname)" == Linux ]]
 }
 
+is_boot2docker_running() {
+    [[ "$(boot2docker status)" == "running" ]]
+}
+
+is_machine_running() {
+    [[ "$(docker-machine status $DOCKER_MACHINE)" == "Running" ]]
+}
+
 cloudbreak-conf-db() {
     declare desc="Declares cloudbreak DB config"
 
