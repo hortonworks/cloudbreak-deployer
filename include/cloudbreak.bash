@@ -2,6 +2,7 @@
 cloudbreak-config() {
   : ${BRIDGE_IP:=$(docker run --label cbreak.sidekick=true alpine sh -c 'ip ro | grep default | cut -d" " -f 3')}
   env-import PRIVATE_IP $BRIDGE_IP
+  env-import DOCKER_MACHINE ""
   cloudbreak-conf-tags
   cloudbreak-conf-images
   cloudbreak-conf-cert
@@ -30,14 +31,14 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_UAADB v2.7.1
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.0.3
-    env-import DOCKER_TAG_CBDB 1.2.0
-    env-import DOCKER_TAG_PCDB 1.2.0
-    env-import DOCKER_TAG_PERISCOPE 1.2.6
-    env-import DOCKER_TAG_CLOUDBREAK 1.2.6
-    env-import DOCKER_TAG_ULUWATU 1.2.6
-    env-import DOCKER_TAG_SULTANS 1.2.6
-    env-import DOCKER_TAG_CLOUDBREAK_SHELL 1.2.5
-
+    env-import DOCKER_TAG_CBDB 1.3.0
+    env-import DOCKER_TAG_PCDB 1.3.0
+    env-import DOCKER_TAG_PERISCOPE 1.3.0
+    env-import DOCKER_TAG_CLOUDBREAK 1.3.0
+    env-import DOCKER_TAG_ULUWATU 1.3.0
+    env-import DOCKER_TAG_SULTANS 1.3.0
+    env-import DOCKER_TAG_CLOUDBREAK_SHELL 1.3.0
+    
     env-import CB_DOCKER_CONTAINER_AMBARI ""
     env-import CB_DOCKER_CONTAINER_AMBARI_WARM ""
 }
@@ -123,10 +124,15 @@ cloudbreak-conf-cert() {
 cloudbreak-delete-dbs() {
     declare desc="deletes all cloudbreak related dbs: cbdb,pcdb,uaadb"
 
+    cloudbreak-conf-db
     if is_linux; then
         rm -rf /var/lib/cloudbreak/*
     else
-        boot2docker ssh 'sudo rm -rf /var/lib/boot2docker/cloudbreak/*'
+        local sshcommand='boot2docker ssh'
+        if [[ -n "$DOCKER_MACHINE" ]]; then
+          sshcommand='docker-machine ssh '$DOCKER_MACHINE
+        fi
+        $sshcommand ' sudo rm -rf '${CB_DB_ROOT_PATH:? required}'/*'
     fi
 }
 
@@ -169,6 +175,8 @@ cloudbreak-conf-defaults() {
     env-import CB_LOCAL_DEV_BIND_ADDR "192.168.59.3"
     env-import ADDRESS_RESOLVING_TIMEOUT 120000
     env-import CB_UI_MAX_WAIT 400
+    env-import CB_HOST_DISCOVERY_CUSTOM_DOMAIN ""
+    env-import CB_SMARTSENSE_CONFIGURE "false"
 }
 
 cloudbreak-conf-cloud-provider() {
@@ -176,6 +184,8 @@ cloudbreak-conf-cloud-provider() {
 
     env-import AWS_ACCESS_KEY_ID ""
     env-import AWS_SECRET_ACCESS_KEY ""
+    env-import CB_AWS_DEFAULT_CF_TAG ""
+    env-import CB_AWS_CUSTOM_CF_TAGS ""
 
     env-import CB_AWS_HOSTKEY_VERIFY "false"
     env-import CB_GCP_HOSTKEY_VERIFY "false"

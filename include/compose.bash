@@ -226,15 +226,14 @@ logspout:
         - SERVICE_NAME=logspout
         - DEBUG=true
         - LOGSPOUT=ignore
-        - ROUTE_URIS=tcp://logsink:3333
         - "RAW_FORMAT={{.Container.Name}} | {{.Data}}\n"
     links:
         - logsink
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    image: gliderlabs/logspout:master
+    image: gliderlabs/logspout:v3.1
     entrypoint: ["/bin/sh"]
-    command: -c 'sleep 1; /bin/logspout'
+    command: -c 'sleep 1; ROUTE_URIS=\$LOGSINK_PORT_3333_TCP /bin/logspout'
 
 uaadb:
     privileged: true
@@ -315,7 +314,11 @@ cloudbreak:
         - CB_AWS_HOSTKEY_VERIFY=$CB_AWS_HOSTKEY_VERIFY
         - CB_GCP_HOSTKEY_VERIFY=$CB_GCP_HOSTKEY_VERIFY
         - REST_DEBUG=$REST_DEBUG
+        - CB_AWS_DEFAULT_CF_TAG=$CB_AWS_DEFAULT_CF_TAG
+        - CB_AWS_CUSTOM_CF_TAGS=$CB_AWS_CUSTOM_CF_TAGS
         - CERT_VALIDATION=$CERT_VALIDATION
+        - CB_HOST_DISCOVERY_CUSTOM_DOMAIN=$CB_HOST_DISCOVERY_CUSTOM_DOMAIN
+        - CB_SMARTSENSE_CONFIGURE=$CB_SMARTSENSE_CONFIGURE
     ports:
         - 8080:8080
     volumes:
