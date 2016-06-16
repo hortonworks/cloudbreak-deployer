@@ -205,7 +205,7 @@ cloudbreak-conf-ui() {
 
     env-import ULU_HOST_ADDRESS  "https://$PUBLIC_IP"
     env-import ULU_OAUTH_REDIRECT_URI  "$ULU_HOST_ADDRESS/authorize"
-    env-import ULU_SULTANS_ADDRESS  "https://$PUBLIC_IP/identity"
+    env-import ULU_SULTANS_ADDRESS  "https://$PUBLIC_IP/sl"
     env-import CB_HOST_ADDRESS  "http://$PUBLIC_IP:8080"
     env-import ULU_HWX_CLOUD_DEFAULT_CREDENTIAL ""
     env-import ULU_HWX_CLOUD_DEFAULT_REGION ""
