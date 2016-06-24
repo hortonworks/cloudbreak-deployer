@@ -163,7 +163,11 @@ public-ip-resolver-command() {
     if is_linux; then
         # on openstack
         if curl -m 1 -f -s 169.254.169.254/latest/meta-data/public-hostname | grep -q novalocal ; then
-            echo "curl -m 1 -f -s 169.254.169.254/latest/meta-data/public-ipv4"
+            if [[ -n "$(curl -m 1 -f -s 169.254.169.254/latest/meta-data/public-ipv4)" ]]; then
+                echo "curl -m 1 -f -s 169.254.169.254/latest/meta-data/public-ipv4"
+            else
+                echo "curl -m 1 -f -s 169.254.169.254/latest/meta-data/local-ipv4"
+            fi
             return
         fi
         
