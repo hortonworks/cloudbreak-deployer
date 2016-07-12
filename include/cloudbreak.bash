@@ -106,6 +106,10 @@ is_linux() {
     [[ "$(uname)" == Linux ]]
 }
 
+is_aws() {
+    curl -m 1 -f -s 169.254.169.254/latest/dynamic &>/dev/null
+}
+
 cloudbreak-conf-db() {
     declare desc="Declares cloudbreak DB config"
 
@@ -175,6 +179,7 @@ cloudbreak-conf-uaa() {
 cloudbreak-conf-defaults() {
     env-import PUBLIC_IP
 
+    env-import TRAEFIK_ULU_HOSTS ",$PUBLIC_IP"
     env-import CB_HOST_ADDR $PUBLIC_IP
     env-import CB_BLUEPRINT_DEFAULTS "hdp-small-default;hdp-spark-cluster;hdp-streaming-cluster;hdp-ephemeral"
     env-import CB_TEMPLATE_DEFAULTS "minviable-gcp,minviable-azure,minviable-aws"

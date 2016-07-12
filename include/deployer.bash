@@ -141,6 +141,12 @@ init-profile() {
             if ! is_linux && [[ "$(boot2docker status)" == "running" ]]; then
                 boot2docker shellinit 2>/dev/null >> $CBD_PROFILE
             fi
+            if is_aws ; then
+                publicip="$(curl -m 1 -f -s 169.254.169.254/latest/meta-data/public-ipv4 2>/dev/null)"
+                if [[ $publicip ]]; then
+                    echo "export TRAEFIK_ULU_HOSTS=,\$(echo $PUBLIC_IP),$publicip" >> $CBD_PROFILE
+                fi
+            fi
         else
             if ! is_linux && [[ "$(boot2docker status)" != "running" ]]; then
                 echo "boot2docker isn't running, please start it, with the following 2 commands:" | red
@@ -168,7 +174,7 @@ public-ip-resolver-command() {
         fi
         
         # on amazon
-        if curl -m 1 -f -s 169.254.169.254/latest/dynamic &>/dev/null ; then
+        if is_aws ; then
             if curl -m 1 -f -s 169.254.169.254/latest/meta-data/public-hostname &>/dev/null ; then
                 echo "curl -m 1 -f -s 169.254.169.254/latest/meta-data/public-hostname"
             else

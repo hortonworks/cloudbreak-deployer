@@ -472,7 +472,7 @@ uluwatu:
         - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
     labels:
       - traefik.port=3000
-      - traefik.frontend.rule=Host:,$PUBLIC_IP
+      - traefik.frontend.rule=Host:${TRAEFIK_ULU_HOSTS}
       - traefik.backend=uluwatu-backend
       - traefik.frontend.priority=5
     ports:
