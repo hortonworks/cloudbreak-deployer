@@ -342,6 +342,15 @@ deployer-login() {
     echo "  $UAA_DEFAULT_USER_EMAIL" | blue
     info "password:"
     echo "  $UAA_DEFAULT_USER_PW" | blue
+
+    info "creating config file for hdc cli: $HOME/.hdc/config"
+    mkdir -p $HOME/.hdc
+    cat > $HOME/.hdc/config <<EOF
+username: $UAA_DEFAULT_USER_EMAIL
+password: $UAA_DEFAULT_USER_PW
+server: $ULU_HOST_ADDRESS
+EOF
+
 }
 
 start-cmd() {
@@ -385,6 +394,14 @@ start-requested-services() {
 
     create-logfile
     compose-up $services
+    hdc-cli-downloadable
+}
+
+hdc-cli-downloadable() {
+  if [ -e /var/lib/cloudbreak/hdc-cli ];then
+    find /var/lib/cloudbreak/hdc-cli -name \*.tgz \
+      | xargs --no-run-if-empty -t -n 1 -I@ docker cp @ cbreak_uluwatu_1:/hortonworks-cloud-web/app/static/
+  fi
 }
 
 wait-for-cloudbreak() {
