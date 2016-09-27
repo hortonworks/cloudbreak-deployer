@@ -211,6 +211,9 @@ cloudbreak-conf-cloud-provider() {
     env-import CB_AWS_DEFAULT_CF_TAG ""
     env-import CB_AWS_CUSTOM_CF_TAGS ""
 
+    env-import AZURE_TENANT_ID ""
+    env-import AZURE_SUBSCRIPTION_ID ""
+
     env-import CB_AWS_HOSTKEY_VERIFY "false"
     env-import CB_GCP_HOSTKEY_VERIFY "false"
     
@@ -238,7 +241,11 @@ cloudbreak-conf-ui() {
     env-import ULU_HWX_CLOUD_DEFAULT_VPC_ID ""
     env-import ULU_HWX_CLOUD_DEFAULT_IGW_ID ""
     env-import ULU_HWX_CLOUD_DEFAULT_SUBNET_ID ""
+    env-import ULU_HWX_CLOUD_AZURE_SSH_KEY ""
+    env-import ULU_HWX_CLOUD_AZURE_RESOURCE_GROUP ""
+    env-import ULU_HWX_CLOUD_AZURE_DEFAULT_VIRTUAL_NETWORK_ID 
     env-import ULU_HWX_CLOUD_REGISTRATION_URL ""
+    env-import ULU_HWX_CLOUD_PROVIDER ""
     env-import HWX_DOC_LINK ""
     env-import ULU_SUBSCRIBE_TO_NOTIFICATIONS "true"
     env-import HWX_CLOUD_ENABLE_GOVERNANCE_AND_SECURITY "false"
