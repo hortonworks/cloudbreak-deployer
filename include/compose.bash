@@ -530,6 +530,11 @@ periscope:
         - ENDPOINTS_BEANS_ENABLED=false
         - ENDPOINTS_ENV_ENABLED=false
         - PERISCOPE_ADDRESS_RESOLVING_TIMEOUT
+        - PERISCOPE_DB_TCP_ADDR
+        - PERISCOPE_DB_TCP_PORT
+        - PERISCOPE_DB_USER
+        - PERISCOPE_DB_PASS
+        - PERISCOPE_DB_NAME
         - PERISCOPE_DB_SERVICEID=pcdb.service.consul
         - PERISCOPE_CLOUDBREAK_SERVICEID=cloudbreak.service.consul
         - PERISCOPE_IDENTITY_SERVICEID=identity.service.consul

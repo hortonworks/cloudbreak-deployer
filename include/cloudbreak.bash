@@ -132,6 +132,13 @@ cloudbreak-conf-db() {
     env-import IDENTITY_DB_NAME "postgres"
     env-import IDENTITY_DB_USER "postgres"
     env-import IDENTITY_DB_PASS ""
+
+    env-import PERISCOPE_DB_TCP_ADDR ""
+    env-import PERISCOPE_DB_TCP_PORT ""
+    env-import PERISCOPE_DB_USER "postgres"
+    env-import PERISCOPE_DB_PASS ""
+    env-import PERISCOPE_DB_NAME "postgres"
+
 }
 
 cloudbreak-conf-cert() {
