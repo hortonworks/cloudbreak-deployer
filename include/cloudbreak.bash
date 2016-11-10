@@ -243,7 +243,7 @@ cloudbreak-conf-ui() {
     env-import ULU_HWX_CLOUD_DEFAULT_SUBNET_ID ""
     env-import ULU_HWX_CLOUD_AZURE_SSH_KEY ""
     env-import ULU_HWX_CLOUD_AZURE_RESOURCE_GROUP ""
-    env-import ULU_HWX_CLOUD_AZURE_DEFAULT_VIRTUAL_NETWORK_ID 
+    env-import ULU_HWX_CLOUD_AZURE_DEFAULT_VIRTUAL_NETWORK_ID ""
     env-import ULU_HWX_CLOUD_REGISTRATION_URL ""
     env-import ULU_HWX_CLOUD_PROVIDER ""
     env-import HWX_DOC_LINK ""
