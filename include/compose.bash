@@ -565,5 +565,21 @@ periscope:
         - /dev/urandom:/dev/random
     image: $DOCKER_IMAGE_CLOUDBREAK_PERISCOPE:$DOCKER_TAG_PERISCOPE
 
+prometheus:
+    environment: 
+      - SERVICE_NAME=prometheus
+      - geci=simicska
+    labels:
+      - traefik.port=9090
+      - traefik.frontend.rule=PathPrefix:/prom/
+      - traefik.backend=prometheus-backend
+      - traefik.frontend.priority=10
+    ports:
+        - 9090:9090
+    volumes:
+        - ./prometheus/etc:/etc/prometheus/etc
+        - ./prometheus/data:/opt/prometheus/data
+    image: $DOCKER_IMAGE_PROMETHEUS:$DOCKER_TAG_PROMETHEUS
+    command: -config.file=/etc/prometheus/prometheus.yml
 EOF
 }
