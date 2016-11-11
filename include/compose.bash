@@ -579,6 +579,6 @@ prometheus:
         - ./prometheus/etc:/etc/prometheus
         - ./prometheus/data:/opt/prometheus/data
     image: $DOCKER_IMAGE_PROMETHEUS:$DOCKER_TAG_PROMETHEUS
-    command: -config.file=/etc/prometheus/prometheus.yml
+    command: -config.file=/etc/prometheus/prometheus.yml -web.external-url=https://$PUBLIC_IP/prom/
 EOF
 }
