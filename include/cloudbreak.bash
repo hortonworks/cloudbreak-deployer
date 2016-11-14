@@ -52,7 +52,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CLOUDBREAK_SHELL hortonworks/cloudbreak-shell
     env-import DOCKER_IMAGE_CBD_SMARTSENSE hortonworks/cbd-smartsense
 
-    env-import DOCKER_IMAGE_PROMETHEUS prom/prometheus
+    env-import DOCKER_IMAGE_PROMETHEUS deathowl/consul-prom
 
     env-import CB_DOCKER_CONTAINER_AMBARI ""
     env-import CB_DOCKER_CONTAINER_AMBARI_WARM ""
@@ -217,7 +217,7 @@ cloudbreak-conf-cloud-provider() {
 
     env-import CB_AWS_HOSTKEY_VERIFY "false"
     env-import CB_GCP_HOSTKEY_VERIFY "false"
-    
+
     env-import CB_BYOS_DFS_DATA_DIR "/hadoop/hdfs/data"
 }
 
