@@ -338,6 +338,8 @@ deployer-regenerate() {
         mv uaa.yml uaa-${datetime}.yml
     fi
     generate_uaa_config
+
+    generate_prometheus_config
 }
 
 deployer-login() {
@@ -480,6 +482,10 @@ main() {
     cmd-export-ns azure "Azure namespace"
     cmd-export azure-deploy-dash
     cmd-export azure-configure-arm
+
+    cmd-export-ns prometheus "Prometheus namespace"
+    cmd-export prometheus-generate-node-exporter-config node-exp-config
+
 
     
     if [[ "$PROFILE_LOADED" ]] ; then

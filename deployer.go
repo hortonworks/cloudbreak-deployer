@@ -151,6 +151,7 @@ func main() {
 		"include/fn.bash",
 		"include/migrate.bash",
 		"include/module.bash",
+		"include/prometheus.bash",
 	}, Asset, false)
 
 }
