@@ -569,6 +569,8 @@ periscope:
 prometheus:
     environment:
       - SERVICE_NAME=prometheus
+      - PUBLIC_IP
+      - CONSUL_HTTP_ADDR=consul.service.consul:8500
     labels:
       - traefik.port=9090
       - traefik.frontend.rule=PathPrefix:/prom/
@@ -576,10 +578,11 @@ prometheus:
       - traefik.frontend.priority=10
     ports:
         - 9090:9090
+    dns: $PRIVATE_IP
     volumes:
-        - ./prometheus/etc:/etc/prometheus
+        - .:/work
         - ./prometheus/data:/opt/prometheus/data
     image: $DOCKER_IMAGE_PROMETHEUS:$DOCKER_TAG_PROMETHEUS
-    command: /usr/local/bin/prometheus -config.file=/etc/prometheus/prometheus.yml -web.external-url=https://$PUBLIC_IP/prom/
+    command: [ "/bin/sh", "-c" , "/usr/local/bin/consul kv get prometheus-entrypoint.sh | /bin/sh"]
 EOF
 }
