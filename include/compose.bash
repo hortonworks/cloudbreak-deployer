@@ -580,9 +580,8 @@ prometheus:
         - 9090:9090
     dns: $PRIVATE_IP
     volumes:
-        - .:/work
         - ./prometheus/data:/opt/prometheus/data
     image: $DOCKER_IMAGE_PROMETHEUS:$DOCKER_TAG_PROMETHEUS
-    command: [ "/bin/sh", "-c" , "/usr/local/bin/consul kv get prometheus-entrypoint.sh | /bin/sh"]
+    command: [ "/bin/bash", "-c" , "/usr/local/bin/consul kv get prometheus-entrypoint.sh | /bin/bash"]
 EOF
 }
