@@ -582,5 +582,18 @@ prometheus:
     volumes:
         - ./prometheus/data:/opt/prometheus/data:rw
     image: $DOCKER_IMAGE_PROMETHEUS:$DOCKER_TAG_PROMETHEUS
+grafana:
+    environment:
+      - SERVICE_NAME=grafana
+      - CONSUL_HTTP_ADDR=consul.service.consul:8500
+    labels:
+      - traefik.port=3003
+      - traefik.frontend.rule=PathPrefix:/grafana/
+      - traefik.backend=grafana-backend
+      - traefik.frontend.priority=10
+    dns: $PRIVATE_IP
+    ports:
+      - 3003:3000
+    image: deathowl/prom_gf:latest
 EOF
 }
