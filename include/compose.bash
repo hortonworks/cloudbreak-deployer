@@ -532,7 +532,7 @@ periscope:
         - PERISCOPE_DB_HBM2DDL_STRATEGY
         - SERVICE_NAME=periscope
           #- SERVICE_CHECK_HTTP=/info
-        - CB_JAVA_OPTS
+        - "CB_JAVA_OPTS=$CB_JAVA_OPTS -Dspring.cloud.consul.host=consul.service.consul"
         - PROMETHEUS_ADDRESS=http://172.17.0.1:9090/prom
         - PERISCOPE_CLIENT_ID=$UAA_PERISCOPE_ID
         - PERISCOPE_CLIENT_SECRET=$UAA_PERISCOPE_SECRET
