@@ -26,7 +26,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_ALPINE 3.1
     env-import DOCKER_TAG_HAVEGED 1.1.0
     env-import DOCKER_TAG_TRAEFIK v1.0.0
-    env-import DOCKER_TAG_CONSUL 0.5
+    env-import DOCKER_TAG_CONSUL 0.7
     env-import DOCKER_TAG_REGISTRATOR v5
     env-import DOCKER_TAG_POSTGRES 9.4.1
     env-import DOCKER_TAG_POSTFIX latest
@@ -53,6 +53,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CBD_SMARTSENSE hortonworks/cbd-smartsense
 
     env-import DOCKER_IMAGE_PROMETHEUS deathowl/consul-prom
+    env-import DOCKER_IMAGE_CONSUL deathowl/consul-server
 
     env-import CB_DOCKER_CONTAINER_AMBARI ""
     env-import CB_DOCKER_CONTAINER_AMBARI_WARM ""

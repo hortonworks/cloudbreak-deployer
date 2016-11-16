@@ -237,7 +237,7 @@ consul:
         - "8400:8400"
         - "8500:8500"
     hostname: node1
-    image: gliderlabs/consul-server:$DOCKER_TAG_CONSUL
+    image: $DOCKER_IMAGE_CONSUL:$DOCKER_TAG_CONSUL
     command: --bootstrap --advertise $PRIVATE_IP $DOCKER_CONSUL_OPTIONS
 
 registrator:
