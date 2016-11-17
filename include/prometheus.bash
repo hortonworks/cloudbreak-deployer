@@ -1,6 +1,6 @@
 init() {
     debug prometheus init ...
-    
+
 }
 
 choose-cluster() {
@@ -28,7 +28,7 @@ get-cluster-ips() {
 prometheus-generate-targets-yaml() {
     declare desc="Genberates tagets yml, and loads it into consul"
     declare clusterIpsJson=${1:?required} port=${2:?required} path=${3:?required}
-    
+
     local clusterIpsYml=$(
       sigil -i '- targets:{{- range $k,$v := stdin | json  }}{{"\n"}}  - {{ $v.PublicIP  }}:{{$PORT}}{{- end }}' PORT=$port <<< "$clusterIpsJson"
     )
@@ -49,10 +49,12 @@ prometheus-monitor-cluster() {
 
     local clusterIpsJson=$(get-cluster-ips $cluster)
     debug "clusterIpsJson: $clusterIpsJson"
-    
+
     prometheus-generate-targets-yaml "$clusterIpsJson" 9100 etc/prometheus/sdiscovery/node_collector.yml
     prometheus-generate-targets-yaml "$clusterIpsJson" 20101 etc/prometheus/sdiscovery/jmx_resourcemanager.yml
     prometheus-generate-targets-yaml "$clusterIpsJson" 20103 etc/prometheus/sdiscovery/jmx_namenode.yml
+    prometheus-generate-targets-yaml "$clusterIpsJson" 9246 etc/prometheus/sdiscovery/process.yml
+
 
 
 }
