@@ -68,6 +68,20 @@ compose-up() {
 compose-kill() {
     declare desc="Kills and removes all cloudbreak related container"
 
+    dateofdeletion=$(date +"%Y-%m-%d_%H-%M-%S")
+    if boot2docker version &> /dev/null; then
+        # this is for OSX
+        logsdestination=/tmp/cbd-logs/$dateofdeletion
+    else
+        # this is for linux
+        logsdestination=/var/log/cbd-logs/$dateofdeletion
+    fi
+    mkdir -p $logsdestination
+    for containerid in `dockerCompose ps -q`; do
+        containername=$(docker inspect -f {{.Name}} $containerid|sed 's/\///g')
+        docker logs $containerid &> $logsdestination/$containername.log
+    done
+
     dockerCompose kill
     dockerCompose rm -f
 }
