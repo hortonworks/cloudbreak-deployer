@@ -580,7 +580,7 @@ prometheus:
         - 9090:9090
     dns: $PRIVATE_IP
     volumes:
-        - ./prometheus/data:/opt/prometheus/data:rw
+        - $CB_DB_ROOT_PATH/prometheus:/opt/prometheus/data
     image: $DOCKER_IMAGE_PROMETHEUS:$DOCKER_TAG_PROMETHEUS
 grafana:
     environment:
