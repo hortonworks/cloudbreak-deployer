@@ -153,7 +153,7 @@ cloudbreak-conf-cert() {
 cloudbreak-delete-dbs() {
     declare desc="deletes all cloudbreak related dbs: cbdb,pcdb,uaadb"
 
-    docker volume rm uaadb cbdb pcdb
+    docker volume rm $COMMON_DB_VOL
 }
 
 cloudbreak-delete-consul-data() {
