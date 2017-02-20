@@ -25,7 +25,7 @@ cloudbreak-conf-tags() {
 
     env-import DOCKER_TAG_ALPINE 3.1
     env-import DOCKER_TAG_HAVEGED 1.1.0
-    env-import DOCKER_TAG_TRAEFIK v1.0.0
+    env-import DOCKER_TAG_TRAEFIK v1.1.2
     env-import DOCKER_TAG_CONSUL 0.5
     env-import DOCKER_TAG_REGISTRATOR v5
     env-import DOCKER_TAG_POSTFIX latest
@@ -169,7 +169,7 @@ cloudbreak-delete-certs() {
 
 cloudbreak-conf-uaa() {
 
-    env-import UAA_DEFAULT_SECRET "cbsecret2015"
+    env-import UAA_DEFAULT_SECRET "$(checksum sha1 <<< $UAA_DEFAULT_USER_PW)"
 
     env-import UAA_CLOUDBREAK_ID cloudbreak
     env-import UAA_CLOUDBREAK_SECRET $UAA_DEFAULT_SECRET
