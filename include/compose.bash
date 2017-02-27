@@ -524,6 +524,8 @@ periscope:
         - http_proxy=$CB_HTTP_PROXY
         - https_proxy=$CB_HTTPS_PROXY
         - PERISCOPE_DB_HBM2DDL_STRATEGY
+        - PERISCOPE_DB_TCP_ADDR
+        - PERISCOPE_DB_TCP_PORT
         - PERISCOPE_DB_USER
         - PERISCOPE_DB_PASS
         - PERISCOPE_DB_NAME
