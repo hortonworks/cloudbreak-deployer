@@ -30,7 +30,6 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_REGISTRATOR v5
     env-import DOCKER_TAG_POSTFIX latest
     env-import DOCKER_TAG_UAA 3.6.0
-    env-import DOCKER_TAG_UAADB v3.6.0
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.0.3
     env-import DOCKER_TAG_PERISCOPE 1.14.0-dev.102
@@ -38,8 +37,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_ULUWATU 1.14.0-dev.102
     env-import DOCKER_TAG_SULTANS 1.14.0-dev.102
     env-import DOCKER_TAG_CLOUDBREAK_SHELL 1.14.0-dev.102
-    env-import DOCKER_TAG_CBDB 1.2.0
-    env-import DOCKER_TAG_PCDB 1.2.0
+    env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
 
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.1.0
 
@@ -119,6 +117,10 @@ is_linux() {
     [[ "$(uname)" == Linux ]]
 }
 
+is_macos() {
+    [[ "$(uname)" == Darwin ]]
+}
+
 cloudbreak-conf-db() {
     declare desc="Declares cloudbreak DB config"
 
@@ -128,14 +130,20 @@ cloudbreak-conf-db() {
         env-import CB_DB_ROOT_PATH "/var/lib/boot2docker/cloudbreak"
     fi
 
+    env-import COMMON_DB commondb
+    env-import COMMON_DB_VOL common
     env-import CB_DB_ENV_USER "postgres"
-    env-import CB_DB_ENV_DB ""
+    env-import CB_DB_ENV_DB "cbdb"
     env-import CB_DB_ENV_PASS ""
     env-import CB_HBM2DDL_STRATEGY "validate"
+
+    env-import PERISCOPE_DB_NAME "periscopedb"
+    env-import PERISCOPE_DB_USER "postgres"
+    env-import PERISCOPE_DB_PASS ""
     env-import PERISCOPE_DB_HBM2DDL_STRATEGY "validate"
 
-    env-import IDENTITY_DB_URL "uaadb.service.consul:5434"
-    env-import IDENTITY_DB_NAME "postgres"
+    env-import IDENTITY_DB_URL "${COMMON_DB}.service.consul:5432"
+    env-import IDENTITY_DB_NAME "uaadb"
     env-import IDENTITY_DB_USER "postgres"
     env-import IDENTITY_DB_PASS ""
 }
@@ -148,18 +156,23 @@ cloudbreak-conf-cert() {
 }
 
 cloudbreak-delete-dbs() {
-    declare desc="deletes all cloudbreak related dbs: cbdb,pcdb,uaadb"
+    declare desc="deletes all cloudbreak db (volume)"
 
-    cloudbreak-conf-db
-    if is_linux; then
-        rm -rf ${CB_DB_ROOT_PATH:? required}
-    else
-        local sshcommand='boot2docker ssh'
-        if [[ -n "$DOCKER_MACHINE" ]]; then
-          sshcommand='docker-machine ssh '$DOCKER_MACHINE
-        fi
-        $sshcommand ' sudo rm -rf '${CB_DB_ROOT_PATH:? required}'/*'
+    if [[ $(docker-compose -p cbreak ps -q $COMMON_DB | wc -l) -eq 1 ]]; then
+        error "Database container is running, delete not allowed"
+        _exit 1
     fi
+    docker volume rm $COMMON_DB_VOL 1>/dev/null || :
+}
+
+cloudbreak-delete-consul-data() {
+    declare desc="deletes consul data-dir (volume)"
+
+    if [[ $(docker-compose -p cbreak ps -q consul | wc -l) -eq 1 ]]; then
+        error "Consul container is running, delete not allowed"
+        _exit 1
+    fi
+    docker volume rm consul-data 1>/dev/null || :
 }
 
 cloudbreak-delete-certs() {
@@ -419,9 +432,9 @@ spring_profiles: postgresql
 
 database:
   driverClassName: org.postgresql.Driver
-  url: jdbc:postgresql://\${IDENTITY_DB_URL}/\${IDENTITY_DB_NAME:postgres}
-  username: \${IDENTITY_DB_USER:postgres}
-  password: \${IDENTITY_DB_PASS:}
+  url: jdbc:postgresql://\${IDENTITY_DB_URL}/\${IDENTITY_DB_NAME}
+  username: \${IDENTITY_DB_USER}
+  password: \${IDENTITY_DB_PASS}
 
 zones:
  internal:

@@ -1,12 +1,12 @@
 
 machine-init() {
-
   env-import MACHINE_NAME cbd
   env-import MACHINE_STORAGE_PATH $HOME/.docker/machine
   env-import MACHINE_MEM 4096
   env-import MACHINE_CPU 2
   env-import MACHINE_OPTS "--xhyve-virtio-9p"
   env-import DOCKER_PROFILE Profile
+  machine-deps
 }
 
 machine-deps() {
@@ -19,7 +19,6 @@ machine-create() {
     declare desc="Installs docker-machine xhyve driver"
     debug "$desc"
     
-    machine-deps
     docker-machine create \
         -d xhyve \
         --xhyve-memory-size $MACHINE_MEM \
@@ -34,7 +33,6 @@ machine-create() {
 machine-check() {
    declare desc="Check the Docker vm"
 
-   machine-deps
    debug "Check if vm is running"
    local status=$(docker-machine status $MACHINE_NAME)
    if [[ "$status" != "Running" ]]; then
@@ -60,7 +58,6 @@ machine-env() {
     declare desc="creates local profile script"
     debug "$desc"
     
-    machine-deps
     touch $DOCKER_PROFILE
     sed -i '/PUBLIC_IP/ d' Profile
 

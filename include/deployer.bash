@@ -391,14 +391,14 @@ start-wait-cmd() {
 start-requested-services() {
     declare services="$@"
 
+    db-initialize-databases
     deployer-generate
 
     if ! [[ "$services" ]]; then
         debug "All services must be started"
-        local dbServices=$(sed -n "/^[a-z]/ s/:.*//p" docker-compose.yml | grep "db$" | xargs)
-        local otherServices=$(sed -n "/^[a-z]/ s/:.*//p" docker-compose.yml | grep -v "db$" | xargs)
-        if [[ $(docker-compose -p cbreak ps -q $dbServices | wc -l) -eq 3 ]]; then
-            debug "DB services: $dbServices are already running, start only other services"
+        if [[ $(docker-compose -p cbreak ps -q $COMMON_DB | wc -l) -eq 1 ]]; then
+            debug "DB services: $COMMON_DB are already running, start only other services"
+            local otherServices=$(sed -n "/^[a-z]/ s/:.*//p" docker-compose.yml | grep -v "db$" | xargs)
             services="${otherServices}"
         fi
     fi
@@ -459,7 +459,10 @@ main() {
     circle-init
     compose-init
     aws-init
-    machine-init
+    if is_macos; then
+        machine-init
+    fi
+    db-init
 
     debug "Cloudbreak Deployer $(bin-version)"
 
@@ -487,6 +490,12 @@ main() {
     cmd-export machine-create
     cmd-export machine-check
 
+    cmd-export-ns db "Db operations namespace"
+    cmd-export db-dump
+    cmd-export db-list-dumps
+    cmd-export db-init-volume-from-dump
+    cmd-export db-restore-volume-from-dump
+    
     if [[ "$PROFILE_LOADED" ]] ; then
         cmd-export cbd-update update
         cmd-export deployer-generate generate

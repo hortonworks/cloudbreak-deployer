@@ -248,7 +248,7 @@ consul:
         - https_proxy=$CB_HTTPS_PROXY
     volumes:
         - "/var/run/docker.sock:/var/run/docker.sock"
-        - "$CB_DB_ROOT_PATH/consul-data:/data"
+        - consul-data:/data
     ports:
         - "$PRIVATE_IP:53:8600/udp"
         - "8400:8400"
@@ -309,18 +309,18 @@ mail:
         - 'smtp_user=admin:$(escape-string-compose-yaml $LOCAL_SMTP_PASSWORD \')'
     image: catatnight/postfix:$DOCKER_TAG_POSTFIX
 
-uaadb:
+commondb:
     labels:
       - traefik.enable=false
     privileged: true
     ports:
-        - "$PRIVATE_IP:5434:5432"
+        - "$PRIVATE_IP:5432:5432"
     environment:
-      - SERVICE_NAME=uaadb
+      - SERVICE_NAME=$COMMON_DB
         #- SERVICE_CHECK_CMD=bash -c 'psql -h 127.0.0.1 -p 5432  -U postgres -c "select 1"'
     volumes:
-        - "$CB_DB_ROOT_PATH/uaadb:/var/lib/postgresql/data"
-    image: hortonworks/cloudbreak-uaa-db:$DOCKER_TAG_UAADB
+        - "$COMMON_DB_VOL:/var/lib/postgresql/data"
+    image: postgres:$DOCKER_TAG_POSTGRES
 
 identity:
     labels:
@@ -343,18 +343,6 @@ identity:
     volumes:
       - ./uaa.yml:/uaa/uaa.yml
     image: hortonworks/cloudbreak-uaa:$DOCKER_TAG_UAA
-
-cbdb:
-    labels:
-      - traefik.enable=false
-    ports:
-        - "$PRIVATE_IP:5432:5432"
-    environment:
-      - SERVICE_NAME=cbdb
-        #- SERVICE_CHECK_CMD=bash -c 'psql -h 127.0.0.1 -p 5432  -U postgres -c "select 1"'
-    volumes:
-        - "$CB_DB_ROOT_PATH/cbdb:/var/lib/postgresql/data"
-    image: hortonworks/cloudbreak-server-db:$DOCKER_TAG_CBDB
 
 cloudbreak:
     environment:
@@ -394,7 +382,7 @@ cloudbreak:
         - CB_DB_ENV_USER
         - CB_DB_ENV_PASS
         - CB_DB_ENV_DB
-        - "CB_DB_SERVICEID=cbdb.service.consul"
+        - "CB_DB_SERVICEID=$COMMON_DB.service.consul"
         - "CB_MAIL_SMTP_AUTH=$CLOUDBREAK_SMTP_AUTH"
         - "CB_MAIL_SMTP_STARTTLS_ENABLE=$CLOUDBREAK_SMTP_STARTTLS_ENABLE"
         - "CB_MAIL_SMTP_TYPE=$CLOUDBREAK_SMTP_TYPE"
@@ -531,23 +519,16 @@ uluwatu:
     dns: $PRIVATE_IP
     image: $DOCKER_IMAGE_CLOUDBREAK_WEB:$DOCKER_TAG_ULUWATU
 
-pcdb:
-    labels:
-      - traefik.enable=false
-    environment:
-        - SERVICE_NAME=pcdb
-     #- SERVICE_NAMEE_CHECK_CMD='psql -h 127.0.0.1 -p 5432  -U postgres -c "select 1"'
-    ports:
-        - "$PRIVATE_IP:5433:5432"
-    volumes:
-        - "$CB_DB_ROOT_PATH/periscopedb:/var/lib/postgresql/data"
-    image: hortonworks/cloudbreak-autoscale-db:$DOCKER_TAG_PCDB
-
 periscope:
     environment:
         - http_proxy=$CB_HTTP_PROXY
         - https_proxy=$CB_HTTPS_PROXY
         - PERISCOPE_DB_HBM2DDL_STRATEGY
+        - PERISCOPE_DB_TCP_ADDR
+        - PERISCOPE_DB_TCP_PORT
+        - PERISCOPE_DB_USER
+        - PERISCOPE_DB_PASS
+        - PERISCOPE_DB_NAME
         - SERVICE_NAME=periscope
           #- SERVICE_CHECK_HTTP=/info
         - CB_JAVA_OPTS
@@ -563,7 +544,7 @@ periscope:
         - ENDPOINTS_BEANS_ENABLED=false
         - ENDPOINTS_ENV_ENABLED=false
         - PERISCOPE_ADDRESS_RESOLVING_TIMEOUT
-        - PERISCOPE_DB_SERVICEID=pcdb.service.consul
+        - PERISCOPE_DB_SERVICEID=$COMMON_DB.service.consul
         - PERISCOPE_CLOUDBREAK_SERVICEID=cloudbreak.service.consul
         - PERISCOPE_IDENTITY_SERVICEID=identity.service.consul
         - PERISCOPE_SCHEMA_SCRIPTS_LOCATION
