@@ -192,6 +192,7 @@ cloudbreak-conf-uaa() {
     env-import UAA_ZONE_DOMAIN example.com
 
     env-import UAA_DEFAULT_USER_GROUPS "openid,cloudbreak.networks,cloudbreak.securitygroups,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,sequenceiq.cloudbreak.admin,sequenceiq.cloudbreak.user,sequenceiq.account.seq1234567.SequenceIQ,cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,periscope.cluster,cloudbreak.recipes,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read"
+    env-import UAA_SULTANS_SCOPES "scim.read,scim.write,password.write"
 }
 
 cloudbreak-conf-defaults() {
@@ -442,8 +443,8 @@ oauth:
       id: ${UAA_SULTANS_ID}
       secret: ${UAA_SULTANS_SECRET}
       authorized-grant-types: client_credentials
-      scope: scim.read,scim.write,password.write
-      authorities: uaa.resource,scim.read,scim.write,password.write
+      scope: ${UAA_SULTANS_SCOPES}
+      authorities: uaa.resource,${UAA_SULTANS_SCOPES}
     ${UAA_ULUWATU_ID}:
       id: ${UAA_ULUWATU_ID}
       secret: ${UAA_ULUWATU_SECRET}
