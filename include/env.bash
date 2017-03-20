@@ -2,7 +2,7 @@
 declare -a _env
 
 env-import() {
-	declare var="$1" default="$2"
+	declare var="$1" default="$2" pattern="$3" patterntext="$4"
 	if [[ -z "${!var+x}" ]]; then
 		if [[ -z "${2+x}" ]]; then
 			echo "!! Imported variable $var must be set in profile or environment." | red
@@ -10,6 +10,10 @@ env-import() {
 		else
 			export $var="$default"
 		fi
+	fi
+	if [[ $pattern ]] && [[ ${!var} == $pattern ]]; then
+		echo "!! Imported variable $var contains $patterntext." | red
+		_exit 3
 	fi
 	_env+=($var)
 }

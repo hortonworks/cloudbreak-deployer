@@ -175,24 +175,24 @@ cloudbreak-delete-certs() {
 
 cloudbreak-conf-uaa() {
 
-    env-import UAA_DEFAULT_SECRET "cbsecret2015"
+    env-import UAA_DEFAULT_SECRET "cbsecret2015" *" "* "space"
 
     env-import UAA_CLOUDBREAK_ID cloudbreak
-    env-import UAA_CLOUDBREAK_SECRET $UAA_DEFAULT_SECRET
+    env-import UAA_CLOUDBREAK_SECRET $UAA_DEFAULT_SECRET *" "* "space"
 
     env-import UAA_PERISCOPE_ID periscope
-    env-import UAA_PERISCOPE_SECRET $UAA_DEFAULT_SECRET
+    env-import UAA_PERISCOPE_SECRET $UAA_DEFAULT_SECRET *" "* "space"
 
     env-import UAA_ULUWATU_ID uluwatu
-    env-import UAA_ULUWATU_SECRET $UAA_DEFAULT_SECRET
+    env-import UAA_ULUWATU_SECRET $UAA_DEFAULT_SECRET *" "* "space"
 
     env-import UAA_SULTANS_ID sultans
-    env-import UAA_SULTANS_SECRET $UAA_DEFAULT_SECRET
+    env-import UAA_SULTANS_SECRET $UAA_DEFAULT_SECRET *" "* "space"
 
     env-import UAA_CLOUDBREAK_SHELL_ID cloudbreak_shell
 
     env-import UAA_DEFAULT_USER_EMAIL admin@example.com
-    env-import UAA_DEFAULT_USER_PW cloudbreak
+    env-import UAA_DEFAULT_USER_PW cloudbreak *" "* "space"
     env-import UAA_DEFAULT_USER_FIRSTNAME Joe
     env-import UAA_DEFAULT_USER_LASTNAME Admin
     env-import UAA_ZONE_DOMAIN example.com
