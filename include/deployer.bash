@@ -46,7 +46,7 @@ error() {
 }
 
 command_exists() {
-	command -v "$@" > /dev/null 2>&1
+    command -v "$@" > /dev/null 2>&1
 }
 
 cbd-version() {
@@ -137,52 +137,47 @@ init-profile() {
     # if the profile exist
     if [ -f $CBD_PROFILE ]; then
         info "$CBD_PROFILE already exists, now you are ready to run:"
-        echo "cbd generate" | blue
+        echo "cbd start" | blue
     else
         ipcommand=$(public-ip-resolver-command)
         if [[ "$ipcommand" ]]; then
             PUBLIC_IP=$(eval "$ipcommand")
             echo "export PUBLIC_IP=\$($ipcommand)" > $CBD_PROFILE
-            if ! is_linux && [[ "$(boot2docker status)" == "running" ]]; then
-                boot2docker shellinit 2>/dev/null >> $CBD_PROFILE
-            fi
         else
-            if ! is_linux && [[ "$(boot2docker status)" != "running" ]]; then
-                echo "boot2docker isn't running, please start it, with the following 2 commands:" | red
-                echo "boot2docker start" | blue
-                echo 'eval "$(boot2docker shellinit)"' | blue
-            else
-                warn "We can not guess your PUBLIC_IP, please run the following command: (replace 1.2.3.4 with a real IP)"
-                echo "echo export PUBLIC_IP=1.2.3.4 > $CBD_PROFILE" | blue
-            fi
+            warn "We can not guess your PUBLIC_IP, please run the following command: (replace 1.2.3.4 with a real IP)"
+            echo "echo export PUBLIC_IP=1.2.3.4 > $CBD_PROFILE" | blue
             _exit 2
         fi
     fi
 
-    doctor
+    #doctor
 }
 
 public-ip-resolver-command() {
     declare desc="Generates command to resolve public IP"
-    
+
     if is_linux; then
         # on gce
         if curl -m 1 -f -s -H "Metadata-Flavor: Google" 169.254.169.254/computeMetadata/v1/ &>/dev/null ; then
             echo "curl -m 1 -f -s -H \"Metadata-Flavor: Google\" 169.254.169.254/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip"
             return
         fi
-        
+
         # on amazon
         if curl -m 1 -f -s 169.254.169.254/latest/dynamic &>/dev/null ; then
             if curl -m 1 -f -s 169.254.169.254/latest/meta-data/public-hostname &>/dev/null ; then
                 echo "curl -m 1 -f -s 169.254.169.254/latest/meta-data/public-hostname"
             else
-                warn "Public hostname not found setting up loopback as PUBLLIC_IP"
-                echo "echo 127.0.0.1"
+                if curl -m 1 -f -s 169.254.169.254/latest/meta-data/local-ipv4 &>/dev/null ; then
+                     echo "curl -m 1 -f -s 169.254.169.254/latest/meta-data/local-ipv4"
+                else
+                    warn "Public hostname not found setting up loopback as PUBLLIC_IP"
+                    echo "echo 127.0.0.1"
+                fi
             fi
             return
         fi
-        
+
         # on openstack
         if curl -m 1 -f -s 169.254.169.254/latest &>/dev/null ; then
             if [[ -n "$(curl -m 1 -f -s 169.254.169.254/latest/meta-data/public-ipv4)" ]]; then
@@ -191,11 +186,6 @@ public-ip-resolver-command() {
                 warn "Public ip not found setting up private as PUBLLIC_IP"
                 echo "curl -m 1 -f -s 169.254.169.254/latest/meta-data/local-ipv4"
             fi
-            return
-        fi
-    else
-        if [[ "$(boot2docker status)" == "running" ]]; then
-            echo "echo $(boot2docker ip)"
             return
         fi
     fi
@@ -218,9 +208,9 @@ load-profile() {
     if [[ "$CBD_DEFAULT_PROFILE" && -f "Profile.$CBD_DEFAULT_PROFILE" ]]; then
         CBD_PROFILE="Profile.$CBD_DEFAULT_PROFILE"
 
-		module-load $CBD_PROFILE
-		debug "Using profile $CBD_DEFAULT_PROFILE"
-	fi
+        module-load $CBD_PROFILE
+        debug "Using profile $CBD_DEFAULT_PROFILE"
+    fi
 }
 
 doctor() {
@@ -234,8 +224,6 @@ doctor() {
         debug "checking OSX specific dependencies..."
         if [[ "$DOCKER_MACHINE" ]]; then
           docker-check-docker-machine
-        else
-          docker-check-boot2docker
         fi
 
         if [[ $(is-sub-path $(dirname ~/.) $(pwd)) == 0 ]]; then
@@ -253,7 +241,7 @@ doctor() {
 }
 
 network-doctor() {
-    
+
     if [[ "$SKIP_NETWORK_DOCTOR" ]] || [[ "$CB_HTTP_PROXY" ]] || [[ "$CB_HTTPS_PROXY" ]] || [[ "$http_proxy" ]] || [[ "$https_proxy" ]]; then
         info "network checks are skippen in case you are using porxy"
         return
@@ -265,21 +253,21 @@ network-doctor() {
     else
         error
     fi
-    
+
     echo-n "ping github.com on host: "
     if ping -c 1 -W 1 github.com &> /dev/null; then
         info "OK"
     else
         error
     fi
-    
+
     echo-n "ping 8.8.8.8 in container: "
     if docker run --label cbreak.sidekick=true alpine sh -c 'ping -c 1 -W 1 8.8.8.8' &> /dev/null; then
         info "OK"
     else
         error
     fi
-    
+
     echo-n "ping github.com in container: "
     if docker run --label cbreak.sidekick=true alpine sh -c 'ping -c 1 -W 1 github.com' &> /dev/null; then
         info "OK"
@@ -336,6 +324,23 @@ deployer-regenerate() {
     generate_uaa_config
 }
 
+escape-string-yaml() {
+    declare desc="Escape yaml string by delimiter type"
+    : ${2:=required}
+    local in=$1
+    local delimiter=$2
+
+    if [[ $delimiter == "'" ]]; then
+        out=`echo $in | sed -e "s/'/''/g"`
+    elif [[ $delimiter == '"' ]]; then
+        out=`echo $in | sed -e 's/\\\\/\\\\\\\/g' -e 's/"/\\\"/g'`
+    else
+        out="$in"
+    fi
+
+    echo $out
+}
+
 deployer-login() {
     declare desc="Shows Uluwatu (Cloudbreak UI) login url and credentials"
 
@@ -346,15 +351,17 @@ deployer-login() {
     info "login email:"
     echo "  $UAA_DEFAULT_USER_EMAIL" | blue
     info "password:"
-    echo "  $UAA_DEFAULT_USER_PW" | blue
+    echo "  ****" | blue
 
     info "creating config file for hdc cli: $HOME/.hdc/config"
     mkdir -p $HOME/.hdc
     cat > $HOME/.hdc/config <<EOF
 username: $UAA_DEFAULT_USER_EMAIL
-password: $UAA_DEFAULT_USER_PW
 server: $ULU_HOST_ADDRESS
 EOF
+    if [[ "$UAA_DEFAULT_USER_PW" ]]; then
+        echo "password: \"$(escape-string-yaml $UAA_DEFAULT_USER_PW \")\"" >> $HOME/.hdc/config
+    fi
 
 }
 
@@ -367,11 +374,10 @@ start-cmd() {
 
 restart-cmd() {
     declare desc="shortcut for kill + regenerate + start"
-    
+
     compose-kill
     deployer-regenerate
     start-requested-services
-    
 }
 
 start-wait-cmd() {
@@ -415,7 +421,7 @@ hdc-cli-downloadable() {
 
 wait-for-cloudbreak() {
     info "Waiting for Cloudbreak UI (timeout: $CB_UI_MAX_WAIT)"
-    
+
     local count=0
     while ! curl -m 1 -sfo /dev/null ${CB_HOST_ADDRESS}/cb/info &&  [ $((count++)) -lt $CB_UI_MAX_WAIT ] ; do
         echo -n . 1>&2
@@ -441,10 +447,10 @@ _exit() {
 }
 
 main() {
-	set -eo pipefail; [[ "$TRACE" ]] && set -x
+    set -eo pipefail; [[ "$TRACE" ]] && set -x
 
     cbd-find-root
-	color-init
+    color-init
     load-profile "$@"
     deps-init
     deps-require sed
@@ -453,6 +459,7 @@ main() {
     circle-init
     compose-init
     aws-init
+    machine-init
 
     debug "Cloudbreak Deployer $(bin-version)"
 
@@ -474,10 +481,12 @@ main() {
     cmd-export aws-certs-restore-s3
 
     cmd-export-ns azure "Azure namespace"
-    cmd-export azure-deploy-dash
     cmd-export azure-configure-arm
 
-    
+    cmd-export-ns machine "Docker-machine"
+    cmd-export machine-create
+    cmd-export machine-check
+
     if [[ "$PROFILE_LOADED" ]] ; then
         cmd-export cbd-update update
         cmd-export deployer-generate generate
@@ -496,26 +505,29 @@ main() {
 
         cmd-export migrate-startdb-cmd startdb
         cmd-export migrate-cmd migrate
-        
+
         cmd-export-ns util "Util namespace"
         cmd-export util-cloudbreak-shell
         cmd-export util-cloudbreak-shell-quiet
         cmd-export util-cloudbreak-shell-remote
         cmd-export util-token
+        cmd-export util-token-debug
         cmd-export util-local-dev
         cmd-export util-cleanup
+        cmd-export util-smartsense
+        cmd-export util-add-default-user
     fi
 
     if [[ "$DEBUG" ]]; then
         cmd-export fn-call fn
     fi
 
-	if [[ "${!#}" == "-h" || "${!#}" == "--help" ]]; then
-		local args=("$@")
-		unset args[${#args[@]}-1]
-		cmd-ns "" help "${args[@]}"
-	else
-		cmd-ns "" "$@"
-	fi
+    if [[ "${!#}" == "-h" || "${!#}" == "--help" ]]; then
+        local args=("$@")
+        unset args[${#args[@]}-1]
+        cmd-ns "" help "${args[@]}"
+    else
+        cmd-ns "" "$@"
+    fi
     docker-kill-all-sidekicks
 }

@@ -3,7 +3,7 @@ compose-init() {
         echo "* removing old docker-compose binary" | yellow
         rm -f .deps/bin/docker-compose
     fi
-    deps-require docker-compose 1.7.1
+    deps-require docker-compose 1.9.0
     env-import CB_COMPOSE_PROJECT cbreak
     env-import COMPOSE_HTTP_TIMEOUT 120
     env-import CBD_LOG_NAME cbreak
@@ -68,7 +68,7 @@ compose-up() {
 compose-kill() {
     declare desc="Kills and removes all cloudbreak related container"
 
-    dockerCompose kill
+    dockerCompose stop
     dockerCompose rm -f
 }
 
@@ -187,6 +187,23 @@ compose-generate-yaml() {
     fi
 }
 
+escape-string-compose-yaml() {
+    declare desc="Escape compose yaml string by delimiter type"
+    : ${2:=required}
+    local in=$1
+    local delimiter=$2
+
+    if [[ $delimiter == "'" ]]; then
+        out=`echo $in | sed -e "s/'/''/g" -e 's/[$]/$$/g'`
+    elif [[ $delimiter == '"' ]]; then
+		out=`echo $in | sed -e 's/\\\\/\\\\\\\/g' -e 's/"/\\\"/g' -e 's/[$]/$$/g'`
+    else
+        out="$in"
+    fi
+
+    echo $out
+}
+
 compose-generate-yaml-force() {
     declare composeFile=${1:? required: compose file path}
     debug "Generating docker-compose yaml: ${composeFile} ..."
@@ -289,7 +306,7 @@ mail:
     environment:
         - SERVICE_NAME=smtp
         - maildomain=example.com
-        - smtp_user=admin:$UAA_DEFAULT_USER_PW
+        - 'smtp_user=admin:$(escape-string-compose-yaml $LOCAL_SMTP_PASSWORD \')'
     image: catatnight/postfix:$DOCKER_TAG_POSTFIX
 
 uaadb:
@@ -312,7 +329,7 @@ identity:
       - traefik.backend=identity-backend
       - traefik.frontend.priority=10
     ports:
-        - 8089:8080
+        - $UAA_PORT:8080
     environment:
         - http_proxy=$CB_HTTP_PROXY
         - https_proxy=$CB_HTTPS_PROXY
@@ -349,7 +366,7 @@ cloudbreak:
         - "https_proxy=$CB_HTTPS_PROXY"
         - CB_JAVA_OPTS
         - "CB_CLIENT_ID=$UAA_CLOUDBREAK_ID"
-        - "CB_CLIENT_SECRET=$UAA_CLOUDBREAK_SECRET"
+        - 'CB_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_CLOUDBREAK_SECRET \')'
         - CB_BLUEPRINT_DEFAULTS
         - CB_TEMPLATE_DEFAULTS
         - CB_AZURE_IMAGE_URI
@@ -358,7 +375,7 @@ cloudbreak:
         - CB_OPENSTACK_IMAGE
         - CB_HBM2DDL_STRATEGY
         - "CB_SMTP_SENDER_USERNAME=$CLOUDBREAK_SMTP_SENDER_USERNAME"
-        - "CB_SMTP_SENDER_PASSWORD=$CLOUDBREAK_SMTP_SENDER_PASSWORD"
+        - 'CB_SMTP_SENDER_PASSWORD=$(escape-string-compose-yaml $CLOUDBREAK_SMTP_SENDER_PASSWORD \')'
         - "CB_SMTP_SENDER_HOST=$CLOUDBREAK_SMTP_SENDER_HOST"
         - "CB_SMTP_SENDER_PORT=$CLOUDBREAK_SMTP_SENDER_PORT"
         - "CB_SMTP_SENDER_FROM=$CLOUDBREAK_SMTP_SENDER_FROM"
@@ -377,6 +394,7 @@ cloudbreak:
         - CB_DB_ENV_USER
         - CB_DB_ENV_PASS
         - CB_DB_ENV_DB
+        - CB_DB_ENV_SCHEMA
         - "CB_DB_SERVICEID=cbdb.service.consul"
         - "CB_MAIL_SMTP_AUTH=$CLOUDBREAK_SMTP_AUTH"
         - "CB_MAIL_SMTP_STARTTLS_ENABLE=$CLOUDBREAK_SMTP_STARTTLS_ENABLE"
@@ -399,6 +417,13 @@ cloudbreak:
         - AWS_INSTANCE_ID
         - AWS_ACCOUNT_ID
         - CB_PLATFORM_DEFAULT_REGIONS
+        - CB_DEFAULT_SUBSCRIPTION_ADDRESS
+        - CB_IMAGE_CATALOG_URL
+        - "CB_PUBLICIP=$DEFAULT_INBOUND_ACCESS_IP"
+        - CB_AWS_DEFAULT_INBOUND_SECURITY_GROUP
+        - CB_AWS_VPC
+        - CB_ENABLEDPLATFORMS
+        - CB_ENABLE_CUSTOM_IMAGE
     labels:
       - traefik.port=8080
       - traefik.frontend.rule=PathPrefix:/cb/
@@ -421,14 +446,14 @@ sultans:
         - http_proxy=$CB_HTTP_PROXY
         - https_proxy=$CB_HTTPS_PROXY
         - SL_CLIENT_ID=$UAA_SULTANS_ID
-        - SL_CLIENT_SECRET=$UAA_SULTANS_SECRET
+        - 'SL_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_SULTANS_SECRET \')'
         - SERVICE_NAME=sultans
           #- SERVICE_CHECK_HTTP=/
         - SL_PORT=3000
         - SL_SMTP_SENDER_HOST=$CLOUDBREAK_SMTP_SENDER_HOST
         - SL_SMTP_SENDER_PORT=$CLOUDBREAK_SMTP_SENDER_PORT
         - SL_SMTP_SENDER_USERNAME=$CLOUDBREAK_SMTP_SENDER_USERNAME
-        - SL_SMTP_SENDER_PASSWORD=$CLOUDBREAK_SMTP_SENDER_PASSWORD
+        - "SL_SMTP_SENDER_PASSWORD=$(escape-string-compose-yaml $CLOUDBREAK_SMTP_SENDER_PASSWORD \")"
         - SL_SMTP_SENDER_FROM=$CLOUDBREAK_SMTP_SENDER_FROM
         - HWX_CLOUD_COLLECTOR=$CLOUDBREAK_TELEMETRY_MAIL_ADDRESS
         - HWX_CLOUD_USER=$UAA_DEFAULT_USER_EMAIL
@@ -438,6 +463,7 @@ sultans:
         - AWS_INSTANCE_ID
         - AWS_ACCOUNT_ID
         - AWS_ACCOUNT_NAME
+        - HWX_DOC_LINK
         - SL_SMARTSENSE_CONFIGURE=$CB_SMARTSENSE_CONFIGURE
         - SL_CB_ADDRESS=$ULU_HOST_ADDRESS
         - SL_ADDRESS=$ULU_SULTANS_ADDRESS
@@ -466,7 +492,7 @@ uluwatu:
         - ULU_OAUTH_REDIRECT_URI
         - ULU_SULTANS_ADDRESS
         - ULU_OAUTH_CLIENT_ID=$UAA_ULUWATU_ID
-        - ULU_OAUTH_CLIENT_SECRET=$UAA_ULUWATU_SECRET
+        - 'ULU_OAUTH_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_ULUWATU_SECRET \')'
         - ULU_HOST_ADDRESS
         - NODE_TLS_REJECT_UNAUTHORIZED=0
         - ULU_HWX_CLOUD_DEFAULT_CREDENTIAL
@@ -475,14 +501,24 @@ uluwatu:
         - ULU_HWX_CLOUD_DEFAULT_VPC_ID
         - ULU_HWX_CLOUD_DEFAULT_IGW_ID
         - ULU_HWX_CLOUD_DEFAULT_SUBNET_ID
+        - ULU_HWX_CLOUD_DEFAULT_ARM_VIRTUAL_NETWORK_ID
         - ULU_SMARTSENSE_CONFIGURE=$CB_SMARTSENSE_CONFIGURE
         - HWX_CLOUD_TEMPLATE_VERSION
-
+        - HWX_CLOUD_ENABLE_GOVERNANCE_AND_SECURITY
         - ULU_ADDRESS_RESOLVING_TIMEOUT
         - ULU_SULTANS_SERVICEID=sultans.service.consul
         - ULU_IDENTITY_SERVICEID=identity.service.consul
         - ULU_CLOUDBREAK_SERVICEID=cloudbreak.service.consul
         - ULU_PERISCOPE_SERVICEID=periscope.service.consul
+        - ULU_HWX_CLOUD_REGISTRATION_URL
+        - ULU_SUBSCRIBE_TO_NOTIFICATIONS
+        - AWS_INSTANCE_ID
+        - HWX_HCC_AVAILABLE
+        - AWS_ACCOUNT_ID
+        - AWS_AMI_ID
+        - HWX_DOC_LINK
+        - AZURE_TENANT_ID
+        - AZURE_SUBSCRIPTION_ID
         - AWS_ACCESS_KEY_ID
         - AWS_SECRET_ACCESS_KEY
     labels:
@@ -514,11 +550,17 @@ periscope:
         - http_proxy=$CB_HTTP_PROXY
         - https_proxy=$CB_HTTPS_PROXY
         - PERISCOPE_DB_HBM2DDL_STRATEGY
+        - PERISCOPE_DB_TCP_ADDR
+        - PERISCOPE_DB_TCP_PORT
+        - PERISCOPE_DB_USER
+        - PERISCOPE_DB_PASS
+        - PERISCOPE_DB_NAME
+        - PERISCOPE_DB_SCHEMA_NAME
         - SERVICE_NAME=periscope
           #- SERVICE_CHECK_HTTP=/info
         - CB_JAVA_OPTS
         - PERISCOPE_CLIENT_ID=$UAA_PERISCOPE_ID
-        - PERISCOPE_CLIENT_SECRET=$UAA_PERISCOPE_SECRET
+        - 'PERISCOPE_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_PERISCOPE_SECRET \')'
         - PERISCOPE_HOSTNAME_RESOLUTION=public
         - ENDPOINTS_AUTOCONFIG_ENABLED=false
         - ENDPOINTS_DUMP_ENABLED=false
@@ -536,6 +578,7 @@ periscope:
         - PERISCOPE_SCHEMA_MIGRATION_AUTO
         - REST_DEBUG
         - CERT_VALIDATION
+        - CB_DEFAULT_SUBSCRIPTION_ADDRESS
     labels:
       - traefik.port=8080
       - traefik.frontend.rule=PathPrefix:/as/

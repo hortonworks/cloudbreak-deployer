@@ -2,6 +2,7 @@
 cloudbreak-config() {
   : ${BRIDGE_IP:=$(docker run --label cbreak.sidekick=true alpine sh -c 'ip ro | grep default | cut -d" " -f 3')}
   env-import PRIVATE_IP $BRIDGE_IP
+  env-import UAA_PORT 8089
   env-import DOCKER_MACHINE ""
   cloudbreak-conf-tags
   cloudbreak-conf-images
@@ -27,28 +28,31 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_TRAEFIK v1.1.2
     env-import DOCKER_TAG_CONSUL 0.5
     env-import DOCKER_TAG_REGISTRATOR v5
-    env-import DOCKER_TAG_POSTGRES 9.4.1
     env-import DOCKER_TAG_POSTFIX latest
     env-import DOCKER_TAG_UAA 3.6.0
     env-import DOCKER_TAG_UAADB v3.6.0
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.0.3
+    env-import DOCKER_TAG_PERISCOPE 1.14.0
+    env-import DOCKER_TAG_CLOUDBREAK 1.14.0
+    env-import DOCKER_TAG_ULUWATU 1.14.0
+    env-import DOCKER_TAG_SULTANS 1.14.0
+    env-import DOCKER_TAG_CLOUDBREAK_SHELL 1.14.0
     env-import DOCKER_TAG_CBDB 1.2.0
     env-import DOCKER_TAG_PCDB 1.2.0
-    env-import DOCKER_TAG_PERISCOPE 1.6.3
-    env-import DOCKER_TAG_CLOUDBREAK 1.6.3
-    env-import DOCKER_TAG_ULUWATU 1.6.3
-    env-import DOCKER_TAG_SULTANS 1.6.3
-    env-import DOCKER_TAG_CLOUDBREAK_SHELL 1.6.3
+
+    env-import DOCKER_TAG_CBD_SMARTSENSE 0.1.0
 
     env-import DOCKER_IMAGE_CLOUDBREAK hortonworks/cloudbreak
     env-import DOCKER_IMAGE_CLOUDBREAK_WEB hortonworks/cloudbreak-web
     env-import DOCKER_IMAGE_CLOUDBREAK_AUTH hortonworks/cloudbreak-auth
     env-import DOCKER_IMAGE_CLOUDBREAK_PERISCOPE hortonworks/cloudbreak-autoscale
     env-import DOCKER_IMAGE_CLOUDBREAK_SHELL hortonworks/cloudbreak-shell
+    env-import DOCKER_IMAGE_CBD_SMARTSENSE hortonworks/cbd-smartsense
 
     env-import CB_DOCKER_CONTAINER_AMBARI ""
     env-import CB_DOCKER_CONTAINER_AMBARI_WARM ""
+    env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu.service.consul:3000/notifications
     env-import CERTS_BUCKET ""
 }
 
@@ -91,12 +95,17 @@ cloudbreak-conf-images() {
     env-import CB_AWS_AMI_MAP ""
     env-import CB_OPENSTACK_IMAGE ""
     env-import CB_GCP_SOURCE_IMAGE_PATH ""
-
+    env-import CB_IMAGE_CATALOG_URL "https://s3-eu-west-1.amazonaws.com/cloudbreak-info/cb-image-catalog.json"
 }
 
 cloudbreak-conf-smtp() {
+    env-import LOCAL_SMTP_PASSWORD "$UAA_DEFAULT_USER_PW"
+    if ! [[ "$LOCAL_SMTP_PASSWORD" ]]; then
+        LOCAL_SMTP_PASSWORD="cloudbreak"
+    fi
+
     env-import CLOUDBREAK_SMTP_SENDER_USERNAME "admin"
-    env-import CLOUDBREAK_SMTP_SENDER_PASSWORD "$UAA_DEFAULT_USER_PW"
+    env-import CLOUDBREAK_SMTP_SENDER_PASSWORD "$LOCAL_SMTP_PASSWORD"
     env-import CLOUDBREAK_SMTP_SENDER_HOST "smtp.service.consul"
     env-import CLOUDBREAK_SMTP_SENDER_PORT 25
     env-import CLOUDBREAK_SMTP_SENDER_FROM "noreply@hortonworks.com"
@@ -122,7 +131,13 @@ cloudbreak-conf-db() {
     env-import CB_DB_ENV_USER "postgres"
     env-import CB_DB_ENV_DB ""
     env-import CB_DB_ENV_PASS ""
+    env-import CB_DB_ENV_SCHEMA "public"
     env-import CB_HBM2DDL_STRATEGY "validate"
+
+    env-import PERISCOPE_DB_USER "postgres"
+    env-import PERISCOPE_DB_NAME ""
+    env-import PERISCOPE_DB_PASS ""
+    env-import PERISCOPE_DB_SCHEMA_NAME "public"
     env-import PERISCOPE_DB_HBM2DDL_STRATEGY "validate"
 
     env-import IDENTITY_DB_URL "uaadb.service.consul:5434"
@@ -181,12 +196,15 @@ cloudbreak-conf-uaa() {
     env-import UAA_DEFAULT_USER_FIRSTNAME Joe
     env-import UAA_DEFAULT_USER_LASTNAME Admin
     env-import UAA_ZONE_DOMAIN example.com
+
+    env-import UAA_DEFAULT_ACCOUNT "seq1234567.SequenceIQ"
+    env-import UAA_DEFAULT_USER_GROUPS "openid,cloudbreak.networks,cloudbreak.securitygroups,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,sequenceiq.cloudbreak.admin,sequenceiq.cloudbreak.user,sequenceiq.account.${UAA_DEFAULT_ACCOUNT},cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,periscope.cluster,cloudbreak.recipes,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read"
 }
 
 cloudbreak-conf-defaults() {
     env-import PUBLIC_IP
 
-    env-import CB_BLUEPRINT_DEFAULTS "hdp-small-default;hdp-spark-cluster;hdp-streaming-cluster;hdp-ephemeral"
+    env-import CB_BLUEPRINT_DEFAULTS "hdp-small-default;hdp-spark-cluster;hdp-streaming-cluster"
     env-import CB_TEMPLATE_DEFAULTS "minviable-gcp,minviable-azure,minviable-aws"
     env-import CB_LOCAL_DEV_BIND_ADDR "192.168.59.3"
     env-import ADDRESS_RESOLVING_TIMEOUT 120000
@@ -194,6 +212,10 @@ cloudbreak-conf-defaults() {
     env-import CB_HOST_DISCOVERY_CUSTOM_DOMAIN ""
     env-import CB_SMARTSENSE_CONFIGURE "false"
     env-import TRAEFIK_MAX_IDLE_CONNECTION 100
+    env-import DEFAULT_INBOUND_ACCESS_IP ""
+    env-import CB_AWS_DEFAULT_INBOUND_SECURITY_GROUP ""
+    env-import CB_AWS_VPC ""
+    env-import CB_ENABLE_CUSTOM_IMAGE "false"
 }
 
 cloudbreak-conf-cloud-provider() {
@@ -223,13 +245,18 @@ cloudbreak-conf-ui() {
     env-import ULU_HOST_ADDRESS  "https://$PUBLIC_IP"
     env-import ULU_OAUTH_REDIRECT_URI  "$ULU_HOST_ADDRESS/authorize"
     env-import ULU_SULTANS_ADDRESS  "https://$PUBLIC_IP/sl"
-    env-import CB_HOST_ADDRESS  "http://$PUBLIC_IP:8080"
+    env-import CB_HOST_ADDRESS  "http://$PUBLIC_IP"
     env-import ULU_HWX_CLOUD_DEFAULT_CREDENTIAL ""
+    env-import HWX_HCC_AVAILABLE "false"
     env-import ULU_HWX_CLOUD_DEFAULT_SSH_KEY ""
     env-import ULU_HWX_CLOUD_DEFAULT_REGION ""
     env-import ULU_HWX_CLOUD_DEFAULT_VPC_ID ""
     env-import ULU_HWX_CLOUD_DEFAULT_IGW_ID ""
     env-import ULU_HWX_CLOUD_DEFAULT_SUBNET_ID ""
+    env-import ULU_HWX_CLOUD_REGISTRATION_URL ""
+    env-import HWX_DOC_LINK ""
+    env-import ULU_SUBSCRIBE_TO_NOTIFICATIONS "false"
+    env-import HWX_CLOUD_ENABLE_GOVERNANCE_AND_SECURITY "false"
 }
 
 cloudbreak-conf-java() {
@@ -256,13 +283,13 @@ util-cloudbreak-shell-remote(){
 
     cloudbreak-config
 
-    echo "If you want to run CloudbreakShell on your local machine then please copy and paste the next command:"
+    echo "If you want to run CloudbreakShell on your local machine then please copy and paste the next command and fill your password:"
     echo docker run -it \
         --rm --name cloudbreak-shell \
         -e CLOUDBREAK_ADDRESS=\'https://$PUBLIC_IP\' \
         -e IDENTITY_ADDRESS=\'https://$PUBLIC_IP/identity\' \
         -e SEQUENCEIQ_USER=\'$UAA_DEFAULT_USER_EMAIL\' \
-        -e SEQUENCEIQ_PASSWORD=\'$UAA_DEFAULT_USER_PW\' \
+        -e SEQUENCEIQ_PASSWORD=\'****\' \
         -w /data \
         -v $PWD:/data \
         $DOCKER_IMAGE_CLOUDBREAK_SHELL:$DOCKER_TAG_CLOUDBREAK_SHELL --cert.validation=false
@@ -278,19 +305,42 @@ _cloudbreak-shell() {
 
     cloudbreak-config
 
+    local passwd="$UAA_DEFAULT_USER_PW"
+    if ! [[ "$passwd" ]]; then
+        read -s -t 10 -p "password:" passwd
+        echo
+    fi
+
     docker run "$@" \
         --name cloudbreak-shell \
         --label cbreak.sidekick=true \
         --dns=$PRIVATE_IP \
         -e CLOUDBREAK_ADDRESS=http://cloudbreak.service.consul:8080 \
-        -e IDENTITY_ADDRESS=http://identity.service.consul:8089 \
+        -e IDENTITY_ADDRESS=http://identity.service.consul:$UAA_PORT \
         -e SEQUENCEIQ_USER=$UAA_DEFAULT_USER_EMAIL \
-        -e SEQUENCEIQ_PASSWORD=$UAA_DEFAULT_USER_PW \
+        -e SEQUENCEIQ_PASSWORD="$(escape-string-env $passwd \")" \
         -w /data \
         -v $PWD:/data \
         $DOCKER_IMAGE_CLOUDBREAK_SHELL:$DOCKER_TAG_CLOUDBREAK_SHELL
 
     docker-kill-all-sidekicks
+}
+
+escape-string-env() {
+    declare desc="Escape yaml string by delimiter type"
+    : ${2:=required}
+    local in=$1
+    local delimiter=$2
+
+    if [[ $delimiter == "'" ]]; then
+        out=`echo $in | sed -e "s/'/'\\\\\\''/g"`
+    elif [[ $delimiter == '"' ]]; then
+        out=`echo $in | sed -e 's/\\\\/\\\\\\\/g' -e 's/"/\\\"/g' -e 's/[$]/\$/g' -e "s/\\\`/\\\\\\\\\\\\\\\`/g" -e 's/!/\\\\!/g'`
+    else
+        out="$in"
+    fi
+
+    echo $out
 }
 
 gen-password() {
@@ -367,7 +417,6 @@ generate_uaa_config() {
     fi
 }
 
-
 generate_uaa_config_force() {
     declare uaaFile=${1:? required: uaa config file path}
 
@@ -399,55 +448,129 @@ oauth:
   clients:
     ${UAA_SULTANS_ID}:
       id: ${UAA_SULTANS_ID}
-      secret: ${UAA_SULTANS_SECRET}
+      secret: '$(escape-string-yaml $UAA_SULTANS_SECRET \')'
       authorized-grant-types: client_credentials
       scope: scim.read,scim.write,password.write
       authorities: uaa.resource,scim.read,scim.write,password.write
     ${UAA_ULUWATU_ID}:
       id: ${UAA_ULUWATU_ID}
-      secret: ${UAA_ULUWATU_SECRET}
+      secret: '$(escape-string-yaml $UAA_ULUWATU_SECRET \')'
       authorized-grant-types: authorization_code,client_credentials
-      scope: cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,cloudbreak.templates,cloudbreak.networks,cloudbreak.securitygroups,openid,password.write,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,cloudbreak.events,periscope.cluster,cloudbreak.recipes,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read
+      scope: cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,cloudbreak.templates,cloudbreak.networks,cloudbreak.securitygroups,openid,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,cloudbreak.events,periscope.cluster,cloudbreak.recipes,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read
       authorities: cloudbreak.subscribe
       redirect-uri: ${ULU_OAUTH_REDIRECT_URI}
     ${UAA_CLOUDBREAK_ID}:
       id: ${UAA_CLOUDBREAK_ID}
-      secret: ${UAA_CLOUDBREAK_SECRET}
+      secret: '$(escape-string-yaml $UAA_CLOUDBREAK_SECRET \')'
       authorized-grant-types: client_credentials
-      scope: scim.read,scim.write,password.write
-      authorities: uaa.resource,scim.read,scim.write,password.write
+      scope: scim.read
+      authorities: uaa.resource,scim.read
     ${UAA_PERISCOPE_ID}:
       id: ${UAA_PERISCOPE_ID}
-      secret: ${UAA_PERISCOPE_SECRET}
+      secret: '$(escape-string-yaml $UAA_PERISCOPE_SECRET \')'
       authorized-grant-types: client_credentials
       scope: none
       authorities: cloudbreak.autoscale,uaa.resource,scim.read
     ${UAA_CLOUDBREAK_SHELL_ID}:
       id: ${UAA_CLOUDBREAK_SHELL_ID}
       authorized-grant-types: implicit
-      scope: cloudbreak.networks,cloudbreak.securitygroups,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,cloudbreak.recipes,openid,password.write,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read
+      scope: cloudbreak.networks,cloudbreak.securitygroups,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,cloudbreak.recipes,openid,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read,periscope.cluster
       authorities: uaa.none
       redirect-uri: http://cloudbreak.shell
 
 scim:
   username_pattern: '[a-z0-9+\-_.@]+'
-  users:
-    - ${UAA_DEFAULT_USER_EMAIL}|${UAA_DEFAULT_USER_PW}|${UAA_DEFAULT_USER_EMAIL}|${UAA_DEFAULT_USER_FIRSTNAME}|${UAA_DEFAULT_USER_LASTNAME}|openid,cloudbreak.networks,cloudbreak.securitygroups,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,sequenceiq.cloudbreak.admin,sequenceiq.cloudbreak.user,sequenceiq.account.seq1234567.SequenceIQ,cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,periscope.cluster,cloudbreak.recipes,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read
-
+  groups:
 EOF
+    for group in ${UAA_DEFAULT_USER_GROUPS//,/ }; do
+        echo "    $group: Default group" >> ${uaaFile}
+    done
+    if [[ "$UAA_DEFAULT_USER_PW" ]]; then
+        cat >> ${uaaFile} << EOF
+  users:
+    - ${UAA_DEFAULT_USER_EMAIL}|${UAA_DEFAULT_USER_PW}|${UAA_DEFAULT_USER_EMAIL}|${UAA_DEFAULT_USER_FIRSTNAME}|${UAA_DEFAULT_USER_LASTNAME}|${UAA_DEFAULT_USER_GROUPS}
+EOF
+    fi
 }
+
+escape-string-json() {
+    declare desc="Escape json string"
+    : ${1:=required}
+    local in=$1
+
+    out=`echo $in | sed -e 's/\\\\/\\\\\\\/g' -e 's/"/\\\"/g'`
+
+    echo $out
+}
+
+util-add-default-user() {
+    declare desc="Add default admin Cloudbreak user"
+    debug $desc
+    
+    cloudbreak-config
+
+    local passwd="$UAA_DEFAULT_USER_PW"
+    if ! [[ "$passwd" ]]; then
+        read -s -t 10 -p "password:" passwd
+        echo
+    fi
+
+    local container=$(docker ps | grep cbreak_identity_ | cut -d" " -f 1)
+    if ! [[ "$container" ]];then
+        echo "[ERROR] Cloudbreak doesn't running, please start it before adding new user" | red 1>&2
+        _exit 1
+    fi
+
+    local address="http://localhost:8080"
+    local bearer=$(docker exec -i $container curl -s "$address/oauth/token?grant_type=client_credentials&token_format=opaque" -u "${UAA_SULTANS_ID}:${UAA_SULTANS_SECRET}" | jq -r .access_token 2>/dev/null)
+    local json='{"userName":"'${UAA_DEFAULT_USER_EMAIL}'","name":{"familyName":"'${UAA_DEFAULT_USER_LASTNAME}'","givenName":"'${UAA_DEFAULT_USER_FIRSTNAME}'"},"emails":[{"value":"'${UAA_DEFAULT_USER_EMAIL}'","primary":true}],"password":"'$(escape-string-json $passwd)'","active":true,"verified":true,"schemas":["urn:scim:schemas:core:1.0"]}'
+    local user=$(docker exec -i $container  curl -s $address/Users -X POST -H 'Accept: application/json' -H "Authorization: Bearer $bearer" -H 'Content-Type: application/json' -d ''$json'' 2>/dev/null)
+    local existing_id=$(echo $user | jq -r .user_id 2> /dev/null)
+    if [[ "$existing_id" != "null" ]]; then
+        info "User already exists, nothing to do."
+        return
+    fi
+    local new_id=$(echo $user | jq -r .id 2> /dev/null)
+    if [[ "$new_id" != "null" ]]; then
+        local groups=$(docker exec -i $container  curl -s "$address/Groups" -H "Authorization: Bearer $bearer" | jq ".resources[] | {id, displayName}")
+        for group in ${UAA_DEFAULT_USER_GROUPS//,/ }; do
+            debug "Adding user to group $group"
+            group_id=$(echo $groups | jq . | grep -B2 -A1 '"'$group'"' | jq -r .id)
+            docker exec -i $container curl -s "$address/Groups/$group_id/members" -X POST -H "Authorization: Bearer $bearer" -H 'Content-Type: application/json' -d '{"origin":"uaa","type":"USER","value":"'$new_id'"}' &>/dev/null
+        done
+        info "Default user created."
+    else
+        echo "[ERROR] ${user}" | red 1>&2
+        _exit 1
+    fi
+}
+
 
 util-token() {
     declare desc="Generates an OAuth token with CloudbreakShell scopes"
 
     cloudbreak-config
+
+    local passwd="$UAA_DEFAULT_USER_PW"
+    if ! [[ "$passwd" ]]; then
+        read -s -t 10 -p "password:" passwd
+        echo
+    fi
+
     local TOKEN=$(curl -sX POST \
         -w '%{redirect_url}' \
         -H "accept: application/x-www-form-urlencoded" \
-        --data-urlencode credentials='{"username":"'${UAA_DEFAULT_USER_EMAIL}'","password":"'${UAA_DEFAULT_USER_PW}'"}' \
-        "${PUBLIC_IP}:8089/oauth/authorize?response_type=token&client_id=cloudbreak_shell&scope.0=openid&source=login&redirect_uri=http://cloudbreak.shell" \
+        --data-urlencode credentials='{"username":"'${UAA_DEFAULT_USER_EMAIL}'","password":"'$(escape-string-json $passwd)'"}' \
+        "${PUBLIC_IP}:${UAA_PORT}/oauth/authorize?response_type=token&client_id=cloudbreak_shell&scope.0=openid&source=login&redirect_uri=http://cloudbreak.shell" \
            | cut -d'&' -f 2)
-    info $TOKEN
+    echo ${TOKEN#*=}
+}
+
+util-token-debug() {
+    declare desc="Opens the browse jwt.io to inspect a newly generated Oauth token."
+
+    local token="$(util-token)"
+    open "http://jwt.io/?value=$token"
 }
 
 util-local-dev() {
@@ -502,4 +625,21 @@ HINT
         -l traefik.frontend.priority=10 \
         sequenceiq/ambassadord:$DOCKER_TAG_AMBASSADOR $CB_LOCAL_DEV_BIND_ADDR:8085
 
+}
+
+util-smartsense() {
+
+  cloudbreak-config
+
+  docker rm -f cbd-smartsense 2> /dev/null || :
+
+  docker run -d \
+      --name cbd-smartsense \
+      -e AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID \
+      -e AWS_INSTANCE_ID=$AWS_INSTANCE_ID \
+      -e ULU_HWX_CLOUD_DEFAULT_REGION=$ULU_HWX_CLOUD_DEFAULT_REGION \
+      -e CB_SMARTSENSE_CONFIGURE=$CB_SMARTSENSE_CONFIGURE \
+      -l traefik.enable=false \
+      -v $PWD:/var/lib/cloudbreak-deployment \
+      $DOCKER_IMAGE_CBD_SMARTSENSE:$DOCKER_TAG_CBD_SMARTSENSE
 }
