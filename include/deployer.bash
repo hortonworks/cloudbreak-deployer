@@ -46,7 +46,7 @@ error() {
 }
 
 command_exists() {
-	command -v "$@" > /dev/null 2>&1
+    command -v "$@" > /dev/null 2>&1
 }
 
 cbd-version() {
@@ -208,9 +208,9 @@ load-profile() {
     if [[ "$CBD_DEFAULT_PROFILE" && -f "Profile.$CBD_DEFAULT_PROFILE" ]]; then
         CBD_PROFILE="Profile.$CBD_DEFAULT_PROFILE"
 
-		module-load $CBD_PROFILE
-		debug "Using profile $CBD_DEFAULT_PROFILE"
-	fi
+        module-load $CBD_PROFILE
+        debug "Using profile $CBD_DEFAULT_PROFILE"
+    fi
 }
 
 doctor() {
@@ -333,7 +333,7 @@ escape-string-yaml() {
     if [[ $delimiter == "'" ]]; then
         out=`echo $in | sed -e "s/'/''/g"`
     elif [[ $delimiter == '"' ]]; then
-		out=`echo $in | sed -e 's/\\\\/\\\\\\\/g' -e 's/"/\\\"/g'`
+        out=`echo $in | sed -e 's/\\\\/\\\\\\\/g' -e 's/"/\\\"/g'`
     else
         out="$in"
     fi
@@ -447,10 +447,10 @@ _exit() {
 }
 
 main() {
-	set -eo pipefail; [[ "$TRACE" ]] && set -x
+    set -eo pipefail; [[ "$TRACE" ]] && set -x
 
     cbd-find-root
-	color-init
+    color-init
     load-profile "$@"
     deps-init
     deps-require sed
@@ -522,12 +522,12 @@ main() {
         cmd-export fn-call fn
     fi
 
-	if [[ "${!#}" == "-h" || "${!#}" == "--help" ]]; then
-		local args=("$@")
-		unset args[${#args[@]}-1]
-		cmd-ns "" help "${args[@]}"
-	else
-		cmd-ns "" "$@"
-	fi
+    if [[ "${!#}" == "-h" || "${!#}" == "--help" ]]; then
+        local args=("$@")
+        unset args[${#args[@]}-1]
+        cmd-ns "" help "${args[@]}"
+    else
+        cmd-ns "" "$@"
+    fi
     docker-kill-all-sidekicks
 }
