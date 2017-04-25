@@ -368,7 +368,7 @@ gen-password() {
 
 cloudbreak-generate-cert() {
     cloudbreak-config
-    if [ -f "${CBD_CERT_ROOT_PATH}/client.pem" ] && [ -f "${CBD_CERT_ROOT_PATH}/client-key.pem" ]; then
+    if [ -f "${CBD_CERT_ROOT_PATH}/client-ca.pem" ] && [ -f "${CBD_CERT_ROOT_PATH}/client-ca-key.pem" ]; then
       debug "Cloudbreak certificate and private key already exist, won't generate new ones."
     else
       info "Generating Cloudbreak client certificate and private key in ${CBD_CERT_ROOT_PATH}."
