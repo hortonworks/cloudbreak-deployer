@@ -87,6 +87,7 @@ deps: ## Installs required cli tools (only needed for new envs)
 	go get -u github.com/progrium/gh-release/...
 	go get github.com/progrium/basht
 #	go get github.com/github/hub
+	go get github.com/tools/godep
 	go get || true
 
 tests:

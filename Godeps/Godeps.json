@@ -1,0 +1,28 @@
+{
+	"ImportPath": "github.com/sequenceiq/cloudbreak-deployer",
+	"GoVersion": "go1.8",
+	"GodepVersion": "v74",
+	"Deps": [
+		{
+			"ImportPath": "github.com/hashicorp/go-version",
+			"Rev": "0181db47023708a38c2d20d2fe25a5fa034d5743"
+		},
+		{
+			"ImportPath": "github.com/kardianos/osext",
+			"Rev": "ae77be60afb1dcacde03767a8c37337fad28ac14"
+		},
+		{
+			"ImportPath": "github.com/mitchellh/go-homedir",
+			"Rev": "b8bc1bf767474819792c23f32d8286a45736f1c6"
+		},
+		{
+			"ImportPath": "github.com/progrium/go-basher",
+			"Comment": "v1-14-g6a5b35f",
+			"Rev": "6a5b35fcdaea1ddfc145720efc903869413629e7"
+		},
+		{
+			"ImportPath": "github.com/skratchdot/open-golang/open",
+			"Rev": "75fb7ed4208cf72d323d7d02fd1a5964a7a9073c"
+		}
+	]
+}
