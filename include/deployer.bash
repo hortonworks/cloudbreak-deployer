@@ -199,12 +199,6 @@ init-profile() {
         echo "export CB_INSTANCE_UUID=$(uuidgen | tr '[:upper:]' '[:lower:]')" >> $CBD_PROFILE
     fi
 
-    if ! [[ "$UAA_DEFAULT_SECRET" ]]; then
-        info "Your secret is auto-generated in $CBD_PROFILE as UAA_DEFAULT_SECRET"
-        echo "Make backup of your secret, because used for data encryption !!!" | red
-        echo "export UAA_DEFAULT_SECRET=$(uuidgen | sed 's/-//g')" >> $CBD_PROFILE
-    fi
-
     provider-and-region-init
 }
 
