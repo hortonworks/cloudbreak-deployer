@@ -154,6 +154,7 @@ func main() {
 		"include/migrate.bash",
 		"include/machine.bash",
 		"include/module.bash",
+		"include/logging.bash",
 	}, Asset, false)
 
 }

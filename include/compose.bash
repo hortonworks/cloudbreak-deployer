@@ -301,17 +301,32 @@ logspout:
         - SERVICE_NAME=logspout
         - DEBUG=true
         - LOGSPOUT=ignore
+        - ROUTE_URIS=logstash+tcp://logstash:9600
         - "RAW_FORMAT={{.Container.Name}} | {{.Data}}\n"
     links:
-        - logsink
+        - logstash
+    restart: on-failure
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    entrypoint: ["/bin/sh"]
-    command: -c 'sleep 1; ROUTE_URIS=\$\$LOGSINK_PORT_3333_TCP /bin/logspout'
     log_opt:
         max-size: "10M"
         max-file: "5"
     image: hortonworks/logspout:v3.2.2
+
+logstash:
+    labels:
+      - traefik.enable=false
+    environment:
+        - LOGSTASH_OUTPUT_PATH=/usr/share/logstash/logstash-output
+    volumes:
+        - ./logconfig/logstash.conf:/usr/share/logstash-config/logstash.conf
+        - ./logconfig/logstash.yaml:/usr/share/logstash/config/logstash.yaml
+        - ./logs/logstash-output:/usr/share/logstash/logstash-output
+    command: logstash -f /usr/share/logstash-config/logstash.conf
+    log_opt:
+        max-size: "10M"
+        max-file: "5"
+    image: docker.elastic.co/logstash/logstash:$DOCKER_TAG_LOGSTASH
 
 logrotate:
     environment:

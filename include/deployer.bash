@@ -544,6 +544,7 @@ main() {
         machine-init
     fi
     db-init
+    log-init
 
     debug "Cloudbreak Deployer $(bin-version)"
 
