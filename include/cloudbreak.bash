@@ -104,7 +104,7 @@ cloudbreak-conf-smtp() {
     env-import CLOUDBREAK_SMTP_SENDER_PASSWORD "$LOCAL_SMTP_PASSWORD"
     env-import CLOUDBREAK_SMTP_SENDER_HOST "smtp.service.consul"
     env-import CLOUDBREAK_SMTP_SENDER_PORT 25
-    env-import CLOUDBREAK_SMTP_SENDER_FROM "noreply@hortonworks.com"
+    env-import CLOUDBREAK_SMTP_SENDER_FROM "no-reply@hortonworks.com"
     env-import CLOUDBREAK_SMTP_AUTH "true"
     env-import CLOUDBREAK_SMTP_STARTTLS_ENABLE "false"
     env-import CLOUDBREAK_SMTP_TYPE "smtp"
