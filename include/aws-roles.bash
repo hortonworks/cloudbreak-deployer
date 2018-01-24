@@ -201,95 +201,71 @@ EOF
 aws-generate-inline-role-policy() {
     cat << EOF
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "cloudformation:CreateStack",
-        "cloudformation:DeleteStack",
-        "cloudformation:DescribeStackEvents",
-        "cloudformation:DescribeStackResource",
-        "cloudformation:DescribeStacks"
-      ],
-      "Resource": [
-        "*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:AllocateAddress",
-        "ec2:AssociateAddress",
-        "ec2:AssociateRouteTable",
-        "ec2:AuthorizeSecurityGroupIngress",
-        "ec2:CreateAddress",
-        "ec2:CreateRoute",
-        "ec2:CreateRouteTable",
-        "ec2:CreateSecurityGroup",
-        "ec2:CreateSubnet",
-        "ec2:CreateTags",
-        "ec2:CreateVpc",
-        "ec2:ModifyVpcAttribute",
-        "ec2:DeleteSubnet",
-        "ec2:CreateInternetGateway",
-        "ec2:CreateKeyPair",
-        "ec2:DisassociateAddress",
-        "ec2:DisassociateRouteTable",
-        "ec2:ModifySubnetAttribute",
-        "ec2:ReleaseAddress",
-        "ec2:DescribeAddresses",
-        "ec2:DescribeImages",
-        "ec2:DescribeInstanceStatus",
-        "ec2:DescribeInstances",
-        "ec2:DescribeInternetGateways",
-        "ec2:DescribeKeyPairs",
-        "ec2:DescribeRouteTables",
-        "ec2:DescribeSecurityGroups",
-        "ec2:DescribeSubnets",
-        "ec2:DescribeVpcs",
-        "ec2:DescribeVpcAttribute",
-        "ec2:ImportKeyPair"
-      ],
-      "Resource": [
-        "*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "iam:ListRolePolicies",
-        "iam:GetRolePolicy",
-        "iam:ListAttachedRolePolicies",
-        "iam:ListInstanceProfiles",
-        "iam:PutRolePolicy",
-        "iam:PassRole",
-        "iam:GetRole"
-      ],
-      "Resource": [
-        "*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "autoscaling:CreateAutoScalingGroup",
-        "autoscaling:CreateLaunchConfiguration",
-        "autoscaling:DeleteAutoScalingGroup",
-        "autoscaling:DeleteLaunchConfiguration",
-        "autoscaling:DescribeAutoScalingGroups",
-        "autoscaling:DescribeLaunchConfigurations",
-        "autoscaling:DescribeScalingActivities",
-        "autoscaling:DetachInstances",
-        "autoscaling:ResumeProcesses",
-        "autoscaling:SuspendProcesses",
-        "autoscaling:UpdateAutoScalingGroup"
-      ],
-      "Resource": [
-        "*"
-      ]
-    }
-  ]
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:AuthorizeSecurityGroupIngress",
+                "ec2:DeleteSubnet",
+                "ec2:DescribeInstances",
+                "ec2:CreateKeyPair",
+                "cloudformation:DescribeStackResource",
+                "iam:PutRolePolicy",
+                "ec2:AssociateRouteTable",
+                "ec2:DescribeInternetGateways",
+                "cloudformation:DescribeStackEvents",
+                "autoscaling:DescribeAutoScalingGroups",
+                "iam:ListAttachedRolePolicies",
+                "ec2:CreateRoute",
+                "ec2:CreateInternetGateway",
+                "autoscaling:UpdateAutoScalingGroup",
+                "iam:ListRolePolicies",
+                "ec2:DescribeKeyPairs",
+                "ec2:DescribeRouteTables",
+                "iam:GetRole",
+                "autoscaling:ResumeProcesses",
+                "ec2:ImportKeyPair",
+                "ec2:CreateTags",
+                "ec2:CreateRouteTable",
+                "autoscaling:SuspendProcesses",
+                "ec2:DisassociateRouteTable",
+                "cloudformation:DescribeStacks",
+                "cloudformation:DeleteStack",
+                "autoscaling:DeleteAutoScalingGroup",
+                "ec2:CreateSubnet",
+                "ec2:AssociateAddress",
+                "ec2:DescribeSubnets",
+                "autoscaling:CreateAutoScalingGroup",
+                "iam:GetRolePolicy",
+                "autoscaling:DetachInstances",
+                "ec2:DisassociateAddress",
+                "ec2:DescribeAddresses",
+                "autoscaling:DescribeLaunchConfigurations",
+                "ec2:DescribeRegions",
+                "ec2:CreateVpc",
+                "ec2:DescribeVpcAttribute",
+                "ec2:ModifySubnetAttribute",
+                "iam:PassRole",
+                "autoscaling:DescribeScalingActivities",
+                "ec2:DescribeAvailabilityZones",
+                "ec2:CreateSecurityGroup",
+                "ec2:ModifyVpcAttribute",
+                "ec2:DescribeInstanceStatus",
+                "ec2:ReleaseAddress",
+                "iam:ListInstanceProfiles",
+                "ec2:AllocateAddress",
+                "ec2:DescribeSecurityGroups",
+                "autoscaling:CreateLaunchConfiguration",
+                "ec2:DescribeImages",
+                "autoscaling:DeleteLaunchConfiguration",
+                "cloudformation:CreateStack",
+                "ec2:DescribeVpcs"
+            ],
+            "Resource": "*"
+        }
+    ]
 }
 EOF
 }
