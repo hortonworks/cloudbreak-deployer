@@ -1,5 +1,5 @@
-export-logs() {
-    declare desc="Exports and anonymizes logs for fault analysis. Usage: cbd export-logs [archive_name]"
+create-bundle() {
+    declare desc="Exports and anonymizes logs for fault analysis. Usage: cbd create-bundle [archive_name]"
     declare archivename=$1
     if [[ -z $archivename ]] || [[ "/" == $archivename ]]; then
         archivename="cbd_export_$(date +%s)"
@@ -24,9 +24,7 @@ export-logs() {
 }
 
 export-psql-history() {
-    local psqlcmd="docker exec -t cbreak_commondb_1 cat /var/lib/postgresql/.psql_history"
-
-    ! $($psqlcmd) > "$1/.psql_history"
+    ! docker exec -t cbreak_commondb_1 cat /var/lib/postgresql/.psql_history > "$1/.psql_history"
     check-export-success "$1/.psql_history"
 }
 
@@ -48,7 +46,7 @@ export-prerequisites() {
     fi
 
     printf "\n### Open ports\n" >> $out
-    ! docker run --rm --network=host alpine:3.7 netstat -tulnp >> $out
+    ! docker run --rm --name=cbreak_export_netstat --network=host alpine:3.7 netstat -tulnp >> $out
 
     if command_exists iptables; then
         printf "\n### IPTABLES\n" >> $out
@@ -108,7 +106,6 @@ archive-directory() {
 
 anonymize-exported-files() {
     cloudbreak-config
-    
     info "Anonymization started."
 
     ! docker run -e ACCOUNT_ID=$AWS_ACCOUNT_ID \
@@ -128,6 +125,7 @@ anonymize-exported-files() {
         -e SMARTSENSE_UPLOAD_USERNAME \
         -e SMARTSENSE_UPLOAD_PASSWORD \
         --rm \
+        --name=cbreak_export_smartsense \
         -v $(pwd):/var/lib/cloudbreak-deployment \
         -v $(pwd)/$1:/var/lib/cloudbreak-deployment/cfg \
         -v $(pwd)/$2:/var/lib/cloudbreak-deployment/hst_bundle \
@@ -141,9 +139,9 @@ anonymize-exported-files() {
     local collectioncount=$(ls $2 | wc -l)
     if [[ $(( collectioncount + 0 )) = 0 ]]; then
         error "Anonymization failed."
-        rm -rf $1
-        rm -rf $2
-        return -1
+        cp -r $1/ $2/
+        cp -r logs $2
+        cp -r etc $2
     else
         info "Anonymization finished."
     fi

@@ -1,6 +1,6 @@
 
 cloudbreak-config() {
-  : ${BRIDGE_IP:=$(docker run --label cbreak.sidekick=true alpine sh -c 'ip ro | grep default | cut -d" " -f 3')}
+  : ${BRIDGE_IP:=$(docker run --rm --name=cbreak_cbd_bridgeip --label cbreak.sidekick=true alpine sh -c 'ip ro | grep default | cut -d" " -f 3')}
   env-import PRIVATE_IP $BRIDGE_IP
   env-import DOCKER_MACHINE ""
   cloudbreak-conf-tags
@@ -26,20 +26,20 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_HAVEGED 1.1.0
     env-import DOCKER_TAG_TRAEFIK v1.3.8-alpine
     env-import DOCKER_TAG_CONSUL 0.5
-    env-import DOCKER_TAG_REGISTRATOR v5
+    env-import DOCKER_TAG_REGISTRATOR v7
     env-import DOCKER_TAG_POSTFIX latest
     env-import DOCKER_TAG_UAA 3.6.5-pgupdate
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.2.0
 
-    env-import DOCKER_TAG_PERISCOPE 2.4.2
-    env-import DOCKER_TAG_CLOUDBREAK 2.4.2
-    env-import DOCKER_TAG_ULUWATU 2.4.2
-    env-import DOCKER_TAG_SULTANS 2.4.2
+    env-import DOCKER_TAG_PERISCOPE 2.7.0
+    env-import DOCKER_TAG_CLOUDBREAK 2.7.0
+    env-import DOCKER_TAG_ULUWATU 2.7.0
+    env-import DOCKER_TAG_SULTANS 2.7.0
 
     env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
     env-import DOCKER_TAG_LOGROTATE 1.0.1
-    env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.0
+    env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.2
 
     env-import DOCKER_IMAGE_CLOUDBREAK hortonworks/cloudbreak
     env-import DOCKER_IMAGE_CLOUDBREAK_WEB hortonworks/hdc-web
@@ -225,6 +225,7 @@ cloudbreak-conf-defaults() {
     if [[ ! -z "$CB_BLUEPRINT_DEFAULTS"  ]]; then
         env-import CB_BLUEPRINT_DEFAULTS
     fi;
+    env-import CB_BLUEPRINT_INTERNAL ""
     if [[ ! -z "$CB_TEMPLATE_DEFAULTS" ]]; then
         env-import CB_TEMPLATE_DEFAULTS
     fi;
@@ -240,8 +241,10 @@ cloudbreak-conf-defaults() {
     env-import CB_AWS_DEFAULT_INBOUND_SECURITY_GROUP ""
     env-import CB_AWS_VPC ""
     env-import CB_MAX_SALT_NEW_SERVICE_RETRY 90
+    env-import CB_MAX_SALT_NEW_SERVICE_RETRY_ONERROR 10
     env-import CB_MAX_SALT_RECIPE_EXECUTION_RETRY 90
     env-import CB_LOG_LEVEL "INFO"
+    env-import CB_PORT 8080
 
     env-import CB_INSTANCE_UUID
     env-import CB_INSTANCE_NODE_ID
@@ -250,6 +253,9 @@ cloudbreak-conf-defaults() {
     env-import CB_SMARTSENSE_ID ""
 
     env-import DOCKER_STOP_TIMEOUT 60
+
+    env-import PUBLIC_HTTP_PORT 80
+    env-import PUBLIC_HTTPS_PORT 443
 }
 
 cloudbreak-conf-autscale() {
@@ -280,9 +286,9 @@ cloudbreak-conf-rest-client() {
 cloudbreak-conf-ui() {
     declare desc="Defines Uluwatu and Sultans related parameters"
 
-    env-import ULU_HOST_ADDRESS  "https://$PUBLIC_IP"
+    env-import ULU_HOST_ADDRESS  "https://$PUBLIC_IP:$PUBLIC_HTTPS_PORT"
     env-import ULU_OAUTH_REDIRECT_URI  "$ULU_HOST_ADDRESS/authorize"
-    env-import ULU_SULTANS_ADDRESS  "https://$PUBLIC_IP/sl"
+    env-import ULU_SULTANS_ADDRESS  "https://$PUBLIC_IP:$PUBLIC_HTTPS_PORT/sl"
     env-import CB_HOST_ADDRESS  "http://$PUBLIC_IP"
     env-import ULU_HWX_CLOUD_DEFAULT_CREDENTIAL ""
     env-import HWX_HCC_AVAILABLE "false"
@@ -681,6 +687,7 @@ util-local-dev() {
             -p 8080:8080 \
             -e PORT=8080 \
             -e SERVICE_NAME=cloudbreak \
+            -e SERVICE_8080_NAME=cloudbreak \
             -l traefik.port=8080 \
             -l traefik.frontend.rule=PathPrefix:/cb/ \
             -l traefik.backend=cloudbreak-backend \
@@ -692,6 +699,7 @@ util-local-dev() {
             -p 8085:8085 \
             -e PORT=8085 \
             -e SERVICE_NAME=periscope \
+            -e SERVICE_8085_NAME=periscope \
             -l traefik.port=8085 \
             -l traefik.frontend.rule=PathPrefix:/as/ \
             -l traefik.backend=periscope-backend \

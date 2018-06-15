@@ -95,9 +95,11 @@ CB_JAVA_OPTS - Extra Java options for Autoscale and Cloudbreak
 CB_LOG_LEVEL - Log level of the Cloudbreak service
 CB_DEFAULT_GATEWAY_CIDR - Cidr for default security rules
 CB_MAX_SALT_NEW_SERVICE_RETRY - Salt orchestrator max retry count
+CB_MAX_SALT_NEW_SERVICE_RETRY_ONERROR - Salt orchestrator max retry count in case of error
 CB_MAX_SALT_RECIPE_EXECUTION_RETRY - Salt orchestrator max retry count for recipes
 CB_PLATFORM_DEFAULT_REGIONS - Comma separated list of default regions by platform (AWS:eu-west-1)
 CB_PRODUCT_ID - SmartSense product ID
+CB_PORT - Cloudbreak port
 CB_SCHEMA_MIGRATION_AUTO - Flag for Cloudbreak automatic database schema update
 CB_SMARTSENSE_CONFIGURE - Flag to install and configure SmartSense on cluster nodes
 CB_SMARTSENSE_CLUSTER_NAME_PREFIX - SmartSense Cloudbreak cluster name prefix
@@ -170,6 +172,8 @@ SL_ADDRESS_RESOLVING_TIMEOUT - DNS lookup timeout of Authentication service for 
 SL_NODE_TLS_REJECT_UNAUTHORIZED - Enables self signed certifications in Authentication service
 SULTANS_CONTAINER_PATH - Default project location in Authentication service container
 TRAEFIK_MAX_IDLE_CONNECTION - Configures --maxidleconnsperhost for Traefik
+PUBLIC_HTTP_PORT - Configures the public http port for Cloudbreak
+PUBLIC_HTTPS_PORT - Configures the public https port for Cloudbreak
 UAA_CLOUDBREAK_ID - Identity of the Cloudbreak scope in Identity
 UAA_CLOUDBREAK_SECRET - Secret of the Cloudbreak scope in Identity
 UAA_CLOUDBREAK_SHELL_ID - Identity of the Cloudbreak Shell scope in Identity

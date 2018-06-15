@@ -217,8 +217,8 @@ compose-generate-yaml-force() {
 traefik:
     ports:
         - "$PRIVATE_IP:8081:8080"
-        - 80:80
-        - 443:443
+        - $PUBLIC_HTTP_PORT:80
+        - $PUBLIC_HTTPS_PORT:443
     links:
         - consul
         - identity
@@ -284,6 +284,7 @@ registrator:
     image: gliderlabs/registrator:$DOCKER_TAG_REGISTRATOR
     links:
         - consul
+    restart: on-failure
     command: consul://consul:8500
 
 logsink:
@@ -437,6 +438,7 @@ cloudbreak:
         - "CB_CLIENT_ID=$UAA_CLOUDBREAK_ID"
         - 'CB_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_CLOUDBREAK_SECRET \')'
         - CB_BLUEPRINT_DEFAULTS
+        - CB_BLUEPRINT_INTERNAL
         - CB_TEMPLATE_DEFAULTS
         - CB_HBM2DDL_STRATEGY
         - "CB_SMTP_SENDER_USERNAME=$CLOUDBREAK_SMTP_SENDER_USERNAME"
@@ -487,6 +489,7 @@ cloudbreak:
         - CB_ENABLEDPLATFORMS
         - "CB_ENABLED_LINUX_TYPES=redhat6,redhat7,centos6,centos7,amazonlinux"
         - CB_MAX_SALT_NEW_SERVICE_RETRY
+        - CB_MAX_SALT_NEW_SERVICE_RETRY_ONERROR
         - CB_MAX_SALT_RECIPE_EXECUTION_RETRY
         - CB_INSTANCE_UUID
         - CB_INSTANCE_NODE_ID
@@ -507,7 +510,7 @@ cloudbreak:
       - traefik.backend=cloudbreak-backend
       - traefik.frontend.priority=10
     ports:
-        - 8080:8080
+        - $CB_PORT:8080
     volumes:
         - "$CBD_CERT_ROOT_PATH:/certs"
         - /dev/urandom:/dev/random
@@ -529,6 +532,7 @@ sultans:
         - SL_CLIENT_ID=$UAA_SULTANS_ID
         - 'SL_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_SULTANS_SECRET \')'
         - SERVICE_NAME=sultans
+        - SERVICE_3000_NAME=sultans
           #- SERVICE_CHECK_HTTP=/
         - SL_PORT=3000
         - SL_SMTP_SENDER_HOST=$CLOUDBREAK_SMTP_SENDER_HOST

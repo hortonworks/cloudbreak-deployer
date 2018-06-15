@@ -175,14 +175,14 @@ cbd-update-release() {
     if [[ ${binver} != ${lastver} ]]; then
         debug upgrade needed |yellow
 
-        if docker volume inspect common &>/dev/null; then
+        if docker volume inspect $COMMON_DB_VOL &>/dev/null; then
             info "Backing up databases"
-            debug "Backup $CB_DB_ENV_DB on volume $COMMON_DB_VOL"
-            db-dump $COMMON_DB_VOL $CB_DB_ENV_DB
-            debug "Backup $PERISCOPE_DB_ENV_DB on volume $COMMON_DB_VOL"
-            db-dump $COMMON_DB_VOL $PERISCOPE_DB_ENV_DB
-            debug "Backup $IDENTITY_DB_NAME on volume $COMMON_DB_VOL"
-            db-dump $COMMON_DB_VOL $IDENTITY_DB_NAME
+            debug "Backing up $CB_DB_ENV_DB"
+            db-dump $CB_DB_ENV_DB
+            debug "Backing up $PERISCOPE_DB_ENV_DB"
+            db-dump $PERISCOPE_DB_ENV_DB
+            debug "Backing up $IDENTITY_DB_NAME"
+            db-dump $IDENTITY_DB_NAME
         fi
 
         local url=https://github.com/hortonworks/cloudbreak-deployer/releases/download/v${lastver}/cloudbreak-deployer_${lastver}_${osarch}.tgz
@@ -426,14 +426,14 @@ network-doctor() {
     fi
 
     echo-n "ping 8.8.8.8 in container: "
-    if docker run --label cbreak.sidekick=true alpine sh -c 'ping -c 1 -W 1 8.8.8.8' &> /dev/null; then
+    if docker --rm --name=cbreak_doctor_gdns run --label cbreak.sidekick=true alpine sh -c 'ping -c 1 -W 1 8.8.8.8' &> /dev/null; then
         info "OK"
     else
         error
     fi
 
     echo-n "ping github.com in container: "
-    if docker run --label cbreak.sidekick=true alpine sh -c 'ping -c 1 -W 1 github.com' &> /dev/null; then
+    if docker --rm --name=cbreak_doctor_github run --label cbreak.sidekick=true alpine sh -c 'ping -c 1 -W 1 github.com' &> /dev/null; then
         info "OK"
     else
         error
@@ -554,8 +554,8 @@ start-wait-cmd() {
 start-requested-services() {
     declare services="$@"
 
-    db-initialize-databases
     deployer-generate
+    db-initialize-databases
 
     if ! [[ "$services" ]]; then
         debug "All services must be started"
@@ -667,7 +667,7 @@ main() {
     cmd-export-ns env "Environment namespace"
     cmd-export env-show
     cmd-export env-export
-    cmd-export export-logs export-logs
+    cmd-export create-bundle create-bundle
 
     cmd-export-ns aws "Amazon Webservice namespace"
     cmd-export aws-show-role
@@ -683,9 +683,7 @@ main() {
 
     cmd-export-ns db "Db operations namespace"
     cmd-export db-dump
-    cmd-export db-list-dumps
-    cmd-export db-set-dump
-    cmd-export db-restore-volume-from-dump
+    cmd-export db-restore
 
     cmd-export cbd-update update
 
