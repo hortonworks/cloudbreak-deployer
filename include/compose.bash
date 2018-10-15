@@ -399,6 +399,24 @@ commondb:
     entrypoint: ["/bin/bash"]
     command: -c 'cd /var/lib/postgresql; touch .ash_history .psql_history; chown -R postgres:postgres /var/lib/postgresql; (/docker-entrypoint.sh postgres -c max_connections=300) & PGPID="\$\$!"; echo "PGPID \$\$PGPID"; trap "kill \$\$PGPID; wait \$\$PGPID" SIGINT SIGTERM; cd /var/lib/postgresql; (tail -f .*history) & wait "\$\$PGPID"'
 
+vault:
+    labels:
+      - traefik.port=$VAULT_BIND_PORT
+      - traefik.frontend.rule=PathPrefixStrip:/vault
+      - traefik.backend=vault
+      - traefik.frontend.priority=10
+    ports:
+    - $VAULT_BIND_PORT:8200
+    environment:
+    - SKIP_SETCAP=true
+    - SERVICE_NAME=vault
+    volumes:
+      - ./$VAULT_CONFIG_FILE:/vault/config/$VAULT_CONFIG_FILE
+    dns: $PRIVATE_IP
+    image: $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG
+    entrypoint: ["/bin/sh"]
+    command: -c 'while ! nslookup $COMMON_DB.service.consul &>/dev/null; do sleep 1; echo -n .; done; docker-entrypoint.sh server'
+
 identity:
     labels:
       - traefik.port=8080

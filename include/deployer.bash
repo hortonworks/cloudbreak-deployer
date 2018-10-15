@@ -476,6 +476,7 @@ deployer-generate() {
     cloudbreak-generate-cert
     compose-generate-yaml
     generate_uaa_config
+    generate_vault_config
 }
 
 deployer-regenerate() {
@@ -496,6 +497,12 @@ deployer-regenerate() {
         mv uaa.yml uaa-${datetime}.yml
     fi
     generate_uaa_config
+
+    if ! generate_vault_check_diff; then
+            info renaming: $VAULT_CONFIG_FILE to: vault-config-${datetime}.yml
+            mv $VAULT_CONFIG_FILE vault-config-${datetime}.yml
+    fi
+    generate_vault_config
 }
 
 escape-string-yaml() {
@@ -566,6 +573,7 @@ start-requested-services() {
     fi
 
     compose-up $services
+    init_vault
     hdc-cli-downloadable
 }
 

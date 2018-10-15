@@ -17,6 +17,7 @@ cloudbreak-config() {
   cloudbreak-conf-ui
   cloudbreak-conf-java
   cloudbreak-conf-consul
+  cloudbreak-conf-vault
   migrate-config
 }
 

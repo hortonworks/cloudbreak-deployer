@@ -49,9 +49,11 @@ db-initialize-databases() {
     migrate-startdb
     db-wait-for-db-cont cbreak_commondb_1
 
-    for db in $CB_DB_ENV_DB $IDENTITY_DB_NAME $PERISCOPE_DB_ENV_DB; do
+    for db in $CB_DB_ENV_DB $IDENTITY_DB_NAME $PERISCOPE_DB_ENV_DB $VAULT_DB_SCHEMA; do
         db-create-database $db
     done
+
+    db-create-vault-schema
 }
 
 db-create-database() {
@@ -65,6 +67,24 @@ db-create-database() {
             debug "create new database: $newDbName"
             docker exec cbreak_commondb_1 psql -U postgres -c "create database $newDbName;" | debug-cat
         fi
+    fi
+}
+
+db-create-vault-schema() {
+    if docker exec cbreak_commondb_1 psql -U postgres -d $VAULT_DB_SCHEMA -c "\d vault_kv_store;" &>/dev/null; then
+        debug "Vault tables are already present in schema: $VAULT_DB_SCHEMA"
+    else
+        debug "Create Vault tables into schema: $VAULT_DB_SCHEMA"
+        docker exec cbreak_commondb_1 psql -U postgres -d $VAULT_DB_SCHEMA -c "
+        CREATE TABLE vault_kv_store (
+            parent_path TEXT COLLATE \"C\" NOT NULL,
+            path        TEXT COLLATE \"C\",
+            key         TEXT COLLATE \"C\",
+            value       BYTEA,
+            CONSTRAINT pkey PRIMARY KEY (path, key)
+        );
+        CREATE INDEX parent_path_idx ON vault_kv_store (parent_path);
+        " | debug-cat
     fi
 }
 
