@@ -5,6 +5,7 @@ cloudbreak-conf-vault() {
     env-import VAULT_DOCKER_IMAGE "vault"
     env-import VAULT_DOCKER_IMAGE_TAG "0.11.3"
     env-import VAULT_UNSEAL_KEYS ""
+    env-import VAULT_AUTO_UNSEAL "false"
 }
 
 generate_vault_check_diff() {
@@ -116,21 +117,37 @@ init_vault() {
             --entrypoint /bin/sh \
             $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c 'vault operator init -key-shares=1 -key-threshold=1 -format=json')
 
+
         rootToken=$(echo $initLog | jq '.root_token' -r)
-        echo "export VAULT_ROOT_TOKEN=$rootToken" >> $CBD_PROFILE
-
         unsealKeys=$(echo $initLog | jq '.unseal_keys_b64[0]' -r)
-        echo "export VAULT_UNSEAL_KEYS=$unsealKeys" >> $CBD_PROFILE
 
+    if [[ "$VAULT_AUTO_UNSEAL" == "true" ]]; then
+        echo "export VAULT_ROOT_TOKEN=$rootToken" >> $CBD_PROFILE
+        echo "export VAULT_UNSEAL_KEYS=$unsealKeys" >> $CBD_PROFILE
         info "$CBD_PROFILE has been updated with the Vault keys"
+
         unseal_vault $unsealKeys
     else
-        debug "Vault is already initialized, trying to unseal it"
-        if [[ -z $VAULT_UNSEAL_KEYS ]]; then
-            warn "Vault is initialized, but the unseal keys are not provided in the Profile. Please include them in the VAULT_UNSEAL_KEYS var or manually unseal Vault."
-            _exit 1
+        warn "Vault auto unseal is disabled so please save the keys in order to use Vault."
+        warn "Each time you restart CBD you must unseal Vault with the unseal key."
+        warn "You can enable Vault auto unseal by putting the following in your $CBD_PROFILE file"
+        warn "export VAULT_AUTO_UNSEAL=true"
+        warn "export VAULT_ROOT_TOKEN=$rootToken"
+        warn "export VAULT_UNSEAL_KEYS=$unsealKeys"
+    fi
+    else
+        debug "Vault is already initialized"
+        if [[ "$VAULT_AUTO_UNSEAL" == "true" ]]; then
+            if [[ -z $VAULT_UNSEAL_KEYS ]]; then
+                warn "Vault is initialized, but the unseal keys are not provided in the Profile. Please include them in the VAULT_UNSEAL_KEYS var or manually unseal Vault."
+                _exit 1
+            fi
+
+            unseal_vault $VAULT_UNSEAL_KEYS
+        else
+            warn "Vault auto unseal is disabled so please unseal Vault now in order to use it."
         fi
-        unseal_vault $VAULT_UNSEAL_KEYS
+
     fi
 
 }

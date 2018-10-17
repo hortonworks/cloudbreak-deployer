@@ -213,6 +213,7 @@ VAULT_DB_SCHEMA - Postgres DB name for storing the secrets
 VAULT_DOCKER_IMAGE - Vault Docker image name
 VAULT_DOCKER_IMAGE_TAG - Vault Docker image tag
 VAULT_UNSEAL_KEYS - Space separated unseal keys for vault
+VAULT_AUTO_UNSEAL - If set to true then the Vault root token and unseal key will be saved to the Profile
 
 CB_LOCAL_DEV_BIND_ADDR - Ambassador external address for local development of Cloudbreak and Autoscale
 CB_SCHEMA_SCRIPTS_LOCATION - Location of Cloudbreak schema update files
