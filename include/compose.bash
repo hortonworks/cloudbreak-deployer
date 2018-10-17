@@ -414,6 +414,7 @@ vault:
       - ./$VAULT_CONFIG_FILE:/vault/config/$VAULT_CONFIG_FILE
     dns: $PRIVATE_IP
     image: $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG
+    restart: on-failure
     entrypoint: ["/bin/sh"]
     command: -c 'while ! nslookup $COMMON_DB.service.consul &>/dev/null; do sleep 1; echo -n .; done; docker-entrypoint.sh server'
 
