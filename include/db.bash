@@ -14,7 +14,7 @@ db-dump() {
     fi
 
     if [ "$dbName" = "all" ]; then
-        for db in $CB_DB_ENV_DB $IDENTITY_DB_NAME $PERISCOPE_DB_ENV_DB; do
+        for db in $CB_DB_ENV_DB $IDENTITY_DB_NAME $PERISCOPE_DB_ENV_DB $VAULT_DB_SCHEMA; do
             db-dump-database $db
         done
     else

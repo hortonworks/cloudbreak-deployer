@@ -8,7 +8,7 @@ Install GO:
 ```
 brew install go
 ```
-Export GOPATH and add to PATH the go/bin directory:
+Export GOPATH and add to PATH the $GOPATH/bin directory:
 
 Get cloudbreak-deployer project with GO:
 ```
