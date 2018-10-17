@@ -207,6 +207,12 @@ ULU_OAUTH_REDIRECT_URI - Authorization page on Web UI
 ULU_SUBSCRIBE_TO_NOTIFICATIONS - Flag for automatic subscriptions for CLoudbreak events
 ULU_SULTANS_ADDRESS - Authentication service address
 VERBOSE_MIGRATION - Flag of verbose database migration
+VAULT_BIND_PORT - Bind Port for Vault
+VAULT_CONFIG_FILE - Name of the config file that will be created for Vault
+VAULT_DB_SCHEMA - Postgres DB name for storing the secrets
+VAULT_DOCKER_IMAGE - Vault Docker image name
+VAULT_DOCKER_IMAGE_TAG - Vault Docker image tag
+VAULT_UNSEAL_KEYS - Space separated unseal keys for vault
 
 CB_LOCAL_DEV_BIND_ADDR - Ambassador external address for local development of Cloudbreak and Autoscale
 CB_SCHEMA_SCRIPTS_LOCATION - Location of Cloudbreak schema update files
