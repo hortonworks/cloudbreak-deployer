@@ -112,6 +112,7 @@ CB_SMARTSENSE_CLUSTER_NAME_PREFIX - SmartSense Cloudbreak cluster name prefix
 CB_SMARTSENSE_ID - SmartSense subscription ID
 CB_TEMPLATE_DEFAULTS - Comma separated list of the default templates what Cloudbreak initialize in database
 CB_UI_MAX_WAIT - Wait timeout for `cbd start-wait` command
+CB_LOCAL_DEV - If set true then Cloudbreak and Periscope containers will not be created
 CERTS_BUCKET - S3 bucket name for backup and restore certificates via `cbd aws [certs-restore-s3  certs-upload-s3]` commands
 CERT_VALIDATION - Enables cert validation in Cloudbreak and Autoscale
 CLOUDBREAK_SMTP_AUTH - Configures mail.smtp.auth in Cloudbreak

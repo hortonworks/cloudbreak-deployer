@@ -444,6 +444,109 @@ identity:
         max-file: "5"
     image: hortonworks/cloudbreak-uaa:$DOCKER_TAG_UAA
 
+sultans:
+    environment:
+        - http_proxy=$HTTP_PROXY
+        - https_proxy=$HTTPS_PROXY
+        - SL_CLIENT_ID=$UAA_SULTANS_ID
+        - 'SL_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_SULTANS_SECRET \')'
+        - SERVICE_NAME=sultans
+        - SERVICE_3000_NAME=sultans
+          #- SERVICE_CHECK_HTTP=/
+        - SL_PORT=3000
+        - SL_SMTP_SENDER_HOST=$CLOUDBREAK_SMTP_SENDER_HOST
+        - SL_SMTP_SENDER_PORT=$CLOUDBREAK_SMTP_SENDER_PORT
+        - SL_SMTP_SENDER_USERNAME=$CLOUDBREAK_SMTP_SENDER_USERNAME
+        - "SL_SMTP_SENDER_PASSWORD=$(escape-string-compose-yaml $CLOUDBREAK_SMTP_SENDER_PASSWORD \")"
+        - SL_SMTP_SENDER_FROM=$CLOUDBREAK_SMTP_SENDER_FROM
+        - HWX_CLOUD_COLLECTOR=$CLOUDBREAK_TELEMETRY_MAIL_ADDRESS
+        - HWX_CLOUD_USER=$UAA_DEFAULT_USER_EMAIL
+        - HWX_CLOUD_TYPE
+        - HWX_CLOUD_TEMPLATE_VERSION
+        - AWS_AMI_ID
+        - AWS_INSTANCE_ID
+        - AWS_ACCOUNT_ID
+        - HWX_DOC_LINK
+        - SL_SMARTSENSE_CONFIGURE=$CB_SMARTSENSE_CONFIGURE
+        - SL_CB_ADDRESS=$ULU_HOST_ADDRESS
+        - SL_ADDRESS=$ULU_SULTANS_ADDRESS
+        - SL_HWX_CLOUD_DEFAULT_REGION=$ULU_HWX_CLOUD_DEFAULT_REGION
+        - SL_ADDRESS_RESOLVING_TIMEOUT
+        - NODE_TLS_REJECT_UNAUTHORIZED=$SL_NODE_TLS_REJECT_UNAUTHORIZED
+        - SL_UAA_SERVICEID=identity.service.consul
+        - SL_DISPLAY_TERMS_AND_SERVICES=$HWX_DISPLAY_TERMS_AND_CONDITIONS
+    labels:
+      - traefik.port=3000
+      - traefik.frontend.rule=PathPrefixStrip:/sl
+      - traefik.backend=sultans-backend
+      - traefik.frontend.priority=10
+    ports:
+        - 3001:3000
+    volumes:
+        - $SULTANS_VOLUME_HOST:$SULTANS_VOLUME_CONTAINER
+    dns: $PRIVATE_IP
+    log_opt:
+        max-size: "10M"
+        max-file: "5"
+    image: $DOCKER_IMAGE_CLOUDBREAK_AUTH:$DOCKER_TAG_SULTANS
+
+uluwatu:
+    environment:
+        - http_proxy=$HTTP_PROXY
+        - https_proxy=$HTTPS_PROXY
+        - SERVICE_NAME=uluwatu
+          #- SERVICE_CHECK_HTTP=/
+        - ULU_OAUTH_REDIRECT_URI
+        - ULU_DEFAULT_SSH_KEY
+        - ULU_SULTANS_ADDRESS
+        - ULU_OAUTH_CLIENT_ID=$UAA_ULUWATU_ID
+        - 'ULU_OAUTH_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_ULUWATU_SECRET \')'
+        - ULU_HOST_ADDRESS
+        - NODE_TLS_REJECT_UNAUTHORIZED=$ULU_NODE_TLS_REJECT_UNAUTHORIZED
+        - ULU_HWX_CLOUD_DEFAULT_CREDENTIAL
+        - ULU_HWX_CLOUD_DEFAULT_REGION
+        - ULU_HWX_CLOUD_DEFAULT_SSH_KEY
+        - ULU_HWX_CLOUD_DEFAULT_VPC_ID
+        - ULU_HWX_CLOUD_DEFAULT_IGW_ID
+        - ULU_HWX_CLOUD_DEFAULT_SUBNET_ID
+        - ULU_HWX_CLOUD_DEFAULT_ARM_VIRTUAL_NETWORK_ID
+        - HWX_CLOUD_TEMPLATE_VERSION
+        - HWX_CLOUD_ENABLE_GOVERNANCE_AND_SECURITY
+        - ULU_ADDRESS_RESOLVING_TIMEOUT
+        - ULU_SULTANS_SERVICEID=sultans.service.consul
+        - ULU_IDENTITY_SERVICEID=identity.service.consul
+        - ULU_CLOUDBREAK_SERVICEID=cloudbreak.service.consul
+        - ULU_PERISCOPE_SERVICEID=periscope.service.consul
+        - ULU_HWX_CLOUD_REGISTRATION_URL
+        - ULU_SUBSCRIBE_TO_NOTIFICATIONS
+        - AWS_INSTANCE_ID
+        - HWX_HCC_AVAILABLE
+        - AWS_ACCOUNT_ID
+        - AWS_AMI_ID
+        - HWX_DOC_LINK
+        - AZURE_TENANT_ID
+        - AZURE_SUBSCRIPTION_ID
+        - AWS_ACCESS_KEY_ID
+        - AWS_SECRET_ACCESS_KEY
+    labels:
+      - traefik.port=3000
+      - traefik.frontend.rule=Host:$PUBLIC_IP,$CB_TRAEFIK_HOST_ADDRESS
+      - traefik.backend=uluwatu-backend
+      - traefik.frontend.priority=5
+    ports:
+        - 3000:3000
+    volumes:
+        - $ULUWATU_VOLUME_HOST:$ULUWATU_VOLUME_CONTAINER
+    dns: $PRIVATE_IP
+    log_opt:
+        max-size: "10M"
+        max-file: "5"
+    image: $DOCKER_IMAGE_CLOUDBREAK_WEB:$DOCKER_TAG_ULUWATU
+
+EOF
+
+    if [[ "$CB_LOCAL_DEV" == "false" ]]; then
+        cat >> ${composeFile} <<EOF
 cloudbreak:
     environment:
         - AWS_ACCESS_KEY_ID
@@ -553,105 +656,6 @@ cloudbreak:
     image: $DOCKER_IMAGE_CLOUDBREAK:$DOCKER_TAG_CLOUDBREAK
     command: bash
 
-sultans:
-    environment:
-        - http_proxy=$HTTP_PROXY
-        - https_proxy=$HTTPS_PROXY
-        - SL_CLIENT_ID=$UAA_SULTANS_ID
-        - 'SL_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_SULTANS_SECRET \')'
-        - SERVICE_NAME=sultans
-        - SERVICE_3000_NAME=sultans
-          #- SERVICE_CHECK_HTTP=/
-        - SL_PORT=3000
-        - SL_SMTP_SENDER_HOST=$CLOUDBREAK_SMTP_SENDER_HOST
-        - SL_SMTP_SENDER_PORT=$CLOUDBREAK_SMTP_SENDER_PORT
-        - SL_SMTP_SENDER_USERNAME=$CLOUDBREAK_SMTP_SENDER_USERNAME
-        - "SL_SMTP_SENDER_PASSWORD=$(escape-string-compose-yaml $CLOUDBREAK_SMTP_SENDER_PASSWORD \")"
-        - SL_SMTP_SENDER_FROM=$CLOUDBREAK_SMTP_SENDER_FROM
-        - HWX_CLOUD_COLLECTOR=$CLOUDBREAK_TELEMETRY_MAIL_ADDRESS
-        - HWX_CLOUD_USER=$UAA_DEFAULT_USER_EMAIL
-        - HWX_CLOUD_TYPE
-        - HWX_CLOUD_TEMPLATE_VERSION
-        - AWS_AMI_ID
-        - AWS_INSTANCE_ID
-        - AWS_ACCOUNT_ID
-        - HWX_DOC_LINK
-        - SL_SMARTSENSE_CONFIGURE=$CB_SMARTSENSE_CONFIGURE
-        - SL_CB_ADDRESS=$ULU_HOST_ADDRESS
-        - SL_ADDRESS=$ULU_SULTANS_ADDRESS
-        - SL_HWX_CLOUD_DEFAULT_REGION=$ULU_HWX_CLOUD_DEFAULT_REGION
-        - SL_ADDRESS_RESOLVING_TIMEOUT
-        - NODE_TLS_REJECT_UNAUTHORIZED=$SL_NODE_TLS_REJECT_UNAUTHORIZED
-        - SL_UAA_SERVICEID=identity.service.consul
-        - SL_DISPLAY_TERMS_AND_SERVICES=$HWX_DISPLAY_TERMS_AND_CONDITIONS
-    labels:
-      - traefik.port=3000
-      - traefik.frontend.rule=PathPrefixStrip:/sl
-      - traefik.backend=sultans-backend
-      - traefik.frontend.priority=10
-    ports:
-        - 3001:3000
-    volumes:
-        - $SULTANS_VOLUME_HOST:$SULTANS_VOLUME_CONTAINER
-    dns: $PRIVATE_IP
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CLOUDBREAK_AUTH:$DOCKER_TAG_SULTANS
-
-uluwatu:
-    environment:
-        - http_proxy=$HTTP_PROXY
-        - https_proxy=$HTTPS_PROXY
-        - SERVICE_NAME=uluwatu
-          #- SERVICE_CHECK_HTTP=/
-        - ULU_OAUTH_REDIRECT_URI
-        - ULU_DEFAULT_SSH_KEY
-        - ULU_SULTANS_ADDRESS
-        - ULU_OAUTH_CLIENT_ID=$UAA_ULUWATU_ID
-        - 'ULU_OAUTH_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_ULUWATU_SECRET \')'
-        - ULU_HOST_ADDRESS
-        - NODE_TLS_REJECT_UNAUTHORIZED=$ULU_NODE_TLS_REJECT_UNAUTHORIZED
-        - ULU_HWX_CLOUD_DEFAULT_CREDENTIAL
-        - ULU_HWX_CLOUD_DEFAULT_REGION
-        - ULU_HWX_CLOUD_DEFAULT_SSH_KEY
-        - ULU_HWX_CLOUD_DEFAULT_VPC_ID
-        - ULU_HWX_CLOUD_DEFAULT_IGW_ID
-        - ULU_HWX_CLOUD_DEFAULT_SUBNET_ID
-        - ULU_HWX_CLOUD_DEFAULT_ARM_VIRTUAL_NETWORK_ID
-        - HWX_CLOUD_TEMPLATE_VERSION
-        - HWX_CLOUD_ENABLE_GOVERNANCE_AND_SECURITY
-        - ULU_ADDRESS_RESOLVING_TIMEOUT
-        - ULU_SULTANS_SERVICEID=sultans.service.consul
-        - ULU_IDENTITY_SERVICEID=identity.service.consul
-        - ULU_CLOUDBREAK_SERVICEID=cloudbreak.service.consul
-        - ULU_PERISCOPE_SERVICEID=periscope.service.consul
-        - ULU_HWX_CLOUD_REGISTRATION_URL
-        - ULU_SUBSCRIBE_TO_NOTIFICATIONS
-        - AWS_INSTANCE_ID
-        - HWX_HCC_AVAILABLE
-        - AWS_ACCOUNT_ID
-        - AWS_AMI_ID
-        - HWX_DOC_LINK
-        - AZURE_TENANT_ID
-        - AZURE_SUBSCRIPTION_ID
-        - AWS_ACCESS_KEY_ID
-        - AWS_SECRET_ACCESS_KEY
-    labels:
-      - traefik.port=3000
-      - traefik.frontend.rule=Host:$PUBLIC_IP,$CB_TRAEFIK_HOST_ADDRESS
-      - traefik.backend=uluwatu-backend
-      - traefik.frontend.priority=5
-    ports:
-        - 3000:3000
-    volumes:
-        - $ULUWATU_VOLUME_HOST:$ULUWATU_VOLUME_CONTAINER
-    dns: $PRIVATE_IP
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CLOUDBREAK_WEB:$DOCKER_TAG_ULUWATU
-
 periscope:
     environment:
         - http_proxy=$HTTP_PROXY
@@ -705,6 +709,6 @@ periscope:
         max-size: "10M"
         max-file: "5"
     image: $DOCKER_IMAGE_CLOUDBREAK_PERISCOPE:$DOCKER_TAG_PERISCOPE
-
 EOF
+    fi
 }
