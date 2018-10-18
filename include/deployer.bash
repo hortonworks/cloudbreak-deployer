@@ -573,7 +573,9 @@ start-requested-services() {
     fi
 
     compose-up $services
-    init_vault
+    if [[ "$services" == *"vault"* ]]; then
+        init_vault
+    fi
     hdc-cli-downloadable
 }
 
