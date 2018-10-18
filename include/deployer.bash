@@ -723,6 +723,10 @@ main() {
     cmd-export util-delete-ldap-mapping
     cmd-export util-get-usage
 
+    cmd-export-ns vault "Vault management namespace"
+    cmd-export vault-unseal
+    cmd-export vault-status
+
     if [[ "$DEBUG" ]]; then
         cmd-export fn-call fn
     fi

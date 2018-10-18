@@ -126,7 +126,7 @@ init_vault() {
             echo "export VAULT_UNSEAL_KEYS=$unsealKeys" >> $CBD_PROFILE
             info "$CBD_PROFILE has been updated with the Vault keys"
 
-            unseal_vault $unsealKeys
+            vault-unseal $unsealKeys
         else
             warn "Vault auto unseal is disabled so please save the keys in order to use Vault."
             warn "Each time you restart CBD you must unseal Vault with the unseal key."
@@ -143,7 +143,7 @@ init_vault() {
                 _exit 1
             fi
 
-            unseal_vault $VAULT_UNSEAL_KEYS
+            vault-unseal $VAULT_UNSEAL_KEYS
         else
             warn "Vault auto unseal is disabled so please unseal Vault now in order to use it."
         fi
@@ -152,10 +152,19 @@ init_vault() {
 
 }
 
-unseal_vault() {
+vault-unseal() {
+    declare desc="Unseal Vault from $CBD_PROFILE file or argument"
+
     cloudbreak-config
 
-    declare vault_unseal_keys=${1:? required Vault unseal keys}
+    declare vault_unseal_keys=${1:-$VAULT_UNSEAL_KEYS}
+    if [[ -z "$vault_unseal_keys" ]]; then
+        warn "Vault unseal key is not in your $CBD_PROFILE file"
+        warn "Please provide it with: export VAULT_UNSEAL_KEYS=mykey"
+        warn "or provide it as an argument for this command"
+        _exit 1
+    fi
+
     local vault_endpoint="http://vault.service.consul:$VAULT_BIND_PORT"
 
     docker run \
@@ -165,5 +174,20 @@ unseal_vault() {
         -e VAULT_UNSEAL_KEYS=$vault_unseal_keys \
         --entrypoint /bin/sh \
         $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c 'vault operator unseal $VAULT_UNSEAL_KEYS &>/dev/null'
-    debug "Vault is unsealed"
+    info "Vault is unsealed"
+}
+
+vault-status() {
+    declare desc="Shows the status of Vault in json format"
+
+    cloudbreak-config
+
+    local vault_endpoint="http://vault.service.consul:$VAULT_BIND_PORT"
+
+    docker run \
+        --dns $PRIVATE_IP \
+        --rm \
+        -e VAULT_ADDR=$vault_endpoint \
+        --entrypoint /bin/sh \
+        $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c 'vault status -format=json'
 }
