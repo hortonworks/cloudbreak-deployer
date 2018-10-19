@@ -62,6 +62,7 @@ CAPTURE_CRON_EXPRESSION - SmartSense bundle generation time interval in Cron for
 CBD_CERT_ROOT_PATH - Path where deployer stores Cloudbreak certificates
 CBD_LOG_NAME - Name of the Cloudbreak log file
 CBD_TRAEFIK_TLS - Path inside of the Traefik container where TLS files located
+CB_AWS_ACCOUNT_ID - ID of AWS account that is configured for the deployment to be used by role based credentials
 CB_AWS_CUSTOM_CF_TAGS - Comma separated list of AWS CloudFormation Stack tags
 CB_AWS_DEFAULT_CF_TAG - Default tag AWS CloudFormation Stack
 CB_AWS_DEFAULT_INBOUND_SECURITY_GROUP - Default inbound policy name for AWS CloudFormation Stack

@@ -531,6 +531,7 @@ cloudbreak:
         - SMARTSENSE_UPLOAD_HOST
         - SMARTSENSE_UPLOAD_USERNAME
         - SMARTSENSE_UPLOAD_PASSWORD
+        - CB_AWS_ACCOUNT_ID
     labels:
       - traefik.port=8080
       - traefik.frontend.rule=PathPrefix:/cb/
