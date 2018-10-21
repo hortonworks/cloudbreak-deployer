@@ -55,6 +55,7 @@ migrate-execute-mybatis-migrations() {
     fi
     migrateDebug "Scripts location:  $new_scripts_location"
     local migrateResult=$(docker run \
+        --rm \
         -e DB_ENV_POSTGRES_SCHEMA=$service_name \
         --label cbreak.sidekick=true \
         --link $container_name:db \
