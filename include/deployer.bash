@@ -560,6 +560,7 @@ start-wait-cmd() {
 
 start-requested-services() {
     declare services="$@"
+    cloudbreak-config
 
     deployer-generate
     db-initialize-databases
@@ -576,18 +577,10 @@ start-requested-services() {
     if [[ "$services" == *"vault"* ]]; then
         init_vault
     fi
-    hdc-cli-downloadable
-}
 
-hdc-cli-downloadable() {
-  cloudbreak-config
-  if [ -e /var/lib/cloudbreak/hdc-cli ];then
-    find /var/lib/cloudbreak/hdc-cli -name \*.tgz \
-      | xargs --no-run-if-empty -t -n 1 -I@ docker cp @ cbreak_uluwatu_1:/hortonworks-cloud-web/app/static/
-
-    info "You can download the cli from:"
-    find /var/lib/cloudbreak/hdc-cli/ -name \*.tgz -printf "curl -kL $ULU_HOST_ADDRESS/%P | tar -xzv\n" | blue
-  fi
+    if [[ "$CB_LOCAL_DEV" == "true" ]]; then
+        util-local-dev
+    fi
 }
 
 wait-for-cloudbreak() {

@@ -268,6 +268,8 @@ cloudbreak-conf-defaults() {
 
     env-import PUBLIC_HTTP_PORT 80
     env-import PUBLIC_HTTPS_PORT 443
+
+    env-import CB_LOCAL_DEV "false"
 }
 
 cloudbreak-conf-autscale() {
@@ -688,8 +690,8 @@ util-local-dev() {
     fi
 
     debug stopping original cloudbreak container
-    dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} cloudbreak
-    dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} periscope
+    dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} cloudbreak 2> /dev/null || :
+    dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} periscope 2> /dev/null || :
 
     if is_macos; then
         docker rm -f cloudbreak-proxy 2> /dev/null || :
@@ -708,7 +710,7 @@ util-local-dev() {
             -l traefik.frontend.rule=PathPrefix:/cb/ \
             -l traefik.backend=cloudbreak-backend \
             -l traefik.frontend.priority=10 \
-            hortonworks/ambassadord:$DOCKER_TAG_AMBASSADOR $CB_LOCAL_DEV_BIND_ADDR:$port
+            hortonworks/ambassadord:$DOCKER_TAG_AMBASSADOR $CB_LOCAL_DEV_BIND_ADDR:$port &> /dev/null
 
         docker run -d \
             --name periscope-proxy \
@@ -720,8 +722,7 @@ util-local-dev() {
             -l traefik.frontend.rule=PathPrefix:/as/ \
             -l traefik.backend=periscope-backend \
             -l traefik.frontend.priority=10 \
-            hortonworks/ambassadord:$DOCKER_TAG_AMBASSADOR $CB_LOCAL_DEV_BIND_ADDR:8085
-
+            hortonworks/ambassadord:$DOCKER_TAG_AMBASSADOR $CB_LOCAL_DEV_BIND_ADDR:8085 &> /dev/null
     fi
 
     create-migrate-log
