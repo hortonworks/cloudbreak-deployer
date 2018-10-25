@@ -126,12 +126,13 @@ init_vault() {
 
 
         rootToken=$(echo $initLog | jq '.root_token' -r)
-        unsealKeys=$(echo $initLog | jq '.unseal_keys_b64[0]' -r)
+        echo "export VAULT_ROOT_TOKEN=$rootToken" >> $CBD_PROFILE
+        info "$CBD_PROFILE has been updated with the Vault root token"
 
+        unsealKeys=$(echo $initLog | jq '.unseal_keys_b64[0]' -r)
         if [[ "$VAULT_AUTO_UNSEAL" == "true" ]]; then
-            echo "export VAULT_ROOT_TOKEN=$rootToken" >> $CBD_PROFILE
             echo "export VAULT_UNSEAL_KEYS=$unsealKeys" >> $CBD_PROFILE
-            info "$CBD_PROFILE has been updated with the Vault keys"
+            info "$CBD_PROFILE has been updated with the Vault unseal keys"
 
             vault-unseal $unsealKeys
         else
@@ -139,7 +140,6 @@ init_vault() {
             warn "Each time you restart CBD you must unseal Vault with the unseal key."
             warn "You can enable Vault auto unseal by putting the following in your $CBD_PROFILE file"
             warn "export VAULT_AUTO_UNSEAL=true"
-            warn "export VAULT_ROOT_TOKEN=$rootToken"
             warn "export VAULT_UNSEAL_KEYS=$unsealKeys"
         fi
     else
