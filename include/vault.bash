@@ -79,8 +79,15 @@ ui = true
 EOF
 }
 
+start_vault() {
+    compose-up --no-recreate consul
+    compose-up --no-recreate registrator
+    compose-up --no-recreate vault
+}
+
 init_vault() {
     cloudbreak-config
+    start_vault
 
     local vault_endpoint="http://vault.service.consul:$VAULT_BIND_PORT"
 
@@ -140,10 +147,9 @@ init_vault() {
         if [[ "$VAULT_AUTO_UNSEAL" == "true" ]]; then
             if [[ -z $VAULT_UNSEAL_KEYS ]]; then
                 warn "Vault is initialized, but the unseal keys are not provided in the Profile. Please include them in the VAULT_UNSEAL_KEYS var or manually unseal Vault."
-                _exit 1
+            else
+                vault-unseal $VAULT_UNSEAL_KEYS
             fi
-
-            vault-unseal $VAULT_UNSEAL_KEYS
         else
             warn "Vault auto unseal is disabled so please unseal Vault now in order to use it."
         fi
