@@ -573,10 +573,12 @@ start-requested-services() {
         fi
     fi
 
-    compose-up $services
     if [[ "$services" == *"vault"* ]]; then
         init_vault
+        deployer-regenerate
     fi
+
+    compose-up $services
 
     if [[ "$CB_LOCAL_DEV" == "true" ]]; then
         util-local-dev
