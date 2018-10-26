@@ -6,6 +6,7 @@ cloudbreak-conf-vault() {
     env-import VAULT_DOCKER_IMAGE_TAG "0.11.3"
     env-import VAULT_UNSEAL_KEYS ""
     env-import VAULT_AUTO_UNSEAL "false"
+    env-import VAULT_ROOT_TOKEN ""
 }
 
 generate_vault_check_diff() {
