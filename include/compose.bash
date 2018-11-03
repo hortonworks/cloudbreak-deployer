@@ -701,6 +701,9 @@ periscope:
         - REST_DEBUG
         - CERT_VALIDATION
         - CB_DEFAULT_SUBSCRIPTION_ADDRESS
+        - PERISCOPE_VAULT_ADDR=vault.service.consul
+        - PERISCOPE_VAULT_PORT=$VAULT_BIND_PORT
+        - PERISCOPE_VAULT_ROOT_TOKEN=$VAULT_ROOT_TOKEN
     labels:
       - traefik.port=8080
       - traefik.frontend.rule=PathPrefix:/as/
