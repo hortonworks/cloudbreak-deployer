@@ -313,9 +313,7 @@ load-profile() {
     module-load "$CBD_PROFILE"
 
     if [[ "$CBD_DEFAULT_PROFILE" && -f "Profile.$CBD_DEFAULT_PROFILE" ]]; then
-        CBD_PROFILE="Profile.$CBD_DEFAULT_PROFILE"
-
-		module-load $CBD_PROFILE
+		module-load $"Profile.$CBD_DEFAULT_PROFILE"
 		debug "Using profile $CBD_DEFAULT_PROFILE"
 	fi
 }
