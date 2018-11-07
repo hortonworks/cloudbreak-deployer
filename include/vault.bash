@@ -93,7 +93,7 @@ init_vault() {
     local vault_endpoint="http://vault.service.consul:$VAULT_BIND_PORT"
 
     local maxtry=${RETRY:=30}
-    while ! docker run --rm --dns=$PRIVATE_IP alpine:$DOCKER_TAG_ALPINE sh -c "wget -q $vault_endpoint/v1/sys/health 2>&1 | grep -q ' 501 '"; do
+    while ! docker run --rm --dns=$PRIVATE_IP alpine:$DOCKER_TAG_ALPINE sh -c "wget -q $vault_endpoint/v1/sys/health 2>&1 | grep -q 'HTTP'"; do
         debug "Waiting for Vault to start [tries left: $maxtry]."
         maxtry=$((maxtry-1))
         if [[ $maxtry -gt 0 ]]; then
