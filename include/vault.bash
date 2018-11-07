@@ -165,8 +165,8 @@ init_vault() {
             --entrypoint /bin/sh \
             $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c "vault secrets list -format=json" | jq -r '.["secret/"].options.version')
     
-    if [[ "$secretStoreVersion" == "1" ]]; then
-        debug "Converting kv engine v1 to v2"
+    if [[ "$secretStoreVersion" == "1" ]] || [[ "$secretStoreVersion" == "null" ]]; then
+        debug "Converting kv engine $secretStoreVersion to v2"
         docker run \
             --dns $PRIVATE_IP \
             --rm \
