@@ -7,7 +7,7 @@ aws-init() {
 }
 
 aws-certs-upload-s3() {
-    declare desc="uploads certs dir backup tgz into s3 bucket"
+    declare desc="Uploads certs dir backup tgz into s3 bucket"
 
     local bucket=${1:-$CERTS_BUCKET}
     : ${bucket:? required}
@@ -24,7 +24,7 @@ aws-certs-upload-s3() {
 }
 
 aws-certs-restore-s3() {
-    declare desc="restores certs dir backup tgz from s3 bucket"
+    declare desc="Restores certs dir backup tgz from s3 bucket"
 
     local bucket=${1:-$CERTS_BUCKET}
     : ${bucket:? required}

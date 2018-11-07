@@ -8,9 +8,9 @@ db-dump() {
     declare desc="Dumping the specified database"
     declare dbName=${1:-all}
 
-    if docker inspect cbreak_commondb_1 &> /dev/null; then
+    if docker inspect cbreak_${COMMON_DB}_1 &> /dev/null; then
         migrate-startdb
-        db-wait-for-db-cont cbreak_commondb_1
+        db-wait-for-db-cont cbreak_${COMMON_DB}_1
     fi
 
     if [ "$dbName" = "all" ]; then
@@ -24,16 +24,16 @@ db-dump() {
 
 db-dump-database() {
     declare dbName=${1:? required: dbName}
-    declare desc="creates an sql dump from the database: $dbName"
+    declare desc="Creates an sql dump from the database: $dbName"
     info $desc
 
-    if docker exec cbreak_commondb_1 psql -U postgres -c "\c $dbName;" &>/dev/null; then
+    if docker exec cbreak_${COMMON_DB}_1 psql -U postgres -c "\c $dbName;" &>/dev/null; then
         local timeStamp=$(date "+%Y%m%d_%H%M")
         local backupFolder="db_backup"
         local backupLocation=$backupFolder"/"$dbName"_"$timeStamp".dump"
         debug "Creating dump of database: $dbName, into the file: $backupLocation"
         mkdir -p $backupFolder
-        docker exec cbreak_commondb_1 pg_dump -Fc -U postgres "$dbName" > "$backupLocation" | debug-cat
+        docker exec cbreak_${COMMON_DB}_1 pg_dump -Fc -U postgres "$dbName" > "$backupLocation" | debug-cat
     else
         error "The specified database $dbName doesn't exist."
         _exit 1
@@ -47,7 +47,7 @@ db-initialize-databases() {
     cloudbreak-config
 
     migrate-startdb
-    db-wait-for-db-cont cbreak_commondb_1
+    db-wait-for-db-cont cbreak_${COMMON_DB}_1
 
     for db in $CB_DB_ENV_DB $IDENTITY_DB_NAME $PERISCOPE_DB_ENV_DB $VAULT_DB_SCHEMA; do
         db-create-database $db
@@ -61,21 +61,21 @@ db-create-database() {
     declare newDbName=${1:? required: newDbName}
 
     if [[ $newDbName != "postgres" ]]; then
-        if docker exec cbreak_commondb_1 psql -U postgres -c "\c $newDbName;" &>/dev/null; then
+        if docker exec cbreak_${COMMON_DB}_1 psql -U postgres -c "\c $newDbName;" &>/dev/null; then
             debug "The database with name $newDbName already exists, no need for creation."
         else
             debug "create new database: $newDbName"
-            docker exec cbreak_commondb_1 psql -U postgres -c "create database $newDbName;" | debug-cat
+            docker exec cbreak_${COMMON_DB}_1 psql -U postgres -c "create database $newDbName;" | debug-cat
         fi
     fi
 }
 
 db-create-vault-schema() {
-    if docker exec cbreak_commondb_1 psql -U postgres -d $VAULT_DB_SCHEMA -c "\d vault_kv_store;" &>/dev/null; then
+    if docker exec cbreak_${COMMON_DB}_1 psql -U postgres -d $VAULT_DB_SCHEMA -c "\d vault_kv_store;" &>/dev/null; then
         debug "Vault tables are already present in schema: $VAULT_DB_SCHEMA"
     else
         debug "Create Vault tables into schema: $VAULT_DB_SCHEMA"
-        docker exec cbreak_commondb_1 psql -U postgres -d $VAULT_DB_SCHEMA -c "
+        docker exec cbreak_${COMMON_DB}_1 psql -U postgres -d $VAULT_DB_SCHEMA -c "
         CREATE TABLE vault_kv_store (
             parent_path TEXT COLLATE \"C\" NOT NULL,
             path        TEXT COLLATE \"C\",
@@ -89,13 +89,13 @@ db-create-vault-schema() {
 }
 
 db-wait-for-db-cont() {
-    declare desc="wait for db container readiness"
+    declare desc="Wait for db container readiness"
     declare contName=${1:? required db container name}
 
     debug $desc
     local maxtry=${RETRY:=30}
     #Polling non-loopback port binding due to automatic restart after init https://github.com/docker-library/postgres/issues/146#issuecomment-215856076
-    while ! docker exec -i cbreak_commondb_1 netstat -tulpn |grep -i "0 0.0.0.0:5432" &> /dev/null; do
+    while ! docker exec -i cbreak_${COMMON_DB}_1 netstat -tulpn |grep -i "0 0.0.0.0:5432" &> /dev/null; do
         debug "waiting for DB: $contName to listen on non-loopback interface [tries left: $maxtry] ..."
         maxtry=$((maxtry-1))
         if [[ $maxtry -gt 0 ]]; then
@@ -106,7 +106,7 @@ db-wait-for-db-cont() {
         fi
     done
 
-    while ! docker exec -i cbreak_commondb_1 pg_isready &> /dev/null; do
+    while ! docker exec -i cbreak_${COMMON_DB}_1 pg_isready &> /dev/null; do
         debug "waiting for DB: $contName to be ready [tries left: $maxtry] ..."
         maxtry=$((maxtry-1))
         if [[ $maxtry -gt 0 ]]; then
@@ -125,14 +125,24 @@ db-restore() {
     info "Restoring database: $dbName from dump, file: $dumpFilePath"
 
     migrate-startdb
-    db-wait-for-db-cont cbreak_commondb_1
+    db-wait-for-db-cont cbreak_${COMMON_DB}_1
     db-create-database $dbName
 
     if [[ -f "$dumpFilePath" ]]; then
         local destFileName=$dbName"-to-restore-"$(date "+%Y%m%d_%H%M")
         debug "copy $dumpFilePath into the container as: $destFileName"
-        docker cp $dumpFilePath cbreak_commondb_1:/$destFileName | debug-cat
+        docker cp $dumpFilePath cbreak_${COMMON_DB}_1:/$destFileName | debug-cat
         debug "Restoring database: $dbName from file: $destFileName with pg_restore."
-        docker exec -i cbreak_commondb_1 pg_restore -U postgres -d $dbName $destFileName | debug-cat
+        docker exec -i cbreak_${COMMON_DB}_1 pg_restore -U postgres -d $dbName $destFileName | debug-cat
     fi
+}
+
+cloudbreak-delete-dbs() {
+    declare desc="Deletes all cloudbreak db (volume)"
+
+    if [[ "$(docker-compose -p cbreak ps $COMMON_DB | tail -1)" == *"Up"* ]]; then
+        error "Database container is running, delete not allowed"
+        _exit 1
+    fi
+    docker volume rm $COMMON_DB_VOL 1>/dev/null || :
 }

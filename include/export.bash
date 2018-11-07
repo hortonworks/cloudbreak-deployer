@@ -24,7 +24,7 @@ create-bundle() {
 }
 
 export-psql-history() {
-    ! docker exec -t cbreak_commondb_1 cat /var/lib/postgresql/.psql_history > "$1/.psql_history"
+    ! docker exec -t cbreak_${COMMON_DB}_1 cat /var/lib/postgresql/.psql_history > "$1/.psql_history"
     check-export-success "$1/.psql_history"
 }
 

@@ -22,7 +22,7 @@ migrate-startdb() {
 }
 
 migrateDebug() {
-    declare desc="prints to migrate log file and to stderr"
+    declare desc="Prints to migrate log file and to stderr"
     echo "[MIGRATE] $*" | tee -a "$DB_MIGRATION_LOG" | debug-cat
 }
 

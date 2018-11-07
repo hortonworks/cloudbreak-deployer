@@ -24,7 +24,7 @@ cloudbreak-config() {
 cloudbreak-conf-tags() {
     declare desc="Defines docker image tags"
 
-    env-import DOCKER_TAG_ALPINE 3.1
+    env-import DOCKER_TAG_ALPINE 3.8
     env-import DOCKER_TAG_HAVEGED 1.1.0
     env-import DOCKER_TAG_TRAEFIK v1.6.6-alpine
     env-import DOCKER_TAG_CONSUL 0.5
@@ -52,31 +52,6 @@ cloudbreak-conf-tags() {
     env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu.service.consul:3000/notifications
     env-import CERTS_BUCKET ""
 
-}
-
-docker-ip() {
-    if [[ $DOCKER_HOST =~ "tcp://" ]];then
-        local dip=${DOCKER_HOST#*//}
-        echo ${dip%:*}
-    else
-        echo none
-    fi
-}
-
-consul-recursors() {
-    declare desc="Generates consul agent recursor option, by reading the hosts resolv.conf"
-    declare resolvConf=${1:? 'required 1.param: resolv.conf file'}
-    declare bridge=${2:? 'required 2.param: bridge ip'}
-    declare dockerIP=${3:- none}
-
-    local nameservers=$(sed -n "/^nameserver/ s/^.*nameserver[^0-9]*//p;" $resolvConf)
-    debug "nameservers on host:\n$nameservers"
-    if [[ "$nameservers" ]]; then
-        debug bridge=$bridge
-        echo "$nameservers" | grep -v "$bridge\|$dockerIP" | sed -n '{s/^/ -recursor /;H;}; $ {x;s/[\n\r]//g;p}'
-    else
-        echo
-    fi
 }
 
 cloudbreak-conf-consul() {
@@ -121,14 +96,6 @@ cloudbreak-conf-smtp() {
     env-import CLOUDBREAK_TELEMETRY_MAIL_ADDRESS "aws-marketplace@hortonworks.com"
 }
 
-is_linux() {
-    [[ "$(uname)" == Linux ]]
-}
-
-is_macos() {
-    [[ "$(uname)" == Darwin ]]
-}
-
 cloudbreak-conf-db() {
     declare desc="Declares cloudbreak DB config"
 
@@ -163,31 +130,6 @@ cloudbreak-conf-cert() {
     env-import CBD_CERT_ROOT_PATH "${PWD}/certs"
 
     env-import CBD_TRAEFIK_TLS "/certs/traefik/client.pem,/certs/traefik/client-key.pem"
-}
-
-cloudbreak-delete-dbs() {
-    declare desc="deletes all cloudbreak db (volume)"
-
-    if [[ "$(docker-compose -p cbreak ps $COMMON_DB | tail -1)" == *"Up"* ]]; then
-        error "Database container is running, delete not allowed"
-        _exit 1
-    fi
-    docker volume rm $COMMON_DB_VOL 1>/dev/null || :
-}
-
-cloudbreak-delete-consul-data() {
-    declare desc="deletes consul data-dir (volume)"
-
-    if [[ $(docker-compose -p cbreak ps -q consul | wc -l) -eq 1 ]]; then
-        error "Consul container is running, delete not allowed"
-        _exit 1
-    fi
-    docker volume rm consul-data 1>/dev/null || :
-}
-
-cloudbreak-delete-certs() {
-    declare desc="deletes all cloudbreak related certificates"
-    rm -rf ${PWD}/certs
 }
 
 cloudbreak-conf-uaa() {
@@ -329,27 +271,6 @@ cloudbreak-conf-java() {
     env-import HTTPS_PROXYFORCLUSTERCONNECTION "false"
 }
 
-escape-string-env() {
-    declare desc="Escape yaml string by delimiter type"
-    : ${2:=required}
-    local in=$1
-    local delimiter=$2
-
-    if [[ $delimiter == "'" ]]; then
-        out=`echo $in | sed -e "s/'/'\\\\\\''/g"`
-    elif [[ $delimiter == '"' ]]; then
-        out=`echo $in | sed -e 's/\\\\/\\\\\\\/g' -e 's/"/\\\"/g' -e 's/[$]/\$/g' -e "s/\\\`/\\\\\\\\\\\\\\\`/g" -e 's/!/\\\\!/g'`
-    else
-        out="$in"
-    fi
-
-    echo $out
-}
-
-gen-password() {
-    date +%s | checksum sha1 | head -c 10
-}
-
 cloudbreak-generate-cert() {
     cloudbreak-config
     if [ -f "${CBD_CERT_ROOT_PATH}/traefik/client.pem" ] && [ -f "${CBD_CERT_ROOT_PATH}/traefik/client-key.pem" ]; then
@@ -396,12 +317,12 @@ cloudbreak-generate-cert() {
     fi
 }
 
-generate_uaa_check_diff() {
+generate-uaa-check-diff() {
     local verbose="$1"
 
     if [ -f uaa.yml ]; then
         local uaa_delme_path=$TEMP_DIR/uaa-delme.yml
-        generate_uaa_config_force $uaa_delme_path
+        generate-uaa-config-force $uaa_delme_path
         if diff $uaa_delme_path uaa.yml &> /dev/null; then
             debug "uaa.yml exists and generate wouldn't change it"
             return 0
@@ -422,16 +343,16 @@ generate_uaa_check_diff() {
             return 1
         fi
     else
-        generate_uaa_config_force uaa.yml
+        generate-uaa-config-force uaa.yml
     fi
     return 0
 
 }
 
-generate_uaa_config() {
+generate-uaa-config() {
     cloudbreak-config
 
-    if ! generate_uaa_check_diff; then
+    if ! generate-uaa-check-diff; then
         if [[ "$CBD_FORCE_START" ]]; then
             warn "You have forced to start ..."
         else
@@ -445,11 +366,11 @@ generate_uaa_config() {
         if [ -f "$UAA_SETTINGS_FILE" ]; then
             info "apply custom uaa settings from file: $UAA_SETTINGS_FILE"
         fi
-        generate_uaa_config_force uaa.yml
+        generate-uaa-config-force uaa.yml
     fi
 }
 
-generate_uaa_config_force() {
+generate-uaa-config-force() {
     declare uaaFile=${1:? required: uaa config file path}
 
     debug "Generating Identity server config: ${uaaFile} ..."
@@ -536,16 +457,6 @@ EOF
     fi
 }
 
-escape-string-json() {
-    declare desc="Escape json string"
-    : ${1:=required}
-    local in=$1
-
-    out=`echo $in | sed -e 's/\\\\/\\\\\\\/g' -e 's/"/\\\"/g'`
-
-    echo $out
-}
-
 util-add-default-user() {
     declare desc="Add default admin Cloudbreak user"
     debug $desc
@@ -586,69 +497,6 @@ util-add-default-user() {
         echo "[ERROR] ${user}" | red 1>&2
         _exit 1
     fi
-}
-
-util-generate-ldap-mapping() {
-  declare desc="Generates an SQL script to map LDAP/AD groups to Cloudbreak defined OAuth2 scopes. Useful if you want to make changes in the mapping."
-  debug $desc
-
-  local mapping_file="mapping.sql"
-  generate-ldap-mapping "$1" "$mapping_file"
-  info "Group mapping file has been created: $mapping_file"
-  info "To apply the $mapping_file please run the following command: docker exec cbreak_commondb_1 psql -U postgres -d uaadb -c \"\$(cat $mapping_file)\""
-  info "To clean up the group mapping please run the following command: docker exec cbreak_commondb_1 psql -U postgres -d uaadb -c \"delete from external_group_mapping\""
-  info "Note: you must log out and log back in with your LDAP/AD users after the mapping change"
-}
-
-util-execute-ldap-mapping() {
-  declare desc="Generates and automatically applies the changes in identity to map LDAP/AD groups to Cloudbreak defined OAuth2 scopes"
-  debug $desc
-
-  local mapping_file="$TEMP_DIR/mapping-delme.yml"
-  generate-ldap-mapping "$1" "$mapping_file"
-  info "Applying LDAP/AD mapping"
-  docker exec cbreak_commondb_1 psql -U postgres -d uaadb -c "$(cat $mapping_file)"
-  rm -f "$mapping_file"
-  info "Successfully applied LDAP/AD mapping"
-  info "Note: you must log out and log back in with your LDAP/AD users after the mapping change"
-}
-
-util-delete-ldap-mapping() {
-  declare desc="Removes all the LDAP/AD group mappings to OAuth2 scopes"
-  debug $desc
-
-  local container=$(docker ps | grep cbreak_commondb_ | cut -d" " -f 1)
-    if ! [[ "$container" ]]; then
-        error "Cloudbreak isn't running, please start it"
-        _exit 1
-    fi
-
-  info "Remove LDAP/AD mappings"
-  docker exec cbreak_commondb_1 psql -U postgres -d uaadb -c "delete from external_group_mapping"
-  info "Successfully removed LDAP/AD mappings"
-  info "Note: you must log out and log back in with your LDAP/AD users after the mapping change"
-}
-
-generate-ldap-mapping() {
- if [[ -z "$1" ]]; then
-    error "LDAP/AD group DN parameter must be provided (e.g: CN=cloudbreak,CN=Users,DC=ad,DC=mycompany,DC=com)"
-    _exit 1
-  fi
-  local group="$1"
-  local mapping_file=${2:-mapping.sql}
-
-  local container=$(docker ps | grep cbreak_commondb_ | cut -d" " -f 1)
-    if ! [[ "$container" ]]; then
-        error "Cloudbreak isn't running, please start it"
-        _exit 1
-    fi
-
-  local scopes=$(docker exec $container psql -U postgres -d uaadb -c "select displayname from groups where displayname like 'cloudbreak%' or displayname like 'periscope%' or displayname='sequenceiq.cloudbreak.user';" | tail -n +3 | grep -v rows)
-  rm -f ${mapping_file}
-  for scope in ${scopes}; do
-    local line="INSERT INTO external_group_mapping (group_id, external_group, added, origin) VALUES ((select id from groups where displayname='$scope'), '$group', '2016-09-30 19:28:24.255', 'ldap');"
-    echo $line >> ${mapping_file}
-  done
 }
 
 util-token() {
@@ -728,31 +576,4 @@ util-local-dev() {
     create-migrate-log
     migrate-one-db cbdb up
     migrate-one-db periscopedb up
-}
-
-util-get-usage() {
-    declare desc="Generate Flex related usages."
-
-    cloudbreak-conf-uaa
-
-    local USAGE_PATH="usages/flex/daily"
-
-    if [ $# -eq 1 ]; then
-        local PARAMETER=$1
-        case $PARAMETER in
-            latest)
-                USAGE_PATH="usages/flex/latest"
-                ;;
-            *)
-                error "Invalid parameter: $PARAMETER. Supported parameters: latest"
-                return 1
-                ;;
-        esac
-    fi
-
-    local CRED="$UAA_FLEX_USAGE_CLIENT_ID:$UAA_FLEX_USAGE_CLIENT_SECRET"
-    local CRED_BASE64="$(echo -n "${CRED}"|base64|tr -d '\n')"
-    local TOKEN=$(curl -sX POST -H "Authorization: Basic $CRED_BASE64" "${PUBLIC_IP}:${UAA_PORT}/oauth/token?grant_type=client_credentials" | jq '.access_token' -r)
-    local USAGE=$(curl -sX GET -H "Authorization: Bearer $TOKEN" "${PUBLIC_IP}:8080/cb/api/v1/${USAGE_PATH}")
-    echo ${USAGE#*=}
 }

@@ -351,7 +351,7 @@ mail:
         max-file: "5"
     image: catatnight/postfix:$DOCKER_TAG_POSTFIX
 
-commondb:
+$COMMON_DB:
     labels:
       - traefik.enable=false
     privileged: true

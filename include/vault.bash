@@ -16,7 +16,7 @@ generate_vault_check_diff() {
 
     if [ -f $VAULT_CONFIG_FILE ]; then
         local vault_delme_path=$TEMP_DIR/vault-delme.hcl
-        generate_vault_config_force $vault_delme_path
+        generate-vault-config-force $vault_delme_path
         if diff $vault_delme_path $VAULT_CONFIG_FILE &> /dev/null; then
             debug "$VAULT_CONFIG_FILE exists and generate wouldn't change it"
             return 0
@@ -37,13 +37,13 @@ generate_vault_check_diff() {
             return 1
         fi
     else
-        generate_vault_config_force $VAULT_CONFIG_FILE
+        generate-vault-config-force $VAULT_CONFIG_FILE
     fi
     return 0
 
 }
 
-generate_vault_config() {
+generate-vault-config() {
     cloudbreak-config
 
     if ! generate_vault_check_diff; then
@@ -55,11 +55,11 @@ generate_vault_config() {
         fi
     else
         info "generating $VAULT_CONFIG_FILE"
-        generate_vault_config_force $VAULT_CONFIG_FILE
+        generate-vault-config-force $VAULT_CONFIG_FILE
     fi
 }
 
-generate_vault_config_force() {
+generate-vault-config-force() {
     cloudbreak-config
 
     declare vaultFile=${1:? required: vault config file path}
@@ -93,7 +93,7 @@ init_vault() {
     local vault_endpoint="http://vault.service.consul:$VAULT_BIND_PORT"
 
     local maxtry=${RETRY:=30}
-    while ! curl -m 1 $PUBLIC_IP:$VAULT_BIND_PORT/v1/sys/health &>/dev/null; do
+    while ! docker run --rm --dns=$PRIVATE_IP alpine:$DOCKER_TAG_ALPINE sh -c "wget -q $vault_endpoint/v1/sys/health 2>&1 | grep -q ' 501 '"; do
         debug "Waiting for Vault to start [tries left: $maxtry]."
         maxtry=$((maxtry-1))
         if [[ $maxtry -gt 0 ]]; then
@@ -127,12 +127,12 @@ init_vault() {
 
 
         rootToken=$(echo $initLog | jq '.root_token' -r)
-        echo "export VAULT_ROOT_TOKEN=$rootToken" >> $CBD_PROFILE
+        append-variable-to-profile VAULT_ROOT_TOKEN "$rootToken"
         info "$CBD_PROFILE has been updated with the Vault root token"
 
         unsealKeys=$(echo $initLog | jq '.unseal_keys_b64[0]' -r)
         if [[ "$VAULT_AUTO_UNSEAL" == "true" ]]; then
-            echo "export VAULT_UNSEAL_KEYS=$unsealKeys" >> $CBD_PROFILE
+            append-variable-to-profile VAULT_UNSEAL_KEYS "$unsealKeys"
             info "$CBD_PROFILE has been updated with the Vault unseal keys"
 
             vault-unseal $unsealKeys
@@ -197,4 +197,13 @@ vault-status() {
         -e VAULT_ADDR=$vault_endpoint \
         --entrypoint /bin/sh \
         $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c 'vault status -format=json'
+}
+
+cloudbreak-delete-vault-data() {
+    cloudbreak-conf-vault
+
+    remove-variable-from-profile VAULT_UNSEAL_KEYS
+    remove-variable-from-profile VAULT_ROOT_TOKEN
+    
+    rm -rf $VAULT_CONFIG_FILE
 }
