@@ -154,9 +154,27 @@ init_vault() {
         else
             warn "Vault auto unseal is disabled so please unseal Vault now in order to use it."
         fi
-
     fi
 
+    debug "Checking kv engine version"
+    local secretStoreVersion=$(docker run \
+            --dns $PRIVATE_IP \
+            --rm \
+            -e VAULT_TOKEN=$VAULT_ROOT_TOKEN \
+            -e VAULT_ADDR=$vault_endpoint \
+            --entrypoint /bin/sh \
+            $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c "vault secrets list -format=json" | jq -r '.["secret/"].options.version')
+    
+    if [[ "$secretStoreVersion" == "1" ]]; then
+        debug "Converting kv engine v1 to v2"
+        docker run \
+            --dns $PRIVATE_IP \
+            --rm \
+            -e VAULT_TOKEN=$VAULT_ROOT_TOKEN \
+            -e VAULT_ADDR=$vault_endpoint \
+            --entrypoint /bin/sh \
+            $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c "vault kv enable-versioning secret/"
+    fi
 }
 
 vault-unseal() {

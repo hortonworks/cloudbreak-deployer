@@ -51,7 +51,9 @@ append-variable-to-profile() {
     : ${1:=required}
     : ${2:=required}
 
-    echo "export ${1}=\"$(escape-string-env ${2} '"')\"" >> $CBD_PROFILE
+    locale var="export ${1}=\"$(escape-string-env ${2} '"')\""
+    echo $var >> $CBD_PROFILE
+    eval $var
 }
 
 remove-variable-from-profile() {
