@@ -290,18 +290,18 @@ init-profile() {
 
     if ! [[ "$CB_INSTANCE_UUID" ]]; then
         debug "Instance UUID not found, let's generate one"
-        echo "export CB_INSTANCE_UUID=$(uuidgen | tr '[:upper:]' '[:lower:]')" >> $CBD_PROFILE
+        append-variable-to-profile CB_INSTANCE_UUID "$(uuidgen | tr '[:upper:]' '[:lower:]')"
     fi
 
     if ! [[ "$CB_INSTANCE_NODE_ID" ]]; then
         debug "Instance node UUID not found, let's generate one"
-        echo "export CB_INSTANCE_NODE_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')" >> $CBD_PROFILE
+        append-variable-to-profile CB_INSTANCE_NODE_ID "$(uuidgen | tr '[:upper:]' '[:lower:]')"
     fi
 
     if ! [[ "$UAA_DEFAULT_SECRET" ]]; then
         info "Your secret is auto-generated in $CBD_PROFILE as UAA_DEFAULT_SECRET"
         echo "Make backup of your secret, because used for data encryption !!!" | red
-        echo "export UAA_DEFAULT_SECRET=$(uuidgen | sed 's/-//g')" >> $CBD_PROFILE
+        append-variable-to-profile UAA_DEFAULT_SECRET "$(uuidgen | sed 's/-//g')"
     fi
 
     provider-and-region-init
@@ -367,8 +367,8 @@ provider-and-region-init() {
             fi
         fi
 
-        echo "export CB_INSTANCE_PROVIDER=$CB_INSTANCE_PROVIDER" >> $CBD_PROFILE
-        echo "export CB_INSTANCE_REGION=$CB_INSTANCE_REGION" >> $CBD_PROFILE
+        append-variable-to-profile CB_INSTANCE_PROVIDER "$CB_INSTANCE_PROVIDER"
+        append-variable-to-profile CB_INSTANCE_REGION "$CB_INSTANCE_REGION"
     fi
 }
 
@@ -399,7 +399,7 @@ doctor() {
         compose-generate-check-diff verbose
     fi
     if [[ -e uaa.yml ]]; then
-        generate_uaa_check_diff verbose
+        generate-uaa-check-diff verbose
     fi
 }
 
@@ -456,16 +456,16 @@ deployer-delete() {
     declare desc="Deletes yaml files, and all dbs. You can use '--force' to avoid confirm dialog"
     if [[ "$1" != "--force" ]] ; then
         read -r -t 10 -p "Are you sure you would like to wipe all Cloudbreak related data? [y/N] " response
-        if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
-            debug "Delete confirmed"
-        else
+        if ! [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
             info "Delete terminated for user request"
             _exit 0
         fi
     fi
 
     cloudbreak-delete-dbs
-    rm -f *.yml
+    cloudbreak-delete-consul-data
+    cloudbreak-delete-vault-data
+    rm -f docker-compose.yml uaa.yml
 }
 
 deployer-generate() {
@@ -473,8 +473,8 @@ deployer-generate() {
 
     cloudbreak-generate-cert
     compose-generate-yaml
-    generate_uaa_config
-    generate_vault_config
+    generate-uaa-config
+    generate-vault-config
 }
 
 deployer-regenerate() {
@@ -490,17 +490,17 @@ deployer-regenerate() {
     fi
     compose-generate-yaml
 
-    if ! generate_uaa_check_diff; then
+    if ! generate-uaa-check-diff; then
         info renaming: uaa.yml to: uaa-${datetime}.yml
         mv uaa.yml uaa-${datetime}.yml
     fi
-    generate_uaa_config
+    generate-uaa-config
 
     if ! generate_vault_check_diff; then
             info renaming: $VAULT_CONFIG_FILE to: vault-config-${datetime}.yml
             mv $VAULT_CONFIG_FILE vault-config-${datetime}.yml
     fi
-    generate_vault_config
+    generate-vault-config
 }
 
 escape-string-yaml() {
@@ -717,7 +717,7 @@ main() {
     cmd-export util-generate-ldap-mapping
     cmd-export util-execute-ldap-mapping
     cmd-export util-delete-ldap-mapping
-    cmd-export util-get-usage
+    cmd-export generate-flex-usage
 
     cmd-export-ns vault "Vault management namespace"
     cmd-export vault-unseal

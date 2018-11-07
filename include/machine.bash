@@ -55,7 +55,7 @@ machine-check() {
 }
 
 machine-env() {
-    declare desc="creates local profile script"
+    declare desc="Creates local profile script"
     debug "$desc"
     
     touch $DOCKER_PROFILE
