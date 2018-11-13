@@ -229,6 +229,7 @@ UAA_SCHEMA_SCRIPTS_LOCATION - Location of Identity schema update files
 ULUWATU_VOLUME_HOST - Location of the locally developed Web UI project
 
 DOCKER_MACHINE - Name of the Docker Machine where Cloudbreak runs
+COMPOSE_TLS_VERSION - TLS version used by Docker Compose
 DOCKER_PROFILE - Profile file for Docker Machine related environment variables
 MACHINE_CPU - Number of the CPU cores on the Docker Machine instance
 MACHINE_MEM - Amount of RAM on the Docker Machine instance
