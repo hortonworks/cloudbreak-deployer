@@ -3,6 +3,7 @@ cloudbreak-config() {
   : ${BRIDGE_IP:=$(docker run --rm --name=cbreak_cbd_bridgeip --label cbreak.sidekick=true alpine sh -c 'ip ro | grep default | cut -d" " -f 3')}
   env-import PRIVATE_IP $BRIDGE_IP
   env-import DOCKER_MACHINE ""
+  env-import COMPOSE_TLS_VERSION "TLSv1_2"
   cloudbreak-conf-tags
   cloudbreak-conf-images
   cloudbreak-conf-capabilities
