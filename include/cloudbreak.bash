@@ -124,6 +124,8 @@ cloudbreak-conf-db() {
     env-import IDENTITY_DB_NAME "uaadb"
     env-import IDENTITY_DB_USER "postgres"
     env-import IDENTITY_DB_PASS ""
+
+    env-import VAULT_DB_SCHEMA "vault"
 }
 
 cloudbreak-conf-cert() {
