@@ -93,7 +93,7 @@ init_vault() {
     local vault_endpoint="http://vault.service.consul:$VAULT_BIND_PORT"
 
     local maxtry=${RETRY:=30}
-    while ! docker run --rm --dns=$PRIVATE_IP alpine:$DOCKER_TAG_ALPINE sh -c "wget -q $vault_endpoint/v1/sys/health 2>&1 | grep -q 'HTTP'"; do
+    while ! get-vault-status | jq -r .initialized &>/dev/null; do
         debug "Waiting for Vault to start [tries left: $maxtry]."
         maxtry=$((maxtry-1))
         if [[ $maxtry -gt 0 ]]; then
@@ -106,12 +106,7 @@ init_vault() {
     debug "Vault has started"
 
     set +e
-    vaultStatus=$(docker run \
-        --dns $PRIVATE_IP \
-        --rm \
-        -e VAULT_ADDR=$vault_endpoint \
-        --entrypoint /bin/sh \
-        $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c 'vault status -format=json')
+    vaultStatus=$(get-vault-status)
     set -e
 
     debug "Vault status: $vaultStatus"
@@ -156,25 +151,39 @@ init_vault() {
         fi
     fi
 
-    debug "Checking kv engine version"
-    local secretStoreVersion=$(docker run \
-            --dns $PRIVATE_IP \
-            --rm \
-            -e VAULT_TOKEN=$VAULT_ROOT_TOKEN \
-            -e VAULT_ADDR=$vault_endpoint \
-            --entrypoint /bin/sh \
-            $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c "vault secrets list -format=json" | jq -r '.["secret/"].options.version')
-    
-    if [[ "$secretStoreVersion" == "1" ]] || [[ "$secretStoreVersion" == "null" ]]; then
-        debug "Converting kv engine $secretStoreVersion to v2"
-        docker run \
-            --dns $PRIVATE_IP \
-            --rm \
-            -e VAULT_TOKEN=$VAULT_ROOT_TOKEN \
-            -e VAULT_ADDR=$vault_endpoint \
-            --entrypoint /bin/sh \
-            $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c "vault kv enable-versioning secret/"
+    if [[ "$(get-vault-status | jq -r .sealed 2>/dev/null)" == "false" ]]; then
+        debug "Checking kv engine version"
+        local secretStoreVersion=$(docker run \
+                --dns $PRIVATE_IP \
+                --rm \
+                -e VAULT_TOKEN=$VAULT_ROOT_TOKEN \
+                -e VAULT_ADDR=$vault_endpoint \
+                --entrypoint /bin/sh \
+                $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c "vault secrets list -format=json" | jq -r '.["secret/"].options.version')
+        
+        if [[ "$secretStoreVersion" == "1" ]] || [[ "$secretStoreVersion" == "null" ]]; then
+            debug "Converting kv engine $secretStoreVersion to v2"
+            docker run \
+                --dns $PRIVATE_IP \
+                --rm \
+                -e VAULT_TOKEN=$VAULT_ROOT_TOKEN \
+                -e VAULT_ADDR=$vault_endpoint \
+                --entrypoint /bin/sh \
+                $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c "vault kv enable-versioning secret/"
+        fi
+    else
+        warn "Vault is sealed, please unseal it and execute the following command: vault kv enable-versioning secret/"
     fi
+    _exit 5
+}
+
+get-vault-status() {
+    echo $(docker run \
+        --dns $PRIVATE_IP \
+        --rm \
+        -e VAULT_ADDR=$vault_endpoint \
+        --entrypoint /bin/sh \
+        $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c 'vault status -format=json 2>/dev/null')
 }
 
 vault-unseal() {
