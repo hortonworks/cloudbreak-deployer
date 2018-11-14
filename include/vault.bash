@@ -174,7 +174,6 @@ init_vault() {
     else
         warn "Vault is sealed, please unseal it and execute the following command: vault kv enable-versioning secret/"
     fi
-    _exit 5
 }
 
 get-vault-status() {
