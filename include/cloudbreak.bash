@@ -35,10 +35,10 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.2.0
 
-    env-import DOCKER_TAG_PERISCOPE 2.10.0-dev.183
-    env-import DOCKER_TAG_CLOUDBREAK 2.10.0-dev.183
-    env-import DOCKER_TAG_ULUWATU 2.10.0-dev.183
-    env-import DOCKER_TAG_SULTANS 2.10.0-dev.183
+    env-import DOCKER_TAG_PERISCOPE 2.10.0-dev.184
+    env-import DOCKER_TAG_CLOUDBREAK 2.10.0-dev.184
+    env-import DOCKER_TAG_ULUWATU 2.10.0-dev.184
+    env-import DOCKER_TAG_SULTANS 2.10.0-dev.184
 
     env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
     env-import DOCKER_TAG_LOGROTATE 1.0.1
