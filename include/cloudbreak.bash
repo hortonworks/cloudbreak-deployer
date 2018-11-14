@@ -19,7 +19,14 @@ cloudbreak-config() {
   cloudbreak-conf-java
   cloudbreak-conf-consul
   cloudbreak-conf-vault
+  cloudbreak-conf-caas
   migrate-config
+}
+
+cloudbreak-conf-caas() {
+    declare desc="Defines CAAS related configs"
+
+    env-import CAAS_URL "caas-mock.service.consul:$CAAS_MOCK_BIND_PORT"
 }
 
 cloudbreak-conf-tags() {
@@ -35,6 +42,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.2.0
 
+    env-import DOCKER_TAG_CAAS_MOCK 2.10.0-dev.207
     env-import DOCKER_TAG_PERISCOPE 2.10.0-dev.207
     env-import DOCKER_TAG_CLOUDBREAK 2.10.0-dev.207
     env-import DOCKER_TAG_ULUWATU 2.10.0-dev.207
@@ -44,6 +52,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_LOGROTATE 1.0.1
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.2
 
+    env-import DOCKER_IMAGE_CAAS_MOCK hortonworks/cloudbreak-mock-caas
     env-import DOCKER_IMAGE_CLOUDBREAK hortonworks/cloudbreak
     env-import DOCKER_IMAGE_CLOUDBREAK_WEB hortonworks/hdc-web
     env-import DOCKER_IMAGE_CLOUDBREAK_AUTH hortonworks/hdc-auth
@@ -507,19 +516,15 @@ util-token() {
 
     cloudbreak-config
 
-    local passwd="$UAA_DEFAULT_USER_PW"
-    if ! [[ "$passwd" ]]; then
-        read -s -t 10 -p "password:" passwd
-        echo
+    if [ $# -ne 2 ]; then
+        error "Invalid parameters, please provide username tenant like this: cbd util token admin@hortonworks.com hortonworks"
+    else
+        local username=$1
+        local tenant=$2
+        local TOKEN=$(curl -skX GET \
+        "https://${PUBLIC_IP}/oidc/authorize?tenant=$tenant&username=$username")
+        echo ${TOKEN#*=}
     fi
-
-    local TOKEN=$(curl -sX POST \
-        -w '%{redirect_url}' \
-        -H "accept: application/x-www-form-urlencoded" \
-        --data-urlencode credentials='{"username":"'${UAA_DEFAULT_USER_EMAIL}'","password":"'$(escape-string-json $passwd)'"}' \
-        "${PUBLIC_IP}:${UAA_PORT}/oauth/authorize?response_type=token&client_id=cloudbreak_shell&scope.0=openid&source=login&redirect_uri=http://cloudbreak.shell" \
-           | cut -d'&' -f 2)
-    echo ${TOKEN#*=}
 }
 
 util-token-debug() {

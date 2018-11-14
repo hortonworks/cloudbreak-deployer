@@ -10,12 +10,21 @@ compose-init() {
     env-import CBD_LOG_NAME cbreak
     env-import ULUWATU_VOLUME_HOST /dev/null
     env-import ULUWATU_CONTAINER_PATH /hortonworks-cloud-web
+    env-import CAAS_MOCK_VOLUME_HOST /dev/null
+    env-import CAAS_MOCK_CONTAINER_PATH /caas-mock
 
     if [[ "$ULUWATU_VOLUME_HOST" != "/dev/null" ]]; then
       ULUWATU_VOLUME_CONTAINER=${ULUWATU_CONTAINER_PATH}
     else
       ULUWATU_VOLUME_CONTAINER=/tmp/null
     fi
+
+    if [[ "$CAAS_MOCK_VOLUME_HOST" != "/dev/null" ]]; then
+      CAAS_MOCK_VOLUME_CONTAINER=${CAAS_MOCK_CONTAINER_PATH}
+    else
+      CAAS_MOCK_VOLUME_CONTAINER=/tmp/null
+    fi
+
     env-import SULTANS_VOLUME_HOST /dev/null
     env-import SULTANS_CONTAINER_PATH /hortonworks-cloud-auth
     if [[ "$SULTANS_VOLUME_HOST" != "/dev/null" ]]; then
@@ -214,6 +223,23 @@ compose-generate-yaml-force() {
         export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_KEY
     fi
     cat > ${composeFile} <<EOF
+caas-mock:
+    image: $DOCKER_IMAGE_CAAS_MOCK:$DOCKER_TAG_CAAS_MOCK
+    dns: $PRIVATE_IP
+    restart: always
+    environment:
+      - USERNAME=$UAA_DEFAULT_USER
+      - SERVICE_NAME=caas-mock
+    volumes:
+      - $CAAS_MOCK_VOLUME_HOST:$CAAS_MOCK_VOLUME_CONTAINER
+    ports: 
+      - "$CAAS_MOCK_BIND_PORT:8080"
+    labels:
+      - traefik.frontend.rule=PathPrefix:/auth,/oidc,/idp,/caas/api
+      - traefik.port=8080
+      - traefik.backend=caas-backend
+      - traefik.frontend.priority=5
+      
 traefik:
     ports:
         - "$PRIVATE_IP:8081:8080"
@@ -224,6 +250,7 @@ traefik:
         - identity
         - sultans
         - uluwatu
+        - caas-mock
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock
         - $CBD_CERT_ROOT_PATH/traefik:/certs/traefik
@@ -371,7 +398,7 @@ $COMMON_DB:
 
 vault:
     labels:
-      - traefik.port=$VAULT_BIND_PORT
+      - traefik.port=8200
       - traefik.frontend.rule=PathPrefixStrip:/vault
       - traefik.backend=vault
       - traefik.frontend.priority=10
@@ -498,9 +525,10 @@ uluwatu:
         - AZURE_SUBSCRIPTION_ID
         - AWS_ACCESS_KEY_ID
         - AWS_SECRET_ACCESS_KEY
+        - CAAS_ENABLED=true
     labels:
-      - traefik.port=3000
       - traefik.frontend.rule=Host:$PUBLIC_IP,$CB_TRAEFIK_HOST_ADDRESS
+      - traefik.port=3000
       - traefik.backend=uluwatu-backend
       - traefik.frontend.priority=5
     ports:
@@ -643,6 +671,7 @@ cloudbreak:
         - VAULT_ADDR=vault.service.consul
         - VAULT_PORT=$VAULT_BIND_PORT
         - VAULT_ROOT_TOKEN=$VAULT_ROOT_TOKEN
+        - "CAAS_URL=$CAAS_URL"
     labels:
       - traefik.port=8080
       - traefik.frontend.rule=PathPrefix:/cb/
@@ -663,7 +692,7 @@ cloudbreak:
         max-file: "5"
     image: $DOCKER_IMAGE_CLOUDBREAK:$DOCKER_TAG_CLOUDBREAK
     command: bash
-
+    
 periscope:
     environment:
         - http_proxy=$HTTP_PROXY

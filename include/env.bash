@@ -58,6 +58,8 @@ AWS_ROLE_NAME - Name of the AWS role for the `cbd aws [generate-rol, show role]`
 AWS_SECRET_ACCESS_KEY - Secret access key of the AWS account
 AZURE_SUBSCRIPTION_ID - Azure subscription ID for interactive login in Web UI
 AZURE_TENANT_ID - Azure tenant ID for interactive login in Web UI
+CAAS_URL - CAAS API container address with port
+CAAS_DB_PASS - Password of dps database user
 CAPTURE_CRON_EXPRESSION - SmartSense bundle generation time interval in Cron format
 CBD_CERT_ROOT_PATH - Path where deployer stores Cloudbreak certificates
 CBD_LOG_NAME - Name of the Cloudbreak log file
@@ -131,6 +133,7 @@ DB_DUMP_VOLUME - Name of the database dump volume
 DB_MIGRATION_LOG - Database migration log file
 DOCKER_CONSUL_OPTIONS - Extra options for Consul
 DOCKER_IMAGE_CBD_SMARTSENSE - SmartSense Docker image name
+DOCKER_IMAGE_CAAS_MOCK - Caas mock image name
 DOCKER_IMAGE_CLOUDBREAK - Cloudbreak Docker image name
 DOCKER_IMAGE_CLOUDBREAK_AUTH - Authentication service Docker image name
 DOCKER_IMAGE_CLOUDBREAK_PERISCOPE - Autoscale Docker image name
@@ -139,6 +142,7 @@ DOCKER_TAG_ALPINE - Alpine container version
 DOCKER_TAG_CBD_SMARTSENSE - SmartSense container version
 DOCKER_TAG_CERT_TOOL - Cert tool container version
 DOCKER_TAG_CLOUDBREAK - Cloudbreak container version
+DOCKER_TAG_CAAS_MOCK - Caas mock image name
 DOCKER_TAG_CONSUL - Consul container version
 DOCKER_TAG_HAVEGED - Haveged container version
 DOCKER_TAG_MIGRATION - Migration container version
@@ -202,6 +206,7 @@ UAA_ULUWATU_ID - Identity of the Web UI scope in Identity
 UAA_ULUWATU_SECRET - Secret of the Web UI scope in Identity
 UAA_ZONE_DOMAIN - External domain name for zone in Identity
 ULUWATU_CONTAINER_PATH - Default project location in Web UI container
+CAAS_MOCK_CONTAINER_PATH - Default project location in Caas mock container
 ULU_DEFAULT_SSH_KEY - Default SSH key for the credentials in Cloudbreak
 ULU_HOST_ADDRESS - Web UI host
 ULU_NODE_TLS_REJECT_UNAUTHORIZED - Enables self signed certifications in Web UI
@@ -210,6 +215,7 @@ ULU_SUBSCRIBE_TO_NOTIFICATIONS - Flag for automatic subscriptions for CLoudbreak
 ULU_SULTANS_ADDRESS - Authentication service address
 VERBOSE_MIGRATION - Flag of verbose database migration
 VAULT_BIND_PORT - Bind Port for Vault
+CAAS_MOCK_BIND_PORT - Bind Port for Caas Mock
 VAULT_CONFIG_FILE - Name of the config file that will be created for Vault
 VAULT_DB_SCHEMA - Postgres DB name for storing the secrets
 VAULT_DOCKER_IMAGE - Vault Docker image name
@@ -227,6 +233,7 @@ REMOVE_CONTAINER - Keeps side effect containers for debug purpose
 SULTANS_VOLUME_HOST - Location of the locally developed Authentication service project
 UAA_SCHEMA_SCRIPTS_LOCATION - Location of Identity schema update files
 ULUWATU_VOLUME_HOST - Location of the locally developed Web UI project
+CAAS_MOCK_VOLUME_HOST - Location of the locally developed Caas mock
 
 DOCKER_MACHINE - Name of the Docker Machine where Cloudbreak runs
 COMPOSE_TLS_VERSION - TLS version used by Docker Compose
