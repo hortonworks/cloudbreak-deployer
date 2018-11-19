@@ -1,5 +1,6 @@
 cloudbreak-conf-vault() {
     env-import VAULT_BIND_PORT "8200"
+    env-import CAAS_MOCK_BIND_PORT "10080"
     env-import VAULT_CONFIG_FILE "vault-config.hcl"
     env-import VAULT_DB_SCHEMA "vault"
     env-import VAULT_DOCKER_IMAGE "vault"
