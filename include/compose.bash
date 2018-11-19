@@ -733,6 +733,7 @@ periscope:
         - VAULT_ADDR=vault.service.consul
         - VAULT_PORT=$VAULT_BIND_PORT
         - VAULT_ROOT_TOKEN=$VAULT_ROOT_TOKEN
+        - "CAAS_URL=$CAAS_URL"
     labels:
       - traefik.port=8080
       - traefik.frontend.rule=PathPrefix:/as/
