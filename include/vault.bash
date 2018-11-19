@@ -84,6 +84,7 @@ EOF
 start_vault() {
     compose-up --no-recreate consul
     compose-up --no-recreate registrator
+    consul-wait
     compose-up --no-recreate vault
 }
 

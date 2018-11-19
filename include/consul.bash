@@ -23,3 +23,26 @@ cloudbreak-delete-consul-data() {
     fi
     docker volume rm consul-data 1>/dev/null || :
 }
+
+consul-wait() {
+    cloudbreak-config
+
+    local maxtry=${RETRY:=30}
+    while  [[ -z $(get-consul-leader) ]]; do
+        debug "Waiting for Consul to start [tries left: $maxtry]."
+        maxtry=$((maxtry-1))
+        if [[ $maxtry -gt 0 ]]; then
+            sleep 1;
+        else
+            error "Consul did not start within 30 seconds."
+            _exit 1
+        fi
+    done
+}
+
+get-consul-leader() {
+    declare desc="Returns the consul leader"
+    status=$(docker exec cbreak_consul_1 sh -c 'curl localhost:8500/v1/status/leader 2>/dev/null')
+    debug "Consul leader status: $status"
+    echo "$status" | jq . -r
+}
