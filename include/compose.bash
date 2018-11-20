@@ -293,15 +293,16 @@ consul:
         - consul-data:/data
     ports:
         - "$PRIVATE_IP:53:8600/udp"
+        - "8300:8300"
         - "8400:8400"
         - "8500:8500"
     hostname: node1
     log_opt:
         max-size: "10M"
         max-file: "5"
-    image: gliderlabs/consul-server:$DOCKER_TAG_CONSUL
+    image: $DOCKER_IMAGE_CONSUL:$DOCKER_TAG_CONSUL
     container_name: ${CB_COMPOSE_PROJECT}_consul_1
-    command: --bootstrap --advertise $PRIVATE_IP $DOCKER_CONSUL_OPTIONS
+    command: agent -server -client 0.0.0.0 -advertise=$PRIVATE_IP -bootstrap -ui $DOCKER_CONSUL_OPTIONS
 
 registrator:
     labels:

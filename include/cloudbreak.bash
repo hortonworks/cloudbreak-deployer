@@ -35,7 +35,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_ALPINE 3.8
     env-import DOCKER_TAG_HAVEGED 1.1.0
     env-import DOCKER_TAG_TRAEFIK v1.6.6-alpine
-    env-import DOCKER_TAG_CONSUL 0.5
+    env-import DOCKER_TAG_CONSUL 1.4.0
     env-import DOCKER_TAG_REGISTRATOR v7
     env-import DOCKER_TAG_POSTFIX latest
     env-import DOCKER_TAG_UAA 3.6.5-pgupdate
@@ -52,6 +52,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_LOGROTATE 1.0.1
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.2
 
+    env-import DOCKER_IMAGE_CONSUL consul
     env-import DOCKER_IMAGE_CAAS_MOCK hortonworks/cloudbreak-mock-caas
     env-import DOCKER_IMAGE_CLOUDBREAK hortonworks/cloudbreak
     env-import DOCKER_IMAGE_CLOUDBREAK_WEB hortonworks/hdc-web
