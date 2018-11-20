@@ -3,7 +3,7 @@ cloudbreak-config() {
   : ${BRIDGE_IP:=$(docker run --rm --name=cbreak_cbd_bridgeip --label cbreak.sidekick=true alpine sh -c 'ip ro | grep default | cut -d" " -f 3')}
   env-import PRIVATE_IP $BRIDGE_IP
   env-import DOCKER_MACHINE ""
-  env-import COMPOSE_TLS_VERSION "TLSv1_2"
+  compose-config
   cloudbreak-conf-tags
   cloudbreak-conf-images
   cloudbreak-conf-capabilities
@@ -21,6 +21,12 @@ cloudbreak-config() {
   cloudbreak-conf-vault
   cloudbreak-conf-caas
   migrate-config
+}
+
+compose-config() {
+    declare desc="Defines docker compose variables"
+
+    env-import COMPOSE_TLS_VERSION "TLSv1_2"
 }
 
 cloudbreak-conf-caas() {
