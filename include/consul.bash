@@ -8,7 +8,7 @@ consul-recursors() {
     debug "nameservers on host:\n$nameservers"
     if [[ "$nameservers" ]]; then
         debug bridge=$bridge
-        echo "$nameservers" | grep -v "$bridge\|$dockerIP" | sed -n '{s/^/ -recursor /;H;}; $ {x;s/[\n\r]//g;p}'
+        echo "$nameservers" | grep -v "$bridge\|$dockerIP" | sed -n '{s/^/ -recursor "/;s/$/"/;/:/s/"\(.*\)"/"[\1]"/;H;}; $ {x;s/[\n\r]//g;p}'
     else
         echo
     fi
