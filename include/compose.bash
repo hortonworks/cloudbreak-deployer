@@ -3,7 +3,7 @@ compose-init() {
         echo "* removing old docker-compose binary" | yellow
         rm -f .deps/bin/docker-compose
     fi
-    deps-require docker-compose 1.23.1
+    deps-require docker-compose 1.13.0
     env-import CB_COMPOSE_PROJECT cbreak
     env-import COMPOSE_HTTP_TIMEOUT 120
     env-import DOCKER_STOP_TIMEOUT 60
@@ -225,7 +225,6 @@ compose-generate-yaml-force() {
     cat > ${composeFile} <<EOF
 caas-mock:
     image: $DOCKER_IMAGE_CAAS_MOCK:$DOCKER_TAG_CAAS_MOCK
-    container_name: ${CB_COMPOSE_PROJECT}_caas-mock_1
     dns: $PRIVATE_IP
     restart: always
     environment:
@@ -260,7 +259,6 @@ traefik:
         max-size: "10M"
         max-file: "5"
     image: traefik:$DOCKER_TAG_TRAEFIK
-    container_name: ${CB_COMPOSE_PROJECT}_traefik_1
     restart: on-failure
     command: --debug --web --InsecureSkipVerify=true \
         --defaultEntryPoints=http,https \
@@ -279,7 +277,6 @@ haveged:
         max-size: "10M"
         max-file: "5"
     image: hortonworks/haveged:$DOCKER_TAG_HAVEGED
-    container_name: ${CB_COMPOSE_PROJECT}_haveged_1
 
 consul:
     labels:
@@ -301,7 +298,6 @@ consul:
         max-size: "10M"
         max-file: "5"
     image: $DOCKER_IMAGE_CONSUL:$DOCKER_TAG_CONSUL
-    container_name: ${CB_COMPOSE_PROJECT}_consul_1
     command: agent -server -client 0.0.0.0 -advertise=$PRIVATE_IP -bootstrap -ui $DOCKER_CONSUL_OPTIONS
 
 registrator:
@@ -314,7 +310,6 @@ registrator:
         max-size: "10M"
         max-file: "5"
     image: gliderlabs/registrator:$DOCKER_TAG_REGISTRATOR
-    container_name: ${CB_COMPOSE_PROJECT}_registrator_1
     links:
         - consul
     restart: on-failure
@@ -330,7 +325,6 @@ logsink:
     volumes:
         - ./logs:/tmp
     image: hortonworks/socat:1.0.0
-    container_name: ${CB_COMPOSE_PROJECT}_logsink_1
     log_opt:
         max-size: "10M"
         max-file: "5"
@@ -356,7 +350,6 @@ logspout:
         max-size: "10M"
         max-file: "5"
     image: hortonworks/logspout:v3.2.2
-    container_name: ${CB_COMPOSE_PROJECT}_logspout_1
 
 logrotate:
     environment:
@@ -369,7 +362,6 @@ logrotate:
         max-size: "10M"
         max-file: "5"
     image: hortonworks/logrotate:$DOCKER_TAG_LOGROTATE
-    container_name: ${CB_COMPOSE_PROJECT}_logrotate_1
 
 mail:
     labels:
@@ -386,12 +378,10 @@ mail:
         max-size: "10M"
         max-file: "5"
     image: catatnight/postfix:$DOCKER_TAG_POSTFIX
-    container_name: ${CB_COMPOSE_PROJECT}_mail_1
 
 $COMMON_DB:
     labels:
       - traefik.enable=false
-    container_name: ${CB_COMPOSE_PROJECT}_${COMMON_DB}_1
     privileged: true
     ports:
         - "$PRIVATE_IP:5432:5432"
@@ -422,7 +412,6 @@ vault:
       - ./$VAULT_CONFIG_FILE:/vault/config/$VAULT_CONFIG_FILE
     dns: $PRIVATE_IP
     image: $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG
-    container_name: ${CB_COMPOSE_PROJECT}_vault_1
     restart: on-failure
     command: server
 
@@ -451,7 +440,6 @@ identity:
         max-size: "10M"
         max-file: "5"
     image: hortonworks/cloudbreak-uaa:$DOCKER_TAG_UAA
-    container_name: ${CB_COMPOSE_PROJECT}_identity_1
 
 sultans:
     environment:
@@ -498,7 +486,6 @@ sultans:
         max-size: "10M"
         max-file: "5"
     image: $DOCKER_IMAGE_CLOUDBREAK_AUTH:$DOCKER_TAG_SULTANS
-    container_name: ${CB_COMPOSE_PROJECT}_sultans_1
 
 uluwatu:
     environment:
@@ -553,7 +540,6 @@ uluwatu:
         max-size: "10M"
         max-file: "5"
     image: $DOCKER_IMAGE_CLOUDBREAK_WEB:$DOCKER_TAG_ULUWATU
-    container_name: ${CB_COMPOSE_PROJECT}_uluwatu_1
 
 EOF
 
@@ -588,7 +574,6 @@ smartsense:
         max-size: "10M"
         max-file: "5"
     image: $DOCKER_IMAGE_CBD_SMARTSENSE:$DOCKER_TAG_CBD_SMARTSENSE
-    container_name: ${CB_COMPOSE_PROJECT}_smartsense_1
 
 EOF
     fi
@@ -706,7 +691,6 @@ cloudbreak:
         max-size: "10M"
         max-file: "5"
     image: $DOCKER_IMAGE_CLOUDBREAK:$DOCKER_TAG_CLOUDBREAK
-    container_name: ${CB_COMPOSE_PROJECT}_cloudbreak_1
     command: bash
     
 periscope:
@@ -766,7 +750,6 @@ periscope:
         max-size: "10M"
         max-file: "5"
     image: $DOCKER_IMAGE_CLOUDBREAK_PERISCOPE:$DOCKER_TAG_PERISCOPE
-    container_name: ${CB_COMPOSE_PROJECT}_periscope_1
 EOF
     fi
 }
