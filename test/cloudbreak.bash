@@ -8,8 +8,7 @@ T_consulRecursorOneValid() {
 nameserver 4.4.4.4
 EOF
 ) 172.17.42.1)
-
-    local expected=" -recursor 4.4.4.4"
+    local expected=' -recursor "4.4.4.4"'
     [[ "$result" == "$expected" ]] || $T_fail "expected=\'$expected\' but actual=\'$result\'"
 }
 
@@ -21,7 +20,7 @@ nameserver 1.1.1.1
 EOF
 ) 172.17.42.1)
 
-    local expected=" -recursor 4.4.4.4 -recursor 1.1.1.1"
+    local expected=' -recursor "4.4.4.4" -recursor "1.1.1.1"'
     [[ "$result" == "$expected" ]] || $T_fail "expected=\'$expected\' but actual=\'$result\'"
 }
 
@@ -34,7 +33,7 @@ nameserver 1.1.1.1
 EOF
 ) 172.17.42.1)
 
-    local expected=" -recursor 1.2.3.4 -recursor 1.1.1.1"
+    local expected=' -recursor "1.2.3.4" -recursor "1.1.1.1"'
     [[ "$result" == "$expected" ]] || $T_fail "expected=\'$expected\' but actual=\'$result\'"
 }
 
@@ -47,8 +46,19 @@ nameserver 1.1.1.1
 EOF
 ) 172.17.42.1 192.168.59.103)
 
-    local expected=" -recursor 1.2.3.4 -recursor 1.1.1.1"
+    local expected=' -recursor "1.2.3.4" -recursor "1.1.1.1"'
     [[ "$result" == "$expected" ]] || $T_fail "expected=\'$expected\' but actual=\'$result\'"
 }
 
+T_consulRecursorWithIPV6Address() {
+    result=$(consul-recursors <(cat <<EOF
+domain local
+nameserver 2a02:ab88:42:3f00:20b:ff:fe00:add0
+nameserver 192.168.0.1
+EOF
+) 172.17.42.1 192.168.59.103)
+
+    local expected=' -recursor "[2a02:ab88:42:3f00:20b:ff:fe00:add0]" -recursor "192.168.0.1"'
+    [[ "$result" == "$expected" ]] || $T_fail "expected=\'$expected\' but actual=\'$result\'"
+}
 
