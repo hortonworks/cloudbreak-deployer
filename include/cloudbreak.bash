@@ -52,7 +52,6 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_PERISCOPE 2.10.0-dev.220
     env-import DOCKER_TAG_CLOUDBREAK 2.10.0-dev.220
     env-import DOCKER_TAG_ULUWATU 2.10.0-dev.220
-    env-import DOCKER_TAG_SULTANS 2.10.0-dev.220
 
     env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
     env-import DOCKER_TAG_LOGROTATE 1.0.1
@@ -171,10 +170,6 @@ cloudbreak-conf-uaa() {
     env-import UAA_ULUWATU_SECRET $UAA_DEFAULT_SECRET
     env-validate UAA_ULUWATU_SECRET *" "* "space"
 
-    env-import UAA_SULTANS_ID sultans
-    env-import UAA_SULTANS_SECRET $UAA_DEFAULT_SECRET
-    env-validate UAA_SULTANS_SECRET *" "* "space"
-
     env-import UAA_CLOUDBREAK_SHELL_ID cloudbreak_shell
 
     env-import UAA_DEFAULT_USER_EMAIL admin@example.com
@@ -263,11 +258,9 @@ cloudbreak-conf-rest-client() {
 }
 
 cloudbreak-conf-ui() {
-    declare desc="Defines Uluwatu and Sultans related parameters"
+    declare desc="Defines Uluwatu related parameters"
 
     env-import ULU_HOST_ADDRESS  "https://$PUBLIC_IP:$PUBLIC_HTTPS_PORT"
-    env-import ULU_OAUTH_REDIRECT_URI  "$ULU_HOST_ADDRESS/authorize"
-    env-import ULU_SULTANS_ADDRESS  "https://$PUBLIC_IP:$PUBLIC_HTTPS_PORT/sl"
     env-import CB_HOST_ADDRESS  "http://$PUBLIC_IP"
     env-import ULU_HWX_CLOUD_DEFAULT_CREDENTIAL ""
     env-import HWX_HCC_AVAILABLE "false"
@@ -419,12 +412,6 @@ oauth:
     autoapprove:
       - ${UAA_CLOUDBREAK_SHELL_ID}
   clients:
-    ${UAA_SULTANS_ID}:
-      id: ${UAA_SULTANS_ID}
-      secret: '$(escape-string-yaml $UAA_SULTANS_SECRET \')'
-      authorized-grant-types: client_credentials
-      scope: scim.read,scim.write,password.write
-      authorities: uaa.resource,scim.read,scim.write,password.write
     ${UAA_ULUWATU_ID}:
       id: ${UAA_ULUWATU_ID}
       secret: '$(escape-string-yaml $UAA_ULUWATU_SECRET \')'
@@ -473,48 +460,6 @@ EOF
 
     if [ -f "$UAA_SETTINGS_FILE" ]; then
         yq m -i -x ${uaaFile} ${UAA_SETTINGS_FILE}
-    fi
-}
-
-util-add-default-user() {
-    declare desc="Add default admin Cloudbreak user"
-    debug $desc
-
-    cloudbreak-config
-
-    local passwd="$UAA_DEFAULT_USER_PW"
-    if ! [[ "$passwd" ]]; then
-        read -s -t 10 -p "password:" passwd
-        echo
-    fi
-
-    local container=$(docker ps | grep cbreak_identity_ | cut -d" " -f 1)
-    if ! [[ "$container" ]];then
-        echo "[ERROR] Cloudbreak isn't running, please start it before adding new user" | red 1>&2
-        _exit 1
-    fi
-
-    local address="http://localhost:8080"
-    local bearer=$(docker exec -i $container curl -s "$address/oauth/token?grant_type=client_credentials&token_format=opaque" -u "${UAA_SULTANS_ID}:${UAA_SULTANS_SECRET}" | jq -r .access_token 2>/dev/null)
-    local json='{"userName":"'${UAA_DEFAULT_USER_EMAIL}'","name":{"familyName":"'${UAA_DEFAULT_USER_LASTNAME}'","givenName":"'${UAA_DEFAULT_USER_FIRSTNAME}'"},"emails":[{"value":"'${UAA_DEFAULT_USER_EMAIL}'","primary":true}],"password":"'$(escape-string-json $passwd)'","active":true,"verified":true,"schemas":["urn:scim:schemas:core:1.0"]}'
-    local user=$(docker exec -i $container  curl -s $address/Users -X POST -H 'Accept: application/json' -H "Authorization: Bearer $bearer" -H 'Content-Type: application/json' -d ''$json'' 2>/dev/null)
-    local existing_id=$(echo $user | jq -r .user_id 2> /dev/null)
-    if [[ "$existing_id" != "null" ]]; then
-        info "User already exists, nothing to do."
-        return
-    fi
-    local new_id=$(echo $user | jq -r .id 2> /dev/null)
-    if [[ "$new_id" != "null" ]]; then
-        local groups=$(docker exec -i $container  curl -s "$address/Groups" -H "Authorization: Bearer $bearer" | jq ".resources[] | {id, displayName}")
-        for group in ${UAA_DEFAULT_USER_GROUPS//,/ }; do
-            debug "Adding user to group $group"
-            group_id=$(echo $groups | jq . | grep -B2 -A1 '"'$group'"' | jq -r .id)
-            docker exec -i $container curl -s "$address/Groups/$group_id/members" -X POST -H "Authorization: Bearer $bearer" -H 'Content-Type: application/json' -d '{"origin":"uaa","type":"USER","value":"'$new_id'"}' &>/dev/null
-        done
-        info "Default user created."
-    else
-        echo "[ERROR] ${user}" | red 1>&2
-        _exit 1
     fi
 }
 
