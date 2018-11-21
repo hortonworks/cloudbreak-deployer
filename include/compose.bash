@@ -11,7 +11,7 @@ compose-init() {
     env-import ULUWATU_VOLUME_HOST /dev/null
     env-import ULUWATU_CONTAINER_PATH /hortonworks-cloud-web
     env-import CAAS_MOCK_VOLUME_HOST /dev/null
-    env-import CAAS_MOCK_CONTAINER_PATH /caas-mock
+    env-import CAAS_MOCK_CONTAINER_PATH /mock-caas.jar
 
     if [[ "$ULUWATU_VOLUME_HOST" != "/dev/null" ]]; then
       ULUWATU_VOLUME_CONTAINER=${ULUWATU_CONTAINER_PATH}
