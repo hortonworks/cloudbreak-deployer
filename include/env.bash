@@ -59,7 +59,6 @@ AWS_SECRET_ACCESS_KEY - Secret access key of the AWS account
 AZURE_SUBSCRIPTION_ID - Azure subscription ID for interactive login in Web UI
 AZURE_TENANT_ID - Azure tenant ID for interactive login in Web UI
 CAAS_URL - CAAS API container address with port
-CAAS_DB_PASS - Password of dps database user
 CAPTURE_CRON_EXPRESSION - SmartSense bundle generation time interval in Cron format
 CBD_CERT_ROOT_PATH - Path where deployer stores Cloudbreak certificates
 CBD_LOG_NAME - Name of the Cloudbreak log file
@@ -151,7 +150,6 @@ DOCKER_TAG_POSTFIX - Postfix container version
 DOCKER_TAG_POSTGRES - Postgresql container version
 DOCKER_TAG_LOGROTATE - Logrotate container version
 DOCKER_TAG_REGISTRATOR - Registrator container version
-DOCKER_TAG_SULTANS - Authentication service container version
 DOCKER_TAG_TRAEFIK - Traefik container version
 DOCKER_TAG_UAA - Identity container version
 DOCKER_TAG_ULUWATU - Web UI container version
@@ -181,7 +179,6 @@ PUBLIC_IP - Ip address or hostname of the public interface
 REST_DEBUG - Enables REST call debug level in Cloudbreak and Autoscale
 SL_ADDRESS_RESOLVING_TIMEOUT - DNS lookup timeout of Authentication service for internal service discovery
 SL_NODE_TLS_REJECT_UNAUTHORIZED - Enables self signed certifications in Authentication service
-SULTANS_CONTAINER_PATH - Default project location in Authentication service container
 TRAEFIK_MAX_IDLE_CONNECTION - Configures --maxidleconnsperhost for Traefik
 PUBLIC_HTTP_PORT - Configures the public http port for Cloudbreak
 PUBLIC_HTTPS_PORT - Configures the public https port for Cloudbreak
@@ -200,8 +197,6 @@ UAA_FLEX_USAGE_CLIENT_SECRET - Secret of the Flex usage generator scope in Ident
 UAA_PERISCOPE_ID - Identity of the Autoscale scope in Identity
 UAA_PERISCOPE_SECRET - Secret of the Autoscale scope in Identity
 UAA_PORT - Identity service public port
-UAA_SULTANS_ID - Identity of the Authentication service scope in Identity
-UAA_SULTANS_SECRET - Secret of the Authentication service scope in Identity
 UAA_ULUWATU_ID - Identity of the Web UI scope in Identity
 UAA_ULUWATU_SECRET - Secret of the Web UI scope in Identity
 UAA_ZONE_DOMAIN - External domain name for zone in Identity
@@ -212,7 +207,6 @@ ULU_HOST_ADDRESS - Web UI host
 ULU_NODE_TLS_REJECT_UNAUTHORIZED - Enables self signed certifications in Web UI
 ULU_OAUTH_REDIRECT_URI - Authorization page on Web UI
 ULU_SUBSCRIBE_TO_NOTIFICATIONS - Flag for automatic subscriptions for CLoudbreak events
-ULU_SULTANS_ADDRESS - Authentication service address
 VERBOSE_MIGRATION - Flag of verbose database migration
 VAULT_BIND_PORT - Bind Port for Vault
 CAAS_MOCK_BIND_PORT - Bind Port for Caas Mock
@@ -230,7 +224,6 @@ DOCKER_TAG_AMBASSADOR - Ambassador container version for local development
 PERISCOPE_SCHEMA_SCRIPTS_LOCATION - Location of Cloudbreak schema update files
 PRIVATE_IP - Ip address or hostname of the private interface
 REMOVE_CONTAINER - Keeps side effect containers for debug purpose
-SULTANS_VOLUME_HOST - Location of the locally developed Authentication service project
 UAA_SCHEMA_SCRIPTS_LOCATION - Location of Identity schema update files
 ULUWATU_VOLUME_HOST - Location of the locally developed Web UI project
 CAAS_MOCK_VOLUME_HOST - Location of the locally developed Caas mock
