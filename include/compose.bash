@@ -61,8 +61,13 @@ compose-up() {
 compose-kill() {
     declare desc="Kills and removes all cloudbreak related container"
 
+    compose-config
+
     dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT}
     dockerCompose rm -f
+
+    docker rm -f cloudbreak-proxy 2> /dev/null || :
+    docker rm -f periscope-proxy 2> /dev/null || :
 }
 
 util-cleanup() {
