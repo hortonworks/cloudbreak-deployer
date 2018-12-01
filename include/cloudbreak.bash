@@ -211,7 +211,7 @@ cloudbreak-conf-defaults() {
     env-import CB_MAX_SALT_NEW_SERVICE_RETRY 90
     env-import CB_MAX_SALT_NEW_SERVICE_RETRY_ONERROR 10
     env-import CB_MAX_SALT_RECIPE_EXECUTION_RETRY 90
-    env-import CB_LOG_LEVEL "INFO"
+    env-import CB_LOG_LEVEL "DEBUG"
     env-import CB_PORT 8080
 
     env-import CB_INSTANCE_UUID
@@ -229,7 +229,7 @@ cloudbreak-conf-defaults() {
 }
 
 cloudbreak-conf-autscale() {
-    env-import PERISCOPE_LOG_LEVEL "INFO"
+    env-import PERISCOPE_LOG_LEVEL "DEBUG"
 }
 
 cloudbreak-conf-cloud-provider() {
