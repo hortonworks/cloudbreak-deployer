@@ -232,7 +232,7 @@ caas-mock:
     ports: 
       - "$CAAS_MOCK_BIND_PORT:8080"
     labels:
-      - traefik.frontend.rule=PathPrefix:/auth,/oidc,/idp,/caas/api
+      - traefik.frontend.rule=PathPrefix:/auth,/oidc,/idp,/caas
       - traefik.port=8080
       - traefik.backend=caas-backend
       - traefik.frontend.priority=5
