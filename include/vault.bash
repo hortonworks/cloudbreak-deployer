@@ -4,7 +4,7 @@ cloudbreak-conf-vault() {
     env-import VAULT_CONFIG_FILE "vault-config.hcl"
     env-import VAULT_DB_SCHEMA "vault"
     env-import VAULT_DOCKER_IMAGE "vault"
-    env-import VAULT_DOCKER_IMAGE_TAG "1.0.0"
+    env-import VAULT_DOCKER_IMAGE_TAG "1.0.1"
     env-import VAULT_UNSEAL_KEYS ""
     env-import VAULT_AUTO_UNSEAL "false"
     env-import VAULT_ROOT_TOKEN ""
