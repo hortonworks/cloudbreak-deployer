@@ -55,7 +55,7 @@ cloudbreak-conf-tags() {
     
     env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
     env-import DOCKER_TAG_LOGROTATE 1.0.1
-    env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.2
+    env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.3
 
     env-import DOCKER_IMAGE_CONSUL consul
     env-import DOCKER_IMAGE_CAAS_MOCK hortonworks/cloudbreak-mock-caas

@@ -14,6 +14,8 @@ util-execute-ldap-mapping() {
   declare desc="Generates and automatically applies the changes in identity to map LDAP/AD groups to Cloudbreak defined OAuth2 scopes"
   debug $desc
 
+  exit-on-remote-database uaadb
+
   local mapping_file="$TEMP_DIR/mapping-delme.yml"
   generate-ldap-mapping "$1" "$mapping_file"
   info "Applying LDAP/AD mapping"
@@ -26,6 +28,8 @@ util-execute-ldap-mapping() {
 util-delete-ldap-mapping() {
   declare desc="Removes all the LDAP/AD group mappings to OAuth2 scopes"
   debug $desc
+
+  exit-on-remote-database uaadb
 
   local container=$(docker ps | grep cbreak_${COMMON_DB}_ | cut -d" " -f 1)
     if ! [[ "$container" ]]; then
@@ -40,6 +44,8 @@ util-delete-ldap-mapping() {
 }
 
 generate-ldap-mapping() {
+  exit-on-remote-database uaadb
+  
  if [[ -z "$1" ]]; then
     error "LDAP/AD group DN parameter must be provided (e.g: CN=cloudbreak,CN=Users,DC=ad,DC=mycompany,DC=com)"
     _exit 1

@@ -64,3 +64,26 @@ remove-variable-from-profile() {
     cat $CBD_PROFILE | grep -v "export ${1}=" > $tmp
     mv $tmp $CBD_PROFILE
 }
+
+exit-on-remote-database() {
+    case $1 in
+    cbdb*)
+        db="$CB_DB_PORT_5432_TCP_ADDR"
+    ;;
+    periscopedb*)
+        db="$PERISCOPE_DB_PORT_5432_TCP_ADDR"
+    ;;
+    uaadb*)
+        db="$IDENTITY_DB_URL"
+    ;;
+    *)
+        error "Database not supported $1"
+        _exit 235
+    ;;
+    esac
+
+    if [[ -n "$db" ]] && [[ $db != "$COMMON_DB.service.consul"* ]]; then
+        error "Remote database not supported as $1"
+        _exit 543
+    fi
+}
