@@ -429,6 +429,8 @@ cloudbreak:
     environment:
         - AWS_ACCESS_KEY_ID
         - AWS_SECRET_ACCESS_KEY
+        - AWS_GOV_ACCESS_KEY_ID
+        - AWS_GOV_SECRET_ACCESS_KEY
         - "SERVICE_NAME=cloudbreak"
           #- SERVICE_CHECK_HTTP=/info
         - "http_proxy=$HTTP_PROXY"
@@ -441,6 +443,8 @@ cloudbreak:
         - CB_BLUEPRINT_INTERNAL
         - CB_TEMPLATE_DEFAULTS
         - CB_HBM2DDL_STRATEGY
+        - CB_CAPABILITIES
+        $( if [[ -n "$INFO_APP_CAPABILITIES" ]]; then echo "- INFO_APP_CAPABILITIES"; fi )
         - "CB_SMTP_SENDER_USERNAME=$CLOUDBREAK_SMTP_SENDER_USERNAME"
         - 'CB_SMTP_SENDER_PASSWORD=$(escape-string-compose-yaml $CLOUDBREAK_SMTP_SENDER_PASSWORD \')'
         - "CB_SMTP_SENDER_HOST=$CLOUDBREAK_SMTP_SENDER_HOST"
@@ -487,7 +491,7 @@ cloudbreak:
         - CB_AWS_DEFAULT_INBOUND_SECURITY_GROUP
         - CB_AWS_VPC
         - CB_ENABLEDPLATFORMS
-        - "CB_ENABLED_LINUX_TYPES=redhat6,redhat7,centos6,centos7,amazonlinux"
+        - CB_ENABLED_LINUX_TYPES
         - CB_MAX_SALT_NEW_SERVICE_RETRY
         - CB_MAX_SALT_NEW_SERVICE_RETRY_ONERROR
         - CB_MAX_SALT_RECIPE_EXECUTION_RETRY
@@ -501,6 +505,10 @@ cloudbreak:
         - CB_COMPONENT_CLUSTER_ID
         - CB_LOG_LEVEL
         - CB_DEFAULT_GATEWAY_CIDR
+        $( if [[ "$CB_AUDIT_FILE_ENABLED" = true ]]; then echo "- CB_AUDIT_FILEPATH=/cloudbreak-log/cb-audit.log"; fi )
+        $( if [[ -n "$CB_KAFKA_BOOTSTRAP_SERVERS" ]]; then echo "- CB_KAFKA_BOOTSTRAP_SERVERS"; fi )
+        - CB_DISABLE_SHOW_CLI
+        - CB_DISABLE_SHOW_BLUEPRINT
         - SMARTSENSE_UPLOAD_HOST
         - SMARTSENSE_UPLOAD_USERNAME
         - SMARTSENSE_UPLOAD_PASSWORD
