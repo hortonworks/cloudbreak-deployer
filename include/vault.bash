@@ -140,6 +140,8 @@ init_vault() {
             warn "export VAULT_AUTO_UNSEAL=true"
             warn "export VAULT_UNSEAL_KEYS=$unsealKeys"
         fi
+        load-profile
+        deployer-regenerate
     else
         debug "Vault is already initialized"
         if [[ "$VAULT_AUTO_UNSEAL" == "true" ]]; then

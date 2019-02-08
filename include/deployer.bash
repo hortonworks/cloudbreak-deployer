@@ -576,8 +576,6 @@ start-requested-services() {
 
     if [[ "$services" == *"vault"* ]]; then
         init_vault
-        load-profile
-        deployer-regenerate
     fi
 
     compose-up $services
