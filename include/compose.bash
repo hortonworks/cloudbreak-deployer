@@ -360,22 +360,6 @@ logrotate:
         max-file: "5"
     image: hortonworks/logrotate:$DOCKER_TAG_LOGROTATE
 
-mail:
-    labels:
-      - traefik.enable=false
-    ports:
-        - "$PRIVATE_IP:25:25"
-    environment:
-        - SERVICE_NAME=smtp
-        - maildomain=example.com
-        - 'smtp_user=admin:$(escape-string-compose-yaml $LOCAL_SMTP_PASSWORD \')'
-    entrypoint: ["/bin/sh"]
-    command: -c '/opt/install.sh; (/usr/bin/supervisord -c /etc/supervisor/supervisord.conf) & SUPERVISORDPID="\$\$!"; trap "kill \$\$SUPERVISORDPID; wait \$\$SUPERVISORDPID" INT TERM; wait \$\$SUPERVISORDPID'
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: catatnight/postfix:$DOCKER_TAG_POSTFIX
-
 $COMMON_DB:
     labels:
       - traefik.enable=false
@@ -514,11 +498,6 @@ cloudbreak:
         - CB_HBM2DDL_STRATEGY
         - CB_CAPABILITIES
         $( if [[ -n "$INFO_APP_CAPABILITIES" ]]; then echo "- INFO_APP_CAPABILITIES"; fi )
-        - "CB_SMTP_SENDER_USERNAME=$CLOUDBREAK_SMTP_SENDER_USERNAME"
-        - 'CB_SMTP_SENDER_PASSWORD=$(escape-string-compose-yaml $CLOUDBREAK_SMTP_SENDER_PASSWORD \')'
-        - "CB_SMTP_SENDER_HOST=$CLOUDBREAK_SMTP_SENDER_HOST"
-        - "CB_SMTP_SENDER_PORT=$CLOUDBREAK_SMTP_SENDER_PORT"
-        - "CB_SMTP_SENDER_FROM=$CLOUDBREAK_SMTP_SENDER_FROM"
         - "ENDPOINTS_AUTOCONFIG_ENABLED=false"
         - "ENDPOINTS_DUMP_ENABLED=false"
         - "ENDPOINTS_TRACE_ENABLED=false"
@@ -536,9 +515,6 @@ cloudbreak:
         - CB_DB_ENV_DB
         - CB_DB_ENV_SCHEMA
         - "CB_DB_SERVICEID=$COMMON_DB.service.consul"
-        - "CB_MAIL_SMTP_AUTH=$CLOUDBREAK_SMTP_AUTH"
-        - "CB_MAIL_SMTP_STARTTLS_ENABLE=$CLOUDBREAK_SMTP_STARTTLS_ENABLE"
-        - "CB_MAIL_SMTP_TYPE=$CLOUDBREAK_SMTP_TYPE"
         - CB_SCHEMA_SCRIPTS_LOCATION
         - CB_SCHEMA_MIGRATION_AUTO
         - "SPRING_CLOUD_CONSUL_HOST=consul.service.consul"

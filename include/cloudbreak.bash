@@ -12,7 +12,6 @@ cloudbreak-config() {
   cloudbreak-conf-defaults
   cloudbreak-conf-autscale
   cloudbreak-conf-uaa
-  cloudbreak-conf-smtp
   cloudbreak-conf-cloud-provider
   cloudbreak-conf-rest-client
   cloudbreak-conf-ui
@@ -95,23 +94,6 @@ cloudbreak-conf-capabilities() {
     env-import CB_CAPABILITIES ""
     CB_CAPABILITIES=$(echo $CB_CAPABILITIES | awk '{print toupper($0)}')
     env-import INFO_APP_CAPABILITIES "$CB_CAPABILITIES"
-}
-
-cloudbreak-conf-smtp() {
-    env-import LOCAL_SMTP_PASSWORD "$UAA_DEFAULT_USER_PW"
-    if ! [[ "$LOCAL_SMTP_PASSWORD" ]]; then
-        LOCAL_SMTP_PASSWORD="cloudbreak"
-    fi
-
-    env-import CLOUDBREAK_SMTP_SENDER_USERNAME "admin"
-    env-import CLOUDBREAK_SMTP_SENDER_PASSWORD "$LOCAL_SMTP_PASSWORD"
-    env-import CLOUDBREAK_SMTP_SENDER_HOST "smtp.service.consul"
-    env-import CLOUDBREAK_SMTP_SENDER_PORT 25
-    env-import CLOUDBREAK_SMTP_SENDER_FROM "noreply@hortonworks.com"
-    env-import CLOUDBREAK_SMTP_AUTH "true"
-    env-import CLOUDBREAK_SMTP_STARTTLS_ENABLE "false"
-    env-import CLOUDBREAK_SMTP_TYPE "smtp"
-    env-import CLOUDBREAK_TELEMETRY_MAIL_ADDRESS "aws-marketplace@hortonworks.com"
 }
 
 cloudbreak-conf-db() {
