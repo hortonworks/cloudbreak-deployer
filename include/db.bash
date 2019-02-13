@@ -1,4 +1,4 @@
-db-init() {
+db-config() {
     cloudbreak-conf-tags
     cloudbreak-conf-db
     migrate-config
@@ -7,6 +7,8 @@ db-init() {
 db-dump() {
     declare desc="Dumping the specified database"
     declare dbName=${1:-all}
+
+    db-config
 
     env-import COMPOSE_TLS_VERSION "TLSv1_2"
 
@@ -125,6 +127,8 @@ db-restore() {
     declare dbName=${1:? required: dbName}
     declare dumpFilePath=${2:? required: dumpFilePath}
     info "Restoring database: $dbName from dump, file: $dumpFilePath"
+
+    db-config
 
     migrate-startdb
     db-wait-for-db-cont cbreak_${COMMON_DB}_1

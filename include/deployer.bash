@@ -660,7 +660,6 @@ main() {
     if is_macos; then
         machine-init
     fi
-    db-init
 
     debug "Cloudbreak Deployer $(bin-version)"
 

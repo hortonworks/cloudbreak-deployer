@@ -111,6 +111,33 @@ execute-migration() {
         migrate-one-db periscopedb up
         migrate-one-db periscopedb pending
     else
+        if [[ "$2" == "new" ]] && [[ "$CB_LOCAL_DEV" == "true" ]]; then
+            case $1 in
+                cbdb)
+                    if [ "$CB_SCHEMA_SCRIPTS_LOCATION" = "container" ]; then
+                        migrateError "CB_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the cloudbreak project's schema location"
+                        _exit 127
+                    fi
+                    ;;
+                periscopedb)
+                    if [ "$PERISCOPE_SCHEMA_SCRIPTS_LOCATION" = "container" ]; then
+                        migrateError "PERISCOPE_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the autoscale project's schema location"
+                        _exit 127
+                    fi
+                    ;;
+                uaadb)
+                    if [ "$UAA_SCHEMA_SCRIPTS_LOCATION" = "container" ]; then
+                        migrateError "UAA_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the identity project's schema location"
+                        _exit 127
+                    fi
+                    ;;
+                *)
+                    migrateError "Invalid database service name: $1. Supported databases: cbdb, periscopedb and uaadb"
+                    return 1
+                    ;;
+            esac
+        fi
+
         VERBOSE_MIGRATION=true
         migrate-one-db "$@"
     fi

@@ -492,11 +492,6 @@ util-local-dev() {
 
     cloudbreak-config
 
-    if [ "$CB_SCHEMA_SCRIPTS_LOCATION" = "container" ]; then
-      warn "CB_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the cloudbreak project's schema location"
-      _exit 127
-    fi
-
     debug stopping original cloudbreak container
     dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} cloudbreak 2> /dev/null || :
     dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} periscope 2> /dev/null || :
@@ -532,8 +527,4 @@ util-local-dev() {
             -l traefik.frontend.priority=10 \
             hortonworks/ambassadord:$DOCKER_TAG_AMBASSADOR $CB_LOCAL_DEV_BIND_ADDR:8085 &> /dev/null
     fi
-
-    create-migrate-log
-    migrate-one-db cbdb up
-    migrate-one-db periscopedb up
 }
