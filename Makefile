@@ -82,7 +82,7 @@ install: build ## Installs OS specific binary into: /usr/local/bin
 
 deps-bindata:
 ifeq ($(shell which go-bindata),)
-	go get -u github.com/jteeuwen/go-bindata/...
+	go get -u github.com/go-bindata/go-bindata/...
 endif
 
 deps: deps-bindata ## Installs required cli tools (only needed for new envs)
