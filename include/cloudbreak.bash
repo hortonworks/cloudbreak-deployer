@@ -51,6 +51,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_CAAS_MOCK 2.10.0-dev.543
     env-import DOCKER_TAG_PERISCOPE 2.10.0-dev.543
     env-import DOCKER_TAG_CLOUDBREAK 2.10.0-dev.543
+    env-import DOCKER_TAG_DATALAKE 2.10.0-dev.543
     env-import DOCKER_TAG_ULUWATU 2.10.0-dev.543
 
     env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
@@ -63,6 +64,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CLOUDBREAK_WEB hortonworks/hdc-web
     env-import DOCKER_IMAGE_CLOUDBREAK_AUTH hortonworks/hdc-auth
     env-import DOCKER_IMAGE_CLOUDBREAK_PERISCOPE hortonworks/cloudbreak-autoscale
+    env-import DOCKER_IMAGE__CLOUDBREAK_DATALAKE hortonworks/cloudbreak-datalake
     env-import DOCKER_IMAGE_CBD_SMARTSENSE hortonworks/cbd-smartsense
 
     env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu.service.consul:3000/notifications
@@ -495,10 +497,12 @@ util-local-dev() {
     debug stopping original cloudbreak container
     dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} cloudbreak 2> /dev/null || :
     dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} periscope 2> /dev/null || :
+    dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} datalake 2> /dev/null || :
 
     if is_macos; then
         docker rm -f cloudbreak-proxy 2> /dev/null || :
         docker rm -f periscope-proxy 2> /dev/null || :
+        docker rm -f datalake-proxy 2> /dev/null || :
 
         debug starting an ambassador to be registered as cloudbreak.service.consul.
         debug "all traffic to ambassador will be proxied to localhost"
@@ -526,5 +530,17 @@ util-local-dev() {
             -l traefik.backend=periscope-backend \
             -l traefik.frontend.priority=10 \
             hortonworks/ambassadord:$DOCKER_TAG_AMBASSADOR $CB_LOCAL_DEV_BIND_ADDR:8085 &> /dev/null
+
+        docker run -d \
+            --name datalake-proxy \
+            -p 8086:8086 \
+            -e PORT=8086 \
+            -e SERVICE_NAME=datalake \
+            -e SERVICE_8086_NAME=datalake \
+            -l traefik.port=8086 \
+            -l traefik.frontend.rule=PathPrefix:/dl/ \
+            -l traefik.backend=datalake-backend \
+            -l traefik.frontend.priority=10 \
+            hortonworks/ambassadord:$DOCKER_TAG_AMBASSADOR $CB_LOCAL_DEV_BIND_ADDR:8086 &> /dev/null
     fi
 }
