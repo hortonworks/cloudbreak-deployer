@@ -136,6 +136,7 @@ DOCKER_IMAGE_CAAS_MOCK - Caas mock image name
 DOCKER_IMAGE_CLOUDBREAK - Cloudbreak Docker image name
 DOCKER_IMAGE_CLOUDBREAK_AUTH - Authentication service Docker image name
 DOCKER_IMAGE_CLOUDBREAK_PERISCOPE - Autoscale Docker image name
+DOCKER_IMAGE__CLOUDBREAK_DATALAKE - Datalake Docker image name
 DOCKER_IMAGE_CLOUDBREAK_WEB - Web UI Docker image name
 DOCKER_TAG_ALPINE - Alpine container version
 DOCKER_TAG_CBD_SMARTSENSE - SmartSense container version
@@ -146,6 +147,7 @@ DOCKER_TAG_CONSUL - Consul container version
 DOCKER_TAG_HAVEGED - Haveged container version
 DOCKER_TAG_MIGRATION - Migration container version
 DOCKER_TAG_PERISCOPE - Autoscale container version
+DOCKER_TAG_DATALAKE - Datalake container version
 DOCKER_TAG_POSTFIX - Postfix container version
 DOCKER_TAG_POSTGRES - Postgresql container version
 DOCKER_TAG_LOGROTATE - Logrotate container version

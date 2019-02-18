@@ -68,6 +68,7 @@ compose-kill() {
 
     docker rm -f cloudbreak-proxy 2> /dev/null || :
     docker rm -f periscope-proxy 2> /dev/null || :
+    docker rm -f datalake-proxy 2> /dev/null || :
 }
 
 util-cleanup() {
@@ -604,6 +605,35 @@ cloudbreak:
         max-size: "10M"
         max-file: "5"
     image: $DOCKER_IMAGE_CLOUDBREAK:$DOCKER_TAG_CLOUDBREAK
+    command: bash
+
+datalake:
+    environment:
+        - http_proxy=$HTTP_PROXY
+        - https_proxy=$HTTPS_PROXY
+        - CERT_VALIDATION
+        - SERVICE_NAME=datalake
+        - REST_DEBUG
+        - 'DL_JAVA_OPTS=$(escape-string-compose-yaml "$DL_JAVA_OPTS" \')'
+    labels:
+        - traefik.port=8080
+        - traefik.frontend.rule=PathPrefix:/dl/
+        - traefik.backend=datalake-backend
+        - traefik.frontend.priority=10
+    ports:
+        - 8086:8080
+    volumes:
+        - "$CBD_CERT_ROOT_PATH:/certs"
+        - /dev/urandom:/dev/random
+        - ./logs/datalake:/datalake-log
+        - ./etc/:/etc/datalake
+    dns: $PRIVATE_IP
+    links:
+        - consul
+    log_opt:
+        max-size: "10M"
+        max-file: "5"
+    image: $DOCKER_IMAGE__CLOUDBREAK_DATALAKE:$DOCKER_TAG_DATALAKE
     command: bash
     
 periscope:
