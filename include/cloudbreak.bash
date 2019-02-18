@@ -64,7 +64,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CLOUDBREAK_WEB hortonworks/hdc-web
     env-import DOCKER_IMAGE_CLOUDBREAK_AUTH hortonworks/hdc-auth
     env-import DOCKER_IMAGE_CLOUDBREAK_PERISCOPE hortonworks/cloudbreak-autoscale
-    env-import DOCKER_IMAGE__CLOUDBREAK_DATALAKE hortonworks/cloudbreak-datalake
+    env-import DOCKER_IMAGE_CLOUDBREAK_DATALAKE hortonworks/cloudbreak-datalake
     env-import DOCKER_IMAGE_CBD_SMARTSENSE hortonworks/cbd-smartsense
 
     env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu.service.consul:3000/notifications
@@ -137,6 +137,12 @@ cloudbreak-conf-db() {
     env-import PERISCOPE_DB_ENV_SCHEMA "public"
     env-import PERISCOPE_HBM2DDL_STRATEGY "validate"
 
+    env-import DATALAKE_DB_ENV_USER "postgres"
+    env-import DATALAKE_DB_ENV_DB "datalakedb"
+    env-import DATALAKE_DB_ENV_PASS ""
+    env-import DATALAKE_DB_ENV_SCHEMA "public"
+    env-import DATALAKE_HBM2DDL_STRATEGY "validate"
+
     env-import IDENTITY_DB_URL "${COMMON_DB}.service.consul:5432"
     env-import IDENTITY_DB_NAME "uaadb"
     env-import IDENTITY_DB_USER "postgres"
@@ -167,6 +173,10 @@ cloudbreak-conf-uaa() {
     env-import UAA_PERISCOPE_ID periscope
     env-import UAA_PERISCOPE_SECRET $UAA_DEFAULT_SECRET
     env-validate UAA_PERISCOPE_SECRET *" "* "space"
+
+    env-import UAA_DATALAKE_ID datalake
+    env-import UAA_DATALAKE_SECRET $UAA_DEFAULT_SECRET
+    env-validate UAA_DATALAKE_SECRET *" "* "space"
 
     env-import UAA_ULUWATU_ID uluwatu
     env-import UAA_ULUWATU_SECRET $UAA_DEFAULT_SECRET

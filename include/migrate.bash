@@ -7,6 +7,8 @@ migrate-config() {
     env-import CB_SCHEMA_MIGRATION_AUTO true
     env-import PERISCOPE_SCHEMA_SCRIPTS_LOCATION "container"
     env-import PERISCOPE_SCHEMA_MIGRATION_AUTO true
+    env-import DATALAKE_SCHEMA_SCRIPTS_LOCATION "container"
+    env-import DATALAKE_SCHEMA_MIGRATION_AUTO true
     env-import UAA_SCHEMA_SCRIPTS_LOCATION "container"
     env-import DB_MIGRATION_LOG "db_migration.log"
     env-import VERBOSE_MIGRATION false
@@ -87,12 +89,16 @@ migrate-one-db() {
             local scripts_location=${PERISCOPE_SCHEMA_SCRIPTS_LOCATION}
             local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_PERISCOPE}:${DOCKER_TAG_PERISCOPE}
             ;;
+        datalakedb)
+            local scripts_location=${DATALAKE_SCHEMA_SCRIPTS_LOCATION}
+            local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_DATALAKE}:${DOCKER_TAG_DATALAKE}
+            ;;
         uaadb)
             local scripts_location=${UAA_SCHEMA_SCRIPTS_LOCATION}
             local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_AUTH}:${DOCKER_TAG_CLOUDBREAK}
             ;;
         *)
-            migrateError "Invalid database service name: $service_name. Supported databases: cbdb, periscopedb and uaadb"
+            migrateError "Invalid database service name: $service_name. Supported databases: cbdb, periscopedb, datalakedb and uaadb"
             return 1
             ;;
     esac
@@ -125,6 +131,12 @@ execute-migration() {
                         _exit 127
                     fi
                     ;;
+                datalakedb)
+                    if [ "$DATALAKE_SCHEMA_SCRIPTS_LOCATION" = "container" ]; then
+                        migrateError "DATALAKE_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the autoscale project's schema location"
+                        _exit 127
+                    fi
+                    ;;
                 uaadb)
                     if [ "$UAA_SCHEMA_SCRIPTS_LOCATION" = "container" ]; then
                         migrateError "UAA_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the identity project's schema location"
@@ -132,7 +144,7 @@ execute-migration() {
                     fi
                     ;;
                 *)
-                    migrateError "Invalid database service name: $1. Supported databases: cbdb, periscopedb and uaadb"
+                    migrateError "Invalid database service name: $1. Supported databases: cbdb, periscopedb, datalakedb and uaadb"
                     return 1
                     ;;
             esac
