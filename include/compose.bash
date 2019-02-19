@@ -614,7 +614,24 @@ datalake:
         - CERT_VALIDATION
         - SERVICE_NAME=datalake
         - REST_DEBUG
-        - 'DL_JAVA_OPTS=$(escape-string-compose-yaml "$DL_JAVA_OPTS" \')'
+        - 'DATALAKE_JAVA_OPTS=$(escape-string-compose-yaml "$DATALAKE_JAVA_OPTS" \')'
+        - DATALAKE_HBM2DDL_STRATEGY
+        - DATALAKE_DB_PORT_5432_TCP_ADDR
+        - DATALAKE_DB_PORT_5432_TCP_PORT
+        - DATALAKE_DB_ENV_USER
+        - DATALAKE_DB_ENV_PASS
+        - DATALAKE_DB_ENV_DB
+        - DATALAKE_DB_ENV_SCHEMA
+        - DATALAKE_CLIENT_ID=$UAA_DATALAKE_ID
+        - DATALAKE_HOSTNAME_RESOLUTION=public
+        - DATALAKE_ADDRESS_RESOLVING_TIMEOUT
+        - DATALAKE_DB_SERVICEID=$COMMON_DB.service.consul
+        - DATALAKE_CLOUDBREAK_SERVICEID=cloudbreak.service.consul
+        - DATALAKE_IDENTITY_SERVICEID=identity.service.consul
+        - DATALAKE_SCHEMA_SCRIPTS_LOCATION
+        - DATALAKE_SCHEMA_MIGRATION_AUTO
+        - DATALAKE_INSTANCE_NODE_ID=$CB_INSTANCE_NODE_ID
+        - DATALAKE_LOG_LEVEL
     labels:
         - traefik.port=8080
         - traefik.frontend.rule=PathPrefix:/dl/
@@ -633,7 +650,7 @@ datalake:
     log_opt:
         max-size: "10M"
         max-file: "5"
-    image: $DOCKER_IMAGE__CLOUDBREAK_DATALAKE:$DOCKER_TAG_DATALAKE
+    image: $DOCKER_IMAGE_CLOUDBREAK_DATALAKE:$DOCKER_TAG_DATALAKE
     command: bash
     
 periscope:

@@ -181,6 +181,8 @@ cbd-update-release() {
             db-dump $CB_DB_ENV_DB
             debug "Backing up $PERISCOPE_DB_ENV_DB"
             db-dump $PERISCOPE_DB_ENV_DB
+            debug "Backing up $DATALAKE_DB_ENV_DB"
+            db-dump $DATALAKE_DB_ENV_DB
             debug "Backing up $IDENTITY_DB_NAME"
             db-dump $IDENTITY_DB_NAME
         fi

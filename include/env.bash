@@ -128,6 +128,16 @@ COMMON_DB - Name of the database container
 COMMON_DB_VOL - Name of the database volume
 CURL_CONNECT_TIMEOUT - Timeout for curl command
 COMPOSE_HTTP_TIMEOUT - Docker Compose execution timeout
+DATALAKE_HBM2DDL_STRATEGY - Configures hibernate.hbm2ddl.auto in Datalake
+DATALAKE_DB_ENV_DB - Name of the Datalake database
+DATALAKE_DB_ENV_PASS - Password for the Datalake database authentication
+DATALAKE_DB_ENV_SCHEMA - Used schema in the Datalake database
+DATALAKE_DB_ENV_USER - User for the Datalake database authentication
+DATALAKE_DB_PORT_5432_TCP_ADDR - Address of the Datalake database
+DATALAKE_DB_PORT_5432_TCP_PORT - Port number of the Datalake database
+DATALAKE_LOG_LEVEL - Log level of the Datalake service
+DATALAKE_SCHEMA_MIGRATION_AUTO - Flag for Datalake automatic database schema update
+DATALAKE_SCHEMA_SCRIPTS_LOCATION - Location of Datalake schema update files
 DB_DUMP_VOLUME - Name of the database dump volume
 DB_MIGRATION_LOG - Database migration log file
 DOCKER_CONSUL_OPTIONS - Extra options for Consul
@@ -136,7 +146,7 @@ DOCKER_IMAGE_CAAS_MOCK - Caas mock image name
 DOCKER_IMAGE_CLOUDBREAK - Cloudbreak Docker image name
 DOCKER_IMAGE_CLOUDBREAK_AUTH - Authentication service Docker image name
 DOCKER_IMAGE_CLOUDBREAK_PERISCOPE - Autoscale Docker image name
-DOCKER_IMAGE__CLOUDBREAK_DATALAKE - Datalake Docker image name
+DOCKER_IMAGE_CLOUDBREAK_DATALAKE - Datalake Docker image name
 DOCKER_IMAGE_CLOUDBREAK_WEB - Web UI Docker image name
 DOCKER_TAG_ALPINE - Alpine container version
 DOCKER_TAG_CBD_SMARTSENSE - SmartSense container version
