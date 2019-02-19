@@ -458,6 +458,7 @@ deployer-delete() {
     declare desc="Deletes yaml files, and all dbs. You can use '--force' to avoid confirm dialog"
 
     compose-config
+    cloudbreak-conf-db
 
     if [[ "$1" != "--force" ]] ; then
         read -r -t 10 -p "Are you sure you would like to wipe all Cloudbreak related data? [y/N] " response
