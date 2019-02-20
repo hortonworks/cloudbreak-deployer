@@ -716,9 +716,6 @@ main() {
     cmd-export util-token-debug
     cmd-export util-local-dev
     cmd-export util-cleanup
-    cmd-export util-generate-ldap-mapping
-    cmd-export util-execute-ldap-mapping
-    cmd-export util-delete-ldap-mapping
     cmd-export generate-flex-usage
 
     cmd-export-ns vault "Vault management namespace"

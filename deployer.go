@@ -153,7 +153,6 @@ func main() {
 		"include/export.bash",
 		"include/flex.bash",
 		"include/fn.bash",
-		"include/ldap.bash",
 		"include/machine.bash",
 		"include/migrate.bash",
 		"include/module.bash",
