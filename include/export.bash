@@ -125,8 +125,6 @@ anonymize-exported-files() {
         -e CB_INSTANCE_REGION \
         -e CB_PRODUCT_ID \
         -e CB_COMPONENT_ID \
-        -e UAA_FLEX_USAGE_CLIENT_ID \
-        -e UAA_FLEX_USAGE_CLIENT_SECRET \
         -e SMARTSENSE_UPLOAD_HOST \
         -e SMARTSENSE_UPLOAD_USERNAME \
         -e SMARTSENSE_UPLOAD_PASSWORD \

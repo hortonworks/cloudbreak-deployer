@@ -716,7 +716,6 @@ main() {
     cmd-export util-token-debug
     cmd-export util-local-dev
     cmd-export util-cleanup
-    cmd-export generate-flex-usage
 
     cmd-export-ns vault "Vault management namespace"
     cmd-export vault-unseal

@@ -151,7 +151,6 @@ func main() {
 		"include/docker.bash",
 		"include/env.bash",
 		"include/export.bash",
-		"include/flex.bash",
 		"include/fn.bash",
 		"include/machine.bash",
 		"include/migrate.bash",

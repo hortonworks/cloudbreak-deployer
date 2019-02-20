@@ -174,9 +174,6 @@ cloudbreak-conf-uaa() {
     env-import UAA_ZONE_DOMAIN example.com
 
     env-import UAA_DEFAULT_USER_GROUPS "openid,cloudbreak.networks,cloudbreak.securitygroups,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,sequenceiq.cloudbreak.admin,sequenceiq.cloudbreak.user,cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,periscope.cluster,cloudbreak.recipes,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read"
-
-    env-import UAA_FLEX_USAGE_CLIENT_ID flex_usage_client
-    env-import UAA_FLEX_USAGE_CLIENT_SECRET $UAA_DEFAULT_SECRET
 }
 
 cloudbreak-conf-defaults() {
@@ -431,12 +428,6 @@ oauth:
       scope: cloudbreak.networks,cloudbreak.securitygroups,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,cloudbreak.recipes,openid,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read,periscope.cluster
       authorities: uaa.none
       redirect-uri: http://cloudbreak.shell
-    ${UAA_FLEX_USAGE_CLIENT_ID}:
-      id: ${UAA_FLEX_USAGE_CLIENT_ID}
-      secret: '$(escape-string-yaml $UAA_FLEX_USAGE_CLIENT_SECRET \')'
-      authorized-grant-types: client_credentials
-      scope: none
-      authorities: cloudbreak.flex
 
 scim:
   username_pattern: '[a-z0-9+\-_.@]+'
