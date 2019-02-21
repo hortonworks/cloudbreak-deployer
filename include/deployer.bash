@@ -225,10 +225,6 @@ latest-version() {
     fi
 }
 
-init-profile-deprecated() {
-    warn "Initialization is not need any more"
-}
-
 public-ip-resolver-command() {
     declare desc="Generates command to resolve public IP"
 
@@ -668,7 +664,6 @@ main() {
     cmd-export cmd-help help
     cmd-export cbd-version version
     cmd-export doctor doctor
-    cmd-export init-profile-deprecated init
     cmd-export cmd-bash-complete bash-complete
     cmd-export-ns env "Environment namespace"
     cmd-export env-show
