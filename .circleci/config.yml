@@ -29,9 +29,6 @@ jobs:
       - run:
           name: tar darwin  
           command: tar -czvf cbd-darwin.tgz -C build/Darwin cbd
-      - run:
-          name: run tests
-          command: make tests
       - store_artifacts:
           path: ~/project
       - store_artifacts:
