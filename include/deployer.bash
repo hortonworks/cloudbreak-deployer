@@ -529,10 +529,6 @@ deployer-login() {
     cloudbreak-config
     info "Uluwatu (Cloudbreak UI) url:"
     echo "  $ULU_HOST_ADDRESS" | blue
-    info "login email:"
-    echo "  $UAA_DEFAULT_USER_EMAIL" | blue
-    info "password:"
-    echo "  ****" | blue
 }
 
 start-cmd() {

@@ -7,14 +7,12 @@ compose-init() {
     env-import CB_COMPOSE_PROJECT cbreak
     env-import COMPOSE_HTTP_TIMEOUT 120
     env-import DOCKER_STOP_TIMEOUT 60
-    env-import CBD_LOG_NAME cbreak
     env-import ULUWATU_VOLUME_HOST /dev/null
-    env-import ULUWATU_CONTAINER_PATH /hortonworks-cloud-web
     env-import CAAS_MOCK_VOLUME_HOST /dev/null
     env-import CAAS_MOCK_CONTAINER_PATH /mock-caas.jar
 
     if [[ "$ULUWATU_VOLUME_HOST" != "/dev/null" ]]; then
-      ULUWATU_VOLUME_CONTAINER=${ULUWATU_CONTAINER_PATH}
+      ULUWATU_VOLUME_CONTAINER=/hortonworks-cloud-web
     else
       ULUWATU_VOLUME_CONTAINER=/tmp/null
     fi
@@ -226,7 +224,6 @@ caas-mock:
     dns: $PRIVATE_IP
     restart: always
     environment:
-      - USERNAME=$UAA_DEFAULT_USER
       - SERVICE_NAME=caas-mock
     volumes:
       - $CAAS_MOCK_VOLUME_HOST:$CAAS_MOCK_VOLUME_CONTAINER
@@ -429,31 +426,19 @@ uluwatu:
         - SERVICE_NAME=uluwatu
           #- SERVICE_CHECK_HTTP=/
         - ULU_OAUTH_REDIRECT_URI
-        - ULU_DEFAULT_SSH_KEY
         - ULU_OAUTH_CLIENT_ID=$UAA_ULUWATU_ID
         - 'ULU_OAUTH_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_ULUWATU_SECRET \')'
         - ULU_HOST_ADDRESS
         - NODE_TLS_REJECT_UNAUTHORIZED=$ULU_NODE_TLS_REJECT_UNAUTHORIZED
-        - ULU_HWX_CLOUD_DEFAULT_CREDENTIAL
-        - ULU_HWX_CLOUD_DEFAULT_REGION
-        - ULU_HWX_CLOUD_DEFAULT_SSH_KEY
-        - ULU_HWX_CLOUD_DEFAULT_VPC_ID
-        - ULU_HWX_CLOUD_DEFAULT_IGW_ID
-        - ULU_HWX_CLOUD_DEFAULT_SUBNET_ID
         - ULU_HWX_CLOUD_DEFAULT_ARM_VIRTUAL_NETWORK_ID
-        - HWX_CLOUD_TEMPLATE_VERSION
-        - HWX_CLOUD_ENABLE_GOVERNANCE_AND_SECURITY
         - ULU_ADDRESS_RESOLVING_TIMEOUT
         - ULU_IDENTITY_SERVICEID=identity.service.consul
         - ULU_CLOUDBREAK_SERVICEID=cloudbreak.service.consul
         - ULU_PERISCOPE_SERVICEID=periscope.service.consul
-        - ULU_HWX_CLOUD_REGISTRATION_URL
         - ULU_SUBSCRIBE_TO_NOTIFICATIONS
         - AWS_INSTANCE_ID
-        - HWX_HCC_AVAILABLE
         - AWS_ACCOUNT_ID
         - AWS_AMI_ID
-        - HWX_DOC_LINK
         - AZURE_TENANT_ID
         - AZURE_SUBSCRIPTION_ID
         - AWS_ACCESS_KEY_ID
@@ -527,13 +512,9 @@ cloudbreak:
         - CB_HOST_DISCOVERY_CUSTOM_DOMAIN
         - CB_SMARTSENSE_CONFIGURE
         - CB_SMARTSENSE_ID
-        - "CB_BYOS_DFS_DATA_DIR=$CB_BYOS_DFS_DATA_DIR"
-        - HWX_CLOUD_TEMPLATE_VERSION
-        - "HWX_CLOUD_ADDRESS=$PUBLIC_IP"
         - CB_PLATFORM_DEFAULT_REGIONS
         - CB_DEFAULT_SUBSCRIPTION_ADDRESS
         $( if [[ -n "$CB_IMAGE_CATALOG_URL" ]]; then echo "- CB_IMAGE_CATALOG_URL"; fi )
-        - CB_AWS_DEFAULT_INBOUND_SECURITY_GROUP
         - CB_AWS_VPC
         - CB_ENABLEDPLATFORMS
         - CB_ENABLED_LINUX_TYPES
