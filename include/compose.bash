@@ -248,7 +248,7 @@ traefik:
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock
         - $CBD_CERT_ROOT_PATH/traefik:/certs/traefik
-        - ./logs/traefik:/opt/traefik/log/
+        - $CBD_LOCAL_DIR/logs/traefik:/opt/traefik/log/
     log_opt:
         max-size: "10M"
         max-file: "5"
@@ -317,7 +317,7 @@ logsink:
     environment:
         - SERVICE_NAME=logsink
     volumes:
-        - ./logs:/tmp
+        - $CBD_LOCAL_DIR/logs:/tmp
     image: hortonworks/socat:1.0.0
     log_opt:
         max-size: "10M"
@@ -351,7 +351,7 @@ logrotate:
         - "LOGROTATE_LOGFILES=/var/log/cloudbreak-deployer/*.log /var/log/cloudbreak-deployer/*/*.log"
         - LOGROTATE_FILESIZE=10M
     volumes:
-        - ./logs:/var/log/cloudbreak-deployer
+        - $CBD_LOCAL_DIR/logs:/var/log/cloudbreak-deployer
     log_opt:
         max-size: "10M"
         max-file: "5"
@@ -387,7 +387,7 @@ vault:
     - SKIP_SETCAP=true
     - SERVICE_NAME=vault
     volumes:
-      - ./$VAULT_CONFIG_FILE:/vault/config/$VAULT_CONFIG_FILE
+      - $CBD_LOCAL_DIR/$VAULT_CONFIG_FILE:/vault/config/$VAULT_CONFIG_FILE
     dns: $PRIVATE_IP
     image: $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG
     restart: on-failure
@@ -412,8 +412,8 @@ identity:
         - IDENTITY_DB_PASS
     dns: $PRIVATE_IP
     volumes:
-      - ./uaa.yml:/uaa/uaa.yml
-      - ./logs/identity:/tomcat/logs/
+      - $CBD_LOCAL_DIR/uaa.yml:/uaa/uaa.yml
+      - $CBD_LOCAL_DIR/logs/identity:/tomcat/logs/
     log_opt:
         max-size: "10M"
         max-file: "5"
@@ -553,8 +553,8 @@ cloudbreak:
     volumes:
         - "$CBD_CERT_ROOT_PATH:/certs"
         - /dev/urandom:/dev/random
-        - ./logs/cloudbreak:/cloudbreak-log
-        - ./etc/:/etc/cloudbreak
+        - $CBD_LOCAL_DIR/logs/cloudbreak:/cloudbreak-log
+        - $CBD_LOCAL_DIR/etc/:/etc/cloudbreak
     dns: $PRIVATE_IP
     links:
         - consul
@@ -660,7 +660,7 @@ periscope:
     dns: $PRIVATE_IP
     volumes:
         - "$CBD_CERT_ROOT_PATH:/certs"
-        - ./logs/autoscale:/autoscale-log
+        - $CBD_LOCAL_DIR/logs/autoscale:/autoscale-log
         - /dev/urandom:/dev/random
     log_opt:
         max-size: "10M"

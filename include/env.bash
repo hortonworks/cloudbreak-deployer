@@ -108,6 +108,7 @@ CB_SMARTSENSE_ID - SmartSense subscription ID
 CB_TEMPLATE_DEFAULTS - Comma separated list of the default templates what Cloudbreak initialize in database
 CB_UI_MAX_WAIT - Wait timeout for `cbd start-wait` command
 CB_LOCAL_DEV - If set true then Cloudbreak and Periscope containers will not be created
+CBD_LOCAL_DIR - The location of the cbd-local directory. Defaults to `pwd`.
 CERT_VALIDATION - Enables cert validation in Cloudbreak and Autoscale
 COMMON_DB - Name of the database container
 COMMON_DB_VOL - Name of the database volume
