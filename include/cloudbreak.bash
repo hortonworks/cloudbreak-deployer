@@ -162,10 +162,10 @@ cloudbreak-conf-uaa() {
 cloudbreak-conf-defaults() {
     env-import PUBLIC_IP
 
-    if [[ ! -z "$CB_BLUEPRINT_DEFAULTS"  ]]; then
-        env-import CB_BLUEPRINT_DEFAULTS
+    if [[ ! -z "$CB_CLUSTERDEFINITION_AMBARI_DEFAULTS"  ]]; then
+        env-import CB_CLUSTERDEFINITION_AMBARI_DEFAULTS
     fi;
-    env-import CB_BLUEPRINT_INTERNAL ""
+    env-import CB_CLUSTERDEFINITION_AMBARI_INTERNAL ""
     if [[ ! -z "$CB_TEMPLATE_DEFAULTS" ]]; then
         env-import CB_TEMPLATE_DEFAULTS
     fi;
