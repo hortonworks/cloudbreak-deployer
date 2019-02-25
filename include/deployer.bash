@@ -225,10 +225,6 @@ latest-version() {
     fi
 }
 
-init-profile-deprecated() {
-    warn "Initialization is not need any more"
-}
-
 public-ip-resolver-command() {
     declare desc="Generates command to resolve public IP"
 
@@ -533,10 +529,6 @@ deployer-login() {
     cloudbreak-config
     info "Uluwatu (Cloudbreak UI) url:"
     echo "  $ULU_HOST_ADDRESS" | blue
-    info "login email:"
-    echo "  $UAA_DEFAULT_USER_EMAIL" | blue
-    info "password:"
-    echo "  ****" | blue
 }
 
 start-cmd() {
@@ -659,7 +651,6 @@ main() {
 
     circle-init
     compose-init
-    aws-init
     if is_macos; then
         machine-init
     fi
@@ -669,20 +660,11 @@ main() {
     cmd-export cmd-help help
     cmd-export cbd-version version
     cmd-export doctor doctor
-    cmd-export init-profile-deprecated init
     cmd-export cmd-bash-complete bash-complete
     cmd-export-ns env "Environment namespace"
     cmd-export env-show
     cmd-export env-export
     cmd-export create-bundle create-bundle
-
-    cmd-export-ns aws "Amazon Webservice namespace"
-    cmd-export aws-show-role
-    cmd-export aws-generate-role
-    cmd-export aws-delete-role
-    cmd-export aws-list-roles
-    cmd-export aws-certs-upload-s3
-    cmd-export aws-certs-restore-s3
 
     cmd-export-ns machine "Docker-machine"
     cmd-export machine-create
@@ -716,10 +698,6 @@ main() {
     cmd-export util-token-debug
     cmd-export util-local-dev
     cmd-export util-cleanup
-    cmd-export util-generate-ldap-mapping
-    cmd-export util-execute-ldap-mapping
-    cmd-export util-delete-ldap-mapping
-    cmd-export generate-flex-usage
 
     cmd-export-ns vault "Vault management namespace"
     cmd-export vault-unseal

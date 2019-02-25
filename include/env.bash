@@ -54,24 +54,19 @@ _env-description() {
 echo '''
 ADDRESS_RESOLVING_TIMEOUT - DNS lookup timeout for internal service discovery
 AWS_ACCESS_KEY_ID - Access key of the AWS account
-AWS_ROLE_NAME - Name of the AWS role for the `cbd aws [generate-rol, show role]` commands
 AWS_SECRET_ACCESS_KEY - Secret access key of the AWS account
 AZURE_SUBSCRIPTION_ID - Azure subscription ID for interactive login in Web UI
 AZURE_TENANT_ID - Azure tenant ID for interactive login in Web UI
 CAAS_URL - CAAS API container address with port
 CAPTURE_CRON_EXPRESSION - SmartSense bundle generation time interval in Cron format
 CBD_CERT_ROOT_PATH - Path where deployer stores Cloudbreak certificates
-CBD_LOG_NAME - Name of the Cloudbreak log file
 CBD_TRAEFIK_TLS - Path inside of the Traefik container where TLS files located
 CB_AWS_ACCOUNT_ID - ID of AWS account that is configured for the deployment to be used by role based credentials
 CB_AWS_CUSTOM_CF_TAGS - Comma separated list of AWS CloudFormation Stack tags
 CB_AWS_DEFAULT_CF_TAG - Default tag AWS CloudFormation Stack
-CB_AWS_DEFAULT_INBOUND_SECURITY_GROUP - Default inbound policy name for AWS CloudFormation Stack
-CB_AWS_EXTERNAL_ID - External ID of the assume role policy
 CB_AWS_HOSTKEY_VERIFY - Enables host fingerprint verification on AWS
 CB_AWS_VPC - Configures the VPC id on AWS if it is the same as provisioned cluster
 CB_BLUEPRINT_DEFAULTS - Comma separated list of the default blueprints what Cloudbreak initialize in database
-CB_BYOS_DFS_DATA_DIR - Deprecated - Default data dir for BYOP orchestrators
 CB_COMPONENT_CLUSTER_ID - SmartSense component cluster ID
 CB_COMPONENT_ID - SmartSense component ID
 CB_COMPOSE_PROJECT - Name of the Docker Compose project, will appear in container names too
@@ -79,7 +74,6 @@ CB_DB_ENV_DB - Name of the Cloudbreak database
 CB_DB_ENV_PASS - Password for the Cloudbreak database authentication
 CB_DB_ENV_SCHEMA - Used schema in the Cloudbreak database
 CB_DB_ENV_USER - User for the Cloudbreak database authentication
-CB_DB_ROOT_PATH - Deprecated - Location of the database volume on Cloudbreak host
 CB_DEFAULT_SUBSCRIPTION_ADDRESS - Address of the default subscription for Cloudbreak notifications
 CB_CAPABILITIES - Comma separated list of enabled capabilities
 CB_DISABLE_SHOW_CLI - Disables the 'show cli commond' function
@@ -114,16 +108,7 @@ CB_SMARTSENSE_ID - SmartSense subscription ID
 CB_TEMPLATE_DEFAULTS - Comma separated list of the default templates what Cloudbreak initialize in database
 CB_UI_MAX_WAIT - Wait timeout for `cbd start-wait` command
 CB_LOCAL_DEV - If set true then Cloudbreak and Periscope containers will not be created
-CERTS_BUCKET - S3 bucket name for backup and restore certificates via `cbd aws [certs-restore-s3  certs-upload-s3]` commands
 CERT_VALIDATION - Enables cert validation in Cloudbreak and Autoscale
-CLOUDBREAK_SMTP_AUTH - Configures mail.smtp.auth in Cloudbreak
-CLOUDBREAK_SMTP_SENDER_FROM - Email address of the sender
-CLOUDBREAK_SMTP_SENDER_HOST - SMTP server address ot hostname
-CLOUDBREAK_SMTP_SENDER_PASSWORD - Password
-CLOUDBREAK_SMTP_SENDER_PORT - Port of the SMTP server
-CLOUDBREAK_SMTP_SENDER_USERNAME - User name for SMTP authentication
-CLOUDBREAK_SMTP_STARTTLS_ENABLE - Configures mail.smtp.starttls.enable in Cloudbreak
-CLOUDBREAK_SMTP_TYPE - Defines mail.transport.protocol in CLoudbreak
 COMMON_DB - Name of the database container
 COMMON_DB_VOL - Name of the database volume
 CURL_CONNECT_TIMEOUT - Timeout for curl command
@@ -158,7 +143,6 @@ DOCKER_TAG_HAVEGED - Haveged container version
 DOCKER_TAG_MIGRATION - Migration container version
 DOCKER_TAG_PERISCOPE - Autoscale container version
 DOCKER_TAG_DATALAKE - Datalake container version
-DOCKER_TAG_POSTFIX - Postfix container version
 DOCKER_TAG_POSTGRES - Postgresql container version
 DOCKER_TAG_LOGROTATE - Logrotate container version
 DOCKER_TAG_REGISTRATOR - Registrator container version
@@ -177,7 +161,6 @@ IDENTITY_DB_NAME - Name of the Identity database
 IDENTITY_DB_PASS - Password for the Identity database authentication
 IDENTITY_DB_URL - Url for the Identity database connection included the port number
 IDENTITY_DB_USER - User for the Identity database authentication
-LOCAL_SMTP_PASSWORD - Default password for the internal mail server
 PERISCOPE_HBM2DDL_STRATEGY - Configures hibernate.hbm2ddl.auto in Autoscale
 PERISCOPE_DB_ENV_DB - Name of the Autoscale database
 PERISCOPE_DB_ENV_PASS - Password for the Autoscale database authentication
@@ -190,7 +173,6 @@ PERISCOPE_SCHEMA_MIGRATION_AUTO - Flag for Autoscale automatic database schema u
 PUBLIC_IP - Ip address or hostname of the public interface
 REST_DEBUG - Enables REST call debug level in Cloudbreak and Autoscale
 SL_ADDRESS_RESOLVING_TIMEOUT - DNS lookup timeout of Authentication service for internal service discovery
-SL_NODE_TLS_REJECT_UNAUTHORIZED - Enables self signed certifications in Authentication service
 TRAEFIK_MAX_IDLE_CONNECTION - Configures --maxidleconnsperhost for Traefik
 PUBLIC_HTTP_PORT - Configures the public http port for Cloudbreak
 PUBLIC_HTTPS_PORT - Configures the public https port for Cloudbreak
@@ -198,23 +180,13 @@ UAA_CLOUDBREAK_ID - Identity of the Cloudbreak scope in Identity
 UAA_CLOUDBREAK_SECRET - Secret of the Cloudbreak scope in Identity
 UAA_CLOUDBREAK_SHELL_ID - Identity of the Cloudbreak Shell scope in Identity
 UAA_DEFAULT_SECRET - Default secret for all the scopes and encryptions
-UAA_DEFAULT_USER_EMAIL - Email address of default admin user
-UAA_DEFAULT_USER_FIRSTNAME - First name of default admin user
-UAA_DEFAULT_USER_GROUPS - Default user groups of the users
-UAA_DEFAULT_USER_LASTNAME - Last name of default admin user
-UAA_DEFAULT_USER_PW - Password of default admin user
 UAA_SETTINGS_FILE - You can specify custom settings for UAA which will be merged with the default (e.g provide LDAP settings)
-UAA_FLEX_USAGE_CLIENT_ID - Identity of the Flex usage generator scope in Identity
-UAA_FLEX_USAGE_CLIENT_SECRET - Secret of the Flex usage generator scope in Identity
 UAA_PERISCOPE_ID - Identity of the Autoscale scope in Identity
 UAA_PERISCOPE_SECRET - Secret of the Autoscale scope in Identity
 UAA_PORT - Identity service public port
 UAA_ULUWATU_ID - Identity of the Web UI scope in Identity
 UAA_ULUWATU_SECRET - Secret of the Web UI scope in Identity
-UAA_ZONE_DOMAIN - External domain name for zone in Identity
-ULUWATU_CONTAINER_PATH - Default project location in Web UI container
 CAAS_MOCK_CONTAINER_PATH - Default project location in Caas mock container
-ULU_DEFAULT_SSH_KEY - Default SSH key for the credentials in Cloudbreak
 ULU_HOST_ADDRESS - Web UI host
 ULU_NODE_TLS_REJECT_UNAUTHORIZED - Enables self signed certifications in Web UI
 ULU_OAUTH_REDIRECT_URI - Authorization page on Web UI
@@ -247,6 +219,5 @@ MACHINE_CPU - Number of the CPU cores on the Docker Machine instance
 MACHINE_MEM - Amount of RAM on the Docker Machine instance
 MACHINE_NAME - Name of the Docker Machine instance
 MACHINE_OPTS - Extra options for Docker Machine instance
-MACHINE_STORAGE_PATH - Docker Machine storage path
 ''' | grep "$1 " | sed "s/^.* - //" || echo Deprecated
 }

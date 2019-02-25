@@ -12,7 +12,6 @@ cloudbreak-config() {
   cloudbreak-conf-defaults
   cloudbreak-conf-autscale
   cloudbreak-conf-uaa
-  cloudbreak-conf-smtp
   cloudbreak-conf-cloud-provider
   cloudbreak-conf-rest-client
   cloudbreak-conf-ui
@@ -43,7 +42,6 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_TRAEFIK v1.6.6-alpine
     env-import DOCKER_TAG_CONSUL 1.4.0
     env-import DOCKER_TAG_REGISTRATOR v7
-    env-import DOCKER_TAG_POSTFIX latest
     env-import DOCKER_TAG_UAA 3.6.5-pgupdate
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.2.0
@@ -68,7 +66,6 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CBD_SMARTSENSE hortonworks/cbd-smartsense
 
     env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu.service.consul:3000/notifications
-    env-import CERTS_BUCKET ""
 
 }
 
@@ -97,31 +94,8 @@ cloudbreak-conf-capabilities() {
     env-import INFO_APP_CAPABILITIES "$CB_CAPABILITIES"
 }
 
-cloudbreak-conf-smtp() {
-    env-import LOCAL_SMTP_PASSWORD "$UAA_DEFAULT_USER_PW"
-    if ! [[ "$LOCAL_SMTP_PASSWORD" ]]; then
-        LOCAL_SMTP_PASSWORD="cloudbreak"
-    fi
-
-    env-import CLOUDBREAK_SMTP_SENDER_USERNAME "admin"
-    env-import CLOUDBREAK_SMTP_SENDER_PASSWORD "$LOCAL_SMTP_PASSWORD"
-    env-import CLOUDBREAK_SMTP_SENDER_HOST "smtp.service.consul"
-    env-import CLOUDBREAK_SMTP_SENDER_PORT 25
-    env-import CLOUDBREAK_SMTP_SENDER_FROM "noreply@hortonworks.com"
-    env-import CLOUDBREAK_SMTP_AUTH "true"
-    env-import CLOUDBREAK_SMTP_STARTTLS_ENABLE "false"
-    env-import CLOUDBREAK_SMTP_TYPE "smtp"
-    env-import CLOUDBREAK_TELEMETRY_MAIL_ADDRESS "aws-marketplace@hortonworks.com"
-}
-
 cloudbreak-conf-db() {
     declare desc="Declares cloudbreak DB config"
-
-    if is_linux; then
-        env-import CB_DB_ROOT_PATH "/var/lib/cloudbreak"
-    else
-        env-import CB_DB_ROOT_PATH "/var/lib/boot2docker/cloudbreak"
-    fi
 
     env-import COMMON_DB commondb
     env-import COMMON_DB_VOL common
@@ -183,18 +157,6 @@ cloudbreak-conf-uaa() {
     env-validate UAA_ULUWATU_SECRET *" "* "space"
 
     env-import UAA_CLOUDBREAK_SHELL_ID cloudbreak_shell
-
-    env-import UAA_DEFAULT_USER_EMAIL admin@example.com
-    env-import UAA_DEFAULT_USER_PW
-    env-validate UAA_DEFAULT_USER_PW *" "* "space"
-    env-import UAA_DEFAULT_USER_FIRSTNAME Joe
-    env-import UAA_DEFAULT_USER_LASTNAME Admin
-    env-import UAA_ZONE_DOMAIN example.com
-
-    env-import UAA_DEFAULT_USER_GROUPS "openid,cloudbreak.networks,cloudbreak.securitygroups,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,sequenceiq.cloudbreak.admin,sequenceiq.cloudbreak.user,cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,periscope.cluster,cloudbreak.recipes,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read"
-
-    env-import UAA_FLEX_USAGE_CLIENT_ID flex_usage_client
-    env-import UAA_FLEX_USAGE_CLIENT_SECRET $UAA_DEFAULT_SECRET
 }
 
 cloudbreak-conf-defaults() {
@@ -218,7 +180,6 @@ cloudbreak-conf-defaults() {
     env-import CB_HOST_DISCOVERY_CUSTOM_DOMAIN ""
     env-import CB_SMARTSENSE_CONFIGURE "false"
     env-import TRAEFIK_MAX_IDLE_CONNECTION 100
-    env-import CB_AWS_DEFAULT_INBOUND_SECURITY_GROUP ""
     env-import CB_AWS_VPC ""
     env-import CB_MAX_SALT_NEW_SERVICE_RETRY 90
     env-import CB_MAX_SALT_NEW_SERVICE_RETRY_ONERROR 10
@@ -257,8 +218,6 @@ cloudbreak-conf-cloud-provider() {
     env-import CB_AWS_HOSTKEY_VERIFY "false"
     env-import CB_GCP_HOSTKEY_VERIFY "false"
 
-    env-import CB_BYOS_DFS_DATA_DIR "/hadoop/hdfs/data"
-
     env-import CB_AWS_ACCOUNT_ID ""
 }
 
@@ -274,20 +233,8 @@ cloudbreak-conf-ui() {
 
     env-import ULU_HOST_ADDRESS  "https://$PUBLIC_IP:$PUBLIC_HTTPS_PORT"
     env-import CB_HOST_ADDRESS  "http://$PUBLIC_IP"
-    env-import ULU_HWX_CLOUD_DEFAULT_CREDENTIAL ""
-    env-import HWX_HCC_AVAILABLE "false"
-    env-import ULU_HWX_CLOUD_DEFAULT_SSH_KEY ""
-    env-import ULU_DEFAULT_SSH_KEY ""
-    env-import ULU_HWX_CLOUD_DEFAULT_REGION ""
-    env-import ULU_HWX_CLOUD_DEFAULT_VPC_ID ""
-    env-import ULU_HWX_CLOUD_DEFAULT_IGW_ID ""
-    env-import ULU_HWX_CLOUD_DEFAULT_SUBNET_ID ""
-    env-import ULU_HWX_CLOUD_REGISTRATION_URL ""
-    env-import HWX_DOC_LINK ""
     env-import ULU_NODE_TLS_REJECT_UNAUTHORIZED "0"
-    env-import SL_NODE_TLS_REJECT_UNAUTHORIZED "0"
     env-import ULU_SUBSCRIBE_TO_NOTIFICATIONS "false"
-    env-import HWX_CLOUD_ENABLE_GOVERNANCE_AND_SECURITY "false"
 }
 
 cloudbreak-conf-java() {
@@ -416,7 +363,6 @@ zones:
      - ${PUBLIC_IP}
      - node1.node.dc1.consul
      - identity.service.consul
-     - ${UAA_ZONE_DOMAIN}
 
 oauth:
   client:
@@ -449,26 +395,7 @@ oauth:
       scope: cloudbreak.networks,cloudbreak.securitygroups,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,cloudbreak.recipes,openid,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read,periscope.cluster
       authorities: uaa.none
       redirect-uri: http://cloudbreak.shell
-    ${UAA_FLEX_USAGE_CLIENT_ID}:
-      id: ${UAA_FLEX_USAGE_CLIENT_ID}
-      secret: '$(escape-string-yaml $UAA_FLEX_USAGE_CLIENT_SECRET \')'
-      authorized-grant-types: client_credentials
-      scope: none
-      authorities: cloudbreak.flex
-
-scim:
-  username_pattern: '[a-z0-9+\-_.@]+'
-  groups:
 EOF
-    for group in ${UAA_DEFAULT_USER_GROUPS//,/ }; do
-        echo "    $group: Default group" >> ${uaaFile}
-    done
-    if [[ "$UAA_DEFAULT_USER_PW" ]]; then
-        cat >> ${uaaFile} << EOF
-  users:
-    - ${UAA_DEFAULT_USER_EMAIL}|${UAA_DEFAULT_USER_PW}|${UAA_DEFAULT_USER_EMAIL}|${UAA_DEFAULT_USER_FIRSTNAME}|${UAA_DEFAULT_USER_LASTNAME}|${UAA_DEFAULT_USER_GROUPS}
-EOF
-    fi
 
     if [ -f "$UAA_SETTINGS_FILE" ]; then
         yq m -i -x ${uaaFile} ${UAA_SETTINGS_FILE}
