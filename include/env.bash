@@ -66,7 +66,7 @@ CB_AWS_CUSTOM_CF_TAGS - Comma separated list of AWS CloudFormation Stack tags
 CB_AWS_DEFAULT_CF_TAG - Default tag AWS CloudFormation Stack
 CB_AWS_HOSTKEY_VERIFY - Enables host fingerprint verification on AWS
 CB_AWS_VPC - Configures the VPC id on AWS if it is the same as provisioned cluster
-CB_BLUEPRINT_DEFAULTS - Comma separated list of the default blueprints what Cloudbreak initialize in database
+CB_CLUSTERDEFINITION_AMBARI_DEFAULTS - Comma separated list of the default Ambari cluster definitions what Cloudbreak initialize in database
 CB_COMPONENT_CLUSTER_ID - SmartSense component cluster ID
 CB_COMPONENT_ID - SmartSense component ID
 CB_COMPOSE_PROJECT - Name of the Docker Compose project, will appear in container names too
@@ -77,7 +77,7 @@ CB_DB_ENV_USER - User for the Cloudbreak database authentication
 CB_DEFAULT_SUBSCRIPTION_ADDRESS - Address of the default subscription for Cloudbreak notifications
 CB_CAPABILITIES - Comma separated list of enabled capabilities
 CB_DISABLE_SHOW_CLI - Disables the 'show cli commond' function
-CB_DISABLE_SHOW_BLUEPRINT - Disables the 'show generated blueprint' function
+CB_DISABLE_SHOW_CLUSTERDEFINITION - Disables the 'show generated cluster definition' function
 CB_ENABLEDPLATFORMS - Disables Cloudbreak resource called Platform
 CB_ENABLED_LINUX_TYPES - List of enabled OS types from image catalog
 CBD_FORCE_START - Disables docker-compose.yml and uaa.yml validation
