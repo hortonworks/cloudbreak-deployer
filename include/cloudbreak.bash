@@ -183,6 +183,8 @@ cloudbreak-conf-defaults() {
     env-import PUBLIC_HTTPS_PORT 443
 
     env-import CB_LOCAL_DEV "false"
+    env-import DPS_VERSION "latest"
+    env-import DPS_REPO ""
 
     if [[ "$CB_LOCAL_DEV" == "true" ]]; then
         env-import CLOUDBREAK_URL "http://$BRIDGE_ADDRESS:9091"
@@ -192,6 +194,14 @@ cloudbreak-conf-defaults() {
         env-import CLOUDBREAK_URL "http://cloudbreak:8080"
         env-import PERISCOPE_URL "http://periscope:8080"
         env-import DATALAKE_URL "http://datalake:8080"
+    fi
+
+    if [[ -z "$DPS_REPO" ]]; then
+        env-import ULUWATU_FRONTEND_RULE "PathPrefix:/"
+        env-import CAAS_URL "caas-api:8080"
+    else
+        env-import ULUWATU_FRONTEND_RULE "PathPrefixStrip:/cloud"
+        env-import CAAS_URL "caas-api:10080"
     fi
 }
 

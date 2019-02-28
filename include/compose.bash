@@ -44,16 +44,12 @@ compose-pull() {
     dockerCompose pull
 }
 
-compose-pull-parallel() {
-    declare desc="Pulls service images parallel"
-    cloudbreak-conf-tags
-
-    [ -f docker-compose.yml ] || deployer-generate
-    sed -n "s/.*image://p" docker-compose.yml|sort -u|xargs -n1 -P 20 docker pull
-}
-
 compose-up() {
-    dockerCompose up -d "$@"
+    if [[ "$FORCE_BUILD" == "true" ]]; then
+        dockerCompose up --build -d "$@"
+    else
+        dockerCompose up -d "$@"
+    fi
 }
 
 compose-kill() {
@@ -221,51 +217,13 @@ version: '3'
 volumes:
     $COMMON_DB_VOL:
 networks:
-    $DOCKER_NETWORK_NAME:
-        driver: bridge
-services:
-    traefik:
-        ports:
-            - "8081:8080"
-            - $PUBLIC_HTTP_PORT:80
-            - $PUBLIC_HTTPS_PORT:443
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-            - $CBD_CERT_ROOT_PATH/traefik:/certs/traefik
-            - ./logs/traefik:/opt/traefik/log/
-            - ./traefik.toml:/etc/traefik/traefik.toml 
-        networks:
-        - $DOCKER_NETWORK_NAME
-        logging:
-            options:
-                max-size: "10M"
-                max-file: "5"
-        image: traefik:$DOCKER_TAG_TRAEFIK
-        restart: on-failure
-        command: --debug --api --rest --ping --metrics --InsecureSkipVerify=true \
-            --defaultEntryPoints=http,https \
-            --entryPoints='Name:http Address::80 Redirect.EntryPoint:https' \
-            --entryPoints='Name:https Address::443 TLS:$CBD_TRAEFIK_TLS' \
-            --maxidleconnsperhost=$TRAEFIK_MAX_IDLE_CONNECTION \
-            --traefiklog.filepath=/opt/traefik/log/traefik.log \
-            --accessLog.filePath=/opt/traefik/log/access.log \
-            --docker
-
-    caas-mock:
-        image: $DOCKER_IMAGE_CAAS_MOCK:$DOCKER_TAG_CAAS_MOCK
-        restart: on-failure
-        volumes:
-        - $CAAS_MOCK_VOLUME_HOST:$CAAS_MOCK_VOLUME_CONTAINER
-        networks:
-        - $DOCKER_NETWORK_NAME
-        ports: 
-        - "$CAAS_MOCK_BIND_PORT:8080"
-        labels:
-        - traefik.frontend.rule=PathPrefix:/auth,/oidc,/idp,/caas
-        - traefik.port=8080
-        - traefik.backend=caas-backend
-        - traefik.frontend.priority=100
-      
+  $DOCKER_NETWORK_NAME:
+    driver: bridge
+    ipam:
+        driver: default
+        config:
+            - subnet: 172.200.0.0/16
+services:      
     haveged:
         labels:
         - traefik.enable=false
@@ -416,7 +374,7 @@ services:
             - AWS_SECRET_ACCESS_KEY
             - CAAS_ENABLED=true
         labels:
-        - traefik.frontend.rule=PathPrefix:/
+        - traefik.frontend.rule=$ULUWATU_FRONTEND_RULE
         - traefik.port=3000
         - traefik.backend=uluwatu-backend
         - traefik.frontend.priority=5
@@ -433,6 +391,213 @@ services:
         image: $DOCKER_IMAGE_CLOUDBREAK_WEB:$DOCKER_TAG_ULUWATU
 
 EOF
+
+    if [[ -z "$DPS_REPO" ]]; then
+        cat >> ${composeFile} <<EOF
+    traefik:
+        ports:
+            - "8081:8080"
+            - $PUBLIC_HTTP_PORT:80
+            - $PUBLIC_HTTPS_PORT:443
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - $CBD_CERT_ROOT_PATH/traefik:/certs/traefik
+            - ./logs/traefik:/opt/traefik/log/
+            - ./traefik.toml:/etc/traefik/traefik.toml 
+        networks:
+        - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: traefik:$DOCKER_TAG_TRAEFIK
+        restart: on-failure
+        command: --debug --api --rest --ping --metrics --InsecureSkipVerify=true \
+            --defaultEntryPoints=http,https \
+            --entryPoints='Name:http Address::80 Redirect.EntryPoint:https' \
+            --entryPoints='Name:https Address::443 TLS:$CBD_TRAEFIK_TLS' \
+            --maxidleconnsperhost=$TRAEFIK_MAX_IDLE_CONNECTION \
+            --traefiklog.filepath=/opt/traefik/log/traefik.log \
+            --accessLog.filePath=/opt/traefik/log/access.log \
+            --docker
+
+    caas-api:
+        image: $DOCKER_IMAGE_CAAS_MOCK:$DOCKER_TAG_CAAS_MOCK
+        restart: on-failure
+        volumes:
+        - $CAAS_MOCK_VOLUME_HOST:$CAAS_MOCK_VOLUME_CONTAINER
+        networks:
+        - $DOCKER_NETWORK_NAME
+        ports: 
+        - "$CAAS_MOCK_BIND_PORT:8080"
+        labels:
+        - traefik.frontend.priority=100
+        - traefik.frontend.rule=PathPrefix:/auth,/oidc,/idp,/caas
+        - traefik.port=8080
+        - traefik.backend=caas-backend
+EOF
+    else
+        cat >> ${composeFile} <<EOF
+    traefik:
+        ports:
+            - "8081:8080"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./logs/traefik:/opt/traefik/log/
+            - ./traefik.toml:/etc/traefik/traefik.toml 
+        networks:
+        - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: traefik:$DOCKER_TAG_TRAEFIK
+        restart: on-failure
+        command: --debug --api --rest --ping --metrics --InsecureSkipVerify=true \
+            --defaultEntryPoints=http,https \
+            --maxidleconnsperhost=$TRAEFIK_MAX_IDLE_CONNECTION \
+            --traefiklog.filepath=/opt/traefik/log/traefik.log \
+            --accessLog.filePath=/opt/traefik/log/access.log \
+            --docker
+
+    caas-api:
+        build: $DPS_REPO/caas-api
+        image: hortonworks/dps-caas-api:$DPS_VERSION
+        ports: 
+        - "$CAAS_MOCK_BIND_PORT:10080"
+        volumes:
+        - $DPS_REPO/resources/dev-setup/serviceaccount:/var/run/secrets/kubernetes.io/serviceaccount
+        environment:
+        # address where knox will try to find caas at
+        # docker for mac  => host.docker.internal
+        # docker-compose  => caas-api
+        # kubernetes      => localhost
+        # dev sans docker => localhost
+        - DB_HOST=$COMMON_DB
+        - CAAS_HOST=caas-api
+        - K8S_TOKEN_PATH=/var/run/secrets/kubernetes.io/serviceaccount/token
+        - K8S_CACERT_PATH=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        - EXTERNAL_HOSTNAME=dps.local
+        - |
+          TENANTS_PRE_CONFIG=[{
+                "name": "manage",
+                "label": "Manage Tenant",
+                "su": {
+                "username": "admin",
+                "password": "admin",
+                "name": "Administrator",
+                "email": "dps.hwx@gmail.com"
+                }
+            }, {
+                "name": "hortonworks",
+                "label": "Hortonworks",
+                "su": {
+                "username": "dps.hwx@gmail.com",
+                "password": "admin",
+                "name": "Jane Doe",
+                "email": "dps.hwx@gmail.com"
+                }
+            }, {
+                "name": "cloudera",
+                "label": "Cloudera",
+                "su": {
+                "username": "dps.hwx@gmail.com",
+                "password": "admin",
+                "name": "Jane Doe",
+                "email": "dps.hwx@gmail.com"
+                }
+            }]
+        networks:
+        - $DOCKER_NETWORK_NAME
+        restart: always
+        labels:
+        - "traefik.frontend.priority=100"
+        - "traefik.backend=caas-api"
+        - "traefik.frontend.rule=PathPrefix:/caas/api,/auth,/oidc,/idp"
+        - "traefik.port=10080"
+        
+    caas-ui:
+        build: $DPS_REPO/caas-ui
+        image: hortonworks/dps-caas-ui:$DPS_VERSION
+        labels:
+        - "traefik.backend=caas-ui"
+        - "traefik.frontend.rule=PathPrefix:/caas"
+        - "traefik.port=9080"
+        networks:
+        - $DOCKER_NETWORK_NAME
+
+    core-api:
+        build: $DPS_REPO/core-api
+        image: hortonworks/dps-core-api:$DPS_VERSION
+        volumes:
+        - $DPS_REPO/resources/dev-setup/serviceaccount:/var/run/secrets/kubernetes.io/serviceaccount
+        environment:
+        - DB_HOST=$COMMON_DB
+        - "CAAS_ADDRESS=http://$CAAS_URL"
+        - K8S_TOKEN_PATH=/var/run/secrets/kubernetes.io/serviceaccount/token
+        networks:
+        - $DOCKER_NETWORK_NAME
+        restart: always
+        labels:
+        - "traefik.backend=core-api"
+        - "traefik.frontend.rule=PathPrefix:/core/api"
+        - "traefik.port=10080"
+
+    core-ui:
+        build: $DPS_REPO/core-ui
+        image: hortonworks/dps-core-ui:$DPS_VERSION
+        networks:
+        - $DOCKER_NETWORK_NAME
+        labels:
+        - "traefik.backend=core-ui"
+        - "traefik.frontend.rule=PathPrefix:/core"
+        - "traefik.port=9080"
+
+    cluster-proxy:
+        build: $DPS_REPO/cluster-proxy
+        image: hortonworks/dps-cluster-proxy:$DPS_VERSION
+        volumes:
+        - $DPS_REPO/resources/dev-setup/serviceaccount:/var/run/secrets/kubernetes.io/serviceaccount
+        environment:
+        - DB_HOST=$COMMON_DB
+        - "CAAS_ADDRESS=http://$CAAS_URL"
+        - K8S_TOKEN_PATH=/var/run/secrets/kubernetes.io/serviceaccount/token
+        networks:
+        - $DOCKER_NETWORK_NAME
+        restart: always
+        labels:
+        - "traefik.backend=cluster-proxy"
+        - "traefik.frontend.rule=PathPrefix:/cluster-proxy"
+        - "traefik.port=10080"
+
+    core-gateway:
+        build: $DPS_REPO/core-gateway
+        image: hortonworks/dps-gateway:$DPS_VERSION
+        # ports:
+            # - $PUBLIC_HTTP_PORT:3000
+            # - $PUBLIC_HTTPS_PORT:443
+        networks:
+        - $DOCKER_NETWORK_NAME
+        environment:
+        - "CAAS_ADDRESS=http://$CAAS_URL"
+        - GATEWAY_DPS_JWT_COOKIE_NAME=dps-jwt
+        - GATEWAY_UPSTREAM_HOSTNAME=traefik
+        - GATEWAY_UPSTREAM_PORT=80
+        - GATEWAY_UNAUTHENTICATED_PATHS=pathPrefix:/auth,pathPrefix:/idp,pathPrefix:/oidc,pathPrefix:/caas,!pathPrefix:/caas/api,pathPrefix:/core,!pathPrefix:/core/api,pathPrefix:/cloud/cb/info
+
+    dev-gateway:
+        image: abiosoft/caddy:no-stats
+        environment:
+        - GATEWAY_HOST=core-gateway
+        networks:
+        - $DOCKER_NETWORK_NAME
+        ports:
+        - 80:80
+        - 443:443
+        volumes:
+        - $DPS_REPO/resources/dev-setup/Caddyfile:/etc/Caddyfile
+EOF
+    fi
 
     if [[ "$CB_LOCAL_DEV" == "false" ]]; then
         cat >> ${composeFile} <<EOF
