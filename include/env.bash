@@ -211,11 +211,9 @@ ULUWATU_VOLUME_HOST - Location of the locally developed Web UI project
 CAAS_MOCK_VOLUME_HOST - Location of the locally developed Caas mock
 
 COMPOSE_TLS_VERSION - TLS version used by Docker Compose
-DOCKER_PROFILE - Profile file for Docker Machine related environment variables
 DOCKER_NETWORK_NAME - Network name for docker, created by docker-compose
-MACHINE_CPU - Number of the CPU cores on the Docker Machine instance
-MACHINE_MEM - Amount of RAM on the Docker Machine instance
-MACHINE_NAME - Name of the Docker Machine instance
-MACHINE_OPTS - Extra options for Docker Machine instance
+
+DPS_VERSION - Image tag for DPS containers
+DPS_REPO - Location of your DPS repo on host. If it has value, DPS environment will start on your machine.
 ''' | grep "$1 " | sed "s/^.* - //" || echo Deprecated
 }
