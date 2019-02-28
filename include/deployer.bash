@@ -319,6 +319,12 @@ load-profile() {
 public-ip-init() {
     declare desc="Tries to guess PUBLIC_IP if not found"
 
+    if is_macos; then
+        debug "PUBLIC_IP and CB_TRAEFIK_HOST_ADDRESS will be 127.0.0.1"
+        export PUBLIC_IP="127.0.0.1"
+        export CB_TRAEFIK_HOST_ADDRESS="localhost"
+    fi
+
     if [[ ! "$PUBLIC_IP" ]]; then
         debug "PUBLIC_IP not found, try to guess"
         ipcommand=$(public-ip-resolver-command)
@@ -379,9 +385,6 @@ doctor() {
     cbd-version
     if [[ "$(uname)" == "Darwin" ]]; then
         debug "checking OSX specific dependencies..."
-        if [[ "$DOCKER_MACHINE" ]]; then
-          docker-check-docker-machine
-        fi
 
         if [[ $(is-sub-path $(dirname ~/.) $(pwd)) == 0 ]]; then
           info "deployer location: OK"
@@ -452,8 +455,7 @@ is-sub-path() {
 
 deployer-delete() {
     declare desc="Deletes yaml files, and all dbs. You can use '--force' to avoid confirm dialog"
-
-    compose-config
+    
     cloudbreak-conf-db
 
     if [[ "$1" != "--force" ]] ; then
@@ -465,7 +467,6 @@ deployer-delete() {
     fi
 
     cloudbreak-delete-dbs
-    cloudbreak-delete-consul-data
     cloudbreak-delete-vault-data
     rm -f docker-compose.yml uaa.yml
 }
@@ -477,6 +478,7 @@ deployer-generate() {
     compose-generate-yaml
     generate-uaa-config
     generate-vault-config
+    generate-toml-file-for-localdev
 }
 
 deployer-regenerate() {
@@ -565,7 +567,7 @@ start-requested-services() {
         debug "All services must be started"
         if [[ "$(docker-compose -p cbreak ps $COMMON_DB | tail -1)" == *"Up"* ]]; then
             debug "DB services: $COMMON_DB are already running, start only other services"
-            services=$(sed -n "/^[a-z]/ s/:.*//p" docker-compose.yml | grep -v "db$" | xargs)
+            services=$(yq r -j docker-compose.yml | jq -r ".services|keys[]" | grep -v "db$" | xargs)
         fi
     fi
 
@@ -651,9 +653,6 @@ main() {
 
     circle-init
     compose-init
-    if is_macos; then
-        machine-init
-    fi
 
     debug "Cloudbreak Deployer $(bin-version)"
 
@@ -665,10 +664,6 @@ main() {
     cmd-export env-show
     cmd-export env-export
     cmd-export create-bundle create-bundle
-
-    cmd-export-ns machine "Docker-machine"
-    cmd-export machine-create
-    cmd-export machine-check
 
     cmd-export-ns db "Db operations namespace"
     cmd-export db-dump

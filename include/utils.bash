@@ -82,7 +82,7 @@ exit-on-remote-database() {
     ;;
     esac
 
-    if [[ -n "$db" ]] && [[ $db != "$COMMON_DB.service.consul"* ]]; then
+    if [[ -n "$db" ]] && [[ $db != "$COMMON_DB"* ]]; then
         error "Remote database not supported as $1"
         _exit 543
     fi

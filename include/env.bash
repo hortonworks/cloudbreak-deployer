@@ -202,19 +202,17 @@ VAULT_UNSEAL_KEYS - Space separated unseal keys for vault
 VAULT_AUTO_UNSEAL - If set to true then the Vault root token and unseal key will be saved to the Profile
 VAULT_ROOT_TOKEN - Root token to authenticate to Vault
 
-CB_LOCAL_DEV_BIND_ADDR - Ambassador external address for local development of Cloudbreak and Autoscale
 CB_SCHEMA_SCRIPTS_LOCATION - Location of Cloudbreak schema update files
 DOCKER_TAG_AMBASSADOR - Ambassador container version for local development
 PERISCOPE_SCHEMA_SCRIPTS_LOCATION - Location of Cloudbreak schema update files
-PRIVATE_IP - Ip address or hostname of the private interface
 REMOVE_CONTAINER - Keeps side effect containers for debug purpose
 UAA_SCHEMA_SCRIPTS_LOCATION - Location of Identity schema update files
 ULUWATU_VOLUME_HOST - Location of the locally developed Web UI project
 CAAS_MOCK_VOLUME_HOST - Location of the locally developed Caas mock
 
-DOCKER_MACHINE - Name of the Docker Machine where Cloudbreak runs
 COMPOSE_TLS_VERSION - TLS version used by Docker Compose
 DOCKER_PROFILE - Profile file for Docker Machine related environment variables
+DOCKER_NETWORK_NAME - Network name for docker, created by docker-compose
 MACHINE_CPU - Number of the CPU cores on the Docker Machine instance
 MACHINE_MEM - Amount of RAM on the Docker Machine instance
 MACHINE_NAME - Name of the Docker Machine instance

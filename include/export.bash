@@ -133,7 +133,6 @@ anonymize-exported-files() {
         -v $(pwd):/var/lib/cloudbreak-deployment \
         -v $(pwd)/$1:/var/lib/cloudbreak-deployment/cfg \
         -v $(pwd)/$2:/var/lib/cloudbreak-deployment/hst_bundle \
-        --dns=$PRIVATE_IP \
         -p 9001:9000 \
         $DOCKER_IMAGE_CBD_SMARTSENSE:$DOCKER_TAG_CBD_SMARTSENSE &> /dev/null
     
