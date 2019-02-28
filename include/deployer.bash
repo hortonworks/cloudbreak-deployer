@@ -575,6 +575,7 @@ start-requested-services() {
         init_vault
     fi
 
+    compose-pull || true
     compose-up $services
 
     if [[ "$CB_LOCAL_DEV" == "true" ]]; then
@@ -683,7 +684,6 @@ main() {
     cmd-export compose-logs logs
     cmd-export compose-logs-tail logs-tail
     cmd-export compose-pull pull
-    cmd-export compose-pull-parallel pull-parallel
 
     cmd-export migrate-startdb-cmd startdb
     cmd-export migrate-cmd migrate

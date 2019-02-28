@@ -56,6 +56,9 @@ db-initialize-databases() {
     done
 
     db-create-vault-schema
+    if [[ ! -z $DPS_REPO ]]; then
+        db-initialize-dps
+    fi
 }
 
 db-create-database() {
@@ -69,6 +72,19 @@ db-create-database() {
             debug "create new database: $newDbName"
             docker exec cbreak_${COMMON_DB}_1 psql -U postgres -c "create database $newDbName;" | debug-cat
         fi
+    fi
+}
+
+db-initialize-dps() {
+    debug "Initialize dps"
+    if docker exec cbreak_${COMMON_DB}_1 psql -U postgres -c "\c dps_core;" &>/dev/null; then
+        debug "The dps_core database already exists, no need for creation."
+    else
+        while read line
+        do
+            printf "%s\n" "$line"
+            docker exec cbreak_${COMMON_DB}_1 psql -U postgres -v "ON_ERROR_STOP=1" -c "$line" | debug-cat
+        done < "$DPS_REPO/resources/dev-setup/init.sql"
     fi
 }
 
