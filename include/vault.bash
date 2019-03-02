@@ -68,7 +68,7 @@ generate-vault-config-force() {
     debug "Generating Vault config: ${vaultFile} ..."
     cat > ${vaultFile} << EOF
 storage "postgresql" {
-  connection_url = "postgres://$CB_DB_ENV_USER:$CB_DB_ENV_PASS@$COMMON_DB.service.consul:5432/$VAULT_DB_SCHEMA?sslmode=disable"
+  connection_url = "postgres://$CB_DB_ENV_USER:$CB_DB_ENV_PASS@$COMMON_DB:5432/$VAULT_DB_SCHEMA?sslmode=disable"
 }
 
 listener "tcp" {
@@ -82,9 +82,6 @@ EOF
 }
 
 start_vault() {
-    compose-up --no-recreate consul
-    compose-up --no-recreate registrator
-    consul-wait
     compose-up --no-recreate vault
 }
 
@@ -92,7 +89,7 @@ init_vault() {
     cloudbreak-config
     start_vault
 
-    local vault_endpoint="http://vault.service.consul:$VAULT_BIND_PORT"
+    local vault_endpoint="http://vault:$VAULT_BIND_PORT"
 
     local maxtry=${RETRY:=30}
     while ! get-vault-status | jq -r .initialized &>/dev/null; do
@@ -116,7 +113,7 @@ init_vault() {
     if [[ "$initialized" == "false" ]]; then
         debug "Vault is not initialized yet, initialize now.."
         initLog=$(docker run \
-            --dns $PRIVATE_IP \
+            --net "$CB_COMPOSE_PROJECT"_"$DOCKER_NETWORK_NAME" \
             --rm \
             -e VAULT_ADDR=$vault_endpoint \
             --entrypoint /bin/sh \
@@ -158,7 +155,7 @@ init_vault() {
     if [[ "$(get-vault-status | jq -r .sealed 2>/dev/null)" == "false" ]]; then
         debug "Checking kv engine version"
         local secretStoreVersion=$(docker run \
-                --dns $PRIVATE_IP \
+                --net "$CB_COMPOSE_PROJECT"_"$DOCKER_NETWORK_NAME" \
                 --rm \
                 -e VAULT_TOKEN=$VAULT_ROOT_TOKEN \
                 -e VAULT_ADDR=$vault_endpoint \
@@ -168,7 +165,7 @@ init_vault() {
         if [[ "$secretStoreVersion" == "1" ]] || [[ "$secretStoreVersion" == "null" ]]; then
             debug "Converting kv engine $secretStoreVersion to v2"
             docker run \
-                --dns $PRIVATE_IP \
+                --net "$CB_COMPOSE_PROJECT"_"$DOCKER_NETWORK_NAME" \
                 --rm \
                 -e VAULT_TOKEN=$VAULT_ROOT_TOKEN \
                 -e VAULT_ADDR=$vault_endpoint \
@@ -182,7 +179,7 @@ init_vault() {
 
 get-vault-status() {
     echo $(docker run \
-        --dns $PRIVATE_IP \
+        --net "$CB_COMPOSE_PROJECT"_"$DOCKER_NETWORK_NAME" \
         --rm \
         -e VAULT_ADDR=$vault_endpoint \
         --entrypoint /bin/sh \
@@ -202,15 +199,15 @@ vault-unseal() {
         _exit 1
     fi
 
-    local vault_endpoint="http://vault.service.consul:$VAULT_BIND_PORT"
+    local vault_endpoint="http://vault:$VAULT_BIND_PORT"
 
     docker run \
-        --dns $PRIVATE_IP \
+        --net "$CB_COMPOSE_PROJECT"_"$DOCKER_NETWORK_NAME" \
         --rm \
         -e VAULT_ADDR=$vault_endpoint \
         -e VAULT_UNSEAL_KEYS=$vault_unseal_keys \
         --entrypoint /bin/sh \
-        $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c 'vault operator unseal $VAULT_UNSEAL_KEYS &>/dev/null'
+        $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c 'vault operator unseal $VAULT_UNSEAL_KEYS' | debug-cat
     info "Vault is unsealed"
 }
 
@@ -219,10 +216,10 @@ vault-status() {
 
     cloudbreak-config
 
-    local vault_endpoint="http://vault.service.consul:$VAULT_BIND_PORT"
+    local vault_endpoint="http://vault:$VAULT_BIND_PORT"
 
     docker run \
-        --dns $PRIVATE_IP \
+        --net "$CB_COMPOSE_PROJECT"_"$DOCKER_NETWORK_NAME" \
         --rm \
         -e VAULT_ADDR=$vault_endpoint \
         --entrypoint /bin/sh \

@@ -10,8 +10,6 @@ db-dump() {
 
     db-config
 
-    env-import COMPOSE_TLS_VERSION "TLSv1_2"
-
     if docker inspect cbreak_${COMMON_DB}_1 &> /dev/null; then
         migrate-startdb
         db-wait-for-db-cont cbreak_${COMMON_DB}_1

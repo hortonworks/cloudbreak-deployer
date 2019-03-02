@@ -3,7 +3,7 @@ compose-init() {
         echo "* removing old docker-compose binary" | yellow
         rm -f .deps/bin/docker-compose
     fi
-    deps-require docker-compose 1.13.0
+    deps-require docker-compose 1.23.2
     env-import CB_COMPOSE_PROJECT cbreak
     env-import COMPOSE_HTTP_TIMEOUT 120
     env-import DOCKER_STOP_TIMEOUT 60
@@ -58,8 +58,6 @@ compose-up() {
 
 compose-kill() {
     declare desc="Kills and removes all cloudbreak related container"
-
-    compose-config
 
     dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT}
     dockerCompose rm -f
@@ -219,453 +217,421 @@ compose-generate-yaml-force() {
         export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_KEY
     fi
     cat > ${composeFile} <<EOF
-caas-mock:
-    image: $DOCKER_IMAGE_CAAS_MOCK:$DOCKER_TAG_CAAS_MOCK
-    dns: $PRIVATE_IP
-    restart: always
-    environment:
-      - SERVICE_NAME=caas-mock
-    volumes:
-      - $CAAS_MOCK_VOLUME_HOST:$CAAS_MOCK_VOLUME_CONTAINER
-    ports: 
-      - "$CAAS_MOCK_BIND_PORT:8080"
-    labels:
-      - traefik.frontend.rule=PathPrefix:/auth,/oidc,/idp,/caas
-      - traefik.port=8080
-      - traefik.backend=caas-backend
-      - traefik.frontend.priority=5
+version: '3'
+volumes:
+    $COMMON_DB_VOL:
+networks:
+    $DOCKER_NETWORK_NAME:
+        driver: bridge
+services:
+    traefik:
+        ports:
+            - "8081:8080"
+            - $PUBLIC_HTTP_PORT:80
+            - $PUBLIC_HTTPS_PORT:443
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - $CBD_CERT_ROOT_PATH/traefik:/certs/traefik
+            - ./logs/traefik:/opt/traefik/log/
+            - ./traefik.toml:/etc/traefik/traefik.toml 
+        networks:
+        - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: traefik:$DOCKER_TAG_TRAEFIK
+        restart: on-failure
+        command: --debug --api --rest --ping --metrics --InsecureSkipVerify=true \
+            --defaultEntryPoints=http,https \
+            --entryPoints='Name:http Address::80 Redirect.EntryPoint:https' \
+            --entryPoints='Name:https Address::443 TLS:$CBD_TRAEFIK_TLS' \
+            --maxidleconnsperhost=$TRAEFIK_MAX_IDLE_CONNECTION \
+            --traefiklog.filepath=/opt/traefik/log/traefik.log \
+            --accessLog.filePath=/opt/traefik/log/access.log \
+            --docker
+
+    caas-mock:
+        image: $DOCKER_IMAGE_CAAS_MOCK:$DOCKER_TAG_CAAS_MOCK
+        restart: on-failure
+        volumes:
+        - $CAAS_MOCK_VOLUME_HOST:$CAAS_MOCK_VOLUME_CONTAINER
+        networks:
+        - $DOCKER_NETWORK_NAME
+        ports: 
+        - "$CAAS_MOCK_BIND_PORT:8080"
+        labels:
+        - traefik.frontend.rule=PathPrefix:/auth,/oidc,/idp,/caas
+        - traefik.port=8080
+        - traefik.backend=caas-backend
+        - traefik.frontend.priority=100
       
-traefik:
-    ports:
-        - "$PRIVATE_IP:8081:8080"
-        - $PUBLIC_HTTP_PORT:80
-        - $PUBLIC_HTTPS_PORT:443
-    links:
-        - consul
-        - identity
-        - uluwatu
-        - caas-mock
-    volumes:
+    haveged:
+        labels:
+        - traefik.enable=false
+        privileged: true
+        networks:
+        - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: hortonworks/haveged:$DOCKER_TAG_HAVEGED
+
+    logsink:
+        labels:
+        - traefik.enable=false
+        ports:
+            - 3333
+        volumes:
+            - ./logs:/tmp
+        networks:
+        - $DOCKER_NETWORK_NAME
+        image: hortonworks/socat:1.0.0
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        command: socat -u TCP-LISTEN:3333,reuseaddr,fork OPEN:/tmp/cbreak.log,creat,append
+
+    logspout:
+        labels:
+        - traefik.enable=false
+        ports:
+            - 8000:80
+        environment:
+            - DEBUG=true
+            - LOGSPOUT=ignore
+            - "RAW_FORMAT={{.Container.Name}} | {{.Data}}\n"
+        volumes:
         - /var/run/docker.sock:/var/run/docker.sock
-        - $CBD_CERT_ROOT_PATH/traefik:/certs/traefik
-        - ./logs/traefik:/opt/traefik/log/
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: traefik:$DOCKER_TAG_TRAEFIK
-    restart: on-failure
-    command: --debug --web --InsecureSkipVerify=true \
-        --defaultEntryPoints=http,https \
-        --entryPoints='Name:http Address::80 Redirect.EntryPoint:https' \
-        --entryPoints='Name:https Address::443 TLS:$CBD_TRAEFIK_TLS' \
-        --maxidleconnsperhost=$TRAEFIK_MAX_IDLE_CONNECTION \
-        --traefikLogsFile=/opt/traefik/log/traefik.log \
-        --accessLogsFile=/opt/traefik/log/access.log \
-        --docker \
-        --consul --consul.endpoint=consul:8500
-haveged:
-    labels:
-      - traefik.enable=false
-    privileged: true
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: hortonworks/haveged:$DOCKER_TAG_HAVEGED
+        networks:
+        - $DOCKER_NETWORK_NAME
+        entrypoint: ["/bin/sh"]
+        command: -c 'sleep 1; (ROUTE_URIS=\$\$LOGSINK_PORT_3333_TCP /bin/logspout) & LSPID=\$\$!; trap "kill \$\$LSPID; wait \$\$LSPID" SIGINT SIGTERM; wait \$\$LSPID'
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: hortonworks/logspout:v3.2.2
 
-consul:
-    labels:
-      - traefik.enable=false
-    privileged: true
-    environment:
-        - http_proxy=$HTTP_PROXY
-        - https_proxy=$HTTPS_PROXY
-    volumes:
-        - "/var/run/docker.sock:/var/run/docker.sock"
-        - consul-data:/data
-    ports:
-        - "$PRIVATE_IP:53:8600/udp"
-        - "8300:8300"
-        - "8400:8400"
-        - "8500:8500"
-    hostname: node1
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CONSUL:$DOCKER_TAG_CONSUL
-    command: agent -server -client 0.0.0.0 -advertise=$PRIVATE_IP -bootstrap -ui $DOCKER_CONSUL_OPTIONS
+    logrotate:
+        environment:
+            - "CRON_EXPR=0 * * * *"
+            - "LOGROTATE_LOGFILES=/var/log/cloudbreak-deployer/*.log /var/log/cloudbreak-deployer/*/*.log"
+            - LOGROTATE_FILESIZE=10M
+        volumes:
+            - ./logs:/var/log/cloudbreak-deployer
+        networks:
+        - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: hortonworks/logrotate:$DOCKER_TAG_LOGROTATE
 
-registrator:
-    labels:
-      - traefik.enable=false
-    privileged: true
-    volumes:
-        - "/var/run/docker.sock:/tmp/docker.sock"
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: gliderlabs/registrator:$DOCKER_TAG_REGISTRATOR
-    links:
-        - consul
-    restart: on-failure
-    command: consul://consul:8500
+    $COMMON_DB:
+        labels:
+        - traefik.enable=false
+        privileged: true
+        ports:
+            - "5432:5432"
+        volumes:
+            - "$COMMON_DB_VOL:/var/lib/postgresql/data"
+        networks:
+        - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: postgres:$DOCKER_TAG_POSTGRES
+        entrypoint: ["/bin/bash"]
+        command: -c 'cd /var/lib/postgresql; touch .ash_history .psql_history; chown -R postgres:postgres /var/lib/postgresql; (/docker-entrypoint.sh postgres -c max_connections=300) & PGPID="\$\$!"; echo "PGPID \$\$PGPID"; trap "kill \$\$PGPID; wait \$\$PGPID" SIGINT SIGTERM; cd /var/lib/postgresql; (tail -f .*history) & wait "\$\$PGPID"'
 
-logsink:
-    labels:
-      - traefik.enable=false
-    ports:
-        - 3333
-    environment:
-        - SERVICE_NAME=logsink
-    volumes:
-        - ./logs:/tmp
-    image: hortonworks/socat:1.0.0
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    command: socat -u TCP-LISTEN:3333,reuseaddr,fork OPEN:/tmp/cbreak.log,creat,append
+    vault:
+        labels:
+        - traefik.port=8200
+        - traefik.frontend.rule=PathPrefixStrip:/vault
+        - traefik.backend=vault
+        - traefik.frontend.priority=100
+        ports:
+        - $VAULT_BIND_PORT:8200
+        environment:
+        - SKIP_SETCAP=true
+        volumes:
+        - ./$VAULT_CONFIG_FILE:/vault/config/$VAULT_CONFIG_FILE
+        networks:
+        - $DOCKER_NETWORK_NAME
+        image: $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG
+        restart: on-failure
+        command: server
 
-logspout:
-    labels:
-      - traefik.enable=false
-    ports:
-        - 8000:80
-    environment:
-        - SERVICE_NAME=logspout
-        - DEBUG=true
-        - LOGSPOUT=ignore
-        - "RAW_FORMAT={{.Container.Name}} | {{.Data}}\n"
-    links:
-        - logsink
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    entrypoint: ["/bin/sh"]
-    command: -c 'sleep 1; (ROUTE_URIS=\$\$LOGSINK_PORT_3333_TCP /bin/logspout) & LSPID=\$\$!; trap "kill \$\$LSPID; wait \$\$LSPID" SIGINT SIGTERM; wait \$\$LSPID'
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: hortonworks/logspout:v3.2.2
+    identity:
+        labels:
+        - traefik.port=8080
+        - traefik.frontend.rule=PathPrefix:/identity/check_token,/identity/oauth,/identity/Users,/identity/login.do,/identity/Groups;PathPrefixStrip:/identity
+        - traefik.backend=identity-backend
+        - traefik.frontend.priority=100
+        ports:
+            - $UAA_PORT:8080
+        environment:
+            - http_proxy=$HTTP_PROXY
+            - https_proxy=$HTTPS_PROXY
+            - IDENTITY_DB_URL
+            - IDENTITY_DB_NAME
+            - IDENTITY_DB_USER
+            - IDENTITY_DB_PASS
+        volumes:
+        - ./uaa.yml:/uaa/uaa.yml
+        - ./logs/identity:/tomcat/logs/
+        networks:
+        - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: hortonworks/cloudbreak-uaa:$DOCKER_TAG_UAA
 
-logrotate:
-    environment:
-        - "CRON_EXPR=0 * * * *"
-        - "LOGROTATE_LOGFILES=/var/log/cloudbreak-deployer/*.log /var/log/cloudbreak-deployer/*/*.log"
-        - LOGROTATE_FILESIZE=10M
-    volumes:
-        - ./logs:/var/log/cloudbreak-deployer
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: hortonworks/logrotate:$DOCKER_TAG_LOGROTATE
-
-$COMMON_DB:
-    labels:
-      - traefik.enable=false
-    privileged: true
-    ports:
-        - "$PRIVATE_IP:5432:5432"
-    environment:
-      - SERVICE_NAME=$COMMON_DB
-        #- SERVICE_CHECK_CMD=bash -c 'psql -h 127.0.0.1 -p 5432  -U postgres -c "select 1"'
-    volumes:
-        - "$COMMON_DB_VOL:/var/lib/postgresql/data"
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: postgres:$DOCKER_TAG_POSTGRES
-    entrypoint: ["/bin/bash"]
-    command: -c 'cd /var/lib/postgresql; touch .ash_history .psql_history; chown -R postgres:postgres /var/lib/postgresql; (/docker-entrypoint.sh postgres -c max_connections=300) & PGPID="\$\$!"; echo "PGPID \$\$PGPID"; trap "kill \$\$PGPID; wait \$\$PGPID" SIGINT SIGTERM; cd /var/lib/postgresql; (tail -f .*history) & wait "\$\$PGPID"'
-
-vault:
-    labels:
-      - traefik.port=8200
-      - traefik.frontend.rule=PathPrefixStrip:/vault
-      - traefik.backend=vault
-      - traefik.frontend.priority=10
-    ports:
-    - $VAULT_BIND_PORT:8200
-    environment:
-    - SKIP_SETCAP=true
-    - SERVICE_NAME=vault
-    volumes:
-      - ./$VAULT_CONFIG_FILE:/vault/config/$VAULT_CONFIG_FILE
-    dns: $PRIVATE_IP
-    image: $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG
-    restart: on-failure
-    command: server
-
-identity:
-    labels:
-      - traefik.port=8080
-      - traefik.frontend.rule=PathPrefix:/identity/check_token,/identity/oauth,/identity/Users,/identity/login.do,/identity/Groups;PathPrefixStrip:/identity
-      - traefik.backend=identity-backend
-      - traefik.frontend.priority=10
-    ports:
-        - $UAA_PORT:8080
-    environment:
-        - http_proxy=$HTTP_PROXY
-        - https_proxy=$HTTPS_PROXY
-        - SERVICE_NAME=identity
-        # - SERVICE_CHECK_HTTP=/login
-        - IDENTITY_DB_URL
-        - IDENTITY_DB_NAME
-        - IDENTITY_DB_USER
-        - IDENTITY_DB_PASS
-    dns: $PRIVATE_IP
-    volumes:
-      - ./uaa.yml:/uaa/uaa.yml
-      - ./logs/identity:/tomcat/logs/
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: hortonworks/cloudbreak-uaa:$DOCKER_TAG_UAA
-
-uluwatu:
-    environment:
-        - http_proxy=$HTTP_PROXY
-        - https_proxy=$HTTPS_PROXY
-        - SERVICE_NAME=uluwatu
-          #- SERVICE_CHECK_HTTP=/
-        - ULU_OAUTH_REDIRECT_URI
-        - ULU_OAUTH_CLIENT_ID=$UAA_ULUWATU_ID
-        - 'ULU_OAUTH_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_ULUWATU_SECRET \')'
-        - ULU_HOST_ADDRESS
-        - NODE_TLS_REJECT_UNAUTHORIZED=$ULU_NODE_TLS_REJECT_UNAUTHORIZED
-        - ULU_HWX_CLOUD_DEFAULT_ARM_VIRTUAL_NETWORK_ID
-        - ULU_ADDRESS_RESOLVING_TIMEOUT
-        - ULU_IDENTITY_SERVICEID=identity.service.consul
-        - ULU_CLOUDBREAK_SERVICEID=cloudbreak.service.consul
-        - ULU_PERISCOPE_SERVICEID=periscope.service.consul
-        - ULU_SUBSCRIBE_TO_NOTIFICATIONS
-        - AWS_INSTANCE_ID
-        - AWS_ACCOUNT_ID
-        - AWS_AMI_ID
-        - AZURE_TENANT_ID
-        - AZURE_SUBSCRIPTION_ID
-        - AWS_ACCESS_KEY_ID
-        - AWS_SECRET_ACCESS_KEY
-        - CAAS_ENABLED=true
-    labels:
-      - traefik.frontend.rule=Host:$PUBLIC_IP,$CB_TRAEFIK_HOST_ADDRESS
-      - traefik.port=3000
-      - traefik.backend=uluwatu-backend
-      - traefik.frontend.priority=5
-    ports:
-        - 3000:3000
-    volumes:
-        - $ULUWATU_VOLUME_HOST:$ULUWATU_VOLUME_CONTAINER
-    dns: $PRIVATE_IP
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CLOUDBREAK_WEB:$DOCKER_TAG_ULUWATU
+    uluwatu:
+        environment:
+            - http_proxy=$HTTP_PROXY
+            - https_proxy=$HTTPS_PROXY
+            - ULU_OAUTH_REDIRECT_URI
+            - ULU_OAUTH_CLIENT_ID=$UAA_ULUWATU_ID
+            - 'ULU_OAUTH_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_ULUWATU_SECRET \')'
+            - ULU_HOST_ADDRESS
+            - NODE_TLS_REJECT_UNAUTHORIZED=$ULU_NODE_TLS_REJECT_UNAUTHORIZED
+            - ULU_HWX_CLOUD_DEFAULT_ARM_VIRTUAL_NETWORK_ID
+            - ULU_ADDRESS_RESOLVING_TIMEOUT
+            - "ULU_IDENTITY_ADDRESS=http://identity:8080"
+            - "ULU_CLOUDBREAK_ADDRESS=$CLOUDBREAK_URL"
+            - "ULU_PERISCOPE_ADDRESS=http://periscope:8080"
+            - ULU_SUBSCRIBE_TO_NOTIFICATIONS
+            - AWS_INSTANCE_ID
+            - AWS_ACCOUNT_ID
+            - AWS_AMI_ID
+            - AZURE_TENANT_ID
+            - AZURE_SUBSCRIPTION_ID
+            - AWS_ACCESS_KEY_ID
+            - AWS_SECRET_ACCESS_KEY
+            - CAAS_ENABLED=true
+        labels:
+        - traefik.frontend.rule=PathPrefix:/
+        - traefik.port=3000
+        - traefik.backend=uluwatu-backend
+        - traefik.frontend.priority=5
+        ports:
+            - 3000:3000
+        volumes:
+            - $ULUWATU_VOLUME_HOST:$ULUWATU_VOLUME_CONTAINER
+        networks:
+        - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: $DOCKER_IMAGE_CLOUDBREAK_WEB:$DOCKER_TAG_ULUWATU
 
 EOF
 
     if [[ "$CB_LOCAL_DEV" == "false" ]]; then
         cat >> ${composeFile} <<EOF
-cloudbreak:
-    environment:
-        - AWS_ACCESS_KEY_ID
-        - AWS_SECRET_ACCESS_KEY
-        - AWS_GOV_ACCESS_KEY_ID
-        - AWS_GOV_SECRET_ACCESS_KEY
-        - "SERVICE_NAME=cloudbreak"
-          #- SERVICE_CHECK_HTTP=/info
-        - "http_proxy=$HTTP_PROXY"
-        - "https_proxy=$HTTPS_PROXY"
-        - 'CB_JAVA_OPTS=$(escape-string-compose-yaml "$CB_JAVA_OPTS" \')'
-        - "HTTPS_PROXYFORCLUSTERCONNECTION=$HTTPS_PROXYFORCLUSTERCONNECTION"
-        - "CB_CLIENT_ID=$UAA_CLOUDBREAK_ID"
-        - 'CB_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_CLOUDBREAK_SECRET \')'
-        - CB_CLUSTERDEFINITION_AMBARI_DEFAULTS
-        - CB_CLUSTERDEFINITION_AMBARI_INTERNAL
-        - CB_TEMPLATE_DEFAULTS
-        - CB_HBM2DDL_STRATEGY
-        - CB_CAPABILITIES
-        $( if [[ -n "$INFO_APP_CAPABILITIES" ]]; then echo "- INFO_APP_CAPABILITIES"; fi )
-        - "ENDPOINTS_AUTOCONFIG_ENABLED=false"
-        - "ENDPOINTS_DUMP_ENABLED=false"
-        - "ENDPOINTS_TRACE_ENABLED=false"
-        - "ENDPOINTS_CONFIGPROPS_ENABLED=false"
-        - "ENDPOINTS_METRICS_ENABLED=false"
-        - "ENDPOINTS_MAPPINGS_ENABLED=false"
-        - "ENDPOINTS_BEANS_ENABLED=false"
-        - "ENDPOINTS_ENV_ENABLED=false"
-        - "CB_ADDRESS_RESOLVING_TIMEOUT"
-        - "CB_IDENTITY_SERVICEID=identity.service.consul"
-        - CB_DB_PORT_5432_TCP_ADDR
-        - CB_DB_PORT_5432_TCP_PORT
-        - CB_DB_ENV_USER
-        - CB_DB_ENV_PASS
-        - CB_DB_ENV_DB
-        - CB_DB_ENV_SCHEMA
-        - "CB_DB_SERVICEID=$COMMON_DB.service.consul"
-        - CB_SCHEMA_SCRIPTS_LOCATION
-        - CB_SCHEMA_MIGRATION_AUTO
-        - "SPRING_CLOUD_CONSUL_HOST=consul.service.consul"
-        - CB_AWS_HOSTKEY_VERIFY
-        - CB_GCP_HOSTKEY_VERIFY
-        - REST_DEBUG
-        - CB_AWS_DEFAULT_CF_TAG
-        - CB_AWS_CUSTOM_CF_TAGS
-        - CERT_VALIDATION
-        - CB_HOST_DISCOVERY_CUSTOM_DOMAIN
-        - CB_SMARTSENSE_CONFIGURE
-        - CB_SMARTSENSE_ID
-        - CB_PLATFORM_DEFAULT_REGIONS
-        - CB_DEFAULT_SUBSCRIPTION_ADDRESS
-        $( if [[ -n "$CB_IMAGE_CATALOG_URL" ]]; then echo "- CB_IMAGE_CATALOG_URL"; fi )
-        - CB_AWS_VPC
-        - CB_ENABLEDPLATFORMS
-        - CB_ENABLED_LINUX_TYPES
-        - CB_MAX_SALT_NEW_SERVICE_RETRY
-        - CB_MAX_SALT_NEW_SERVICE_RETRY_ONERROR
-        - CB_MAX_SALT_RECIPE_EXECUTION_RETRY
-        - CB_INSTANCE_UUID
-        - CB_INSTANCE_NODE_ID
-        - CB_INSTANCE_PROVIDER
-        - CB_INSTANCE_REGION
-        - CB_PRODUCT_ID
-        - CB_COMPONENT_ID
-        - CB_COMPONENT_CREATED
-        - CB_COMPONENT_CLUSTER_ID
-        - CB_LOG_LEVEL
-        - CB_DEFAULT_GATEWAY_CIDR
-        $( if [[ "$CB_AUDIT_FILE_ENABLED" = true ]]; then echo "- CB_AUDIT_FILEPATH=/cloudbreak-log/cb-audit.log"; fi )
-        $( if [[ -n "$CB_KAFKA_BOOTSTRAP_SERVERS" ]]; then echo "- CB_KAFKA_BOOTSTRAP_SERVERS"; fi )
-        - CB_DISABLE_SHOW_CLI
-        - CB_DISABLE_SHOW_CLUSTERDEFINITION
-        - SMARTSENSE_UPLOAD_HOST
-        - SMARTSENSE_UPLOAD_USERNAME
-        - SMARTSENSE_UPLOAD_PASSWORD
-        - CB_AWS_ACCOUNT_ID
-        - VAULT_ADDR=vault.service.consul
-        - VAULT_PORT=$VAULT_BIND_PORT
-        - VAULT_ROOT_TOKEN=$VAULT_ROOT_TOKEN
-        - "CAAS_URL=$CAAS_URL"
-    labels:
-      - traefik.port=8080
-      - traefik.frontend.rule=PathPrefix:/cb/
-      - traefik.backend=cloudbreak-backend
-      - traefik.frontend.priority=10
-    ports:
-        - $CB_PORT:8080
-    volumes:
-        - "$CBD_CERT_ROOT_PATH:/certs"
-        - /dev/urandom:/dev/random
-        - ./logs/cloudbreak:/cloudbreak-log
-        - ./etc/:/etc/cloudbreak
-    dns: $PRIVATE_IP
-    links:
-        - consul
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CLOUDBREAK:$DOCKER_TAG_CLOUDBREAK
-    command: bash
-
-datalake:
-    environment:
-        - http_proxy=$HTTP_PROXY
-        - https_proxy=$HTTPS_PROXY
-        - CERT_VALIDATION
-        - SERVICE_NAME=datalake
-        - REST_DEBUG
-        - 'DATALAKE_JAVA_OPTS=$(escape-string-compose-yaml "$DATALAKE_JAVA_OPTS" \')'
-        - DATALAKE_HBM2DDL_STRATEGY
-        - DATALAKE_DB_PORT_5432_TCP_ADDR
-        - DATALAKE_DB_PORT_5432_TCP_PORT
-        - DATALAKE_DB_ENV_USER
-        - DATALAKE_DB_ENV_PASS
-        - DATALAKE_DB_ENV_DB
-        - DATALAKE_DB_ENV_SCHEMA
-        - DATALAKE_CLIENT_ID=$UAA_DATALAKE_ID
-        - DATALAKE_HOSTNAME_RESOLUTION=public
-        - DATALAKE_ADDRESS_RESOLVING_TIMEOUT
-        - DATALAKE_DB_SERVICEID=$COMMON_DB.service.consul
-        - DATALAKE_CLOUDBREAK_SERVICEID=cloudbreak.service.consul
-        - DATALAKE_SCHEMA_SCRIPTS_LOCATION
-        - DATALAKE_SCHEMA_MIGRATION_AUTO
-        - DATALAKE_INSTANCE_NODE_ID=$CB_INSTANCE_NODE_ID
-        - DATALAKE_LOG_LEVEL
-    labels:
+    cloudbreak:
+        environment:
+            - AWS_ACCESS_KEY_ID
+            - AWS_SECRET_ACCESS_KEY
+            - AWS_GOV_ACCESS_KEY_ID
+            - AWS_GOV_SECRET_ACCESS_KEY
+            - "http_proxy=$HTTP_PROXY"
+            - "https_proxy=$HTTPS_PROXY"
+            - 'CB_JAVA_OPTS=$(escape-string-compose-yaml "$CB_JAVA_OPTS" \')'
+            - "HTTPS_PROXYFORCLUSTERCONNECTION=$HTTPS_PROXYFORCLUSTERCONNECTION"
+            - "CB_CLIENT_ID=$UAA_CLOUDBREAK_ID"
+            - 'CB_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_CLOUDBREAK_SECRET \')'
+            - CB_CLUSTERDEFINITION_AMBARI_DEFAULTS
+            - CB_CLUSTERDEFINITION_AMBARI_INTERNAL
+            - CB_TEMPLATE_DEFAULTS
+            - CB_HBM2DDL_STRATEGY
+            - CB_CAPABILITIES
+            $( if [[ -n "$INFO_APP_CAPABILITIES" ]]; then echo "- INFO_APP_CAPABILITIES"; fi )
+            - "ENDPOINTS_AUTOCONFIG_ENABLED=false"
+            - "ENDPOINTS_DUMP_ENABLED=false"
+            - "ENDPOINTS_TRACE_ENABLED=false"
+            - "ENDPOINTS_CONFIGPROPS_ENABLED=false"
+            - "ENDPOINTS_METRICS_ENABLED=false"
+            - "ENDPOINTS_MAPPINGS_ENABLED=false"
+            - "ENDPOINTS_BEANS_ENABLED=false"
+            - "ENDPOINTS_ENV_ENABLED=false"
+            - "CB_ADDRESS_RESOLVING_TIMEOUT"
+            - "CB_IDENTITY_SERVER_URL=http://identity:8080"
+            - "CB_DB_PORT_5432_TCP_ADDR=$COMMON_DB"
+            - "CB_DB_PORT_5432_TCP_PORT=5432"
+            - CB_DB_ENV_USER
+            - CB_DB_ENV_PASS
+            - CB_DB_ENV_DB
+            - CB_DB_ENV_SCHEMA
+            - CB_SCHEMA_SCRIPTS_LOCATION
+            - CB_SCHEMA_MIGRATION_AUTO
+            - CB_AWS_HOSTKEY_VERIFY
+            - CB_GCP_HOSTKEY_VERIFY
+            - REST_DEBUG
+            - CB_AWS_DEFAULT_CF_TAG
+            - CB_AWS_CUSTOM_CF_TAGS
+            - CERT_VALIDATION
+            - CB_HOST_DISCOVERY_CUSTOM_DOMAIN
+            - CB_SMARTSENSE_CONFIGURE
+            - CB_SMARTSENSE_ID
+            - CB_PLATFORM_DEFAULT_REGIONS
+            - CB_DEFAULT_SUBSCRIPTION_ADDRESS
+            $( if [[ -n "$CB_IMAGE_CATALOG_URL" ]]; then echo "- CB_IMAGE_CATALOG_URL"; fi )
+            - CB_AWS_VPC
+            - CB_ENABLEDPLATFORMS
+            - CB_ENABLED_LINUX_TYPES
+            - CB_MAX_SALT_NEW_SERVICE_RETRY
+            - CB_MAX_SALT_NEW_SERVICE_RETRY_ONERROR
+            - CB_MAX_SALT_RECIPE_EXECUTION_RETRY
+            - CB_INSTANCE_UUID
+            - CB_INSTANCE_NODE_ID
+            - CB_INSTANCE_PROVIDER
+            - CB_INSTANCE_REGION
+            - CB_PRODUCT_ID
+            - CB_COMPONENT_ID
+            - CB_COMPONENT_CREATED
+            - CB_COMPONENT_CLUSTER_ID
+            - CB_LOG_LEVEL
+            - CB_DEFAULT_GATEWAY_CIDR
+            $( if [[ "$CB_AUDIT_FILE_ENABLED" = true ]]; then echo "- CB_AUDIT_FILEPATH=/cloudbreak-log/cb-audit.log"; fi )
+            $( if [[ -n "$CB_KAFKA_BOOTSTRAP_SERVERS" ]]; then echo "- CB_KAFKA_BOOTSTRAP_SERVERS"; fi )
+            - CB_DISABLE_SHOW_CLI
+            - CB_DISABLE_SHOW_CLUSTERDEFINITION
+            - SMARTSENSE_UPLOAD_HOST
+            - SMARTSENSE_UPLOAD_USERNAME
+            - SMARTSENSE_UPLOAD_PASSWORD
+            - CB_AWS_ACCOUNT_ID
+            - VAULT_ADDR=vault
+            - VAULT_PORT=$VAULT_BIND_PORT
+            - VAULT_ROOT_TOKEN=$VAULT_ROOT_TOKEN
+            - "CAAS_URL=$CAAS_URL"
+        labels:
         - traefik.port=8080
-        - traefik.frontend.rule=PathPrefix:/dl/
-        - traefik.backend=datalake-backend
+        - traefik.frontend.rule=PathPrefix:/cb/
+        - traefik.backend=cloudbreak-backend
         - traefik.frontend.priority=10
-    ports:
-        - 8086:8080
-    volumes:
-        - "$CBD_CERT_ROOT_PATH:/certs"
-        - /dev/urandom:/dev/random
-        - ./logs/datalake:/datalake-log
-        - ./etc/:/etc/datalake
-    dns: $PRIVATE_IP
-    links:
-        - consul
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CLOUDBREAK_DATALAKE:$DOCKER_TAG_DATALAKE
-    command: bash
-    
-periscope:
-    environment:
-        - http_proxy=$HTTP_PROXY
-        - https_proxy=$HTTPS_PROXY
-        - PERISCOPE_HBM2DDL_STRATEGY
-        - PERISCOPE_DB_PORT_5432_TCP_ADDR
-        - PERISCOPE_DB_PORT_5432_TCP_PORT
-        - PERISCOPE_DB_ENV_USER
-        - PERISCOPE_DB_ENV_PASS
-        - PERISCOPE_DB_ENV_DB
-        - PERISCOPE_DB_ENV_SCHEMA
-        - "HTTPS_PROXYFORCLUSTERCONNECTION=$HTTPS_PROXYFORCLUSTERCONNECTION"
-        - SERVICE_NAME=periscope
-          #- SERVICE_CHECK_HTTP=/info
-        - 'CB_JAVA_OPTS=$(escape-string-compose-yaml "$CB_JAVA_OPTS" \')'
-        - PERISCOPE_CLIENT_ID=$UAA_PERISCOPE_ID
-        - 'PERISCOPE_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_PERISCOPE_SECRET \')'
-        - PERISCOPE_HOSTNAME_RESOLUTION=public
-        - ENDPOINTS_AUTOCONFIG_ENABLED=false
-        - ENDPOINTS_DUMP_ENABLED=false
-        - ENDPOINTS_TRACE_ENABLED=false
-        - ENDPOINTS_CONFIGPROPS_ENABLED=false
-        - ENDPOINTS_METRICS_ENABLED=false
-        - ENDPOINTS_MAPPINGS_ENABLED=false
-        - ENDPOINTS_BEANS_ENABLED=false
-        - ENDPOINTS_ENV_ENABLED=false
-        - PERISCOPE_ADDRESS_RESOLVING_TIMEOUT
-        - PERISCOPE_DB_SERVICEID=$COMMON_DB.service.consul
-        - PERISCOPE_CLOUDBREAK_SERVICEID=cloudbreak.service.consul
-        - PERISCOPE_IDENTITY_SERVICEID=identity.service.consul
-        - PERISCOPE_SCHEMA_SCRIPTS_LOCATION
-        - PERISCOPE_SCHEMA_MIGRATION_AUTO
-        - PERISCOPE_INSTANCE_NODE_ID=$CB_INSTANCE_NODE_ID
-        - PERISCOPE_LOG_LEVEL
-        - REST_DEBUG
-        - CERT_VALIDATION
-        - CB_DEFAULT_SUBSCRIPTION_ADDRESS
-        - VAULT_ADDR=vault.service.consul
-        - VAULT_PORT=$VAULT_BIND_PORT
-        - VAULT_ROOT_TOKEN=$VAULT_ROOT_TOKEN
-        - "CAAS_URL=$CAAS_URL"
-    labels:
-      - traefik.port=8080
-      - traefik.frontend.rule=PathPrefix:/as/
-      - traefik.backend=periscope-backend
-      - traefik.frontend.priority=10
-    ports:
-        - 8085:8080
-    dns: $PRIVATE_IP
-    volumes:
-        - "$CBD_CERT_ROOT_PATH:/certs"
-        - ./logs/autoscale:/autoscale-log
-        - /dev/urandom:/dev/random
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CLOUDBREAK_PERISCOPE:$DOCKER_TAG_PERISCOPE
+        ports:
+            - $CB_PORT:8080
+        volumes:
+            - "$CBD_CERT_ROOT_PATH:/certs"
+            - /dev/urandom:/dev/random
+            - ./logs/cloudbreak:/cloudbreak-log
+            - ./etc/:/etc/cloudbreak
+        networks:
+        - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: $DOCKER_IMAGE_CLOUDBREAK:$DOCKER_TAG_CLOUDBREAK
+        command: bash
+
+    datalake:
+        environment:
+            - http_proxy=$HTTP_PROXY
+            - https_proxy=$HTTPS_PROXY
+            - CERT_VALIDATION
+            - REST_DEBUG
+            - 'DATALAKE_JAVA_OPTS=$(escape-string-compose-yaml "$DATALAKE_JAVA_OPTS" \')'
+            - DATALAKE_HBM2DDL_STRATEGY
+            - "DATALAKE_DB_PORT_5432_TCP_ADDR=$COMMON_DB"
+            - "DATALAKE_DB_PORT_5432_TCP_PORT=5432"
+            - DATALAKE_DB_ENV_USER
+            - DATALAKE_DB_ENV_PASS
+            - DATALAKE_DB_ENV_DB
+            - DATALAKE_DB_ENV_SCHEMA
+            - DATALAKE_CLIENT_ID=$UAA_DATALAKE_ID
+            - DATALAKE_HOSTNAME_RESOLUTION=public
+            - DATALAKE_ADDRESS_RESOLVING_TIMEOUT
+            - "DATALAKE_CLOUDBREAK_URL=$CLOUDBREAK_URL"
+            - DATALAKE_SCHEMA_SCRIPTS_LOCATION
+            - DATALAKE_SCHEMA_MIGRATION_AUTO
+            - DATALAKE_INSTANCE_NODE_ID=$CB_INSTANCE_NODE_ID
+            - DATALAKE_LOG_LEVEL
+        labels:
+            - traefik.port=8080
+            - traefik.frontend.rule=PathPrefix:/dl/
+            - traefik.backend=datalake-backend
+            - traefik.frontend.priority=10
+        ports:
+            - 8086:8080
+        volumes:
+            - "$CBD_CERT_ROOT_PATH:/certs"
+            - /dev/urandom:/dev/random
+            - ./logs/datalake:/datalake-log
+            - ./etc/:/etc/datalake
+        networks:
+        - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: $DOCKER_IMAGE_CLOUDBREAK_DATALAKE:$DOCKER_TAG_DATALAKE
+        command: bash
+        
+    periscope:
+        environment:
+            - http_proxy=$HTTP_PROXY
+            - https_proxy=$HTTPS_PROXY
+            - PERISCOPE_HBM2DDL_STRATEGY
+            - "PERISCOPE_DB_PORT_5432_TCP_ADDR=$COMMON_DB"
+            - "PERISCOPE_DB_PORT_5432_TCP_PORT=5432"
+            - PERISCOPE_DB_ENV_USER
+            - PERISCOPE_DB_ENV_PASS
+            - PERISCOPE_DB_ENV_DB
+            - PERISCOPE_DB_ENV_SCHEMA
+            - "HTTPS_PROXYFORCLUSTERCONNECTION=$HTTPS_PROXYFORCLUSTERCONNECTION"
+            - 'CB_JAVA_OPTS=$(escape-string-compose-yaml "$CB_JAVA_OPTS" \')'
+            - PERISCOPE_CLIENT_ID=$UAA_PERISCOPE_ID
+            - 'PERISCOPE_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_PERISCOPE_SECRET \')'
+            - PERISCOPE_HOSTNAME_RESOLUTION=public
+            - ENDPOINTS_AUTOCONFIG_ENABLED=false
+            - ENDPOINTS_DUMP_ENABLED=false
+            - ENDPOINTS_TRACE_ENABLED=false
+            - ENDPOINTS_CONFIGPROPS_ENABLED=false
+            - ENDPOINTS_METRICS_ENABLED=false
+            - ENDPOINTS_MAPPINGS_ENABLED=false
+            - ENDPOINTS_BEANS_ENABLED=false
+            - ENDPOINTS_ENV_ENABLED=false
+            - PERISCOPE_ADDRESS_RESOLVING_TIMEOUT
+            - "PERISCOPE_CLOUDBREAK_URL=$CLOUDBREAK_URL"
+            - PERISCOPE_IDENTITY_SERVER_URL=http://identity:8080
+            - PERISCOPE_SCHEMA_SCRIPTS_LOCATION
+            - PERISCOPE_SCHEMA_MIGRATION_AUTO
+            - PERISCOPE_INSTANCE_NODE_ID=$CB_INSTANCE_NODE_ID
+            - PERISCOPE_LOG_LEVEL
+            - REST_DEBUG
+            - CERT_VALIDATION
+            - CB_DEFAULT_SUBSCRIPTION_ADDRESS
+            - VAULT_ADDR=vault
+            - VAULT_PORT=$VAULT_BIND_PORT
+            - VAULT_ROOT_TOKEN=$VAULT_ROOT_TOKEN
+            - "CAAS_URL=$CAAS_URL"
+        labels:
+        - traefik.port=8080
+        - traefik.frontend.rule=PathPrefix:/as/
+        - traefik.backend=periscope-backend
+        - traefik.frontend.priority=10
+        ports:
+            - 8085:8080
+        volumes:
+            - "$CBD_CERT_ROOT_PATH:/certs"
+            - ./logs/autoscale:/autoscale-log
+            - /dev/urandom:/dev/random
+        networks:
+        - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: $DOCKER_IMAGE_CLOUDBREAK_PERISCOPE:$DOCKER_TAG_PERISCOPE
 EOF
     fi
 }
