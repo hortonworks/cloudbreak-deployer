@@ -58,9 +58,11 @@ migrate-execute-mybatis-migrations() {
     migrateDebug "Scripts location:  $new_scripts_location"
     local migrateResult=$(docker run \
         --rm \
+        --net "$CB_COMPOSE_PROJECT"_"$DOCKER_NETWORK_NAME" \
         -e DB_ENV_POSTGRES_SCHEMA=$service_name \
+        -e DB_PORT_5432_TCP_ADDR=$COMMON_DB \
+        -e DB_PORT_5432_TCP_PORT=5432 \
         --label cbreak.sidekick=true \
-        --link $container_name:db \
         -v $new_scripts_location:/migrate/scripts \
         hortonworks/mybatis-migrations:$DOCKER_TAG_MIGRATION "$@" \
       | tee -a "$DB_MIGRATION_LOG")
