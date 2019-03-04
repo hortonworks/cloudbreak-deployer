@@ -148,5 +148,5 @@ cloudbreak-delete-dbs() {
         error "Database container is running, delete not allowed"
         _exit 1
     fi
-    docker volume rm $COMMON_DB_VOL 1>/dev/null || :
+    docker volume rm ${CB_COMPOSE_PROJECT}_${COMMON_DB_VOL} 1>/dev/null || :
 }
