@@ -4,8 +4,6 @@
 : ${GITHUB_PROJECT:=cloudbreak-deployer}
 
 main() {
-    declare branch=${1:-master}
-
     local os=$(uname -s)
     local url=$(echo "https://public-repo-1.hortonworks.com/HDP/cloudbreak/cloudbreak-deployer_snapshot_${os}_x86_64.tgz")
 
