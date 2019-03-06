@@ -108,6 +108,10 @@ CB_SMARTSENSE_ID - SmartSense subscription ID
 CB_TEMPLATE_DEFAULTS - Comma separated list of the default templates what Cloudbreak initialize in database
 CB_UI_MAX_WAIT - Wait timeout for `cbd start-wait` command
 CB_LOCAL_DEV - If set true then Cloudbreak and Periscope containers will not be created
+CB_SHOW_TERMINATED_CLUSTERS_ACTIVE - Show terminated clusters
+CB_SHOW_TERMINATED_CLUSTERS_DAYS - Days part of timeout to show terminated clusters
+CB_SHOW_TERMINATED_CLUSTERS_HOURS - Hours part of timeout to show terminated clusters
+CB_SHOW_TERMINATED_CLUSTERS_MINUTES - Minutes part of timeout to show terminated clusters
 CERT_VALIDATION - Enables cert validation in Cloudbreak and Autoscale
 COMMON_DB - Name of the database container
 COMMON_DB_VOL - Name of the database volume

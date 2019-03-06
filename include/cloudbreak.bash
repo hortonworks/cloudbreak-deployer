@@ -181,6 +181,10 @@ cloudbreak-conf-defaults() {
 
     env-import PUBLIC_HTTP_PORT 80
     env-import PUBLIC_HTTPS_PORT 443
+    env-import CB_SHOW_TERMINATED_CLUSTERS_ACTIVE false
+    env-import CB_SHOW_TERMINATED_CLUSTERS_DAYS 7
+    env-import CB_SHOW_TERMINATED_CLUSTERS_HOURS 0
+    env-import CB_SHOW_TERMINATED_CLUSTERS_MINUTES 0
 
     env-import CB_LOCAL_DEV "false"
     env-import DPS_VERSION "latest"
