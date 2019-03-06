@@ -405,7 +405,7 @@ services:
             - ULU_ADDRESS_RESOLVING_TIMEOUT
             - "ULU_IDENTITY_ADDRESS=http://identity:8080"
             - "ULU_CLOUDBREAK_ADDRESS=$CLOUDBREAK_URL"
-            - "ULU_PERISCOPE_ADDRESS=http://periscope:8080"
+            - "ULU_PERISCOPE_ADDRESS=$PERISCOPE_URL"
             - ULU_SUBSCRIBE_TO_NOTIFICATIONS
             - AWS_INSTANCE_ID
             - AWS_ACCOUNT_ID
