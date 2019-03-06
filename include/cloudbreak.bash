@@ -186,9 +186,11 @@ cloudbreak-conf-defaults() {
 
     if [[ "$CB_LOCAL_DEV" == "true" ]]; then
         env-import CLOUDBREAK_URL "http://$BRIDGE_ADDRESS:9091"
+        env-import PERISCOPE_URL "http://$BRIDGE_ADDRESS:8085"
         env-import DATALAKE_URL "http://$BRIDGE_ADDRESS:8086"
     else
         env-import CLOUDBREAK_URL "http://cloudbreak:8080"
+        env-import PERISCOPE_URL "http://periscope:8080"
         env-import DATALAKE_URL "http://datalake:8080"
     fi
 }
@@ -294,6 +296,10 @@ generate-toml-file-for-localdev() {
         [backends.datalake.servers]
             [backends.datalake.servers.server0]
             url = "$DATALAKE_URL"
+    [backends.periscope]
+        [backends.periscope.servers]
+            [backends.periscope.servers.server0]
+            url = "$PERISCOPE_URL"
 
 [frontends]
     [frontends.cloudbreak-frontend]
@@ -305,6 +311,11 @@ generate-toml-file-for-localdev() {
     backend = "datalake"
         [frontends.datalake-frontend.routes.frontendrule]
         rule = "PathPrefix:/dl/"
+        priority = 100
+    [frontends.periscope-frontend]
+    backend = "periscope"
+        [frontends.periscope-frontend.routes.frontendrule]
+        rule = "PathPrefix:/as/"
         priority = 100
 EOF
     else
