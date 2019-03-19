@@ -186,19 +186,13 @@ cloudbreak-conf-defaults() {
     env-import CB_SHOW_TERMINATED_CLUSTERS_HOURS 0
     env-import CB_SHOW_TERMINATED_CLUSTERS_MINUTES 0
 
-    env-import CB_LOCAL_DEV "false"
+    env-import CB_LOCAL_DEV_LIST ""
     env-import DPS_VERSION "latest"
     env-import DPS_REPO ""
 
-    if [[ "$CB_LOCAL_DEV" == "true" ]]; then
-        env-import CLOUDBREAK_URL "http://$BRIDGE_ADDRESS:9091"
-        env-import PERISCOPE_URL "http://$BRIDGE_ADDRESS:8085"
-        env-import DATALAKE_URL "http://$BRIDGE_ADDRESS:8086"
-    else
-        env-import CLOUDBREAK_URL "http://cloudbreak:8080"
-        env-import PERISCOPE_URL "http://periscope:8080"
-        env-import DATALAKE_URL "http://datalake:8080"
-    fi
+    env-import CLOUDBREAK_URL $(service-url cloudbreak "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST")
+    env-import PERISCOPE_URL $(service-url periscope "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST")
+    env-import DATALAKE_URL $(service-url datalake "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST")
 
     if [[ -z "$DPS_REPO" ]]; then
         env-import ULUWATU_FRONTEND_RULE "PathPrefix:/"
@@ -297,44 +291,60 @@ cloudbreak-generate-cert() {
 }
 
 generate-toml-file-for-localdev() {
-    if [[ "$CB_LOCAL_DEV" == "true" ]]; then
-        cat > traefik.toml << EOF
-[file]
+    cloudbreak-config
 
-[backends]
-    [backends.cloudbreak]
-        [backends.cloudbreak.servers]
-            [backends.cloudbreak.servers.server0]
-            url = "$CLOUDBREAK_URL"
-    [backends.datalake]
-        [backends.datalake.servers]
-            [backends.datalake.servers.server0]
-            url = "$DATALAKE_URL"
-    [backends.periscope]
-        [backends.periscope.servers]
-            [backends.periscope.servers.server0]
-            url = "$PERISCOPE_URL"
-
-[frontends]
-    [frontends.cloudbreak-frontend]
-    backend = "cloudbreak"
-        [frontends.cloudbreak-frontend.routes.frontendrule]
-        rule = "PathPrefix:/cb/"
-        priority = 100
-    [frontends.datalake-frontend]
-    backend = "datalake"
-        [frontends.datalake-frontend.routes.frontendrule]
-        rule = "PathPrefix:/dl/"
-        priority = 100
-    [frontends.periscope-frontend]
-    backend = "periscope"
-        [frontends.periscope-frontend.routes.frontendrule]
-        rule = "PathPrefix:/as/"
-        priority = 100
-EOF
+    if ! generate-traefik-check-diff; then
+        if [[ "$CBD_FORCE_START" ]]; then
+            warn "You have forced to start ..."
+        else
+            warn "Please check the expected config changes with:"
+            echo "  cbd doctor" | blue
+            debug "If you want to ignore the changes, set the CBD_FORCE_START to true in Profile"
+            _exit 1
+        fi
     else
-        echo "" > traefik.toml
+        info "generating traefik.toml"
+        generate-toml-file-for-localdev-force
     fi
+}
+
+generate-toml-file-for-localdev-force() {
+    declare traefikFile=${1:-traefik.toml}
+    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$DATALAKE_URL" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
+}
+
+generate-traefik-check-diff() {
+    cloudbreak-config
+
+    local verbose="$1"
+
+    if [ -f traefik.toml ]; then
+        local traefik_delme_path=$TEMP_DIR/traefik-delme.toml
+        generate-toml-file-for-localdev-force $traefik_delme_path
+        if diff $traefik_delme_path traefik.toml &> /dev/null; then
+            debug "traefik.toml exists and generate wouldn't change it"
+            return 0
+        else
+            if ! [[ "$regeneteInProgress" ]]; then
+                warn "traefik.toml already exists, BUT generate would create a DIFFERENT one!"
+                warn "please regenerate it:"
+                echo "  cbd regenerate" | blue
+            fi
+
+            if [[ "$verbose" ]]; then
+                warn "expected change:"
+                diff $traefik_delme_path traefik.toml || true
+            else
+                debug "expected change:"
+                (diff $traefik_delme_path traefik.toml || true) | debug-cat
+            fi
+            return 1
+        fi
+    else
+        generate-toml-file-for-localdev-force
+    fi
+    return 0
+
 }
 
 generate-uaa-check-diff() {
@@ -471,16 +481,4 @@ util-token-debug() {
 
     local token="$(util-token)"
     open "http://jwt.io/?value=$token"
-}
-
-util-local-dev() {
-    declare desc="Stops cloudbreak and periscope container, and starts an ambassador for cbreak and periscope in IntelliJ (def cb: port:9090, peri: port: 8085)"
-    declare port=${1:-9091}
-
-    cloudbreak-config
-
-    debug stopping original cloudbreak container
-    dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} cloudbreak 2> /dev/null || :
-    dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} periscope 2> /dev/null || :
-    dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} datalake 2> /dev/null || :
 }

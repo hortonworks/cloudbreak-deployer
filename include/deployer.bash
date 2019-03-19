@@ -140,7 +140,6 @@ cbd-version() {
         sed -n "s/.*image://p" docker-compose.yml | grep "sequenceiq\|hortonworks" |green
     fi
 
-
 }
 
 cbd-update() {
@@ -396,12 +395,40 @@ doctor() {
 
     docker-check-version
     network-doctor
+    localdev-doctor
     if [[ -e docker-compose.yml ]]; then
         compose-generate-check-diff verbose
     fi
     if [[ -e uaa.yml ]]; then
         generate-uaa-check-diff verbose
     fi
+    if [[ -e traefik.toml ]]; then
+        generate-traefik-check-diff verbose
+    fi
+}
+
+localdev-doctor() {
+    localdev-doctor-service "cloudbreak" "9091"
+    localdev-doctor-service "periscope" "8085"
+    localdev-doctor-service "dataplane" "8086"
+}
+
+localdev-doctor-service() {
+    if [[ $CB_LOCAL_DEV_LIST == *"$1"* ]]; then
+        echo "$1 is in local-dev mode (container not started)"
+        echo-n "$1 container status: "
+        if docker inspect ${CB_COMPOSE_PROJECT}_${1}_1 &> /dev/null; then
+            error "$1  container is running."
+        else
+            info "OK (not runnig)"
+        fi
+        echo-n "Local $1 status: "
+        if curl -s localhost:"$2" &> /dev/null; then
+            info "OK"
+        else
+            error "$1 is not running on localhost, port $2"
+        fi
+    fi 
 }
 
 network-doctor() {
@@ -505,6 +532,12 @@ deployer-regenerate() {
             mv $VAULT_CONFIG_FILE vault-config-${datetime}.yml
     fi
     generate-vault-config
+
+    if ! generate-traefik-check-diff; then
+            info renaming: traefik.toml to: traefik-${datetime}.toml
+            mv traefik.toml traefik-${datetime}.toml
+    fi
+    generate-toml-file-for-localdev
 }
 
 escape-string-yaml() {
@@ -577,10 +610,6 @@ start-requested-services() {
 
     compose-pull || :
     compose-up $services
-
-    if [[ "$CB_LOCAL_DEV" == "true" ]]; then
-        util-local-dev
-    fi
 }
 
 wait-for-cloudbreak() {
@@ -691,7 +720,6 @@ main() {
     cmd-export-ns util "Util namespace"
     cmd-export util-token
     cmd-export util-token-debug
-    cmd-export util-local-dev
     cmd-export util-cleanup
 
     cmd-export-ns vault "Vault management namespace"

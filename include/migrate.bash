@@ -119,22 +119,22 @@ execute-migration() {
         migrate-one-db periscopedb up
         migrate-one-db periscopedb pending
     else
-        if [[ "$2" == "new" ]] && [[ "$CB_LOCAL_DEV" == "true" ]]; then
+        if [[ "$2" == "new" ]]; then
             case $1 in
                 cbdb)
-                    if [ "$CB_SCHEMA_SCRIPTS_LOCATION" = "container" ]; then
+                    if [[ "$CB_SCHEMA_SCRIPTS_LOCATION" == "container" && "$CB_LOCAL_DEV_LIST" == *"cloudbreak"* ]]; then
                         migrateError "CB_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the cloudbreak project's schema location"
                         _exit 127
                     fi
                     ;;
                 periscopedb)
-                    if [ "$PERISCOPE_SCHEMA_SCRIPTS_LOCATION" = "container" ]; then
+                    if [[ "$PERISCOPE_SCHEMA_SCRIPTS_LOCATION" == "container" && "$CB_LOCAL_DEV_LIST" == *"periscope"* ]]; then
                         migrateError "PERISCOPE_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the autoscale project's schema location"
                         _exit 127
                     fi
                     ;;
                 datalakedb)
-                    if [ "$DATALAKE_SCHEMA_SCRIPTS_LOCATION" = "container" ]; then
+                    if [[ "$DATALAKE_SCHEMA_SCRIPTS_LOCATION" == "container" && "$CB_LOCAL_DEV_LIST" == *"datalake"* ]]; then
                         migrateError "DATALAKE_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the autoscale project's schema location"
                         _exit 127
                     fi

@@ -1,0 +1,180 @@
+version: '3'
+volumes:
+    {{{get . "COMMON_DB_VOL"}}}:
+networks:
+  {{{get . "DOCKER_NETWORK_NAME"}}}:
+    driver: bridge
+    ipam:
+        driver: default
+        config:
+            - subnet: 172.200.0.0/16
+services:
+    haveged:
+        labels:
+        - traefik.enable=false
+        privileged: true
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: hortonworks/haveged:{{{get . "DOCKER_TAG_HAVEGED"}}}
+
+    logsink:
+        labels:
+        - traefik.enable=false
+        ports:
+            - 3333
+        volumes:
+            - ./logs:/tmp
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        image: hortonworks/socat:1.0.0
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        command: socat -u TCP-LISTEN:3333,reuseaddr,fork OPEN:/tmp/cbreak.log,creat,append
+
+    logspout:
+        labels:
+        - traefik.enable=false
+        ports:
+            - 8000:80
+        environment:
+            - DEBUG=true
+            - LOGSPOUT=ignore
+            - "RAW_FORMAT={{.Container.Name}} | {{.Data}}\n"
+        volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        entrypoint: ["/bin/sh"]
+        command: -c 'sleep 1; (ROUTE_URIS=$$LOGSINK_PORT_3333_TCP /bin/logspout) & LSPID=$$!; trap "kill $$LSPID; wait $$LSPID" SIGINT SIGTERM; wait $$LSPID'
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: hortonworks/logspout:v3.2.2
+
+    logrotate:
+        environment:
+            - "CRON_EXPR=0 * * * *"
+            - "LOGROTATE_LOGFILES=/var/log/cloudbreak-deployer/*.log /var/log/cloudbreak-deployer/*/*.log"
+            - LOGROTATE_FILESIZE=10M
+        volumes:
+            - ./logs:/var/log/cloudbreak-deployer
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: hortonworks/logrotate:{{{get . "DOCKER_TAG_LOGROTATE"}}}
+
+    {{{get . "COMMON_DB"}}}:
+        labels:
+        - traefik.enable=false
+        ports:
+            - "5432:5432"
+        volumes:
+            - "{{{get . "COMMON_DB_VOL"}}}:/var/lib/postgresql/data"
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: postgres:{{{get . "DOCKER_TAG_POSTGRES"}}}
+        entrypoint: ["/bin/bash"]
+        command: -c 'cd /var/lib/postgresql; touch .ash_history .psql_history; chown -R postgres:postgres /var/lib/postgresql; (/docker-entrypoint.sh postgres -c max_connections=300 -c shared_preload_libraries='pg_stat_statements') & PGPID="$$!"; echo "PGPID $$PGPID"; trap "kill $$PGPID; wait $$PGPID" SIGINT SIGTERM; cd /var/lib/postgresql; (tail -f .*history) & wait "$$PGPID"'
+    
+    vault:
+        labels:
+        - traefik.port=8200
+        - traefik.frontend.rule=PathPrefixStrip:/vault
+        - traefik.backend=vault
+        - traefik.frontend.priority=100
+        ports:
+        - {{{get . "VAULT_BIND_PORT"}}}:8200
+        environment:
+        - SKIP_SETCAP=true
+        volumes:
+        - ./{{{get . "VAULT_CONFIG_FILE"}}}:/vault/config/{{{get . "VAULT_CONFIG_FILE"}}}
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        image: {{{get . "VAULT_DOCKER_IMAGE"}}}:{{{get . "VAULT_DOCKER_IMAGE_TAG"}}}
+        restart: on-failure
+        command: server
+
+    identity:
+        labels:
+        - traefik.port=8080
+        - traefik.frontend.rule=PathPrefix:/identity/check_token,/identity/oauth,/identity/Users,/identity/login.do,/identity/Groups;PathPrefixStrip:/identity
+        - traefik.backend=identity-backend
+        - traefik.frontend.priority=100
+        ports:
+            - {{{get . "UAA_PORT"}}}:8080
+        environment:
+            - http_proxy={{{get . "HTTP_PROXY"}}}
+            - https_proxy={{{get . "HTTPS_PROXY"}}}
+            - IDENTITY_DB_URL
+            - IDENTITY_DB_NAME
+            - IDENTITY_DB_USER
+            - IDENTITY_DB_PASS
+        volumes:
+        - ./uaa.yml:/uaa/uaa.yml
+        - ./logs/identity:/tomcat/logs/
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: hortonworks/cloudbreak-uaa:{{{get . "DOCKER_TAG_UAA"}}}
+
+    uluwatu:
+        environment:
+            - http_proxy={{{get . "HTTP_PROXY"}}}
+            - https_proxy={{{get . "HTTPS_PROXY"}}}
+            - ULU_OAUTH_REDIRECT_URI
+            - ULU_OAUTH_CLIENT_ID={{{get . "UAA_ULUWATU_ID"}}}
+            - 'ULU_OAUTH_CLIENT_SECRET={{{getEscaped . "UAA_ULUWATU_SECRET"}}}'
+            - ULU_HOST_ADDRESS
+            - NODE_TLS_REJECT_UNAUTHORIZED={{{get . "ULU_NODE_TLS_REJECT_UNAUTHORIZED"}}}
+            - ULU_HWX_CLOUD_DEFAULT_ARM_VIRTUAL_NETWORK_ID
+            - ULU_ADDRESS_RESOLVING_TIMEOUT
+            - "ULU_IDENTITY_ADDRESS=http://identity:8080"
+            - "ULU_CLOUDBREAK_ADDRESS={{{get . "CLOUDBREAK_URL"}}}"
+            - "ULU_PERISCOPE_ADDRESS={{{get . "PERISCOPE_URL"}}}"
+            - ULU_SUBSCRIBE_TO_NOTIFICATIONS
+            - AWS_INSTANCE_ID
+            - AWS_ACCOUNT_ID
+            - AWS_AMI_ID
+            - AZURE_TENANT_ID
+            - AZURE_SUBSCRIPTION_ID
+            - AWS_ACCESS_KEY_ID
+            - AWS_SECRET_ACCESS_KEY
+            - CAAS_ENABLED=true
+        labels:
+        - traefik.frontend.rule={{{get . "ULUWATU_FRONTEND_RULE"}}}
+        - traefik.port=3000
+        - traefik.backend=uluwatu-backend
+        - traefik.frontend.priority=5
+        ports:
+            - 3000:3000
+        volumes:
+            - {{{get . "ULUWATU_VOLUME_HOST"}}}:{{{get . "ULUWATU_VOLUME_CONTAINER"}}}
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: {{{get . "DOCKER_IMAGE_CLOUDBREAK_WEB"}}}:{{{get . "DOCKER_TAG_ULUWATU"}}}
+{{{ block "dps" .}}}{{{end}}}
+{{{- block "cloudbreak" .}}}{{{end}}}
+{{{- block "datalake" .}}}{{{end}}}
+{{{- block "periscope" .}}}{{{end}}}
+

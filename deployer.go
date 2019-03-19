@@ -1,42 +1,14 @@
 package main
 
 import (
-	"crypto/md5"
-	"crypto/sha1"
-	"crypto/sha256"
 	"fmt"
-	"hash"
-	"io"
 	"log"
 	"os"
 	"runtime"
 	"strings"
 
-	v "github.com/hashicorp/go-version"
 	"github.com/progrium/go-basher"
-	"github.com/skratchdot/open-golang/open"
 )
-
-var Version string
-var GitRevision string
-
-func version() (v string) {
-	if GitRevision == "" {
-		v = Version
-	} else {
-		v = fmt.Sprintf("%s-%s", Version, GitRevision)
-	}
-	return
-}
-
-func fatal(msg string) {
-	println("!!", msg)
-	os.Exit(2)
-}
-
-func BinVersion(args []string) {
-	fmt.Println(version())
-}
 
 // Copied from https://github.com/progrium/go-basher/blob/master/basher.go#L37
 // to be able to add exporting DEBUG and TRACE, as we don't inherit anything
@@ -87,45 +59,6 @@ func application(
 	os.Exit(status)
 }
 
-func OpenBrowser(args []string) {
-	err := open.Start(args[0])
-	if err != nil {
-		fatal("Can't open browser: '" + err.Error())
-	}
-}
-
-func VersionCompare(args []string) {
-	v0, err := v.NewVersion(args[0])
-	if err != nil {
-		fatal("Can't parse version string" + err.Error())
-	}
-
-	v1, err := v.NewVersion(args[1])
-	if err != nil {
-		fatal("Can't parse version string" + err.Error())
-	}
-	fmt.Println(v0.Compare(v1))
-}
-
-func Checksum(args []string) {
-	if len(args) < 1 {
-		fatal("No algorithm specified")
-	}
-	var h hash.Hash
-	switch args[0] {
-	case "md5":
-		h = md5.New()
-	case "sha1":
-		h = sha1.New()
-	case "sha256":
-		h = sha256.New()
-	default:
-		fatal("Algorithm '" + args[0] + "' is unsupported")
-	}
-	io.Copy(h, os.Stdin)
-	fmt.Printf("%x\n", h.Sum(nil))
-}
-
 func main() {
 	if len(os.Args) == 2 && os.Args[1] == "--version" {
 		fmt.Println("Cloudbreak Deployer:", version())
@@ -133,10 +66,13 @@ func main() {
 	}
 
 	application(map[string]func([]string){
-		"checksum":        Checksum,
-		"bin-version":     BinVersion,
-		"browse":          OpenBrowser,
-		"version-compare": VersionCompare,
+		"checksum":              Checksum,
+		"bin-version":           BinVersion,
+		"browse":                OpenBrowser,
+		"version-compare":       VersionCompare,
+		"generate-compose-yaml": GenerateComposeYaml,
+		"service-url":           ServiceURL,
+		"generate-traefik-toml": GenerateTraefikToml,
 	}, []string{
 		"include/circle.bash",
 		"include/cloudbreak.bash",
