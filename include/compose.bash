@@ -291,7 +291,6 @@ services:
     $COMMON_DB:
         labels:
         - traefik.enable=false
-        privileged: true
         ports:
             - "5432:5432"
         volumes:
@@ -304,7 +303,7 @@ services:
                 max-file: "5"
         image: postgres:$DOCKER_TAG_POSTGRES
         entrypoint: ["/bin/bash"]
-        command: -c 'cd /var/lib/postgresql; touch .ash_history .psql_history; chown -R postgres:postgres /var/lib/postgresql; (/docker-entrypoint.sh postgres -c max_connections=300) & PGPID="\$\$!"; echo "PGPID \$\$PGPID"; trap "kill \$\$PGPID; wait \$\$PGPID" SIGINT SIGTERM; cd /var/lib/postgresql; (tail -f .*history) & wait "\$\$PGPID"'
+        command: -c 'cd /var/lib/postgresql; touch .ash_history .psql_history; chown -R postgres:postgres /var/lib/postgresql; (/docker-entrypoint.sh postgres -c max_connections=300 -c shared_preload_libraries='pg_stat_statements') & PGPID="\$\$!"; echo "PGPID \$\$PGPID"; trap "kill \$\$PGPID; wait \$\$PGPID" SIGINT SIGTERM; cd /var/lib/postgresql; (tail -f .*history) & wait "\$\$PGPID"'
 
     vault:
         labels:
