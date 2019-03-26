@@ -1,0 +1,58 @@
+{{{define "periscope"}}}
+    periscope:
+        environment:
+            - http_proxy={{{get . "HTTP_PROXY"}}}
+            - https_proxy={{{get . "HTTPS_PROXY"}}}
+            - PERISCOPE_HBM2DDL_STRATEGY
+            - "PERISCOPE_DB_PORT_5432_TCP_ADDR={{{get . "COMMON_DB"}}}"
+            - "PERISCOPE_DB_PORT_5432_TCP_PORT=5432"
+            - PERISCOPE_DB_ENV_USER
+            - PERISCOPE_DB_ENV_PASS
+            - PERISCOPE_DB_ENV_DB
+            - PERISCOPE_DB_ENV_SCHEMA
+            - "HTTPS_PROXYFORCLUSTERCONNECTION={{{get . "HTTPS_PROXYFORCLUSTERCONNECTION"}}}"
+            - 'CB_JAVA_OPTS={{{getEscaped . "CB_JAVA_OPTS"}}}'
+            - PERISCOPE_CLIENT_ID={{{get . "UAA_PERISCOPE_ID"}}}
+            - 'PERISCOPE_CLIENT_SECRET={{{getEscaped . "UAA_PERISCOPE_SECRET"}}}'
+            - PERISCOPE_HOSTNAME_RESOLUTION=public
+            - ENDPOINTS_AUTOCONFIG_ENABLED=false
+            - ENDPOINTS_DUMP_ENABLED=false
+            - ENDPOINTS_TRACE_ENABLED=false
+            - ENDPOINTS_CONFIGPROPS_ENABLED=false
+            - ENDPOINTS_METRICS_ENABLED=false
+            - ENDPOINTS_MAPPINGS_ENABLED=false
+            - ENDPOINTS_BEANS_ENABLED=false
+            - ENDPOINTS_ENV_ENABLED=false
+            - PERISCOPE_ADDRESS_RESOLVING_TIMEOUT
+            - "PERISCOPE_CLOUDBREAK_URL={{{get . "CLOUDBREAK_URL"}}}"
+            - PERISCOPE_IDENTITY_SERVER_URL=http://identity:8080
+            - PERISCOPE_SCHEMA_SCRIPTS_LOCATION
+            - PERISCOPE_SCHEMA_MIGRATION_AUTO
+            - PERISCOPE_INSTANCE_NODE_ID={{{get . "CB_INSTANCE_NODE_ID"}}}
+            - PERISCOPE_LOG_LEVEL
+            - REST_DEBUG
+            - CERT_VALIDATION
+            - CB_DEFAULT_SUBSCRIPTION_ADDRESS
+            - VAULT_ADDR=vault
+            - VAULT_PORT={{{get . "VAULT_BIND_PORT"}}}
+            - VAULT_ROOT_TOKEN={{{get . "VAULT_ROOT_TOKEN"}}}
+            - "CAAS_URL={{{get . "CAAS_URL"}}}"
+        labels:
+        - traefik.port=8080
+        - traefik.frontend.rule=PathPrefix:/as/
+        - traefik.backend=periscope-backend
+        - traefik.frontend.priority=10
+        ports:
+            - 8085:8080
+        volumes:
+            - "{{{get . "CBD_CERT_ROOT_PATH"}}}:/certs"
+            - ./logs/autoscale:/autoscale-log
+            - /dev/urandom:/dev/random
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: {{{get . "DOCKER_IMAGE_CLOUDBREAK_PERISCOPE"}}}:{{{get . "DOCKER_TAG_PERISCOPE"}}}
+{{{end}}}

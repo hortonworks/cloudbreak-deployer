@@ -1,0 +1,111 @@
+{{{define "cloudbreak"}}}
+    cloudbreak:
+        environment:
+            - AWS_ACCESS_KEY_ID
+            - AWS_SECRET_ACCESS_KEY
+            - AWS_GOV_ACCESS_KEY_ID
+            - AWS_GOV_SECRET_ACCESS_KEY
+            - "http_proxy={{{get . "HTTP_PROXY"}}}"
+            - "https_proxy={{{get . "HTTPS_PROXY"}}}"
+            - 'CB_JAVA_OPTS="{{{getEscaped . "CB_JAVA_OPTS"}}}"'
+            - "HTTPS_PROXYFORCLUSTERCONNECTION={{{get . "HTTPS_PROXYFORCLUSTERCONNECTION"}}}"
+            - "CB_CLIENT_ID={{{get . "UAA_CLOUDBREAK_ID"}}}"
+            - 'CB_CLIENT_SECRET={{{getEscaped . "UAA_CLOUDBREAK_SECRET"}}}'
+            - CB_CLUSTERDEFINITION_AMBARI_DEFAULTS
+            - CB_CLUSTERDEFINITION_AMBARI_INTERNAL
+            - CB_TEMPLATE_DEFAULTS
+            - CB_HBM2DDL_STRATEGY
+            - CB_CAPABILITIES
+            {{{- if get . "INFO_APP_CAPABILITIES"}}}
+            - INFO_APP_CAPABILITIES
+            {{{- end}}}
+            - "ENDPOINTS_AUTOCONFIG_ENABLED=false"
+            - "ENDPOINTS_DUMP_ENABLED=false"
+            - "ENDPOINTS_TRACE_ENABLED=false"
+            - "ENDPOINTS_CONFIGPROPS_ENABLED=false"
+            - "ENDPOINTS_METRICS_ENABLED=false"
+            - "ENDPOINTS_MAPPINGS_ENABLED=false"
+            - "ENDPOINTS_BEANS_ENABLED=false"
+            - "ENDPOINTS_ENV_ENABLED=false"
+            - "CB_ADDRESS_RESOLVING_TIMEOUT"
+            - "CB_IDENTITY_SERVER_URL=http://identity:8080"
+            - "CB_DB_PORT_5432_TCP_ADDR={{{get . "COMMON_DB"}}}"
+            - "CB_DB_PORT_5432_TCP_PORT=5432"
+            - CB_DB_ENV_USER
+            - CB_DB_ENV_PASS
+            - CB_DB_ENV_DB
+            - CB_DB_ENV_SCHEMA
+            - CB_SCHEMA_SCRIPTS_LOCATION
+            - CB_SCHEMA_MIGRATION_AUTO
+            - CB_AWS_HOSTKEY_VERIFY
+            - CB_GCP_HOSTKEY_VERIFY
+            - REST_DEBUG
+            - CB_AWS_DEFAULT_CF_TAG
+            - CB_AWS_CUSTOM_CF_TAGS
+            - CERT_VALIDATION
+            - CB_HOST_DISCOVERY_CUSTOM_DOMAIN
+            - CB_SMARTSENSE_CONFIGURE
+            - CB_SMARTSENSE_ID
+            - CB_PLATFORM_DEFAULT_REGIONS
+            - CB_DEFAULT_SUBSCRIPTION_ADDRESS
+            {{{- if get . "CB_IMAGE_CATALOG_URL"}}}
+            - CB_IMAGE_CATALOG_URL
+            {{{- end}}}
+            - CB_AWS_VPC
+            - CB_ENABLEDPLATFORMS
+            - CB_ENABLED_LINUX_TYPES
+            - CB_MAX_SALT_NEW_SERVICE_RETRY
+            - CB_MAX_SALT_NEW_SERVICE_RETRY_ONERROR
+            - CB_MAX_SALT_RECIPE_EXECUTION_RETRY
+            - CB_INSTANCE_UUID
+            - CB_INSTANCE_NODE_ID
+            - CB_INSTANCE_PROVIDER
+            - CB_INSTANCE_REGION
+            - CB_PRODUCT_ID
+            - CB_COMPONENT_ID
+            - CB_COMPONENT_CREATED
+            - CB_COMPONENT_CLUSTER_ID
+            - CB_LOG_LEVEL
+            - CB_DEFAULT_GATEWAY_CIDR
+            {{{- if eq (get . "CB_AUDIT_FILE_ENABLED") "true"}}}
+            - CB_AUDIT_FILEPATH=/cloudbreak-log/cb-audit.log
+            {{{- end}}}
+            {{{- if get . "CB_KAFKA_BOOTSTRAP_SERVERS"}}}
+            - CB_KAFKA_BOOTSTRAP_SERVERS
+            {{{- end}}}
+            - CB_DISABLE_SHOW_CLI
+            - CB_DISABLE_SHOW_CLUSTERDEFINITION
+            - SMARTSENSE_UPLOAD_HOST
+            - SMARTSENSE_UPLOAD_USERNAME
+            - SMARTSENSE_UPLOAD_PASSWORD
+            - CB_AWS_ACCOUNT_ID
+            - VAULT_ADDR=vault
+            - VAULT_PORT={{{get . "VAULT_BIND_PORT"}}}
+            - VAULT_ROOT_TOKEN={{{get . "VAULT_ROOT_TOKEN"}}}
+            - "CAAS_URL={{{get . "CAAS_URL"}}}"
+            - "CB_SHOW_TERMINATED_CLUSTERS_ACTIVE={{{get . "CB_SHOW_TERMINATED_CLUSTERS_ACTIVE"}}}"
+            - "CB_SHOW_TERMINATED_CLUSTERS_DAYS={{{get . "CB_SHOW_TERMINATED_CLUSTERS_DAYS"}}}"
+            - "CB_SHOW_TERMINATED_CLUSTERS_HOURS={{{get . "CB_SHOW_TERMINATED_CLUSTERS_HOURS"}}}"
+            - "CB_SHOW_TERMINATED_CLUSTERS_MINUTES={{{get . "CB_SHOW_TERMINATED_CLUSTERS_MINUTES"}}}"
+    
+        labels:
+        - traefik.port=8080
+        - traefik.frontend.rule=PathPrefix:/cb/
+        - traefik.backend=cloudbreak-backend
+        - traefik.frontend.priority=10
+        ports:
+            - {{{get . "CB_PORT"}}}:8080
+        volumes:
+            - "{{{get . "CBD_CERT_ROOT_PATH"}}}:/certs"
+            - /dev/urandom:/dev/random
+            - ./logs/cloudbreak:/cloudbreak-log
+            - ./etc/:/etc/cloudbreak
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: {{{get . "DOCKER_IMAGE_CLOUDBREAK"}}}:{{{get . "DOCKER_TAG_CLOUDBREAK"}}}
+        command: bash
+{{{end}}}

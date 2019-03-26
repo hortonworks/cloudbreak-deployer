@@ -72,11 +72,11 @@ dev: bindata
 	go build -ldflags $(FLAGS) -o /usr/local/bin/$(BINARYNAME)
 
 dev-debug: deps-bindata ## Installs dev version into /usr/local/bin. bash scripts are linked, so changes are effective without new build
-	go-bindata -debug=true include .deps/bin
+	go-bindata -debug=true include templates .deps/bin
 	go build -ldflags $(FLAGS) -o /usr/local/bin/$(BINARYNAME)
 
 bindata: deps-bindata
-	go-bindata include .deps/bin
+	go-bindata include templates .deps/bin
 
 install: build ## Installs OS specific binary into: /usr/local/bin
 	install build/$(shell uname -s)/$(BINARYNAME) /usr/local/bin

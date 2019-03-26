@@ -107,7 +107,7 @@ CB_SMARTSENSE_CLUSTER_NAME_PREFIX - SmartSense Cloudbreak cluster name prefix
 CB_SMARTSENSE_ID - SmartSense subscription ID
 CB_TEMPLATE_DEFAULTS - Comma separated list of the default templates what Cloudbreak initialize in database
 CB_UI_MAX_WAIT - Wait timeout for `cbd start-wait` command
-CB_LOCAL_DEV - If set true then Cloudbreak and Periscope containers will not be created
+CB_LOCAL_DEV_LIST - List of services that will not be created (e.g.: cloudbreak,periscope,datalake)
 CB_SHOW_TERMINATED_CLUSTERS_ACTIVE - Show terminated clusters
 CB_SHOW_TERMINATED_CLUSTERS_DAYS - Days part of timeout to show terminated clusters
 CB_SHOW_TERMINATED_CLUSTERS_HOURS - Hours part of timeout to show terminated clusters

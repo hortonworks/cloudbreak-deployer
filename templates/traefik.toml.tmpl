@@ -1,0 +1,44 @@
+[file]
+
+[backends]
+{{{- if isLocal . "cloudbreak" }}}
+    [backends.cloudbreak]
+        [backends.cloudbreak.servers]
+            [backends.cloudbreak.servers.server0]
+            url = "{{{ .CloudbreakURL }}}"
+{{{- end}}}
+{{{- if isLocal . "datalake" }}}
+    [backends.datalake]
+        [backends.datalake.servers]
+            [backends.datalake.servers.server0]
+            url = "{{{ .DatalakeURL }}}"
+{{{- end}}}
+{{{- if isLocal . "periscope" }}}
+    [backends.periscope]
+        [backends.periscope.servers]
+            [backends.periscope.servers.server0]
+            url = "{{{ .PeriscopeURL }}}"
+{{{- end}}}
+
+[frontends]
+{{{- if isLocal . "cloudbreak"}}}
+    [frontends.cloudbreak-frontend]
+    backend = "cloudbreak"
+        [frontends.cloudbreak-frontend.routes.frontendrule]
+        rule = "PathPrefix:/cb/"
+        priority = 100
+{{{- end}}}
+{{{- if isLocal . "datalake"}}}
+    [frontends.datalake-frontend]
+    backend = "datalake"
+        [frontends.datalake-frontend.routes.frontendrule]
+        rule = "PathPrefix:/dl/"
+        priority = 100
+{{{- end}}}
+{{{- if isLocal . "periscope"}}}
+    [frontends.periscope-frontend]
+    backend = "periscope"
+        [frontends.periscope-frontend.routes.frontendrule]
+        rule = "PathPrefix:/as/"
+        priority = 100
+{{{- end}}}
