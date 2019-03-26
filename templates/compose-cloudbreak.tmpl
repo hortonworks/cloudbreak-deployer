@@ -7,7 +7,7 @@
             - AWS_GOV_SECRET_ACCESS_KEY
             - "http_proxy={{{get . "HTTP_PROXY"}}}"
             - "https_proxy={{{get . "HTTPS_PROXY"}}}"
-            - 'CB_JAVA_OPTS="{{{getEscaped . "CB_JAVA_OPTS"}}}"'
+            - 'CB_JAVA_OPTS={{{getEscaped . "CB_JAVA_OPTS"}}}'
             - "HTTPS_PROXYFORCLUSTERCONNECTION={{{get . "HTTPS_PROXYFORCLUSTERCONNECTION"}}}"
             - "CB_CLIENT_ID={{{get . "UAA_CLOUDBREAK_ID"}}}"
             - 'CB_CLIENT_SECRET={{{getEscaped . "UAA_CLOUDBREAK_SECRET"}}}'
