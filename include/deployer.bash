@@ -410,7 +410,7 @@ doctor() {
 localdev-doctor() {
     localdev-doctor-service "cloudbreak" "9091"
     localdev-doctor-service "periscope" "8085"
-    localdev-doctor-service "dataplane" "8086"
+    localdev-doctor-service "datalake" "8086"
 }
 
 localdev-doctor-service() {
@@ -420,7 +420,7 @@ localdev-doctor-service() {
         if docker inspect ${CB_COMPOSE_PROJECT}_${1}_1 &> /dev/null; then
             error "$1  container is running."
         else
-            info "OK (not runnig)"
+            info "OK (not running)"
         fi
         echo-n "Local $1 status: "
         if curl -s localhost:"$2" &> /dev/null; then
