@@ -190,6 +190,9 @@ cloudbreak-conf-defaults() {
     env-import DPS_VERSION "latest"
     env-import DPS_REPO ""
 
+    env-import UMS_HOST ""
+    env-import UMS_PORT "8982"
+
     env-import CLOUDBREAK_URL $(service-url cloudbreak "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST")
     env-import PERISCOPE_URL $(service-url periscope "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST")
     env-import DATALAKE_URL $(service-url datalake "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST")

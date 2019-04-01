@@ -140,6 +140,7 @@
         - GATEWAY_UPSTREAM_HOSTNAME=traefik
         - GATEWAY_UPSTREAM_PORT=80
         - GATEWAY_UNAUTHENTICATED_PATHS=pathPrefix:/auth,pathPrefix:/idp,pathPrefix:/oidc,pathPrefix:/caas,!pathPrefix:/caas/api,pathPrefix:/core,!pathPrefix:/core/api,pathPrefix:/cloud/cb/info
+        - UMS_HOST={{{get . "UMS_HOST"}}}
     
     dev-gateway:
         image: abiosoft/caddy:no-stats
