@@ -1,0 +1,26 @@
+(proxies) {
+  proxy /         {$GATEWAY_HOST}:3000  {
+    transparent
+  }
+  proxy /socket.io {$GATEWAY_HOST}:3000  {
+    websocket
+  }
+}
+
+{{{range $i, $IngressUrl := .IngressUrls}}}
+{{{$IngressUrl}}}:443 {
+
+  tls self_signed
+  log stdout
+
+  import proxies
+}
+
+{{{$IngressUrl}}}:80 {
+
+  log stdout
+
+  import proxies
+}
+{{{end}}}
+

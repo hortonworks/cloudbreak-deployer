@@ -506,6 +506,7 @@ deployer-generate() {
     generate-uaa-config
     generate-vault-config
     generate-toml-file-for-localdev
+    generate-caddy-file-for-localdev
 }
 
 deployer-regenerate() {
@@ -538,6 +539,7 @@ deployer-regenerate() {
             mv traefik.toml traefik-${datetime}.toml
     fi
     generate-toml-file-for-localdev
+    generate-caddy-file-for-localdev
 }
 
 escape-string-yaml() {
