@@ -78,21 +78,23 @@ func Checksum(args []string) {
 	fmt.Printf("%x\n", h.Sum(nil))
 }
 
-var localPorts = map[string]int{
-	"cloudbreak": 9091,
-	"periscope":  8085,
-	"datalake":   8086,
-}
-
 func ServiceURL(args []string) {
-	serviceName, bridgeAddress, localDevList := unpackServiceURLArgs(args)
+	serviceName, bridgeAddress, localDevList, protocol, localDevPort, servicePort := unpackServiceURLArgs(args)
 	if strings.Contains(localDevList, serviceName) {
-		fmt.Printf("http://%s:%v", bridgeAddress, localPorts[serviceName])
+		if (len(localDevPort) > 0) {
+			fmt.Printf("%s%s:%s", protocol, bridgeAddress, localDevPort)
+		} else {
+			fmt.Printf("%s%s", protocol, bridgeAddress)
+		}
 	} else {
-		fmt.Printf("http://%s:8080", serviceName)
+		if (len(servicePort) > 0) {
+			fmt.Printf("%s%s:%s", protocol, serviceName, servicePort)
+		} else {
+			fmt.Printf("%s%s", protocol, serviceName)
+		}
 	}
 }
 
-func unpackServiceURLArgs(args []string) (string, string, string) {
-	return args[0], args[1], args[2]
+func unpackServiceURLArgs(args []string) (string, string, string, string, string, string) {
+	return args[0], args[1], args[2], args[3], args[4], args[5]
 }

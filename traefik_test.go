@@ -56,7 +56,7 @@ var expectedMulti string = `[file]
 
 func TestNoLocalService(t *testing.T) {
 	out := catchStdOut(t, func() {
-		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", ""})
+		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "caasURL", ""})
 	})
 	if len(out) > 0 {
 		t.Errorf("If no local-dev services were defined, traefik.toml should be empty. out:'%s'", out)
@@ -65,7 +65,7 @@ func TestNoLocalService(t *testing.T) {
 
 func TestCloudbreakLocalService(t *testing.T) {
 	out := catchStdOut(t, func() {
-		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "cloudbreak"})
+		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "caasURL", "cloudbreak"})
 	})
 	if out != expectedSingle {
 		t.Errorf("If cloudbreak service was defined as local-dev, traefik.toml should contain the cloudbreak service related configs. out:'%s'\nexpected:'%s'", out, expectedSingle)
@@ -74,7 +74,7 @@ func TestCloudbreakLocalService(t *testing.T) {
 
 func TestMultiLocalService(t *testing.T) {
 	out := catchStdOut(t, func() {
-		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "cloudbreak,periscope,datalake"})
+		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "caasURL", "cloudbreak,periscope,datalake"})
 	})
 	if out != expectedMulti {
 		t.Errorf("If services were defined as local-dev, traefik.toml should contain the defined services. out:'%s'", out)

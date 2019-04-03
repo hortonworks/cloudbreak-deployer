@@ -19,6 +19,12 @@
             [backends.periscope.servers.server0]
             url = "{{{ .PeriscopeURL }}}"
 {{{- end}}}
+{{{- if isLocal . "caas-api" }}}
+    [backends.caas-api]
+        [backends.caas-api.servers]
+            [backends.caas-api.servers.server0]
+            url = "{{{ .CaasURL }}}"
+{{{- end}}}
 
 [frontends]
 {{{- if isLocal . "cloudbreak"}}}
@@ -40,5 +46,12 @@
     backend = "periscope"
         [frontends.periscope-frontend.routes.frontendrule]
         rule = "PathPrefix:/as/"
+        priority = 100
+{{{- end}}}
+{{{- if isLocal . "caas-api"}}}
+    [frontends.caas-api-frontend]
+    backend = "caas-api"
+        [frontends.caas-api-frontend.routes.frontendrule]
+        rule = "PathPrefix:/auth,/oidc,/idp,/caas"
         priority = 100
 {{{- end}}}
