@@ -73,6 +73,7 @@ func main() {
 		"generate-compose-yaml": GenerateComposeYaml,
 		"service-url":           ServiceURL,
 		"generate-traefik-toml": GenerateTraefikToml,
+		"generate-caddy-file":   GenerateCaddyFile,
 	}, []string{
 		"include/circle.bash",
 		"include/cloudbreak.bash",

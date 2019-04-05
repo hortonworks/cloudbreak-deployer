@@ -189,18 +189,27 @@ cloudbreak-conf-defaults() {
     env-import CB_LOCAL_DEV_LIST ""
     env-import DPS_VERSION "latest"
     env-import DPS_REPO ""
+    env-import CAAS_MOCK "true"
+    env-import INGRESS_URLS "localhost,manage.dps.local"
 
-    env-import CLOUDBREAK_URL $(service-url cloudbreak "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST")
-    env-import PERISCOPE_URL $(service-url periscope "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST")
-    env-import DATALAKE_URL $(service-url datalake "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST")
+    env-import CLOUDBREAK_URL $(service-url cloudbreak "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "9091" "8080")
+    env-import PERISCOPE_URL $(service-url periscope "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8085" "8080")
+    env-import DATALAKE_URL $(service-url datalake "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8086" "8080")
 
-    if [[ -z "$DPS_REPO" ]]; then
+    if [[ "$CAAS_MOCK" == "true" ]]; then
         env-import ULUWATU_FRONTEND_RULE "PathPrefix:/"
-        env-import CAAS_URL "caas-api:8080"
+        env-import CAAS_URL $(service-url auth-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8080" "8080")
+        if [[ "$UMS_ENABLED" == "true" ]]; then
+            env-import UMS_HOST $(service-url auth-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
+        fi
     else
-        env-import ULUWATU_FRONTEND_RULE "PathPrefixStrip:/cloud"
-        env-import CAAS_URL "caas-api:10080"
+        env-import CAAS_URL $(service-url caas-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8080" "8080")
+        if [[ "$UMS_ENABLED" == "true" ]]; then
+            env-import UMS_HOST $(service-url caas-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
+        fi
     fi
+
+    env-import UMS_PORT "8982"
 }
 
 cloudbreak-conf-autscale() {
@@ -310,7 +319,7 @@ generate-toml-file-for-localdev() {
 
 generate-toml-file-for-localdev-force() {
     declare traefikFile=${1:-traefik.toml}
-    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$DATALAKE_URL" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
+    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$DATALAKE_URL" "http://$CAAS_URL" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
 }
 
 generate-traefik-check-diff() {
@@ -345,6 +354,12 @@ generate-traefik-check-diff() {
     fi
     return 0
 
+}
+
+generate-caddy-file-for-localdev() {
+    info "generating Caddyfile"
+    declare caddyFile=${1:-Caddyfile}
+    generate-caddy-file "$INGRESS_URLS" > "$caddyFile"
 }
 
 generate-uaa-check-diff() {

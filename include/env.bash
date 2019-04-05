@@ -219,5 +219,9 @@ DOCKER_NETWORK_NAME - Network name for docker, created by docker-compose
 
 DPS_VERSION - Image tag for DPS containers
 DPS_REPO - Location of your DPS repo on host. If it has value, DPS environment will start on your machine.
+UMS_HOST - Host address of Altus UMS service
+UMS_PORT - Port of Altus UMS service
+UMS_ENABLED - Enable UMS
+CAAS_MOCK - Enables authentication mock
 ''' | grep "$1 " | sed "s/^.* - //" || echo Deprecated
 }

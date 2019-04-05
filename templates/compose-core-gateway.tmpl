@@ -1,0 +1,49 @@
+{{{define "core-gateway"}}}
+    core-gateway:
+        {{{- if get . "DPS_REPO"}}}
+        build: {{{get . "DPS_REPO"}}}/core-gateway
+        {{{- end}}}
+        image: hortonworks/dps-gateway:{{{get . "DPS_VERSION"}}}
+        # ports:
+            # - {{{get . "PUBLIC_HTTP_PORT"}}}:3000
+            # - {{{get . "PUBLIC_HTTPS_PORT"}}}:443
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        environment:
+        - "CAAS_ADDRESS=http://{{{get . "CAAS_URL"}}}"
+        - GATEWAY_DPS_JWT_COOKIE_NAME=dps-jwt
+        - GATEWAY_UPSTREAM_HOSTNAME=traefik
+        - GATEWAY_UPSTREAM_PORT=80
+        - GATEWAY_UNAUTHENTICATED_PATHS=pathPrefix:/auth,pathPrefix:/idp,pathPrefix:/oidc,pathPrefix:/caas,!pathPrefix:/caas/api,pathPrefix:/core,!pathPrefix:/core/api,pathPrefix:/cloud/cb/info
+        - UMS_HOST={{{get . "UMS_HOST"}}}
+
+    dev-gateway:
+        image: abiosoft/caddy:no-stats
+        environment:
+        - GATEWAY_HOST=core-gateway
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        ports:
+        - 80:80
+        - 443:443
+        volumes:
+        - ./Caddyfile:/etc/Caddyfile
+
+    traefik:
+        ports:
+            - "8081:8080"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./logs/traefik:/opt/traefik/log/
+            - ./traefik.toml:/etc/traefik/traefik.toml
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: traefik:{{{get . "DOCKER_TAG_TRAEFIK"}}}
+        restart: on-failure
+        command: --debug --api --rest --ping --metrics --InsecureSkipVerify=true --defaultEntryPoints=http,https --maxidleconnsperhost={{{get . "TRAEFIK_MAX_IDLE_CONNECTION"}}} --traefiklog.filepath=/opt/traefik/log/traefik.log --accessLog.filePath=/opt/traefik/log/access.log --docker
+    
+{{{end}}}

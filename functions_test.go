@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"regexp"
+	"testing"
+)
 
 func TestServiceURL(t *testing.T) {
 	var testCases = []struct {
@@ -32,4 +35,32 @@ func TestBinVersion(t *testing.T) {
 		t.Errorf("Version should be '%s', was: '%s'", expected, out)
 	}
 
+}
+
+func TestGenerateCaddyFileSingle(t *testing.T) {
+	should := []string{`(?m)^\s*localhost:`}
+	out := catchStdOut(t, func() {
+		GenerateCaddyFile([]string{"localhost"})
+	})
+	t.Log(out)
+	for _, s := range should {
+		re := regexp.MustCompile(s)
+		if res := re.FindString(out); len(res) == 0 {
+			t.Errorf("Can't find service '%s' in output.", s)
+		}
+	}
+}
+
+func TestGenerateCaddyFileMultiple(t *testing.T) {
+	should := []string{`(?m)^\s*localhost:`, `(?m)^\s*localhost2:`}
+	out := catchStdOut(t, func() {
+		GenerateCaddyFile([]string{"localhost,localhost2"})
+	})
+	t.Log(out)
+	for _, s := range should {
+		re := regexp.MustCompile(s)
+		if res := re.FindString(out); len(res) == 0 {
+			t.Errorf("Can't find service '%s' in output.", s)
+		}
+	}
 }
