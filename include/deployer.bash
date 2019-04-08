@@ -411,6 +411,7 @@ localdev-doctor() {
     localdev-doctor-service "cloudbreak" "9091"
     localdev-doctor-service "periscope" "8085"
     localdev-doctor-service "datalake" "8086"
+    localdev-doctor-service "cluster-proxy" "10081"
 }
 
 localdev-doctor-service() {

@@ -47,6 +47,7 @@ push-container-versions: update-container-versions
 	git push origin HEAD:$(GIT_BRANCH) --tags
 
 build: bindata ## Creates linux an osx binaries in "build/$OS"
+	go test
 	mkdir -p build/Linux  && GOOS=linux  go build -ldflags $(FLAGS) -o build/Linux/$(BINARYNAME)
 	mkdir -p build/Darwin && GOOS=darwin go build -ldflags $(FLAGS) -o build/Darwin/$(BINARYNAME)
 
@@ -69,10 +70,12 @@ upload-snapshot: create-snapshot-tgz
 
 
 dev: bindata
+	go test
 	go build -ldflags $(FLAGS) -o /usr/local/bin/$(BINARYNAME)
 
 dev-debug: deps-bindata ## Installs dev version into /usr/local/bin. bash scripts are linked, so changes are effective without new build
 	go-bindata -debug=true include templates .deps/bin
+	go test
 	go build -ldflags $(FLAGS) -o /usr/local/bin/$(BINARYNAME)
 
 bindata: deps-bindata

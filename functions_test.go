@@ -10,8 +10,8 @@ func TestServiceURL(t *testing.T) {
 		args   []string
 		result string
 	}{
-		{[]string{"cloudbreak", "bridge.address", ""}, "http://cloudbreak:8080"},
-		{[]string{"cloudbreak", "bridge.address", "cloudbreak,periscope"}, "http://bridge.address:9091"},
+		{[]string{"cloudbreak", "bridge.address", "", "http://", "9091", "8080"}, "http://cloudbreak:8080"},
+		{[]string{"cloudbreak", "bridge.address", "cloudbreak", "http://", "9091", "8080"}, "http://bridge.address:9091"},
 	}
 
 	for _, c := range testCases {
