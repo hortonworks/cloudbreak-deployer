@@ -195,6 +195,7 @@ cloudbreak-conf-defaults() {
     env-import CLOUDBREAK_URL $(service-url cloudbreak "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "9091" "8080")
     env-import PERISCOPE_URL $(service-url periscope "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8085" "8080")
     env-import DATALAKE_URL $(service-url datalake "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8086" "8080")
+    env-import CLUSTER_PROXY_URL $(service-url cluster-proxy "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "10081" "8080")
 
     if [[ "$CAAS_MOCK" == "true" ]]; then
         env-import ULUWATU_FRONTEND_RULE "PathPrefix:/"
@@ -319,7 +320,7 @@ generate-toml-file-for-localdev() {
 
 generate-toml-file-for-localdev-force() {
     declare traefikFile=${1:-traefik.toml}
-    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$DATALAKE_URL" "http://$CAAS_URL" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
+    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$DATALAKE_URL" "http://$CAAS_URL" "$CLUSTER_PROXY_URL" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
 }
 
 generate-traefik-check-diff() {

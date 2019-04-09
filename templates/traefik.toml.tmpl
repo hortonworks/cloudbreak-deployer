@@ -25,6 +25,12 @@
             [backends.caas-api.servers.server0]
             url = "{{{ .CaasURL }}}"
 {{{- end}}}
+{{{- if isLocal . "cluster-proxy" }}}
+    [backends.cluster-proxy]
+        [backends.cluster-proxy.servers]
+            [backends.cluster-proxy.servers.server0]
+            url = "{{{ .ClusterProxyURL }}}"
+{{{- end}}}
 
 [frontends]
 {{{- if isLocal . "cloudbreak"}}}
@@ -53,5 +59,12 @@
     backend = "caas-api"
         [frontends.caas-api-frontend.routes.frontendrule]
         rule = "PathPrefix:/auth,/oidc,/idp,/caas"
+        priority = 100
+{{{- end}}}
+{{{- if isLocal . "cluster-proxy"}}}
+    [frontends.cluster-proxy-frontend]
+    backend = "cluster-proxy"
+        [frontends.cluster-proxy-frontend.routes.frontendrule]
+        rule = "PathPrefix:/cluster-proxy"
         priority = 100
 {{{- end}}}

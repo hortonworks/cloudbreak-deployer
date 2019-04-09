@@ -82,13 +82,13 @@ func Checksum(args []string) {
 func ServiceURL(args []string) {
 	serviceName, bridgeAddress, localDevList, protocol, localDevPort, servicePort := unpackServiceURLArgs(args)
 	if strings.Contains(localDevList, serviceName) {
-		printServiceUrl(bridgeAddress, protocol, localDevPort)
+		printServiceURL(bridgeAddress, protocol, localDevPort)
 	} else {
-		printServiceUrl(serviceName, protocol, servicePort)
+		printServiceURL(serviceName, protocol, servicePort)
 	}
 }
 
-func printServiceUrl(serviceName string, protocol string, port string) {
+func printServiceURL(serviceName string, protocol string, port string) {
 	if len(port) > 0 {
 		fmt.Printf("%s%s:%s", protocol, serviceName, port)
 	} else {

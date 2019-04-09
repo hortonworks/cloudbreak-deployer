@@ -1,0 +1,18 @@
+{{{define "cluster-proxy"}}}
+    cluster-proxy:
+        build: {{{get . "DPS_REPO"}}}/cluster-proxy
+        image: hortonworks/dps-cluster-proxy:{{{get . "DPS_VERSION"}}}
+        volumes:
+        - {{{get . "DPS_REPO"}}}/resources/dev-setup/serviceaccount:/var/run/secrets/kubernetes.io/serviceaccount
+        environment:
+        - DB_HOST={{{get . "COMMON_DB"}}}
+        - "CAAS_ADDRESS=http://{{{get . "CAAS_URL"}}}"
+        - K8S_TOKEN_PATH=/var/run/secrets/kubernetes.io/serviceaccount/token
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        restart: always
+        labels:
+        - "traefik.backend=cluster-proxy"
+        - "traefik.frontend.rule=PathPrefix:/cluster-proxy"
+        - "traefik.port=10080"
+{{{end}}}
