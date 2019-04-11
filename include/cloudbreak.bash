@@ -200,10 +200,12 @@ cloudbreak-conf-defaults() {
     if [[ "$CAAS_MOCK" == "true" ]]; then
         env-import ULUWATU_FRONTEND_RULE "PathPrefix:/"
         env-import CAAS_URL $(service-url auth-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8080" "10080")
+        env-import GATEWAY_DEFAULT_REDIRECT_PATH "/environments"
         if [[ "$UMS_ENABLED" == "true" ]]; then
             env-import UMS_HOST $(service-url auth-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
         fi
     else
+        env-import GATEWAY_DEFAULT_REDIRECT_PATH "/cloud"
         env-import CAAS_URL $(service-url caas-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8080" "10080")
         if [[ "$UMS_ENABLED" == "true" ]]; then
             env-import UMS_HOST $(service-url caas-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
