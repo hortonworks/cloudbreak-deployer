@@ -16,6 +16,7 @@ cloudbreak-config() {
   cloudbreak-conf-ui
   cloudbreak-conf-java
   cloudbreak-conf-consul
+  cloudbreak-conf-proxy
   migrate-config
 }
 
@@ -311,6 +312,15 @@ cloudbreak-conf-ui() {
 
 cloudbreak-conf-java() {
     env-import CB_JAVA_OPTS ""
+}
+
+cloudbreak-conf-proxy() {
+    env-import HTTP_PROXY_HOST ""
+    env-import HTTPS_PROXY_HOST ""
+    env-import PROXY_PORT ""
+    env-import PROXY_USER ""
+    env-import PROXY_PASSWORD ""
+    env-import NON_PROXY_HOSTS "*.consul"
     env-import HTTPS_PROXYFORCLUSTERCONNECTION "false"
 }
 
