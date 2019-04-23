@@ -190,6 +190,7 @@ cloudbreak-conf-defaults() {
     env-import CB_LOCAL_DEV_LIST ""
     env-import DPS_VERSION "latest"
     env-import DPS_REPO ""
+    env-import UMS_ENABLED "true"
     env-import CAAS_MOCK "true"
     env-import INGRESS_URLS "localhost,manage.dps.local"
 
