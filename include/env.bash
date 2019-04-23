@@ -107,7 +107,7 @@ CB_SMARTSENSE_CLUSTER_NAME_PREFIX - SmartSense Cloudbreak cluster name prefix
 CB_SMARTSENSE_ID - SmartSense subscription ID
 CB_TEMPLATE_DEFAULTS - Comma separated list of the default templates what Cloudbreak initialize in database
 CB_UI_MAX_WAIT - Wait timeout for `cbd start-wait` command
-CB_LOCAL_DEV_LIST - List of services that will not be created (e.g.: cloudbreak,periscope,datalake)
+CB_LOCAL_DEV_LIST - List of services that will not be created (e.g.: cloudbreak,periscope,datalake,redbeams)
 CB_SHOW_TERMINATED_CLUSTERS_ACTIVE - Show terminated clusters
 CB_SHOW_TERMINATED_CLUSTERS_DAYS - Days part of timeout to show terminated clusters
 CB_SHOW_TERMINATED_CLUSTERS_HOURS - Hours part of timeout to show terminated clusters
@@ -136,6 +136,7 @@ DOCKER_IMAGE_CLOUDBREAK - Cloudbreak Docker image name
 DOCKER_IMAGE_CLOUDBREAK_AUTH - Authentication service Docker image name
 DOCKER_IMAGE_CLOUDBREAK_PERISCOPE - Autoscale Docker image name
 DOCKER_IMAGE_CLOUDBREAK_DATALAKE - Datalake Docker image name
+DOCKER_IMAGE_CLOUDBREAK_REDBEAMS - Redbeams Docker image name
 DOCKER_IMAGE_CLOUDBREAK_WEB - Web UI Docker image name
 DOCKER_TAG_ALPINE - Alpine container version
 DOCKER_TAG_CBD_SMARTSENSE - SmartSense container version
@@ -147,6 +148,7 @@ DOCKER_TAG_HAVEGED - Haveged container version
 DOCKER_TAG_MIGRATION - Migration container version
 DOCKER_TAG_PERISCOPE - Autoscale container version
 DOCKER_TAG_DATALAKE - Datalake container version
+DOCKER_TAG_REDBEAMS - Redbeams container version
 DOCKER_TAG_POSTGRES - Postgresql container version
 DOCKER_TAG_LOGROTATE - Logrotate container version
 DOCKER_TAG_REGISTRATOR - Registrator container version
@@ -175,7 +177,17 @@ PERISCOPE_DB_PORT_5432_TCP_PORT - Port number of the Autoscale database
 PERISCOPE_LOG_LEVEL - Log level of the Autoscale service
 PERISCOPE_SCHEMA_MIGRATION_AUTO - Flag for Autoscale automatic database schema update
 PUBLIC_IP - Ip address or hostname of the public interface
-REST_DEBUG - Enables REST call debug level in Cloudbreak and Autoscale
+REDBEAMS_HBM2DDL_STRATEGY - Configures hibernate.hbm2ddl.auto in Redbeams
+REDBEAMS_DB_ENV_DB - Name of the Redbeams database
+REDBEAMS_DB_ENV_PASS - Password for the Redbeams database authentication
+REDBEAMS_DB_ENV_SCHEMA - Used schema in the Redbeams database
+REDBEAMS_DB_ENV_USER - User for the Redbeams database authentication
+REDBEAMS_DB_PORT_5432_TCP_ADDR - Address of the Redbeams database
+REDBEAMS_DB_PORT_5432_TCP_PORT - Port number of the Redbeams database
+REDBEAMS_LOG_LEVEL - Log level of the Redbeams service
+REDBEAMS_SCHEMA_MIGRATION_AUTO - Flag for Redbeams automatic database schema update
+REDBEAMS_SCHEMA_SCRIPTS_LOCATION - Location of Redbeams schema update files
+REST_DEBUG - Enables REST call debug level in Cloudbreak, Autoscale, Datalake, Redbeams
 SL_ADDRESS_RESOLVING_TIMEOUT - DNS lookup timeout of Authentication service for internal service discovery
 TRAEFIK_MAX_IDLE_CONNECTION - Configures --maxidleconnsperhost for Traefik
 PUBLIC_HTTP_PORT - Configures the public http port for Cloudbreak

@@ -177,6 +177,8 @@ cbd-update-release() {
             db-dump $PERISCOPE_DB_ENV_DB
             debug "Backing up $DATALAKE_DB_ENV_DB"
             db-dump $DATALAKE_DB_ENV_DB
+            debug "Backing up $REDBEAMS_DB_ENV_DB"
+            db-dump $REDBEAMS_DB_ENV_DB
             debug "Backing up $IDENTITY_DB_NAME"
             db-dump $IDENTITY_DB_NAME
         fi
@@ -406,6 +408,7 @@ localdev-doctor() {
     localdev-doctor-service "cloudbreak" "9091"
     localdev-doctor-service "periscope" "8085"
     localdev-doctor-service "datalake" "8086"
+    localdev-doctor-service "redbeams" "8087"
     localdev-doctor-service "cluster-proxy" "10081"
 }
 
@@ -424,7 +427,7 @@ localdev-doctor-service() {
         else
             error "$1 is not running on localhost, port $2"
         fi
-    fi 
+    fi
 }
 
 network-doctor() {
@@ -478,7 +481,7 @@ is-sub-path() {
 
 deployer-delete() {
     declare desc="Deletes yaml files, and all dbs. You can use '--force' to avoid confirm dialog"
-    
+
     cloudbreak-conf-db
 
     if [[ "$1" != "--force" ]] ; then

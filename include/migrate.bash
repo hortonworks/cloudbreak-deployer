@@ -9,6 +9,8 @@ migrate-config() {
     env-import PERISCOPE_SCHEMA_MIGRATION_AUTO true
     env-import DATALAKE_SCHEMA_SCRIPTS_LOCATION "container"
     env-import DATALAKE_SCHEMA_MIGRATION_AUTO true
+    env-import REDBEAMS_SCHEMA_SCRIPTS_LOCATION "container"
+    env-import REDBEAMS_SCHEMA_MIGRATION_AUTO true
     env-import UAA_SCHEMA_SCRIPTS_LOCATION "container"
     env-import DB_MIGRATION_LOG "db_migration.log"
     env-import VERBOSE_MIGRATION false
@@ -95,12 +97,16 @@ migrate-one-db() {
             local scripts_location=${DATALAKE_SCHEMA_SCRIPTS_LOCATION}
             local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_DATALAKE}:${DOCKER_TAG_DATALAKE}
             ;;
+        redbeamsdb)
+            local scripts_location=${REDBEAMS_SCHEMA_SCRIPTS_LOCATION}
+            local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_REDBEAMS}:${DOCKER_TAG_REDBEAMS}
+            ;;
         uaadb)
             local scripts_location=${UAA_SCHEMA_SCRIPTS_LOCATION}
             local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_AUTH}:${DOCKER_TAG_CLOUDBREAK}
             ;;
         *)
-            migrateError "Invalid database service name: $service_name. Supported databases: cbdb, periscopedb, datalakedb and uaadb"
+            migrateError "Invalid database service name: $service_name. Supported databases: cbdb, periscopedb, datalakedb, redbeamsdb, and uaadb"
             return 1
             ;;
     esac
@@ -123,30 +129,36 @@ execute-migration() {
             case $1 in
                 cbdb)
                     if [[ "$CB_SCHEMA_SCRIPTS_LOCATION" == "container" && "$CB_LOCAL_DEV_LIST" == *"cloudbreak"* ]]; then
-                        migrateError "CB_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the cloudbreak project's schema location"
+                        migrateError "CB_SCHEMA_SCRIPTS_LOCATION environment variable must be set and pointing to the cloudbreak project's schema location"
                         _exit 127
                     fi
                     ;;
                 periscopedb)
                     if [[ "$PERISCOPE_SCHEMA_SCRIPTS_LOCATION" == "container" && "$CB_LOCAL_DEV_LIST" == *"periscope"* ]]; then
-                        migrateError "PERISCOPE_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the autoscale project's schema location"
+                        migrateError "PERISCOPE_SCHEMA_SCRIPTS_LOCATION environment variable must be set and pointing to the autoscale project's schema location"
                         _exit 127
                     fi
                     ;;
                 datalakedb)
                     if [[ "$DATALAKE_SCHEMA_SCRIPTS_LOCATION" == "container" && "$CB_LOCAL_DEV_LIST" == *"datalake"* ]]; then
-                        migrateError "DATALAKE_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the autoscale project's schema location"
+                        migrateError "DATALAKE_SCHEMA_SCRIPTS_LOCATION environment variable must be set and pointing to the datalake project's schema location"
+                        _exit 127
+                    fi
+                    ;;
+                redbeamsdb)
+                    if [[ "$REDBEAMS_SCHEMA_SCRIPTS_LOCATION" == "container" && "$CB_LOCAL_DEV_LIST" == *"redbeams"* ]]; then
+                        migrateError "REDBEAMS_SCHEMA_SCRIPTS_LOCATION environment variable must be set and pointing to the redbeams project's schema location"
                         _exit 127
                     fi
                     ;;
                 uaadb)
                     if [ "$UAA_SCHEMA_SCRIPTS_LOCATION" = "container" ]; then
-                        migrateError "UAA_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the identity project's schema location"
+                        migrateError "UAA_SCHEMA_SCRIPTS_LOCATION environment variable must be set and pointing to the identity project's schema location"
                         _exit 127
                     fi
                     ;;
                 *)
-                    migrateError "Invalid database service name: $1. Supported databases: cbdb, periscopedb, datalakedb and uaadb"
+                    migrateError "Invalid database service name: $1. Supported databases: cbdb, periscopedb, datalakedb, redbeamsdb, and uaadb"
                     return 1
                     ;;
             esac
