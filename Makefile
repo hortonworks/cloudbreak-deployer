@@ -37,6 +37,7 @@ update-container-versions:
 	sed -i "0,/DOCKER_TAG_CAAS_MOCK/  s/DOCKER_TAG_CAAS_MOCK .*/DOCKER_TAG_CAAS_MOCK $(CB_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_PERISCOPE/ s/DOCKER_TAG_PERISCOPE .*/DOCKER_TAG_PERISCOPE $(CB_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_DATALAKE/ s/DOCKER_TAG_DATALAKE .*/DOCKER_TAG_DATALAKE $(CB_VERSION)/" include/cloudbreak.bash
+	sed -i "0,/DOCKER_TAG_REDBEAMS/ s/DOCKER_TAG_REDBEAMS .*/DOCKER_TAG_REDBEAMS $(CB_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_CLOUDBREAK/  s/DOCKER_TAG_CLOUDBREAK .*/DOCKER_TAG_CLOUDBREAK $(CB_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_ULUWATU/ s/DOCKER_TAG_ULUWATU .*/DOCKER_TAG_ULUWATU $(CB_VERSION)/" include/cloudbreak.bash
 

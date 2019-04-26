@@ -19,6 +19,12 @@
             [backends.periscope.servers.server0]
             url = "{{{ .PeriscopeURL }}}"
 {{{- end}}}
+{{{- if isLocal . "redbeams" }}}
+    [backends.redbeams]
+        [backends.redbeams.servers]
+            [backends.redbeams.servers.server0]
+            url = "{{{ .RedbeamsURL }}}"
+{{{- end}}}
 {{{- if isLocal . "caas-api" }}}
     [backends.caas-api]
         [backends.caas-api.servers]
@@ -52,6 +58,13 @@
     backend = "periscope"
         [frontends.periscope-frontend.routes.frontendrule]
         rule = "PathPrefix:/as/"
+        priority = 100
+{{{- end}}}
+{{{- if isLocal . "redbeams"}}}
+    [frontends.redbeams-frontend]
+    backend = "redbeams"
+        [frontends.redbeams-frontend.routes.frontendrule]
+        rule = "PathPrefix:/rdb/"
         priority = 100
 {{{- end}}}
 {{{- if isLocal . "caas-api"}}}

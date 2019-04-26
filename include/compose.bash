@@ -53,7 +53,7 @@ compose-up() {
 }
 
 compose-kill() {
-    declare desc="Kills and removes all cloudbreak related container"
+    declare desc="Kills and removes all cloudbreak related containers"
 
     dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT}
     dockerCompose rm -f
@@ -61,6 +61,7 @@ compose-kill() {
     docker rm -f cbreak_cloudbreak-1 2> /dev/null || :
     docker rm -f cbreak_periscope_1 2> /dev/null || :
     docker rm -f cbreak_datalake_1 2> /dev/null || :
+    docker rm -f cbreak_redbeams_1 2> /dev/null || :
 }
 
 util-cleanup() {
