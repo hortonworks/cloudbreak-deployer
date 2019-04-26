@@ -171,16 +171,11 @@ cbd-update-release() {
 
         if docker volume inspect $COMMON_DB_VOL &>/dev/null; then
             info "Backing up databases"
-            debug "Backing up $CB_DB_ENV_DB"
-            db-dump $CB_DB_ENV_DB
-            debug "Backing up $PERISCOPE_DB_ENV_DB"
-            db-dump $PERISCOPE_DB_ENV_DB
-            debug "Backing up $DATALAKE_DB_ENV_DB"
-            db-dump $DATALAKE_DB_ENV_DB
-            debug "Backing up $REDBEAMS_DB_ENV_DB"
-            db-dump $REDBEAMS_DB_ENV_DB
-            debug "Backing up $IDENTITY_DB_NAME"
-            db-dump $IDENTITY_DB_NAME
+
+	    for db in $CB_DB_ENV_DB $IDENTITY_DB_NAME $PERISCOPE_DB_ENV_DB $DATALAKE_DB_ENV_DB $ENVIRONMENT_DB_ENV_DB $REDBEAMS_DB_ENV_DB; do
+                debug "Backing up $db"
+                db-dump $db
+            done
         fi
 
         local url=https://github.com/hortonworks/cloudbreak-deployer/releases/download/v${lastver}/cloudbreak-deployer_${lastver}_${osarch}.tgz
@@ -409,6 +404,7 @@ localdev-doctor() {
     localdev-doctor-service "periscope" "8085"
     localdev-doctor-service "datalake" "8086"
     localdev-doctor-service "redbeams" "8087"
+    localdev-doctor-service "environment" "8088"
     localdev-doctor-service "cluster-proxy" "10081"
 }
 

@@ -49,7 +49,9 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_CLOUDBREAK 2.10.0-dev.823
     env-import DOCKER_TAG_DATALAKE 2.10.0-dev.823
     env-import DOCKER_TAG_REDBEAMS 2.10.0-dev.823
+    env-import DOCKER_TAG_ENVIRONMENT 2.10.0-dev.823
     env-import DOCKER_TAG_ULUWATU 2.10.0-dev.823
+
 
     env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
     env-import DOCKER_TAG_LOGROTATE 1.0.1
@@ -62,6 +64,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CLOUDBREAK_PERISCOPE hortonworks/cloudbreak-autoscale
     env-import DOCKER_IMAGE_CLOUDBREAK_DATALAKE hortonworks/cloudbreak-datalake
     env-import DOCKER_IMAGE_CLOUDBREAK_REDBEAMS hortonworks/cloudbreak-redbeams
+    env-import DOCKER_IMAGE_CLOUDBREAK_ENVIRONMENT hortonworks/cloudbreak-environment
     env-import DOCKER_IMAGE_CBD_SMARTSENSE hortonworks/cbd-smartsense
 
     env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu:3000/notifications
@@ -110,6 +113,11 @@ cloudbreak-conf-db() {
     env-import REDBEAMS_DB_ENV_PASS ""
     env-import REDBEAMS_DB_ENV_SCHEMA "public"
     env-import REDBEAMS_HBM2DDL_STRATEGY "validate"
+    env-import ENVIRONMENT_DB_ENV_USER "postgres"
+    env-import ENVIRONMENT_DB_ENV_DB "environmentdb"
+    env-import ENVIRONMENT_DB_ENV_PASS ""
+    env-import ENVIRONMENT_DB_ENV_SCHEMA "public"
+    env-import ENVIRONMENT_HBM2DDL_STRATEGY "validate"
 
     env-import IDENTITY_DB_URL "${COMMON_DB}:5432"
     env-import IDENTITY_DB_NAME "uaadb"
@@ -149,6 +157,10 @@ cloudbreak-conf-uaa() {
     env-import UAA_REDBEAMS_ID redbeams
     env-import UAA_REDBEAMS_SECRET $UAA_DEFAULT_SECRET
     env-validate UAA_REDBEAMS_SECRET *" "* "space"
+
+    env-import UAA_ENVIRONMENT_ID environment
+    env-import UAA_ENVIRONMENT_SECRET $UAA_DEFAULT_SECRET
+    env-validate UAA_ENVIRONMENT_SECRET *" "* "space" 
 
     env-import UAA_ULUWATU_ID uluwatu
     env-import UAA_ULUWATU_SECRET $UAA_DEFAULT_SECRET
@@ -210,6 +222,7 @@ cloudbreak-conf-defaults() {
     env-import PERISCOPE_URL $(service-url periscope "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8085" "8080")
     env-import DATALAKE_URL $(service-url datalake "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8086" "8080")
     env-import REDBEAMS_URL $(service-url redbeams "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8087" "8080")
+    env-import ENVIRONMENT_URL $(service-url environment "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8088" "8080")
     env-import CLUSTER_PROXY_URL $(service-url cluster-proxy "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "10081" "8080")
 
     if [[ "$CAAS_MOCK" == "true" ]]; then
@@ -346,7 +359,7 @@ generate-toml-file-for-localdev() {
 
 generate-toml-file-for-localdev-force() {
     declare traefikFile=${1:-traefik.toml}
-    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$DATALAKE_URL" "$REDBEAMS_URL" "http://$CAAS_URL" "$CLUSTER_PROXY_URL" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
+    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$DATALAKE_URL" "$REDBEAMS_URL" "$ENVIRONMENT_URL" "http://$CAAS_URL" "$CLUSTER_PROXY_URL" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
 }
 
 generate-traefik-check-diff() {

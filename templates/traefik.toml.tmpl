@@ -13,6 +13,12 @@
             [backends.datalake.servers.server0]
             url = "{{{ .DatalakeURL }}}"
 {{{- end}}}
+{{{- if isLocal . "environment" }}}
+    [backends.environment]
+        [backends.environment.servers]
+            [backends.environment.servers.server0]
+            url = "{{{ .EnvironmentURL }}}"
+{{{- end}}}
 {{{- if isLocal . "periscope" }}}
     [backends.periscope]
         [backends.periscope.servers]
@@ -51,6 +57,13 @@
     backend = "datalake"
         [frontends.datalake-frontend.routes.frontendrule]
         rule = "PathPrefix:/dl/"
+        priority = 100
+{{{- end}}}
+{{{- if isLocal . "environment"}}}
+    [frontends.environment-frontend]
+    backend = "environment"
+        [frontends.environment-frontend.routes.frontendrule]
+        rule = "PathPrefix:/env/"
         priority = 100
 {{{- end}}}
 {{{- if isLocal . "periscope"}}}
