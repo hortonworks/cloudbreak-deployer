@@ -102,7 +102,7 @@ migrate-one-db() {
         redbeamsdb)
             local scripts_location=${REDBEAMS_SCHEMA_SCRIPTS_LOCATION}
             local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_REDBEAMS}:${DOCKER_TAG_REDBEAMS}
-
+            ;;
         environmentdb)
             local scripts_location=${ENVIRONMENT_SCHEMA_SCRIPTS_LOCATION}
             local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_ENVIRONMENT}:${DOCKER_TAG_ENVIRONMENT}
