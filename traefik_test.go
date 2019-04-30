@@ -31,6 +31,10 @@ var expectedMulti string = `[file]
         [backends.datalake.servers]
             [backends.datalake.servers.server0]
             url = "datalakeURL"
+    [backends.environment]
+        [backends.environment.servers]
+            [backends.environment.servers.server0]
+            url = "environmentURL"
     [backends.periscope]
         [backends.periscope.servers]
             [backends.periscope.servers.server0]
@@ -51,6 +55,11 @@ var expectedMulti string = `[file]
         [frontends.datalake-frontend.routes.frontendrule]
         rule = "PathPrefix:/dl/"
         priority = 100
+    [frontends.environment-frontend]
+    backend = "environment"
+        [frontends.environment-frontend.routes.frontendrule]
+        rule = "PathPrefix:/env/"
+        priority = 100
     [frontends.periscope-frontend]
     backend = "periscope"
         [frontends.periscope-frontend.routes.frontendrule]
@@ -65,7 +74,7 @@ var expectedMulti string = `[file]
 
 func TestNoLocalService(t *testing.T) {
 	out := catchStdOut(t, func() {
-		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "redbeamsURL", "caasURL", "clusterProxyURL", ""})
+		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "environmentURL", "redbeamsURL", "caasURL", "clusterProxyURL", ""})
 	})
 	if len(out) > 0 {
 		t.Errorf("If no local-dev services were defined, traefik.toml should be empty. out:'%s'", out)
@@ -74,7 +83,7 @@ func TestNoLocalService(t *testing.T) {
 
 func TestCloudbreakLocalService(t *testing.T) {
 	out := catchStdOut(t, func() {
-		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "redbeamsURL", "caasURL", "clusterProxyURL", "cloudbreak"})
+		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "environmentURL", "redbeamsURL", "caasURL", "clusterProxyURL", "cloudbreak"})
 	})
 	if out != expectedSingle {
 		t.Errorf("If cloudbreak service was defined as local-dev, traefik.toml should contain the cloudbreak service related configs. out:'%s'\nexpected:'%s'", out, expectedSingle)
@@ -83,7 +92,7 @@ func TestCloudbreakLocalService(t *testing.T) {
 
 func TestMultiLocalService(t *testing.T) {
 	out := catchStdOut(t, func() {
-		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "redbeamsURL", "caasURL", "clusterProxyURL", "cloudbreak,periscope,datalake,redbeams"})
+		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "environmentURL", "redbeamsURL", "caasURL", "clusterProxyURL", "cloudbreak,periscope,datalake,environment,redbeams"})
 	})
 	if out != expectedMulti {
 		t.Errorf("If services were defined as local-dev, traefik.toml should contain the defined services. out:'%s'", out)

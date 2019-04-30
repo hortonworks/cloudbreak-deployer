@@ -12,6 +12,7 @@ type traefikTomlParams struct {
 	CloudbreakURL   string
 	PeriscopeURL    string
 	DatalakeURL     string
+	EnvironmentURL  string
 	RedbeamsURL     string
 	CaasURL         string
 	ClusterProxyURL string
@@ -19,7 +20,7 @@ type traefikTomlParams struct {
 }
 
 func GenerateTraefikToml(args []string) {
-	params := traefikTomlParams{args[0], args[1], args[2], args[3], args[4], args[5], args[6]}
+	params := traefikTomlParams{args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]}
 	if len(params.LocalDevList) == 0 {
 		fmt.Print("")
 	} else {

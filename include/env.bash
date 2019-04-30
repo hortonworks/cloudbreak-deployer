@@ -107,7 +107,7 @@ CB_SMARTSENSE_CLUSTER_NAME_PREFIX - SmartSense Cloudbreak cluster name prefix
 CB_SMARTSENSE_ID - SmartSense subscription ID
 CB_TEMPLATE_DEFAULTS - Comma separated list of the default templates what Cloudbreak initialize in database
 CB_UI_MAX_WAIT - Wait timeout for `cbd start-wait` command
-CB_LOCAL_DEV_LIST - List of services that will not be created (e.g.: cloudbreak,periscope,datalake,redbeams)
+CB_LOCAL_DEV_LIST - List of services that will not be created (e.g.: cloudbreak,periscope,datalake,environment,redbeams)
 CB_SHOW_TERMINATED_CLUSTERS_ACTIVE - Show terminated clusters
 CB_SHOW_TERMINATED_CLUSTERS_DAYS - Days part of timeout to show terminated clusters
 CB_SHOW_TERMINATED_CLUSTERS_HOURS - Hours part of timeout to show terminated clusters
@@ -127,6 +127,16 @@ DATALAKE_DB_PORT_5432_TCP_PORT - Port number of the Datalake database
 DATALAKE_LOG_LEVEL - Log level of the Datalake service
 DATALAKE_SCHEMA_MIGRATION_AUTO - Flag for Datalake automatic database schema update
 DATALAKE_SCHEMA_SCRIPTS_LOCATION - Location of Datalake schema update files
+ENVIRONMENT_HBM2DDL_STRATEGY - Configures hibernate.hbm2ddl.auto in Environment
+ENVIRONMENT_DB_ENV_DB - Name of the Environment database
+ENVIRONMENT_DB_ENV_PASS - Password for the Environment database authentication
+ENVIRONMENT_DB_ENV_SCHEMA - Used schema in the Environment database
+ENVIRONMENT_DB_ENV_USER - User for the Environment database authentication
+ENVIRONMENT_DB_PORT_5432_TCP_ADDR - Address of the Environment database
+ENVIRONMENT_DB_PORT_5432_TCP_PORT - Port number of the Environment database
+ENVIRONMENT_LOG_LEVEL - Log level of the Environment service
+ENVIRONMENT_SCHEMA_MIGRATION_AUTO - Flag for Environment automatic database schema update
+ENVIRONMENT_SCHEMA_SCRIPTS_LOCATION - Location of Environment schema update files
 DB_DUMP_VOLUME - Name of the database dump volume
 DB_MIGRATION_LOG - Database migration log file
 DOCKER_CONSUL_OPTIONS - Extra options for Consul
@@ -137,6 +147,7 @@ DOCKER_IMAGE_CLOUDBREAK_AUTH - Authentication service Docker image name
 DOCKER_IMAGE_CLOUDBREAK_PERISCOPE - Autoscale Docker image name
 DOCKER_IMAGE_CLOUDBREAK_DATALAKE - Datalake Docker image name
 DOCKER_IMAGE_CLOUDBREAK_REDBEAMS - Redbeams Docker image name
+DOCKER_IMAGE_CLOUDBREAK_ENVIRONMENT - Environment Docker image name
 DOCKER_IMAGE_CLOUDBREAK_WEB - Web UI Docker image name
 DOCKER_TAG_ALPINE - Alpine container version
 DOCKER_TAG_CBD_SMARTSENSE - SmartSense container version
@@ -149,6 +160,7 @@ DOCKER_TAG_MIGRATION - Migration container version
 DOCKER_TAG_PERISCOPE - Autoscale container version
 DOCKER_TAG_DATALAKE - Datalake container version
 DOCKER_TAG_REDBEAMS - Redbeams container version
+DOCKER_TAG_ENVIRONMENT - Environment container version
 DOCKER_TAG_POSTGRES - Postgresql container version
 DOCKER_TAG_LOGROTATE - Logrotate container version
 DOCKER_TAG_REGISTRATOR - Registrator container version
