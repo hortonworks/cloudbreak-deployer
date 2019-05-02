@@ -4,6 +4,7 @@
         restart: on-failure
         volumes:
         - {{{get . "CAAS_MOCK_VOLUME_HOST"}}}:{{{get . "CAAS_MOCK_VOLUME_CONTAINER"}}}
+        - ./etc/:/etc/auth
         networks:
         - {{{get . "DOCKER_NETWORK_NAME"}}}
         ports:
