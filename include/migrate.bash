@@ -13,6 +13,8 @@ migrate-config() {
     env-import REDBEAMS_SCHEMA_MIGRATION_AUTO true
     env-import ENVIRONMENT_SCHEMA_SCRIPTS_LOCATION "container"
     env-import ENVIRONMENT_SCHEMA_MIGRATION_AUTO true
+    env-import FREEIPA_SCHEMA_SCRIPTS_LOCATION "container"
+    env-import FREEIPA_SCHEMA_MIGRATION_AUTO true
     env-import UAA_SCHEMA_SCRIPTS_LOCATION "container"
     env-import DB_MIGRATION_LOG "db_migration.log"
     env-import VERBOSE_MIGRATION false
@@ -107,6 +109,10 @@ migrate-one-db() {
             local scripts_location=${ENVIRONMENT_SCHEMA_SCRIPTS_LOCATION}
             local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_ENVIRONMENT}:${DOCKER_TAG_ENVIRONMENT}
             ;;
+        freeipadb)
+            local scripts_location=${FREEIPA_SCHEMA_SCRIPTS_LOCATION}
+            local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_FREEIPA}:${DOCKER_TAG_FREEIPA}
+            ;;
         uaadb)
             local scripts_location=${UAA_SCHEMA_SCRIPTS_LOCATION}
             local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_AUTH}:${DOCKER_TAG_CLOUDBREAK}
@@ -160,6 +166,12 @@ execute-migration() {
                 environmentdb)
                     if [[ "$ENVIRONMENT_SCHEMA_SCRIPTS_LOCATION" == "container" && "$CB_LOCAL_DEV_LIST" == *"environment"* ]]; then
                         migrateError "ENVIRONMENT_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the autoscale project's schema location"
+                        _exit 127
+                    fi
+                    ;;
+                freeipadb)
+                    if [[ "$FREEIPA_SCHEMA_SCRIPTS_LOCATION" == "container" && "$CB_LOCAL_DEV_LIST" == *"freeipa"* ]]; then
+                        migrateError "FREEIPA_SCHEMA_SCRIPTS_LOCATION environment variable must be set and pointing to the freeipa project's schema location"
                         _exit 127
                     fi
                     ;;

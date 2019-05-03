@@ -14,13 +14,14 @@ type traefikTomlParams struct {
 	DatalakeURL     string
 	EnvironmentURL  string
 	RedbeamsURL     string
+	FreeIpaURL      string
 	CaasURL         string
 	ClusterProxyURL string
 	LocalDevList    string
 }
 
 func GenerateTraefikToml(args []string) {
-	params := traefikTomlParams{args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]}
+	params := traefikTomlParams{args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]}
 	if len(params.LocalDevList) == 0 {
 		fmt.Print("")
 	} else {

@@ -28,6 +28,7 @@ export DOCKER_IMAGE_CLOUDBREAK_DATALAKE=hortonworks/cloudbreak-datalake
 export DOCKER_IMAGE_CLOUDBREAK_ENVIRONMENT=hortonworks/cloudbreak-environment
 export DOCKER_IMAGE_CLOUDBREAK_PERISCOPE=hortonworks/cloudbreak-autoscale
 export DOCKER_IMAGE_CLOUDBREAK_REDBEAMS=hortonworks/cloudbreak-redbeams
+export DOCKER_IMAGE_CLOUDBREAK_FREEIPA=hortonworks/cloudbreak-freeipa
 export DOCKER_IMAGE_CLOUDBREAK_WEB=hortonworks/hdc-web
 export DOCKER_NETWORK_NAME=default
 export DOCKER_TAG_CAAS_MOCK=2.10.0-dev.669

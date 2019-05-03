@@ -48,6 +48,7 @@ func GenerateComposeYaml(args []string) {
 	insertIntoTemplateIfNotLocal(t, localDevList, "environment")
 	insertIntoTemplateIfNotLocal(t, localDevList, "periscope")
 	insertIntoTemplateIfNotLocal(t, localDevList, "redbeams")
+	insertIntoTemplateIfNotLocal(t, localDevList, "freeipa")
 
 	t.Execute(os.Stdout, dataMap)
 }

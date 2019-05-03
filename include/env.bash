@@ -137,6 +137,14 @@ ENVIRONMENT_DB_PORT_5432_TCP_PORT - Port number of the Environment database
 ENVIRONMENT_LOG_LEVEL - Log level of the Environment service
 ENVIRONMENT_SCHEMA_MIGRATION_AUTO - Flag for Environment automatic database schema update
 ENVIRONMENT_SCHEMA_SCRIPTS_LOCATION - Location of Environment schema update files
+FREEIPA_HBM2DDL_STRATEGY - Configures hibernate.hbm2ddl.auto in FreeIpa
+FREEIPA_DB_ENV_DB - Name of the FreeIpa database
+FREEIPA_DB_ENV_PASS - Password for the FreeIpa database authentication
+FREEIPA_DB_ENV_SCHEMA - Used schema in the FreeIpa database
+FREEIPA_DB_ENV_USER - User for the FreeIpa database authentication
+FREEIPA_LOG_LEVEL - Log level of the FreeIpa service
+FREEIPA_SCHEMA_MIGRATION_AUTO - Flag for FreeIpa automatic database schema update
+FREEIPA_SCHEMA_SCRIPTS_LOCATION - Location of FreeIpa schema update files
 DB_DUMP_VOLUME - Name of the database dump volume
 DB_MIGRATION_LOG - Database migration log file
 DOCKER_CONSUL_OPTIONS - Extra options for Consul
@@ -148,6 +156,7 @@ DOCKER_IMAGE_CLOUDBREAK_PERISCOPE - Autoscale Docker image name
 DOCKER_IMAGE_CLOUDBREAK_DATALAKE - Datalake Docker image name
 DOCKER_IMAGE_CLOUDBREAK_REDBEAMS - Redbeams Docker image name
 DOCKER_IMAGE_CLOUDBREAK_ENVIRONMENT - Environment Docker image name
+DOCKER_IMAGE_CLOUDBREAK_FREEIPA - FreeIpa Docker image name
 DOCKER_IMAGE_CLOUDBREAK_WEB - Web UI Docker image name
 DOCKER_TAG_ALPINE - Alpine container version
 DOCKER_TAG_CBD_SMARTSENSE - SmartSense container version
@@ -161,6 +170,7 @@ DOCKER_TAG_PERISCOPE - Autoscale container version
 DOCKER_TAG_DATALAKE - Datalake container version
 DOCKER_TAG_REDBEAMS - Redbeams container version
 DOCKER_TAG_ENVIRONMENT - Environment container version
+DOCKER_TAG_FREEIPA - FreeIpa container version
 DOCKER_TAG_POSTGRES - Postgresql container version
 DOCKER_TAG_LOGROTATE - Logrotate container version
 DOCKER_TAG_REGISTRATOR - Registrator container version
