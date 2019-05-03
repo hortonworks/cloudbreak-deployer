@@ -160,7 +160,7 @@ cloudbreak-conf-uaa() {
 
     env-import UAA_ENVIRONMENT_ID environment
     env-import UAA_ENVIRONMENT_SECRET $UAA_DEFAULT_SECRET
-    env-validate UAA_ENVIRONMENT_SECRET *" "* "space" 
+    env-validate UAA_ENVIRONMENT_SECRET *" "* "space"
 
     env-import UAA_ULUWATU_ID uluwatu
     env-import UAA_ULUWATU_SECRET $UAA_DEFAULT_SECRET
@@ -359,7 +359,7 @@ generate-toml-file-for-localdev() {
 
 generate-toml-file-for-localdev-force() {
     declare traefikFile=${1:-traefik.toml}
-    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$DATALAKE_URL" "$REDBEAMS_URL" "$ENVIRONMENT_URL" "http://$CAAS_URL" "$CLUSTER_PROXY_URL" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
+    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$DATALAKE_URL" "$ENVIRONMENT_URL" "$REDBEAMS_URL" "http://$CAAS_URL" "$CLUSTER_PROXY_URL" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
 }
 
 generate-traefik-check-diff() {
