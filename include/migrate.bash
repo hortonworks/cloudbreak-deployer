@@ -112,7 +112,7 @@ migrate-one-db() {
             local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_AUTH}:${DOCKER_TAG_CLOUDBREAK}
             ;;
         *)
-            migrateError "Invalid database service name: $service_name. Supported databases: cbdb, periscopedb, datalakedb, redbeamsdb, and uaadb"
+            migrateError "Invalid database service name: $service_name. Supported databases: cbdb, periscopedb, datalakedb, redbeamsdb, environmentdb and uaadb"
             return 1
             ;;
     esac
@@ -170,7 +170,7 @@ execute-migration() {
                     fi
                     ;;
                 *)
-                    migrateError "Invalid database service name: $1. Supported databases: cbdb, periscopedb, datalakedb, environmentdb, redbeamsdb and uaadb"
+                    migrateError "Invalid database service name: $1. Supported databases: cbdb, periscopedb, datalakedb, redbeamsdb, environmentdb and uaadb"
                     return 1
                     ;;
             esac
