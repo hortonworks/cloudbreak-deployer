@@ -7,8 +7,8 @@
             - REST_DEBUG
             - 'ENVIRONMENT_JAVA_OPTS={{{getEscaped . "ENVIRONMENT_JAVA_OPTS"}}}'
             - ENVIRONMENT_HBM2DDL_STRATEGY
-            - "ENVIRONMENT_DB_PORT_5432_TCP_ADDR={{{get . "COMMON_DB"}}}"
-            - "ENVIRONMENT_DB_PORT_5432_TCP_PORT=5432"
+            - "ENVIRONMENT_DB_HOST={{{get . "COMMON_DB"}}}"
+            - "ENVIRONMENT_DB_PORT=5432"
             - ENVIRONMENT_DB_ENV_USER
             - ENVIRONMENT_DB_ENV_PASS
             - ENVIRONMENT_DB_ENV_DB
