@@ -31,6 +31,12 @@
             [backends.redbeams.servers.server0]
             url = "{{{ .RedbeamsURL }}}"
 {{{- end}}}
+{{{- if isLocal . "freeipa" }}}
+    [backends.freeipa]
+        [backends.freeipa.servers]
+            [backends.freeipa.servers.server0]
+            url = "{{{ .FreeIpaURL }}}"
+{{{- end}}}
 {{{- if isLocal . "caas-api" }}}
     [backends.caas-api]
         [backends.caas-api.servers]
@@ -78,6 +84,13 @@
     backend = "redbeams"
         [frontends.redbeams-frontend.routes.frontendrule]
         rule = "PathPrefix:/rdb/"
+        priority = 100
+{{{- end}}}
+{{{- if isLocal . "freeipa"}}}
+    [frontends.freeipa-frontend]
+    backend = "freeipa"
+        [frontends.freeipa-frontend.routes.frontendrule]
+        rule = "PathPrefix:/freeipa/"
         priority = 100
 {{{- end}}}
 {{{- if isLocal . "caas-api"}}}

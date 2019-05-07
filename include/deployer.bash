@@ -172,7 +172,7 @@ cbd-update-release() {
         if docker volume inspect $COMMON_DB_VOL &>/dev/null; then
             info "Backing up databases"
 
-	    for db in $CB_DB_ENV_DB $IDENTITY_DB_NAME $PERISCOPE_DB_ENV_DB $DATALAKE_DB_ENV_DB $ENVIRONMENT_DB_ENV_DB $REDBEAMS_DB_ENV_DB; do
+	    for db in $CB_DB_ENV_DB $IDENTITY_DB_NAME $PERISCOPE_DB_ENV_DB $DATALAKE_DB_ENV_DB $ENVIRONMENT_DB_ENV_DB $REDBEAMS_DB_ENV_DB $FREEIPA_DB_ENV_DB; do
                 debug "Backing up $db"
                 db-dump $db
             done
@@ -405,6 +405,7 @@ localdev-doctor() {
     localdev-doctor-service "datalake" "8086"
     localdev-doctor-service "redbeams" "8087"
     localdev-doctor-service "environment" "8088"
+    localdev-doctor-service "freeipa" "8090"
     localdev-doctor-service "cluster-proxy" "10081"
 }
 

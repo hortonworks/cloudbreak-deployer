@@ -1,0 +1,47 @@
+{{{define "freeipa"}}}
+    freeipa:
+        environment:
+            - http_proxy={{{get . "HTTP_PROXY"}}}
+            - https_proxy={{{get . "HTTPS_PROXY"}}}
+            - CERT_VALIDATION
+            - REST_DEBUG
+            - 'FREEIPA_JAVA_OPTS={{{getEscaped . "FREEIPA_JAVA_OPTS"}}}'
+            - FREEIPA_HBM2DDL_STRATEGY
+            - "FREEIPA_DB_ADDR={{{get . "COMMON_DB"}}}"
+            - "FREEIPA_DB_PORT=5432"
+            - FREEIPA_DB_ENV_USER
+            - FREEIPA_DB_ENV_PASS
+            - FREEIPA_DB_ENV_DB
+            - FREEIPA_DB_ENV_SCHEMA
+            - FREEIPA_HOSTNAME_RESOLUTION=public
+            - FREEIPA_ADDRESS_RESOLVING_TIMEOUT
+            - "FREEIPA_CLOUDBREAK_URL={{{get . "CLOUDBREAK_URL"}}}"
+            - FREEIPA_SCHEMA_SCRIPTS_LOCATION
+            - FREEIPA_SCHEMA_MIGRATION_AUTO
+            - FREEIPA_INSTANCE_NODE_ID={{{get . "CB_INSTANCE_NODE_ID"}}}
+            - FREEIPA_LOG_LEVEL
+            - VAULT_ADDR=vault
+            - VAULT_PORT={{{get . "VAULT_BIND_PORT"}}}
+            - VAULT_ROOT_TOKEN={{{get . "VAULT_ROOT_TOKEN"}}}
+        labels:
+            - traefik.port=8080
+            - traefik.frontend.rule=PathPrefix:/freeipa/
+            - traefik.backend=freeipa-backend
+            - traefik.frontend.priority=10
+        ports:
+            - 8090:8080
+        volumes:
+            - "{{{get . "CBD_CERT_ROOT_PATH"}}}:/certs"
+            - /dev/urandom:/dev/random
+            - ./logs/freeipa:/freeipa-log
+            - ./etc/:/etc/freeipa
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: {{{get . "DOCKER_IMAGE_CLOUDBREAK_FREEIPA"}}}:{{{get . "DOCKER_TAG_FREEIPA"}}}
+        command: bash
+  {{{end}}}
+  
