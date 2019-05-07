@@ -127,13 +127,13 @@ DATALAKE_DB_PORT_5432_TCP_PORT - Port number of the Datalake database
 DATALAKE_LOG_LEVEL - Log level of the Datalake service
 DATALAKE_SCHEMA_MIGRATION_AUTO - Flag for Datalake automatic database schema update
 DATALAKE_SCHEMA_SCRIPTS_LOCATION - Location of Datalake schema update files
-ENVIRONMENT_HBM2DDL_STRATEGY - Configures hibernate.hbm2ddl.auto in Environment
+ENVIRONMENT_DB_HOST - Address of the Environment database
+ENVIRONMENT_DB_PORT - Port number of the Environment database
 ENVIRONMENT_DB_ENV_DB - Name of the Environment database
-ENVIRONMENT_DB_ENV_PASS - Password for the Environment database authentication
 ENVIRONMENT_DB_ENV_SCHEMA - Used schema in the Environment database
 ENVIRONMENT_DB_ENV_USER - User for the Environment database authentication
-ENVIRONMENT_DB_PORT_5432_TCP_ADDR - Address of the Environment database
-ENVIRONMENT_DB_PORT_5432_TCP_PORT - Port number of the Environment database
+ENVIRONMENT_DB_ENV_PASS - Password for the Environment database authentication
+ENVIRONMENT_HBM2DDL_STRATEGY - Configures hibernate.hbm2ddl.auto in Environment
 ENVIRONMENT_LOG_LEVEL - Log level of the Environment service
 ENVIRONMENT_SCHEMA_MIGRATION_AUTO - Flag for Environment automatic database schema update
 ENVIRONMENT_SCHEMA_SCRIPTS_LOCATION - Location of Environment schema update files
