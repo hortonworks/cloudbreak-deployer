@@ -14,13 +14,20 @@
             - REDBEAMS_DB_ENV_DB
             - REDBEAMS_DB_ENV_SCHEMA
             - REDBEAMS_CLIENT_ID={{{get . "UAA_REDBEAMS_ID"}}}
+            - 'REDBEAMS_CLIENT_SECRET={{{getEscaped . "UAA_REDBEAMS_SECRET"}}}'
             - REDBEAMS_HOSTNAME_RESOLUTION=public
             - REDBEAMS_ADDRESS_RESOLVING_TIMEOUT
             - "REDBEAMS_CLOUDBREAK_URL={{{get . "CLOUDBREAK_URL"}}}"
+            - REDBEAMS_IDENTITY_SERVER_URL=http://identity:8080
             - REDBEAMS_SCHEMA_SCRIPTS_LOCATION
             - REDBEAMS_SCHEMA_MIGRATION_AUTO
             - REDBEAMS_INSTANCE_NODE_ID={{{get . "CB_INSTANCE_NODE_ID"}}}
             - REDBEAMS_LOG_LEVEL
+            - VAULT_ADDR=vault
+            - VAULT_PORT={{{get . "VAULT_BIND_PORT"}}}
+            - VAULT_ROOT_TOKEN={{{get . "VAULT_ROOT_TOKEN"}}}
+            - "CAAS_URL={{{get . "CAAS_URL"}}}"
+            - "ALTUS_UMS_HOST={{{get . "UMS_HOST"}}}"
         labels:
             - traefik.port=8080
             - traefik.frontend.rule=PathPrefix:/rdb/
