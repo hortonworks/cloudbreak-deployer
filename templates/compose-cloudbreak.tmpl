@@ -16,6 +16,7 @@
             - CB_TEMPLATE_DEFAULTS
             - CB_HBM2DDL_STRATEGY
             - CB_CAPABILITIES
+            - "CB_NOTIFICATION_ENDPOINT={{{get . "CB_DEFAULT_SUBSCRIPTION_ADDRESS"}}}"
             {{{- if get . "INFO_APP_CAPABILITIES"}}}
             - INFO_APP_CAPABILITIES
             {{{- end}}}
