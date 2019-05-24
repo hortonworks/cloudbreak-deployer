@@ -586,7 +586,7 @@ start-wait-cmd() {
     wait-for-service "cloudbreak" "cb" "$CB_HOST_ADDRESS"
     wait-for-service "environment" "env" "$ENVIRONMENT_HOST_ADDRESS"	
     wait-for-service "periscope" "as" "$PERISCOPE_HOST_ADDRESS"	
-    #wait-for-service "redbeams" "rdb" "$REDBEAMS_HOST_ADDRESS"		
+    wait-for-service "redbeams" "rdb" "$REDBEAMS_HOST_ADDRESS"		
     wait-for-service "freeipa" "freeipa" "$FREEIPA_HOST_ADDRESS"		
     wait-for-service "datalake" "dl" "$DATALAKE_HOST_ADDRESS"
     deployer-login
