@@ -583,12 +583,7 @@ start-wait-cmd() {
     declare desc="Starts Cloudbreak Deployer containers, and waits until API is available"
 
     start-requested-services "$@"
-    wait-for-service "cloudbreak" "cb"
-    wait-for-service "environment" "env"	
-    wait-for-service "periscope" "as"	
-    wait-for-service "redbeams" "rdb"	
-    wait-for-service "freeipa" "freeipa"	
-    wait-for-service "datalake" "dl"
+    wait-for-cloudbreak
     deployer-login
 }
 
@@ -615,20 +610,20 @@ start-requested-services() {
     compose-up $services
 }
 
-wait-for-service() {
-    if ! [[ $CB_LOCAL_DEV_LIST == *"$1"* ]]; then
-        info "Waiting for $1 UI (timeout: $CB_UI_MAX_WAIT)"
-        local curl_cmd="curl -m 1 -L -k -sfo /dev/null ${CB_HOST_ADDRESS}/$2/info"
-        local count=0
-        while ! $curl_cmd &&  [ $((count++)) -lt $CB_UI_MAX_WAIT ] ; do
-            echo -n . 1>&2
-            sleep 1;
-        done
-        echo 1>&2
-        if ! $curl_cmd; then
-            error "Could not reach $1 in time."
-            _exit 1
-        fi
+wait-for-cloudbreak() {
+    info "Waiting for Cloudbreak UI (timeout: $CB_UI_MAX_WAIT)"
+
+    local curl_cmd="curl -m 1 -L -k -sfo /dev/null ${CB_HOST_ADDRESS}/cb/info"
+    local count=0
+    while ! $curl_cmd &&  [ $((count++)) -lt $CB_UI_MAX_WAIT ] ; do
+        echo -n . 1>&2
+        sleep 1;
+    done
+    echo 1>&2
+
+    if ! $curl_cmd; then
+        error "Could not reach Cloudbreak in time."
+        _exit 1
     fi
 }
 
