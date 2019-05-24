@@ -16,6 +16,7 @@ cloudbreak-config() {
   cloudbreak-conf-cloud-provider
   cloudbreak-conf-rest-client
   cloudbreak-conf-ui
+  cloudbreak-conf-host-addr
   cloudbreak-conf-java
   cloudbreak-conf-vault
   cloudbreak-conf-caas
@@ -283,9 +284,19 @@ cloudbreak-conf-ui() {
     declare desc="Defines Uluwatu related parameters"
 
     env-import ULU_HOST_ADDRESS  "https://$PUBLIC_IP:$PUBLIC_HTTPS_PORT"
-    env-import CB_HOST_ADDRESS  "http://$PUBLIC_IP"
     env-import ULU_NODE_TLS_REJECT_UNAUTHORIZED "0"
     env-import ULU_SUBSCRIBE_TO_NOTIFICATIONS "true"
+}
+
+cloudbreak-conf-host-addr() {
+    declare desc="Defines Host address related parameters"
+
+    env-import CB_HOST_ADDRESS  "http://$PUBLIC_IP"
+    env-import ENVIRONMENT_HOST_ADDRESS  "http://$PUBLIC_IP"
+    env-import FREEIPA_HOST_ADDRESS  "http://$PUBLIC_IP"
+    env-import REDBEAMS_HOST_ADDRESS  "http://$PUBLIC_IP"
+    env-import PERISCOPE_HOST_ADDRESS  "http://$PUBLIC_IP"
+    env-import DATALAKE_HOST_ADDRESS  "http://$PUBLIC_IP"
 }
 
 cloudbreak-conf-java() {
