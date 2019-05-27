@@ -72,7 +72,7 @@ var expectedMulti string = `[file]
     [frontends.redbeams-frontend]
     backend = "redbeams"
         [frontends.redbeams-frontend.routes.frontendrule]
-        rule = "PathPrefix:/rdb/"
+        rule = "PathPrefix:/redbeams/"
         priority = 100
     [frontends.freeipa-frontend]
     backend = "freeipa"
