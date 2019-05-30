@@ -231,7 +231,7 @@ traefik:
     log_opt:
         max-size: "10M"
         max-file: "5"
-    image: traefik:$DOCKER_TAG_TRAEFIK
+    image: $DOCKER_IMAGE_CBD_TRAEFIK:$DOCKER_TAG_TRAEFIK
     restart: on-failure
     command: --debug --web --InsecureSkipVerify=true \
         --defaultEntryPoints=http,https \
@@ -249,7 +249,7 @@ haveged:
     log_opt:
         max-size: "10M"
         max-file: "5"
-    image: hortonworks/haveged:$DOCKER_TAG_HAVEGED
+    image: $DOCKER_IMAGE_CBD_HAVEGED:$DOCKER_TAG_HAVEGED
 
 consul:
     labels:
@@ -269,7 +269,7 @@ consul:
     log_opt:
         max-size: "10M"
         max-file: "5"
-    image: gliderlabs/consul-server:$DOCKER_TAG_CONSUL
+    image: $DOCKER_IMAGE_CBD_CONSUL:$DOCKER_TAG_CONSUL
     command: --bootstrap --advertise $PRIVATE_IP $DOCKER_CONSUL_OPTIONS
 
 registrator:
@@ -281,7 +281,7 @@ registrator:
     log_opt:
         max-size: "10M"
         max-file: "5"
-    image: gliderlabs/registrator:$DOCKER_TAG_REGISTRATOR
+    image: $DOCKER_IMAGE_CBD_REGISTRATOR:$DOCKER_TAG_REGISTRATOR
     links:
         - consul
     restart: on-failure
@@ -296,7 +296,7 @@ logsink:
         - SERVICE_NAME=logsink
     volumes:
         - ./logs:/tmp
-    image: hortonworks/socat:1.0.0
+    image: $DOCKER_IMAGE_CBD_LOGSINK:$DOCKER_TAG_LOGSINK
     log_opt:
         max-size: "10M"
         max-file: "5"
@@ -321,7 +321,7 @@ logspout:
     log_opt:
         max-size: "10M"
         max-file: "5"
-    image: hortonworks/logspout:v3.2.2
+    image: $DOCKER_IMAGE_CBD_LOGSPOUT:$DOCKER_TAG_LOGSPOUT
 
 logrotate:
     environment:
@@ -333,7 +333,7 @@ logrotate:
     log_opt:
         max-size: "10M"
         max-file: "5"
-    image: hortonworks/logrotate:$DOCKER_TAG_LOGROTATE
+    image: $DOCKER_IMAGE_CBD_LOGROTATE:$DOCKER_TAG_LOGROTATE
 
 mail:
     labels:
@@ -349,7 +349,7 @@ mail:
     log_opt:
         max-size: "10M"
         max-file: "5"
-    image: catatnight/postfix:$DOCKER_TAG_POSTFIX
+    image: $DOCKER_IMAGE_CBD_POSTFIX:$DOCKER_TAG_POSTFIX
 
 smartsense:
     labels:
@@ -395,7 +395,7 @@ commondb:
     log_opt:
         max-size: "10M"
         max-file: "5"
-    image: postgres:$DOCKER_TAG_POSTGRES
+    image: $DOCKER_IMAGE_CBD_POSTGRES:$DOCKER_TAG_POSTGRES
     entrypoint: ["/bin/bash"]
     command: -c 'cd /var/lib/postgresql; touch .ash_history .psql_history; chown -R postgres:postgres /var/lib/postgresql; (/docker-entrypoint.sh postgres -c max_connections=300) & PGPID="\$\$!"; echo "PGPID \$\$PGPID"; trap "kill \$\$PGPID; wait \$\$PGPID" SIGINT SIGTERM; cd /var/lib/postgresql; (tail -f .*history) & wait "\$\$PGPID"'
 
@@ -418,12 +418,13 @@ identity:
         - IDENTITY_DB_PASS
     dns: $PRIVATE_IP
     volumes:
-      - ./uaa.yml:/uaa/uaa.yml
-      - ./logs/identity:/tomcat/logs/
+        - "$CBD_CERT_ROOT_PATH:/certs"
+        - ./uaa.yml:/uaa/uaa.yml
+        - ./logs/identity:/tomcat/logs/
     log_opt:
         max-size: "10M"
         max-file: "5"
-    image: hortonworks/cloudbreak-uaa:$DOCKER_TAG_UAA
+    image: $DOCKER_IMAGE_CLOUDBREAK_UAA:$DOCKER_TAG_UAA
 
 cloudbreak:
     environment:
@@ -464,6 +465,8 @@ cloudbreak:
         - CB_DB_PORT_5432_TCP_PORT
         - CB_DB_ENV_USER
         - CB_DB_ENV_PASS
+        - CB_DB_ENV_SSL
+        - CB_DB_ENV_CERT_FILE
         - CB_DB_ENV_DB
         - CB_DB_ENV_SCHEMA
         - "CB_DB_SERVICEID=$COMMON_DB.service.consul"
@@ -643,6 +646,8 @@ periscope:
         - PERISCOPE_DB_ENV_PASS
         - PERISCOPE_DB_ENV_DB
         - PERISCOPE_DB_ENV_SCHEMA
+        - PERISCOPE_DB_ENV_SSL
+        - PERISCOPE_DB_ENV_CERT_FILE
         - "HTTPS_PROXYFORCLUSTERCONNECTION=$HTTPS_PROXYFORCLUSTERCONNECTION"
         - SERVICE_NAME=periscope
           #- SERVICE_CHECK_HTTP=/info

@@ -77,6 +77,8 @@ CB_DB_ENV_DB - Name of the Cloudbreak database
 CB_DB_ENV_PASS - Password for the Cloudbreak database authentication
 CB_DB_ENV_SCHEMA - Used schema in the Cloudbreak database
 CB_DB_ENV_USER - User for the Cloudbreak database authentication
+CB_DB_ENV_SSL - Enable SSL database connection for Cloudbreak
+CB_DB_ENV_CERT_FILE - The name of the cert file. The directory should be $DEPLOYMENT_DIR/certs where the certs should be placed in.
 CB_DB_ROOT_PATH - Deprecated - Location of the database volume on Cloudbreak host
 CB_DEFAULT_SUBSCRIPTION_ADDRESS - Address of the default subscription for Cloudbreak notifications
 CB_CAPABILITIES - Comma separated list of enabled capabilities
@@ -128,11 +130,21 @@ COMPOSE_HTTP_TIMEOUT - Docker Compose execution timeout
 DB_DUMP_VOLUME - Name of the database dump volume
 DB_MIGRATION_LOG - Database migration log file
 DOCKER_CONSUL_OPTIONS - Extra options for Consul
-DOCKER_IMAGE_CBD_SMARTSENSE - SmartSense Docker image name
 DOCKER_IMAGE_CLOUDBREAK - Cloudbreak Docker image name
 DOCKER_IMAGE_CLOUDBREAK_AUTH - Authentication service Docker image name
 DOCKER_IMAGE_CLOUDBREAK_PERISCOPE - Autoscale Docker image name
 DOCKER_IMAGE_CLOUDBREAK_WEB - Web UI Docker image name
+DOCKER_IMAGE_CLOUDBREAK_UAA - Cloudbreak UAA (Identity) Docker image name
+DOCKER_IMAGE_CBD_SMARTSENSE - SmartSense Docker image name
+DOCKER_IMAGE_CBD_TRAEFIK - Traefik Docker image name
+DOCKER_IMAGE_CBD_HAVEGED - Haveged Docker image name
+DOCKER_IMAGE_CBD_CONSUL - Consul Docker image name
+DOCKER_IMAGE_CBD_REGISTRATOR - Registrator Docker image name
+DOCKER_IMAGE_CBD_LOGSINK - Logsink Docker image name
+DOCKER_IMAGE_CBD_LOGSPOUT - Logspout Docker image name
+DOCKER_IMAGE_CBD_LOGROTATE - Logrotate Docker image name
+DOCKER_IMAGE_CBD_POSTFIX - Postfix Docker image name
+DOCKER_IMAGE_CBD_POSTGRES - Postgres Docker image name
 DOCKER_TAG_ALPINE - Alpine container version
 DOCKER_TAG_CBD_SMARTSENSE - SmartSense container version
 DOCKER_TAG_CERT_TOOL - Cert tool container version
@@ -150,6 +162,8 @@ DOCKER_TAG_TRAEFIK - Traefik container version
 DOCKER_TAG_UAA - Identity container version
 DOCKER_TAG_ULUWATU - Web UI container version
 DOCKER_STOP_TIMEOUT - Specify a shutdown timeout in seconds for containers
+DOCKER_TAG_LOGSINK - Logsing container version
+DOCKER_TAG_LOGSPOUT - Logspout container version
 HTTP_PROXY_HOST - HTTP proxy address
 HTTPS_PROXY_HOST - HTTPS proxy address
 PROXY_PORT - Proxy port
@@ -167,6 +181,8 @@ PERISCOPE_DB_ENV_DB - Name of the Autoscale database
 PERISCOPE_DB_ENV_PASS - Password for the Autoscale database authentication
 PERISCOPE_DB_ENV_SCHEMA - Used schema in the Autoscale database
 PERISCOPE_DB_ENV_USER - User for the Autoscale database authentication
+PERISCOPE_DB_ENV_SSL - Enable SSL database connection for Periscope
+PERISCOPE_DB_ENV_CERT_FILE - the name of the cert file. The directory should be $DEPLOYMENT_DIR/certs where the certs should be placed in.
 PERISCOPE_DB_PORT_5432_TCP_ADDR - Address of the Autoscale database
 PERISCOPE_DB_PORT_5432_TCP_PORT - Port number of the Autoscale database
 PERISCOPE_LOG_LEVEL - Log level of the Autoscale service

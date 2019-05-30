@@ -56,12 +56,6 @@ echo_if_not_contains() {
 }
 
 setup_proxy_environments() {
-    env-import HTTP_PROXY_HOST ""
-    env-import HTTPS_PROXY_HOST ""
-    env-import PROXY_PORT ""
-    env-import PROXY_USER ""
-    env-import PROXY_PASSWORD ""
-    env-import NON_PROXY_HOSTS "*.consul"
     if [[ "$HTTP_PROXY_HOST" ]] || [[ "$HTTPS_PROXY_HOST" ]]; then
          if [[ "$HTTP_PROXY_HOST" ]]; then
             PROXY_HOST=$HTTP_PROXY_HOST
@@ -99,6 +93,7 @@ setup_proxy_environments() {
 }
 
 curl-proxy-aware() {
+    cloudbreak-conf-proxy
     env-import CURL_CONNECT_TIMEOUT 20
     local CURL_ARGS="--connect-timeout $CURL_CONNECT_TIMEOUT"
     setup_proxy_environments
@@ -426,14 +421,14 @@ network-doctor() {
     fi
 
     echo-n "ping 8.8.8.8 in container: "
-    if docker --rm --name=cbreak_doctor_gdns run --label cbreak.sidekick=true alpine sh -c 'ping -c 1 -W 1 8.8.8.8' &> /dev/null; then
+    if docker run --rm --name=cbreak_doctor_gdns --label cbreak.sidekick=true alpine sh -c 'ping -c 1 -W 1 8.8.8.8' &> /dev/null; then
         info "OK"
     else
         error
     fi
 
     echo-n "ping github.com in container: "
-    if docker --rm --name=cbreak_doctor_github run --label cbreak.sidekick=true alpine sh -c 'ping -c 1 -W 1 github.com' &> /dev/null; then
+    if docker run --rm --name=cbreak_doctor_github --label cbreak.sidekick=true alpine sh -c 'ping -c 1 -W 1 github.com' &> /dev/null; then
         info "OK"
     else
         error

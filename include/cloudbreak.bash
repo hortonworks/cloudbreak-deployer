@@ -17,6 +17,7 @@ cloudbreak-config() {
   cloudbreak-conf-ui
   cloudbreak-conf-java
   cloudbreak-conf-consul
+  cloudbreak-conf-proxy
   migrate-config
 }
 
@@ -29,24 +30,37 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_CONSUL 0.5
     env-import DOCKER_TAG_REGISTRATOR v7
     env-import DOCKER_TAG_POSTFIX latest
-    env-import DOCKER_TAG_UAA 3.6.5-pgupdate
+    env-import DOCKER_TAG_UAA 3.6.5-certs
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.2.0
 
-    env-import DOCKER_TAG_PERISCOPE 2.9.0
-    env-import DOCKER_TAG_CLOUDBREAK 2.9.0
-    env-import DOCKER_TAG_ULUWATU 2.9.0
-    env-import DOCKER_TAG_SULTANS 2.9.0
+    env-import DOCKER_TAG_PERISCOPE 2.9.1
+    env-import DOCKER_TAG_CLOUDBREAK 2.9.1
+    env-import DOCKER_TAG_ULUWATU 2.9.1
+    env-import DOCKER_TAG_SULTANS 2.9.1
 
     env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
     env-import DOCKER_TAG_LOGROTATE 1.0.1
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
+    env-import DOCKER_TAG_LOGSINK 1.0.0
+    env-import DOCKER_TAG_LOGSPOUT v3.2.2
 
     env-import DOCKER_IMAGE_CLOUDBREAK hortonworks/cloudbreak
     env-import DOCKER_IMAGE_CLOUDBREAK_WEB hortonworks/hdc-web
     env-import DOCKER_IMAGE_CLOUDBREAK_AUTH hortonworks/hdc-auth
     env-import DOCKER_IMAGE_CLOUDBREAK_PERISCOPE hortonworks/cloudbreak-autoscale
     env-import DOCKER_IMAGE_CBD_SMARTSENSE hortonworks/cbd-smartsense
+
+    env-import DOCKER_IMAGE_CLOUDBREAK_UAA hortonworks/cloudbreak-uaa
+    env-import DOCKER_IMAGE_CBD_TRAEFIK traefik
+    env-import DOCKER_IMAGE_CBD_HAVEGED hortonworks/haveged
+    env-import DOCKER_IMAGE_CBD_CONSUL gliderlabs/consul-server
+    env-import DOCKER_IMAGE_CBD_REGISTRATOR gliderlabs/registrator
+    env-import DOCKER_IMAGE_CBD_LOGSINK hortonworks/socat
+    env-import DOCKER_IMAGE_CBD_LOGSPOUT hortonworks/logspout
+    env-import DOCKER_IMAGE_CBD_LOGROTATE hortonworks/logrotate
+    env-import DOCKER_IMAGE_CBD_POSTFIX catatnight/postfix
+    env-import DOCKER_IMAGE_CBD_POSTGRES postgres
 
     env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu.service.consul:3000/notifications
     env-import CERTS_BUCKET ""
@@ -143,12 +157,16 @@ cloudbreak-conf-db() {
     env-import CB_DB_ENV_DB "cbdb"
     env-import CB_DB_ENV_PASS ""
     env-import CB_DB_ENV_SCHEMA "public"
+    env-import CB_DB_ENV_SSL "false"
+    env-import CB_DB_ENV_CERT_FILE ""
     env-import CB_HBM2DDL_STRATEGY "validate"
 
     env-import PERISCOPE_DB_ENV_USER "postgres"
     env-import PERISCOPE_DB_ENV_DB "periscopedb"
     env-import PERISCOPE_DB_ENV_PASS ""
     env-import PERISCOPE_DB_ENV_SCHEMA "public"
+    env-import PERISCOPE_DB_ENV_SSL "false"
+    env-import PERISCOPE_DB_ENV_CERT_FILE ""
     env-import PERISCOPE_HBM2DDL_STRATEGY "validate"
 
     env-import IDENTITY_DB_URL "${COMMON_DB}.service.consul:5432"
@@ -321,6 +339,15 @@ cloudbreak-conf-ui() {
 
 cloudbreak-conf-java() {
     env-import CB_JAVA_OPTS ""
+}
+
+cloudbreak-conf-proxy() {
+    env-import HTTP_PROXY_HOST ""
+    env-import HTTPS_PROXY_HOST ""
+    env-import PROXY_PORT ""
+    env-import PROXY_USER ""
+    env-import PROXY_PASSWORD ""
+    env-import NON_PROXY_HOSTS "*.consul"
     env-import HTTPS_PROXYFORCLUSTERCONNECTION "false"
 }
 
@@ -717,38 +744,35 @@ util-local-dev() {
     dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} cloudbreak
     dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} periscope
 
-    if is_macos; then
-        docker rm -f cloudbreak-proxy 2> /dev/null || :
-        docker rm -f periscope-proxy 2> /dev/null || :
+    docker rm -f cloudbreak-proxy 2> /dev/null || :
+    docker rm -f periscope-proxy 2> /dev/null || :
 
-        debug starting an ambassador to be registered as cloudbreak.service.consul.
-        debug "all traffic to ambassador will be proxied to localhost"
+    debug starting an ambassador to be registered as cloudbreak.service.consul.
+    debug "all traffic to ambassador will be proxied to localhost"
 
-        docker run -d \
-            --name cloudbreak-proxy \
-            -p 8080:8080 \
-            -e PORT=8080 \
-            -e SERVICE_NAME=cloudbreak \
-            -e SERVICE_8080_NAME=cloudbreak \
-            -l traefik.port=8080 \
-            -l traefik.frontend.rule=PathPrefix:/cb/ \
-            -l traefik.backend=cloudbreak-backend \
-            -l traefik.frontend.priority=10 \
-            hortonworks/ambassadord:$DOCKER_TAG_AMBASSADOR $CB_LOCAL_DEV_BIND_ADDR:$port
+    docker run -d \
+        --name cloudbreak-proxy \
+        -p 8080:8080 \
+        -e PORT=8080 \
+        -e SERVICE_NAME=cloudbreak \
+        -e SERVICE_8080_NAME=cloudbreak \
+        -l traefik.port=8080 \
+        -l traefik.frontend.rule=PathPrefix:/cb/ \
+        -l traefik.backend=cloudbreak-backend \
+        -l traefik.frontend.priority=10 \
+        hortonworks/ambassadord:$DOCKER_TAG_AMBASSADOR $CB_LOCAL_DEV_BIND_ADDR:$port
 
-        docker run -d \
-            --name periscope-proxy \
-            -p 8085:8085 \
-            -e PORT=8085 \
-            -e SERVICE_NAME=periscope \
-            -e SERVICE_8085_NAME=periscope \
-            -l traefik.port=8085 \
-            -l traefik.frontend.rule=PathPrefix:/as/ \
-            -l traefik.backend=periscope-backend \
-            -l traefik.frontend.priority=10 \
-            hortonworks/ambassadord:$DOCKER_TAG_AMBASSADOR $CB_LOCAL_DEV_BIND_ADDR:8085
-
-    fi
+    docker run -d \
+        --name periscope-proxy \
+        -p 8085:8085 \
+        -e PORT=8085 \
+        -e SERVICE_NAME=periscope \
+        -e SERVICE_8085_NAME=periscope \
+        -l traefik.port=8085 \
+        -l traefik.frontend.rule=PathPrefix:/as/ \
+        -l traefik.backend=periscope-backend \
+        -l traefik.frontend.priority=10 \
+        hortonworks/ambassadord:$DOCKER_TAG_AMBASSADOR $CB_LOCAL_DEV_BIND_ADDR:8085
 
     create-migrate-log
     migrate-one-db cbdb up
