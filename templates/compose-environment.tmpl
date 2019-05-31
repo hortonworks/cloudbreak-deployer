@@ -28,7 +28,7 @@
             - "ALTUS_UMS_HOST={{{get . "UMS_HOST"}}}"
         labels:
             - traefik.port=8080
-            - traefik.frontend.rule=PathPrefix:/env/
+            - traefik.frontend.rule=PathPrefix:/environmentservice/
             - traefik.backend=environment-backend
             - traefik.frontend.priority=10
         ports:
