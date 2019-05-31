@@ -62,7 +62,7 @@ var expectedMulti string = `[file]
     [frontends.environment-frontend]
     backend = "environment"
         [frontends.environment-frontend.routes.frontendrule]
-        rule = "PathPrefix:/env/"
+        rule = "PathPrefix:/environmentservice/"
         priority = 100
     [frontends.periscope-frontend]
     backend = "periscope"
