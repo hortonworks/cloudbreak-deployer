@@ -584,7 +584,7 @@ start-wait-cmd() {
 
     start-requested-services "$@"
     wait-for-service "cloudbreak" "cb" "$CB_HOST_ADDRESS"
-    wait-for-service "environment" "env" "$ENVIRONMENT_HOST_ADDRESS"	
+    wait-for-service "environment" "environmentservice" "$ENVIRONMENT_HOST_ADDRESS"	
     wait-for-service "periscope" "as" "$PERISCOPE_HOST_ADDRESS"	
     wait-for-service "redbeams" "redbeams" "$REDBEAMS_HOST_ADDRESS"		
     wait-for-service "freeipa" "freeipa" "$FREEIPA_HOST_ADDRESS"		
@@ -618,6 +618,7 @@ start-requested-services() {
 wait-for-service() {
     if ! [[ $CB_LOCAL_DEV_LIST == *"$1"* ]]; then
         info "Waiting for $1 UI (timeout: $CB_UI_MAX_WAIT)"
+        debug "sending curl to: $3/$2/info"
         local curl_cmd="curl -so /dev/null -w "%{http_code}" $3/$2/info"
         local count=0
         while ! $curl_cmd |grep 200 &> /dev/null && [ $((count++)) -lt $CB_UI_MAX_WAIT ] ; do
