@@ -25,6 +25,7 @@
             - VAULT_ADDR=vault
             - VAULT_PORT={{{get . "VAULT_BIND_PORT"}}}
             - VAULT_ROOT_TOKEN={{{get . "VAULT_ROOT_TOKEN"}}}
+            - "ALTUS_UMS_HOST={{{get . "UMS_HOST"}}}"
         labels:
             - traefik.port=8080
             - traefik.frontend.rule=PathPrefix:/freeipa/
