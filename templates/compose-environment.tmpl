@@ -30,12 +30,12 @@
             - "CAAS_URL={{{get . "CAAS_URL"}}}"
             - "ALTUS_UMS_HOST={{{get . "UMS_HOST"}}}"
         labels:
-            - traefik.port=8088
+            - traefik.port=8080
             - traefik.frontend.rule=PathPrefix:/environmentservice/
             - traefik.backend=environment-backend
             - traefik.frontend.priority=10
         ports:
-            - 8088:8088
+            - 8088:8080
         volumes:
             - "{{{get . "CBD_CERT_ROOT_PATH"}}}:/certs"
             - /dev/urandom:/dev/random
