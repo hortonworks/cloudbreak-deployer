@@ -607,7 +607,7 @@ start-requested-services() {
         fi
     fi
 
-    if [[ "$services" == *"vault"* ]]; then
+    if [[ -z "$services" || "$services" == *"vault"* ]]; then
         init_vault
     fi
 
