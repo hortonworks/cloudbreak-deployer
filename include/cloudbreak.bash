@@ -12,7 +12,6 @@ cloudbreak-config() {
   cloudbreak-conf-db
   cloudbreak-conf-defaults
   cloudbreak-conf-autscale
-  cloudbreak-conf-uaa
   cloudbreak-conf-cloud-provider
   cloudbreak-conf-rest-client
   cloudbreak-conf-ui
@@ -41,7 +40,6 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_TRAEFIK v1.7.9-alpine
     env-import DOCKER_TAG_CONSUL 1.4.0
     env-import DOCKER_TAG_REGISTRATOR v7
-    env-import DOCKER_TAG_UAA 3.6.5-pgupdate
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.2.0
 
@@ -128,11 +126,6 @@ cloudbreak-conf-db() {
     env-import FREEIPA_DB_ENV_SCHEMA "public"
     env-import FREEIPA_HBM2DDL_STRATEGY "validate"
 
-    env-import IDENTITY_DB_URL "${COMMON_DB}:5432"
-    env-import IDENTITY_DB_NAME "uaadb"
-    env-import IDENTITY_DB_USER "postgres"
-    env-import IDENTITY_DB_PASS ""
-
     env-import VAULT_DB_SCHEMA "vault"
 }
 
@@ -141,41 +134,6 @@ cloudbreak-conf-cert() {
     env-import CBD_CERT_ROOT_PATH "${PWD}/certs"
 
     env-import CBD_TRAEFIK_TLS "/certs/traefik/client.pem,/certs/traefik/client-key.pem"
-}
-
-cloudbreak-conf-uaa() {
-    env-import UAA_PORT 8089
-
-    env-import UAA_SETTINGS_FILE uaa-changes.yml
-
-    env-import UAA_DEFAULT_SECRET
-    env-validate UAA_DEFAULT_SECRET *" "* "space"
-
-    env-import UAA_CLOUDBREAK_ID cloudbreak
-    env-import UAA_CLOUDBREAK_SECRET $UAA_DEFAULT_SECRET
-    env-validate UAA_CLOUDBREAK_SECRET *" "* "space"
-
-    env-import UAA_PERISCOPE_ID periscope
-    env-import UAA_PERISCOPE_SECRET $UAA_DEFAULT_SECRET
-    env-validate UAA_PERISCOPE_SECRET *" "* "space"
-
-    env-import UAA_DATALAKE_ID datalake
-    env-import UAA_DATALAKE_SECRET $UAA_DEFAULT_SECRET
-    env-validate UAA_DATALAKE_SECRET *" "* "space"
-
-    env-import UAA_REDBEAMS_ID redbeams
-    env-import UAA_REDBEAMS_SECRET $UAA_DEFAULT_SECRET
-    env-validate UAA_REDBEAMS_SECRET *" "* "space"
-
-    env-import UAA_ENVIRONMENT_ID environment
-    env-import UAA_ENVIRONMENT_SECRET $UAA_DEFAULT_SECRET
-    env-validate UAA_ENVIRONMENT_SECRET *" "* "space"
-
-    env-import UAA_ULUWATU_ID uluwatu
-    env-import UAA_ULUWATU_SECRET $UAA_DEFAULT_SECRET
-    env-validate UAA_ULUWATU_SECRET *" "* "space"
-
-    env-import UAA_CLOUDBREAK_SHELL_ID cloudbreak_shell
 }
 
 cloudbreak-conf-defaults() {
@@ -422,119 +380,6 @@ generate-caddy-file-for-localdev() {
     generate-caddy-file "$INGRESS_URLS" > "$caddyFile"
 }
 
-generate-uaa-check-diff() {
-    local verbose="$1"
-
-    if [ -f uaa.yml ]; then
-        local uaa_delme_path=$TEMP_DIR/uaa-delme.yml
-        generate-uaa-config-force $uaa_delme_path
-        if diff $uaa_delme_path uaa.yml &> /dev/null; then
-            debug "uaa.yml exists and generate wouldn't change it"
-            return 0
-        else
-            if ! [[ "$regeneteInProgress" ]]; then
-                warn "uaa.yml already exists, BUT generate would create a DIFFERENT one!"
-                warn "please regenerate it:"
-                echo "  cbd regenerate" | blue
-            fi
-
-            if [[ "$verbose" ]]; then
-                warn "expected change:"
-                diff $uaa_delme_path uaa.yml || true
-            else
-                debug "expected change:"
-                (diff $uaa_delme_path uaa.yml || true) | debug-cat
-            fi
-            return 1
-        fi
-    else
-        generate-uaa-config-force uaa.yml
-    fi
-    return 0
-
-}
-
-generate-uaa-config() {
-    cloudbreak-config
-
-    if ! generate-uaa-check-diff; then
-        if [[ "$CBD_FORCE_START" ]]; then
-            warn "You have forced to start ..."
-        else
-            warn "Please check the expected config changes with:"
-            echo "  cbd doctor" | blue
-            debug "If you want to ignore the changes, set the CBD_FORCE_START to true in Profile"
-            _exit 1
-        fi
-    else
-        info "generating uaa.yml"
-        if [ -f "$UAA_SETTINGS_FILE" ]; then
-            info "apply custom uaa settings from file: $UAA_SETTINGS_FILE"
-        fi
-        generate-uaa-config-force uaa.yml
-    fi
-}
-
-generate-uaa-config-force() {
-    declare uaaFile=${1:? required: uaa config file path}
-
-    debug "Generating Identity server config: ${uaaFile} ..."
-
-    cat > ${uaaFile} << EOF
-spring_profiles: postgresql
-
-database:
-  driverClassName: org.postgresql.Driver
-  url: jdbc:postgresql://\${IDENTITY_DB_URL}/\${IDENTITY_DB_NAME}
-  username: \${IDENTITY_DB_USER}
-  password: \${IDENTITY_DB_PASS}
-  maxactive: 200
-
-zones:
- internal:
-   hostnames:
-     - ${PUBLIC_IP}
-     - node1.node.dc1.consul
-     - identity
-
-oauth:
-  client:
-    override: true
-    autoapprove:
-      - ${UAA_CLOUDBREAK_SHELL_ID}
-  clients:
-    ${UAA_ULUWATU_ID}:
-      id: ${UAA_ULUWATU_ID}
-      secret: '$(escape-string-yaml $UAA_ULUWATU_SECRET \')'
-      authorized-grant-types: authorization_code,client_credentials
-      scope: cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,cloudbreak.templates,cloudbreak.networks,cloudbreak.securitygroups,openid,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,cloudbreak.events,periscope.cluster,cloudbreak.recipes,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read
-      authorities: cloudbreak.subscribe
-      redirect-uri: ${ULU_OAUTH_REDIRECT_URI}
-    ${UAA_CLOUDBREAK_ID}:
-      id: ${UAA_CLOUDBREAK_ID}
-      secret: '$(escape-string-yaml $UAA_CLOUDBREAK_SECRET \')'
-      authorized-grant-types: client_credentials
-      scope: scim.read
-      authorities: uaa.resource,scim.read
-    ${UAA_PERISCOPE_ID}:
-      id: ${UAA_PERISCOPE_ID}
-      secret: '$(escape-string-yaml $UAA_PERISCOPE_SECRET \')'
-      authorized-grant-types: client_credentials
-      scope: none
-      authorities: cloudbreak.autoscale,uaa.resource,scim.read
-    ${UAA_CLOUDBREAK_SHELL_ID}:
-      id: ${UAA_CLOUDBREAK_SHELL_ID}
-      authorized-grant-types: implicit
-      scope: cloudbreak.networks,cloudbreak.securitygroups,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,cloudbreak.recipes,openid,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read,periscope.cluster
-      authorities: uaa.none
-      redirect-uri: http://cloudbreak.shell
-EOF
-
-    if [ -f "$UAA_SETTINGS_FILE" ]; then
-        yq m -i -x ${uaaFile} ${UAA_SETTINGS_FILE}
-    fi
-}
-
 util-token() {
     declare desc="Generates an OAuth token with CloudbreakShell scopes"
 
@@ -545,15 +390,17 @@ util-token() {
     else
         local username=$1
         local tenant=$2
-        local TOKEN=$(curl -skX GET \
-        "https://${PUBLIC_IP}/oidc/authorize?tenant=$tenant&username=$username")
-        echo ${TOKEN#*=}
+        local TOKEN=$(curl --insecure --silent --cookie-jar - "https://localhost/auth/in?tenant=$tenant&username=$username&redirect_uri=https%3A%2F%2Flocalhost" | tr -d '\n' | awk -F/ '{print $NF}' | awk '{ print $(NF) }')
+        echo ${TOKEN}
     fi
 }
 
 util-token-debug() {
     declare desc="Opens the browse jwt.io to inspect a newly generated Oauth token."
 
-    local token="$(util-token)"
+    local username=$1
+    local tenant=$2
+    local token="$(util-token $username $tenant)"
     open "http://jwt.io/?value=$token"
 }
+
