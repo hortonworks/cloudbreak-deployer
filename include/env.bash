@@ -79,6 +79,7 @@ CB_CAPABILITIES - Comma separated list of enabled capabilities
 CB_DISABLE_SHOW_CLI - Disables the 'show cli commond' function
 CB_DISABLE_SHOW_CLUSTERDEFINITION - Disables the 'show generated cluster definition' function
 CB_ENABLEDPLATFORMS - Disables Cloudbreak resource called Platform
+ENVIRONMENT_ENABLEDPLATFORMS - Configures a list of providers available for environment creation
 CB_ENABLED_LINUX_TYPES - List of enabled OS types from image catalog
 CBD_FORCE_START - Disables docker-compose.yml and uaa.yml validation
 CB_GCP_HOSTKEY_VERIFY - Enables host fingerprint verification on GCP
