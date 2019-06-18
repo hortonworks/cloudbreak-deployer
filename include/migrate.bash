@@ -15,7 +15,6 @@ migrate-config() {
     env-import ENVIRONMENT_SCHEMA_MIGRATION_AUTO true
     env-import FREEIPA_SCHEMA_SCRIPTS_LOCATION "container"
     env-import FREEIPA_SCHEMA_MIGRATION_AUTO true
-    env-import UAA_SCHEMA_SCRIPTS_LOCATION "container"
     env-import DB_MIGRATION_LOG "db_migration.log"
     env-import VERBOSE_MIGRATION false
 }
@@ -113,12 +112,8 @@ migrate-one-db() {
             local scripts_location=${FREEIPA_SCHEMA_SCRIPTS_LOCATION}
             local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_FREEIPA}:${DOCKER_TAG_FREEIPA}
             ;;
-        uaadb)
-            local scripts_location=${UAA_SCHEMA_SCRIPTS_LOCATION}
-            local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_AUTH}:${DOCKER_TAG_CLOUDBREAK}
-            ;;
         *)
-            migrateError "Invalid database service name: $service_name. Supported databases: cbdb, periscopedb, datalakedb, redbeamsdb, environmentdb and uaadb"
+            migrateError "Invalid database service name: $service_name. Supported databases: cbdb, periscopedb, datalakedb, redbeamsdb and environmentdb"
             return 1
             ;;
     esac
@@ -130,8 +125,6 @@ migrate-one-db() {
 
 execute-migration() {
     if [ $# -eq 0 ]; then
-        migrate-one-db uaadb up
-        migrate-one-db uaadb pending
         migrate-one-db cbdb up
         migrate-one-db cbdb pending
         migrate-one-db periscopedb up
@@ -175,14 +168,8 @@ execute-migration() {
                         _exit 127
                     fi
                     ;;
-                uaadb)
-                    if [ "$UAA_SCHEMA_SCRIPTS_LOCATION" = "container" ]; then
-                        migrateError "UAA_SCHEMA_SCRIPTS_LOCATION environment variable must be set and pointing to the identity project's schema location"
-                        _exit 127
-                    fi
-                    ;;
                 *)
-                    migrateError "Invalid database service name: $1. Supported databases: cbdb, periscopedb, datalakedb, redbeamsdb, environmentdb and uaadb"
+                    migrateError "Invalid database service name: $1. Supported databases: cbdb, periscopedb, datalakedb, redbeamsdb and environmentdb"
                     return 1
                     ;;
             esac

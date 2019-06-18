@@ -81,7 +81,7 @@ CB_DISABLE_SHOW_CLUSTERDEFINITION - Disables the 'show generated cluster definit
 CB_ENABLEDPLATFORMS - Disables Cloudbreak resource called Platform
 ENVIRONMENT_ENABLEDPLATFORMS - Configures a list of providers available for environment creation
 CB_ENABLED_LINUX_TYPES - List of enabled OS types from image catalog
-CBD_FORCE_START - Disables docker-compose.yml and uaa.yml validation
+CBD_FORCE_START - Disables docker-compose.yml validation
 CB_GCP_HOSTKEY_VERIFY - Enables host fingerprint verification on GCP
 CB_HBM2DDL_STRATEGY - Configures hibernate.hbm2ddl.auto in Cloudbreak
 CB_HOST_DISCOVERY_CUSTOM_DOMAIN - Custom domain of the provisioned cluster
@@ -176,7 +176,6 @@ DOCKER_TAG_POSTGRES - Postgresql container version
 DOCKER_TAG_LOGROTATE - Logrotate container version
 DOCKER_TAG_REGISTRATOR - Registrator container version
 DOCKER_TAG_TRAEFIK - Traefik container version
-DOCKER_TAG_UAA - Identity container version
 DOCKER_TAG_ULUWATU - Web UI container version
 DOCKER_STOP_TIMEOUT - Specify a shutdown timeout in seconds for containers
 HTTP_PROXY_HOST - HTTP proxy address
@@ -186,10 +185,6 @@ PROXY_USER - Proxy user (basic auth)
 PROXY_PASSWORD - Proxy password (basic auth)
 NON_PROXY_HOSTS - Indicates the hosts that should be accessed without going through the proxy. Typically this defines internal hosts. The value of this property is a list of hosts, separated by the "|" character. In addition the wildcard character "*" can be used for pattern matching. For example ”*.foo.com|localhost” will indicate that every hosts in the foo.com domain and the localhost should be accessed directly even if a proxy server is specified. Warning: *.consul should be included!
 HTTPS_PROXYFORCLUSTERCONNECTION - if set to true, Cloudbreak will use the proxy to connect Ambari server. Default: false
-IDENTITY_DB_NAME - Name of the Identity database
-IDENTITY_DB_PASS - Password for the Identity database authentication
-IDENTITY_DB_URL - Url for the Identity database connection included the port number
-IDENTITY_DB_USER - User for the Identity database authentication
 PERISCOPE_HBM2DDL_STRATEGY - Configures hibernate.hbm2ddl.auto in Autoscale
 PERISCOPE_DB_ENV_DB - Name of the Autoscale database
 PERISCOPE_DB_ENV_PASS - Password for the Autoscale database authentication
@@ -215,20 +210,9 @@ SL_ADDRESS_RESOLVING_TIMEOUT - DNS lookup timeout of Authentication service for 
 TRAEFIK_MAX_IDLE_CONNECTION - Configures --maxidleconnsperhost for Traefik
 PUBLIC_HTTP_PORT - Configures the public http port for Cloudbreak
 PUBLIC_HTTPS_PORT - Configures the public https port for Cloudbreak
-UAA_CLOUDBREAK_ID - Identity of the Cloudbreak scope in Identity
-UAA_CLOUDBREAK_SECRET - Secret of the Cloudbreak scope in Identity
-UAA_CLOUDBREAK_SHELL_ID - Identity of the Cloudbreak Shell scope in Identity
-UAA_DEFAULT_SECRET - Default secret for all the scopes and encryptions
-UAA_SETTINGS_FILE - You can specify custom settings for UAA which will be merged with the default (e.g provide LDAP settings)
-UAA_PERISCOPE_ID - Identity of the Autoscale scope in Identity
-UAA_PERISCOPE_SECRET - Secret of the Autoscale scope in Identity
-UAA_PORT - Identity service public port
-UAA_ULUWATU_ID - Identity of the Web UI scope in Identity
-UAA_ULUWATU_SECRET - Secret of the Web UI scope in Identity
 CAAS_MOCK_CONTAINER_PATH - Default project location in Caas mock container
 ULU_HOST_ADDRESS - Web UI host
 ULU_NODE_TLS_REJECT_UNAUTHORIZED - Enables self signed certifications in Web UI
-ULU_OAUTH_REDIRECT_URI - Authorization page on Web UI
 ULU_SUBSCRIBE_TO_NOTIFICATIONS - Flag for automatic subscriptions for CLoudbreak events
 VERBOSE_MIGRATION - Flag of verbose database migration
 VAULT_BIND_PORT - Bind Port for Vault
@@ -245,7 +229,6 @@ CB_SCHEMA_SCRIPTS_LOCATION - Location of Cloudbreak schema update files
 DOCKER_TAG_AMBASSADOR - Ambassador container version for local development
 PERISCOPE_SCHEMA_SCRIPTS_LOCATION - Location of Cloudbreak schema update files
 REMOVE_CONTAINER - Keeps side effect containers for debug purpose
-UAA_SCHEMA_SCRIPTS_LOCATION - Location of Identity schema update files
 ULUWATU_VOLUME_HOST - Location of the locally developed Web UI project
 CAAS_MOCK_VOLUME_HOST - Location of the locally developed Caas mock
 

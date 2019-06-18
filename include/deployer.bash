@@ -172,7 +172,7 @@ cbd-update-release() {
         if docker volume inspect $COMMON_DB_VOL &>/dev/null; then
             info "Backing up databases"
 
-	    for db in $CB_DB_ENV_DB $IDENTITY_DB_NAME $PERISCOPE_DB_ENV_DB $DATALAKE_DB_ENV_DB $ENVIRONMENT_DB_ENV_DB $REDBEAMS_DB_ENV_DB $FREEIPA_DB_ENV_DB; do
+	    for db in $CB_DB_ENV_DB $PERISCOPE_DB_ENV_DB $DATALAKE_DB_ENV_DB $ENVIRONMENT_DB_ENV_DB $REDBEAMS_DB_ENV_DB $FREEIPA_DB_ENV_DB; do
                 debug "Backing up $db"
                 db-dump $db
             done
@@ -287,12 +287,6 @@ init-profile() {
         append-variable-to-profile CB_INSTANCE_NODE_ID "$(uuidgen | tr '[:upper:]' '[:lower:]')"
     fi
 
-    if ! [[ "$UAA_DEFAULT_SECRET" ]]; then
-        info "Your secret is auto-generated in $CBD_PROFILE as UAA_DEFAULT_SECRET"
-        echo "Make backup of your secret, because used for data encryption !!!" | red
-        append-variable-to-profile UAA_DEFAULT_SECRET "$(uuidgen | sed 's/-//g')"
-    fi
-
     provider-and-region-init
 }
 
@@ -391,9 +385,6 @@ doctor() {
     if [[ -e docker-compose.yml ]]; then
         compose-generate-check-diff verbose
     fi
-    if [[ -e uaa.yml ]]; then
-        generate-uaa-check-diff verbose
-    fi
     if [[ -e traefik.toml ]]; then
         generate-traefik-check-diff verbose
     fi
@@ -491,22 +482,20 @@ deployer-delete() {
 
     cloudbreak-delete-dbs
     cloudbreak-delete-vault-data
-    rm -f docker-compose.yml uaa.yml
 }
 
 deployer-generate() {
-    declare desc="Generates docker-compose.yml and uaa.yml"
+    declare desc="Generates docker-compose.yml"
 
     cloudbreak-generate-cert
     compose-generate-yaml
-    generate-uaa-config
     generate-vault-config
     generate-toml-file-for-localdev
     generate-caddy-file-for-localdev
 }
 
 deployer-regenerate() {
-    declare desc="Backups and generates new docker-compose.yml and uaa.yml"
+    declare desc="Backups and generates new docker-compose.yml"
 
     regeneteInProgress=1
     : ${datetime:=$(date +%Y%m%d-%H%M%S)}
@@ -517,12 +506,6 @@ deployer-regenerate() {
         mv docker-compose.yml docker-compose-${datetime}.yml
     fi
     compose-generate-yaml
-
-    if ! generate-uaa-check-diff; then
-        info renaming: uaa.yml to: uaa-${datetime}.yml
-        mv uaa.yml uaa-${datetime}.yml
-    fi
-    generate-uaa-config
 
     if ! generate_vault_check_diff; then
             info renaming: $VAULT_CONFIG_FILE to: vault-config-${datetime}.yml
