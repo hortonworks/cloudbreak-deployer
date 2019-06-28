@@ -5,6 +5,7 @@
             - AWS_SECRET_ACCESS_KEY
             - AWS_GOV_ACCESS_KEY_ID
             - AWS_GOV_SECRET_ACCESS_KEY
+            - CB_AWS_ACCOUNT_ID
             - "http_proxy={{{get . "HTTP_PROXY"}}}"
             - "https_proxy={{{get . "HTTPS_PROXY"}}}"
             - 'CB_JAVA_OPTS={{{getEscaped . "CB_JAVA_OPTS"}}}'
@@ -76,7 +77,6 @@
             - SMARTSENSE_UPLOAD_HOST
             - SMARTSENSE_UPLOAD_USERNAME
             - SMARTSENSE_UPLOAD_PASSWORD
-            - CB_AWS_ACCOUNT_ID
             - VAULT_ADDR=vault
             - VAULT_PORT={{{get . "VAULT_BIND_PORT"}}}
             - VAULT_ROOT_TOKEN={{{get . "VAULT_ROOT_TOKEN"}}}
