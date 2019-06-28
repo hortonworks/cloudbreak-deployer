@@ -73,9 +73,6 @@ exit-on-remote-database() {
     periscopedb*)
         db="$PERISCOPE_DB_PORT_5432_TCP_ADDR"
     ;;
-    uaadb*)
-        db="$IDENTITY_DB_URL"
-    ;;
     *)
         error "Database not supported $1"
         _exit 235
