@@ -108,14 +108,44 @@ services:
         restart: on-failure
         command: server
 
+    identity:
+        labels:
+        - traefik.port=8080
+        - traefik.frontend.rule=PathPrefix:/identity/check_token,/identity/oauth,/identity/Users,/identity/login.do,/identity/Groups;PathPrefixStrip:/identity
+        - traefik.backend=identity-backend
+        - traefik.frontend.priority=100
+        ports:
+            - {{{get . "UAA_PORT"}}}:8080
+        environment:
+            - http_proxy={{{get . "HTTP_PROXY"}}}
+            - https_proxy={{{get . "HTTPS_PROXY"}}}
+            - IDENTITY_DB_URL
+            - IDENTITY_DB_NAME
+            - IDENTITY_DB_USER
+            - IDENTITY_DB_PASS
+        volumes:
+        - ./uaa.yml:/uaa/uaa.yml
+        - ./logs/identity:/tomcat/logs/
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: hortonworks/cloudbreak-uaa:{{{get . "DOCKER_TAG_UAA"}}}
+
     uluwatu:
         environment:
             - http_proxy={{{get . "HTTP_PROXY"}}}
             - https_proxy={{{get . "HTTPS_PROXY"}}}
+            - ULU_OAUTH_REDIRECT_URI
+            - ULU_OAUTH_CLIENT_ID={{{get . "UAA_ULUWATU_ID"}}}
+            - 'ULU_OAUTH_CLIENT_SECRET={{{getEscaped . "UAA_ULUWATU_SECRET"}}}'
             - ULU_HOST_ADDRESS
             - NODE_TLS_REJECT_UNAUTHORIZED={{{get . "ULU_NODE_TLS_REJECT_UNAUTHORIZED"}}}
             - ULU_HWX_CLOUD_DEFAULT_ARM_VIRTUAL_NETWORK_ID
             - ULU_ADDRESS_RESOLVING_TIMEOUT
+            - "ULU_IDENTITY_ADDRESS=http://identity:8080"
             - "ULU_CLOUDBREAK_ADDRESS={{{get . "CLOUDBREAK_URL"}}}"
             - "ULU_DATALAKE_ADDRESS={{{get . "DATALAKE_URL"}}}"
             - "ULU_ENVIRONMENT_ADDRESS={{{get . "ENVIRONMENT_URL"}}}"

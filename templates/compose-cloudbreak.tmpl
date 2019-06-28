@@ -10,6 +10,8 @@
             - "https_proxy={{{get . "HTTPS_PROXY"}}}"
             - 'CB_JAVA_OPTS={{{getEscaped . "CB_JAVA_OPTS"}}}'
             - "HTTPS_PROXYFORCLUSTERCONNECTION={{{get . "HTTPS_PROXYFORCLUSTERCONNECTION"}}}"
+            - "CB_CLIENT_ID={{{get . "UAA_CLOUDBREAK_ID"}}}"
+            - 'CB_CLIENT_SECRET={{{getEscaped . "UAA_CLOUDBREAK_SECRET"}}}'
             - CB_CLUSTERDEFINITION_AMBARI_DEFAULTS
             - CB_CLUSTERDEFINITION_AMBARI_INTERNAL
             - CB_TEMPLATE_DEFAULTS
@@ -28,6 +30,7 @@
             - "ENDPOINTS_BEANS_ENABLED=false"
             - "ENDPOINTS_ENV_ENABLED=false"
             - "CB_ADDRESS_RESOLVING_TIMEOUT"
+            - "CB_IDENTITY_SERVER_URL=http://identity:8080"
             - "CB_DB_PORT_5432_TCP_ADDR={{{get . "COMMON_DB"}}}"
             - "CB_DB_PORT_5432_TCP_PORT=5432"
             - CB_DB_ENV_USER

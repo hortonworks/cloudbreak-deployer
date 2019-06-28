@@ -16,7 +16,7 @@ db-dump() {
     fi
 
     if [ "$dbName" = "all" ]; then
-        for db in $CB_DB_ENV_DB $PERISCOPE_DB_ENV_DB $VAULT_DB_SCHEMA $DATALAKE_DB_ENV_DB $REDBEAMS_DB_ENV_DB $ENVIRONMENT_DB_ENV_DB $FREEIPA_DB_ENV_DB; do
+        for db in $CB_DB_ENV_DB $IDENTITY_DB_NAME $PERISCOPE_DB_ENV_DB $VAULT_DB_SCHEMA $DATALAKE_DB_ENV_DB $REDBEAMS_DB_ENV_DB $ENVIRONMENT_DB_ENV_DB $FREEIPA_DB_ENV_DB; do
             db-dump-database $db
         done
     else
@@ -51,7 +51,7 @@ db-initialize-databases() {
     migrate-startdb
     db-wait-for-db-cont cbreak_${COMMON_DB}_1
 
-    for db in $CB_DB_ENV_DB $PERISCOPE_DB_ENV_DB $VAULT_DB_SCHEMA $DATALAKE_DB_ENV_DB $REDBEAMS_DB_ENV_DB $ENVIRONMENT_DB_ENV_DB $FREEIPA_DB_ENV_DB; do
+    for db in $CB_DB_ENV_DB $IDENTITY_DB_NAME $PERISCOPE_DB_ENV_DB $VAULT_DB_SCHEMA $DATALAKE_DB_ENV_DB $REDBEAMS_DB_ENV_DB $ENVIRONMENT_DB_ENV_DB $FREEIPA_DB_ENV_DB; do
         db-create-database $db
     done
 
