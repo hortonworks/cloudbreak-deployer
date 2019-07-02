@@ -7,8 +7,7 @@ compose-init() {
     env-import CB_COMPOSE_PROJECT cbreak
     env-import COMPOSE_HTTP_TIMEOUT 120
     env-import DOCKER_STOP_TIMEOUT 60
-    env-import ULUWATU_VOLUME_HOS
-    T /dev/null
+    env-import ULUWATU_VOLUME_HOST /dev/null
     env-import CAAS_MOCK_VOLUME_HOST /dev/null
     env-import CAAS_MOCK_CONTAINER_PATH /mock-caas.jar
 
