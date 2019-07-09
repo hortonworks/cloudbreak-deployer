@@ -85,10 +85,7 @@ workflows:
           filters:
             branches:
               only:
-                - rc-1.16
-                - rc-2.4
-                - rc-2.7
-                - rc-2.9
+                - /rc-.*/
           requires:
             - build
       - upload-snapshot:
