@@ -35,12 +35,12 @@
             - VAULT_ROOT_TOKEN={{{get . "VAULT_ROOT_TOKEN"}}}
             - "CAAS_URL={{{get . "CAAS_URL"}}}"
         labels:
-        - traefik.port=8080
+        - traefik.port=8085
         - traefik.frontend.rule=PathPrefix:/as/
         - traefik.backend=periscope-backend
         - traefik.frontend.priority=10
         ports:
-            - 8085:8080
+            - 8085:8085
         volumes:
             - "{{{get . "CBD_CERT_ROOT_PATH"}}}:/certs"
             - ./logs/autoscale:/autoscale-log
