@@ -34,12 +34,12 @@ func GenerateComposeYaml(args []string) {
 		insertIntoTemplateIfNotLocal(t, localDevList, "auth-mock")
 
 		if len(dataMap["UMS_HOST"]) != 0 {
-			insertIntoTemplate(t, "core-gateway")
+			insertIntoTemplateIfNotLocal(t, localDevList, "core-gateway")
 		} else {
 			insertIntoTemplate(t, "cb-traefik")
 		}
 	} else {
-		insertIntoTemplate(t, "core-gateway")
+		insertIntoTemplateIfNotLocal(t, localDevList, "core-gateway")
 		insertIntoTemplate(t, "dps")
 		insertIntoTemplateIfNotLocal(t, localDevList, "cluster-proxy")
 	}
