@@ -89,7 +89,7 @@
             - "CB_SHOW_TERMINATED_CLUSTERS_DAYS={{{get . "CB_SHOW_TERMINATED_CLUSTERS_DAYS"}}}"
             - "CB_SHOW_TERMINATED_CLUSTERS_HOURS={{{get . "CB_SHOW_TERMINATED_CLUSTERS_HOURS"}}}"
             - "CB_SHOW_TERMINATED_CLUSTERS_MINUTES={{{get . "CB_SHOW_TERMINATED_CLUSTERS_MINUTES"}}}"
-    
+            - "NOTIFICATION_URLS={{{get . "CB_DEFAULT_SUBSCRIPTION_ADDRESS"}}}"
         labels:
         - traefik.port=8080
         - traefik.frontend.rule=PathPrefix:/cb/
