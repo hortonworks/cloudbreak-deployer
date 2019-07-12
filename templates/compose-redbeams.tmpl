@@ -31,6 +31,7 @@
             - VAULT_ROOT_TOKEN={{{get . "VAULT_ROOT_TOKEN"}}}
             - "CAAS_URL={{{get . "CAAS_URL"}}}"
             - "ALTUS_UMS_HOST={{{get . "UMS_HOST"}}}"
+            - "NOTIFICATION_URLS={{{get . "CB_DEFAULT_SUBSCRIPTION_ADDRESS"}}}"
         labels:
             - traefik.port=8080
             - traefik.frontend.rule=PathPrefix:/redbeams/
