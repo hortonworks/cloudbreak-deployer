@@ -35,6 +35,7 @@
             - VAULT_ROOT_TOKEN={{{get . "VAULT_ROOT_TOKEN"}}}
             - "CAAS_URL={{{get . "CAAS_URL"}}}"
             - "NOTIFICATION_URLS={{{get . "CB_DEFAULT_SUBSCRIPTION_ADDRESS"}}}"
+            - "ALTUS_UMS_HOST={{{get . "UMS_HOST"}}}"
         labels:
         - traefik.port=8080
         - traefik.frontend.rule=PathPrefix:/as/
