@@ -191,11 +191,12 @@ cloudbreak-conf-defaults() {
     env-import CB_SHOW_TERMINATED_CLUSTERS_MINUTES 0
 
     env-import CB_LOCAL_DEV_LIST ""
-    env-import DPS_VERSION "latest"
+    env-import DPS_VERSION "2.1.0.0-34"
     env-import DPS_REPO ""
     env-import UMS_ENABLED "true"
     env-import CAAS_MOCK "true"
     env-import INGRESS_URLS "localhost,manage.dps.local"
+    env-import CORS_INGRESS_URLS_REGEX $(echo $INGRESS_URLS | tr ',' '|')
 
     env-import CLOUDBREAK_URL $(service-url cloudbreak "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "9091" "8080")
     env-import PERISCOPE_URL $(service-url periscope "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8085" "8080")
