@@ -19,7 +19,7 @@
         - GATEWAY_DEFAULT_REDIRECT_PATH={{{get . "GATEWAY_DEFAULT_REDIRECT_PATH"}}}
 
     dev-gateway:
-        image: abiosoft/caddy:1.0.1
+        image: abiosoft/caddy:1.0.1-no-stats
         environment:
         - GATEWAY_HOST=core-gateway
         networks:
