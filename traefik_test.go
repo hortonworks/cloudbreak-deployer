@@ -83,7 +83,7 @@ var expectedMulti string = `[file]
 
 func TestNoLocalService(t *testing.T) {
 	out := catchStdOut(t, func() {
-		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "environmentURL", "redbeamsURL", "freeIpaURL", "caasURL", "clusterProxyURL", ""})
+		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "environmentURL", "redbeamsURL", "freeIpaURL", "caasURL", "clusterProxyURL", "environments2ApiURL", ""})
 	})
 	if len(out) > 0 {
 		t.Errorf("If no local-dev services were defined, traefik.toml should be empty. out:'%s'", out)
@@ -92,7 +92,7 @@ func TestNoLocalService(t *testing.T) {
 
 func TestCloudbreakLocalService(t *testing.T) {
 	out := catchStdOut(t, func() {
-		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "environmentURL", "redbeamsURL", "freeIpaURL", "caasURL", "clusterProxyURL", "cloudbreak"})
+		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "environmentURL", "redbeamsURL", "freeIpaURL", "caasURL", "clusterProxyURL", "environments2ApiURL", "cloudbreak"})
 	})
 	if out != expectedSingle {
 		t.Errorf("If cloudbreak service was defined as local-dev, traefik.toml should contain the cloudbreak service related configs. out:'%s'\nexpected:'%s'", out, expectedSingle)
@@ -101,7 +101,7 @@ func TestCloudbreakLocalService(t *testing.T) {
 
 func TestMultiLocalService(t *testing.T) {
 	out := catchStdOut(t, func() {
-		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "environmentURL", "redbeamsURL", "freeIpaURL", "caasURL", "clusterProxyURL", "cloudbreak,periscope,datalake,environment,redbeams,freeipa"})
+		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "environmentURL", "redbeamsURL", "freeIpaURL", "caasURL", "clusterProxyURL", "environments2ApiURL", "cloudbreak,periscope,datalake,environment,redbeams,freeipa"})
 	})
 	if out != expectedMulti {
 		t.Errorf("If services were defined as local-dev, traefik.toml should contain the defined services. out:'%s'", out)

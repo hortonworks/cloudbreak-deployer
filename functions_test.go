@@ -64,3 +64,45 @@ func TestGenerateCaddyFileMultiple(t *testing.T) {
 		}
 	}
 }
+
+func TestHostFromURL(t *testing.T) {
+	var testCases = []struct {
+		args   []string
+		result string
+	}{
+		{[]string{"foo.com:1234"}, "foo.com"},
+		{[]string{"foo.com:1234/bar/blah/"}, "foo.com"},
+		{[]string{"http://foo.com:1234"}, "foo.com"},
+		{[]string{"https://foo.com:1234/bar/blah/"}, "foo.com"},
+	}
+
+	for _, c := range testCases {
+		out := catchStdOut(t, func() {
+			HostFromURL(c.args)
+		})
+		if out != c.result {
+			t.Errorf("Host for URL '%s': got '%s', expected '%s'.", c.args, out, c.result)
+		}
+	}
+}
+
+func TestPortFromURL(t *testing.T) {
+	var testCases = []struct {
+		args   []string
+		result string
+	}{
+		{[]string{"foo.com:1234"}, "1234"},
+		{[]string{"foo.com:1234/bar/blah/"}, "1234"},
+		{[]string{"http://foo.com:1234"}, "1234"},
+		{[]string{"https://foo.com:1234/bar/blah/"}, "1234"},
+	}
+
+	for _, c := range testCases {
+		out := catchStdOut(t, func() {
+			PortFromURL(c.args)
+		})
+		if out != c.result {
+			t.Errorf("Host for URL '%s': got '%s', expected '%s'.", c.args, out, c.result)
+		}
+	}
+}

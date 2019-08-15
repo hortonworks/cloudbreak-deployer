@@ -74,6 +74,8 @@ func main() {
 		"service-url":           ServiceURL,
 		"generate-traefik-toml": GenerateTraefikToml,
 		"generate-caddy-file":   GenerateCaddyFile,
+		"host-from-url":         HostFromURL,
+		"port-from-url":         PortFromURL,
 	}, []string{
 		"include/circle.bash",
 		"include/cloudbreak.bash",

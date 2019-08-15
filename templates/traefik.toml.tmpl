@@ -49,6 +49,12 @@
             [backends.cluster-proxy.servers.server0]
             url = "{{{ .ClusterProxyURL }}}"
 {{{- end}}}
+{{{- if isLocal . "environments2-api" }}}
+    [backends.environments2-api]
+        [backends.environments2-api.servers]
+            [backends.environments2-api.servers.server0]
+            url = "{{{ .Environments2ApiURL }}}"
+{{{- end}}}
 
 [frontends]
 {{{- if isLocal . "cloudbreak"}}}
@@ -105,5 +111,12 @@
     backend = "cluster-proxy"
         [frontends.cluster-proxy-frontend.routes.frontendrule]
         rule = "PathPrefix:/cluster-proxy"
+        priority = 100
+{{{- end}}}
+{{{- if isLocal . "environments2-api"}}}
+    [frontends.environments2-api-frontend]
+    backend = "environments2-api"
+        [frontends.environments2-api-frontend.routes.frontendrule]
+        rule = "PathPrefix:/api/v1/environments2/"
         priority = 100
 {{{- end}}}

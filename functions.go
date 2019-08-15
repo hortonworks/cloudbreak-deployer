@@ -8,6 +8,7 @@ import (
 	"hash"
 	"io"
 	"os"
+	"regexp"
 	"strings"
 	"text/template"
 
@@ -113,4 +114,23 @@ func GenerateCaddyFile(args []string) {
 	t := template.Must(template.New("caddy").Delims("{{{", "}}}").Parse(string(tmpl)))
 
 	t.Execute(os.Stdout, params)
+}
+
+func HostFromURL(args []string) {
+	HostOrPortFromURL(args, 1)
+}
+
+func PortFromURL(args []string) {
+	HostOrPortFromURL(args, 2)
+}
+
+func HostOrPortFromURL(args []string, component int) {
+	url := args[0]
+	pattern := regexp.MustCompile(`(?:[^:]+://)?([^:]+):([0-9]+)(?:/.*)?`)
+	submatch := pattern.FindStringSubmatch(url)
+	if submatch == nil {
+		fatal("Can't parse URL '" + url + "'")
+	} else {
+		fmt.Printf("%s", submatch[component])
+	}
 }
