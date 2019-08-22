@@ -108,6 +108,14 @@ services:
         restart: on-failure
         command: server
 
+    jaeger:
+        image: jaegertracing/all-in-one:1.13
+        networks:
+            - {{{get . "DOCKER_NETWORK_NAME"}}}
+        ports:
+            - "6831:6831/udp"
+            - "16686:16686"
+
     uluwatu:
         environment:
             - http_proxy={{{get . "HTTP_PROXY"}}}
