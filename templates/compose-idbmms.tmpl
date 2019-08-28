@@ -1,0 +1,26 @@
+{{{define "idbmms"}}}
+    idbmms:
+        environment:
+            - http_proxy={{{get . "HTTP_PROXY"}}}
+            - https_proxy={{{get . "HTTPS_PROXY"}}}
+            - "DB_HOST={{{get . "IDBMMS_DB_PORT_5432_TCP_ADDR"}}}"
+            - "DB_PORT={{{get . "IDBMMS_DB_PORT_5432_TCP_PORT"}}}"
+            - "DB_USER={{{get . "IDBMMS_DB_ENV_USER"}}}"
+            - "DB_PASSWORD={{{get . "IDBMMS_DB_ENV_PASS"}}}"
+            - "DB_NAME={{{get . "IDBMMS_DB_ENV_DB"}}}"
+            - "SERVICEDEPENDENCIES_UMSHOST={{{get . "UMS_HOST"}}}"
+            - "SERVICEDEPENDENCIES_UMSPORT={{{get . "UMS_PORT"}}}"
+            - "SERVICEDEPENDENCIES_CLOUDBREAKENVHOST={{{get . "ENVIRONMENT_HOST"}}}"
+            - "SERVICEDEPENDENCIES_CLOUDBREAKENVPORT={{{get . "ENVIRONMENT_PORT"}}}"
+            - TELEMETRY_SERVICE_NAME=IdBrokerMappingManagement
+        ports:
+            - 8990:8982
+            - {{{get . "IDBMMS_HEALTHZ_PORT"}}}:8983
+        networks:
+            - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: {{{get . "DOCKER_IMAGE_IDBMMS"}}}:{{{get . "DOCKER_TAG_IDBMMS"}}}
+{{{end}}}

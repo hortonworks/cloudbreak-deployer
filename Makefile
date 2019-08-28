@@ -43,10 +43,20 @@ update-container-versions:
 	sed -i "0,/DOCKER_TAG_CLOUDBREAK/  s/DOCKER_TAG_CLOUDBREAK .*/DOCKER_TAG_CLOUDBREAK $(CB_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_ULUWATU/ s/DOCKER_TAG_ULUWATU .*/DOCKER_TAG_ULUWATU $(CB_VERSION)/" include/cloudbreak.bash
 
+update-container-versions-cdpcp:
+	sed -i "0,/DOCKER_TAG_IDBMMS/ s/DOCKER_TAG_IDBMMS .*/DOCKER_TAG_IDBMMS $(CDPCP_VERSION)/" include/cloudbreak.bash
+	sed -i "0,/DOCKER_TAG_ENVIRONMENTS2_API/ s/DOCKER_TAG_ENVIRONMENTS2_API .*/DOCKER_TAG_ENVIRONMENTS2_API $(CDPCP_VERSION)/" include/cloudbreak.bash
+
 push-container-versions: update-container-versions
 	git add include/cloudbreak.bash
 	git commit -m "Updated container versions to $(CB_VERSION)"
 	git tag $(CB_VERSION)
+	git push origin HEAD:$(GIT_BRANCH) --tags
+
+push-container-versions-cdpcp: update-container-versions-cdpcp
+	git add include/cloudbreak.bash
+	git commit -m "Updated CDPCP container versions to $(CDPCP_VERSION)"
+	git tag $(CDPCP_VERSION)
 	git push origin HEAD:$(GIT_BRANCH) --tags
 
 build: bindata ## Creates linux an osx binaries in "build/$OS"

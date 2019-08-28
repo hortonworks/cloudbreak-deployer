@@ -1,0 +1,30 @@
+{{{define "environments2-api"}}}
+    environments2-api:
+        environment:
+            - http_proxy={{{get . "HTTP_PROXY"}}}
+            - https_proxy={{{get . "HTTPS_PROXY"}}}
+            - "SERVICEDEPENDENCIES_UMSHOST={{{get . "UMS_HOST"}}}"
+            - "SERVICEDEPENDENCIES_UMSPORT={{{get . "UMS_PORT"}}}"
+            - "SERVICEDEPENDENCIES_IDBMMSHOST={{{get . "IDBMMS_HOST"}}}"
+            - "SERVICEDEPENDENCIES_IDBMMSPORT={{{get . "IDBMMS_PORT"}}}"
+            - "SERVICEDEPENDENCIES_CLOUDBREAKENVHOST={{{get . "ENVIRONMENT_HOST"}}}"
+            - "SERVICEDEPENDENCIES_CLOUDBREAKENVPORT={{{get . "ENVIRONMENT_PORT"}}}"
+            - "SERVICEDEPENDENCIES_FMSHOST={{{get . "FREEIPA_HOST"}}}"
+            - "SERVICEDEPENDENCIES_FMSPORT={{{get . "FREEIPA_PORT"}}}"
+            - TELEMETRY_SERVICE_NAME=Environments2Api
+        labels:
+            - traefik.port=8982
+            - traefik.frontend.rule=PathPrefix:/api/v1/environments2/
+            - traefik.backend=environments2-api-backend
+            - traefik.frontend.priority=10
+        ports:
+            - 8984:8982
+            - {{{get . "ENVIRONMENTS2_API_HEALTHZ_PORT"}}}:8983
+        networks:
+            - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: {{{get . "DOCKER_IMAGE_ENVIRONMENTS2_API"}}}:{{{get . "DOCKER_TAG_ENVIRONMENTS2_API"}}}
+{{{end}}}

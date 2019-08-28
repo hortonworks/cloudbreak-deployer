@@ -28,6 +28,8 @@
             - "NOTIFICATION_URLS={{{get . "CB_DEFAULT_SUBSCRIPTION_ADDRESS"}}}"
             - "ALTUS_UMS_HOST={{{get . "UMS_HOST"}}}"
             - OPENTRACING_JAEGER_UDP-SENDER_HOST={{{get . "JAEGER_HOST"}}}
+            - "ALTUS_IDBMMS_HOST={{{get . "IDBMMS_HOST"}}}"
+            - "ALTUS_IDBMMS_PORT={{{get . "IDBMMS_PORT"}}}"
         labels:
             - traefik.port=8080
             - traefik.frontend.rule=PathPrefix:/dl/
@@ -41,11 +43,11 @@
             - ./logs/datalake:/datalake-log
             - ./etc/:/etc/datalake
         networks:
-        - {{{get . "DOCKER_NETWORK_NAME"}}}
+            - {{{get . "DOCKER_NETWORK_NAME"}}}
         logging:
             options:
                 max-size: "10M"
                 max-file: "5"
         image: {{{get . "DOCKER_IMAGE_CLOUDBREAK_DATALAKE"}}}:{{{get . "DOCKER_TAG_DATALAKE"}}}
         command: bash
-  {{{end}}}  
+{{{end}}}

@@ -159,6 +159,8 @@ DOCKER_IMAGE_CLOUDBREAK_REDBEAMS - Redbeams Docker image name
 DOCKER_IMAGE_CLOUDBREAK_ENVIRONMENT - Environment Docker image name
 DOCKER_IMAGE_CLOUDBREAK_FREEIPA - FreeIpa Docker image name
 DOCKER_IMAGE_CLOUDBREAK_WEB - Web UI Docker image name
+DOCKER_IMAGE_ENVIRONMENTS2_API - Environments2 API Docker image name
+DOCKER_IMAGE_IDBMMS - IDBMMS Docker image name
 DOCKER_TAG_ALPINE - Alpine container version
 DOCKER_TAG_CBD_SMARTSENSE - SmartSense container version
 DOCKER_TAG_CERT_TOOL - Cert tool container version
@@ -166,11 +168,13 @@ DOCKER_TAG_CLOUDBREAK - Cloudbreak container version
 DOCKER_TAG_CAAS_MOCK - Caas mock image name
 DOCKER_TAG_CONSUL - Consul container version
 DOCKER_TAG_HAVEGED - Haveged container version
+DOCKER_TAG_IDBMMS - IDBMMS container version
 DOCKER_TAG_MIGRATION - Migration container version
 DOCKER_TAG_PERISCOPE - Autoscale container version
 DOCKER_TAG_DATALAKE - Datalake container version
 DOCKER_TAG_REDBEAMS - Redbeams container version
 DOCKER_TAG_ENVIRONMENT - Environment container version
+DOCKER_TAG_ENVIRONMENTS2_API - Environments2 API container version
 DOCKER_TAG_FREEIPA - FreeIpa container version
 DOCKER_TAG_POSTGRES - Postgresql container version
 DOCKER_TAG_LOGROTATE - Logrotate container version
@@ -180,6 +184,11 @@ DOCKER_TAG_ULUWATU - Web UI container version
 DOCKER_STOP_TIMEOUT - Specify a shutdown timeout in seconds for containers
 HTTP_PROXY_HOST - HTTP proxy address
 HTTPS_PROXY_HOST - HTTPS proxy address
+IDBMMS_DB_ENV_DB - Name of the IDBMMS database
+IDBMMS_DB_ENV_PASS - Password for the IDBMMS database authentication
+IDBMMS_DB_ENV_USER - User for the IDBMMS database authentication
+IDBMMS_DB_PORT_5432_TCP_ADDR - Address of the IDBMMS database
+IDBMMS_DB_PORT_5432_TCP_PORT - Port number of the IDBMMS database
 PROXY_PORT - Proxy port
 PROXY_USER - Proxy user (basic auth)
 PROXY_PASSWORD - Proxy password (basic auth)

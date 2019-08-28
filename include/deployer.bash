@@ -398,6 +398,8 @@ localdev-doctor() {
     localdev-doctor-service "environment" "8088"
     localdev-doctor-service "freeipa" "8090"
     localdev-doctor-service "cluster-proxy" "10081"
+    localdev-doctor-service "idbmms" "8990"
+    localdev-doctor-service "environments2-api" "8984"
 }
 
 localdev-doctor-service() {

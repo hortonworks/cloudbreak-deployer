@@ -52,6 +52,9 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_FREEIPA 2.13.0-dev.89
     env-import DOCKER_TAG_ULUWATU 2.13.0-dev.89
 
+    env-import DOCKER_TAG_IDBMMS d4f8f7e4106895e3dec7bfd354e4aefb087823c6
+    env-import DOCKER_TAG_ENVIRONMENTS2_API d4f8f7e4106895e3dec7bfd354e4aefb087823c6
+
     env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
     env-import DOCKER_TAG_LOGROTATE 1.0.1
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
@@ -66,6 +69,9 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CLOUDBREAK_ENVIRONMENT hortonworks/cloudbreak-environment
     env-import DOCKER_IMAGE_CLOUDBREAK_FREEIPA hortonworks/cloudbreak-freeipa
     env-import DOCKER_IMAGE_CBD_SMARTSENSE hortonworks/cbd-smartsense
+
+    env-import DOCKER_IMAGE_IDBMMS docker-private.infra.cloudera.com/cloudera/thunderhead-idbrokermappingmanagement
+    env-import DOCKER_IMAGE_ENVIRONMENTS2_API docker-private.infra.cloudera.com/cloudera/thunderhead-environments2-api
 
     env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu:3000/notifications
 
@@ -125,6 +131,12 @@ cloudbreak-conf-db() {
     env-import FREEIPA_DB_ENV_PASS ""
     env-import FREEIPA_DB_ENV_SCHEMA "public"
     env-import FREEIPA_HBM2DDL_STRATEGY "validate"
+
+    env-import IDBMMS_DB_ENV_USER "postgres"
+    env-import IDBMMS_DB_ENV_DB "idbmmsdb"
+    env-import IDBMMS_DB_ENV_PASS ""
+    env-import IDBMMS_DB_PORT_5432_TCP_ADDR "$COMMON_DB"
+    env-import IDBMMS_DB_PORT_5432_TCP_PORT "5432"
 
     env-import VAULT_DB_SCHEMA "vault"
 }
@@ -193,6 +205,20 @@ cloudbreak-conf-defaults() {
     env-import FREEIPA_URL $(service-url freeipa "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8090" "8080")
     env-import CLUSTER_PROXY_URL $(service-url cluster-proxy "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "10081" "8080")
     env-import JAEGER_HOST "$BRIDGE_ADDRESS"
+
+    env-import ENVIRONMENT_HOST $(host-from-url "$ENVIRONMENT_URL")
+    env-import FREEIPA_HOST $(host-from-url "$FREEIPA_URL")
+
+    env-import IDBMMS_URL $(service-url idbmms "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8990" "8982")
+    env-import IDBMMS_HOST $(host-from-url "$IDBMMS_URL")
+    env-import ENVIRONMENTS2_API_URL $(service-url environments2-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8984" "8982")
+
+    env-import ENVIRONMENT_PORT $(port-from-url "$ENVIRONMENT_URL")
+    env-import FREEIPA_PORT $(port-from-url "$FREEIPA_URL")
+
+    env-import IDBMMS_PORT $(port-from-url "$IDBMMS_URL")
+    env-import IDBMMS_HEALTHZ_PORT 8991
+    env-import ENVIRONMENTS2_API_HEALTHZ_PORT 8983
 
     env-import UAA_ULUWATU_SECRET "dummysecret"
 
@@ -340,7 +366,7 @@ generate-toml-file-for-localdev() {
 
 generate-toml-file-for-localdev-force() {
     declare traefikFile=${1:-traefik.toml}
-    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$DATALAKE_URL" "$ENVIRONMENT_URL" "$REDBEAMS_URL" "$FREEIPA_URL" "http://$CAAS_URL" "$CLUSTER_PROXY_URL" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
+    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$DATALAKE_URL" "$ENVIRONMENT_URL" "$REDBEAMS_URL" "$FREEIPA_URL" "http://$CAAS_URL" "$CLUSTER_PROXY_URL" "$ENVIRONMENTS2_API_URL" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
 }
 
 generate-traefik-check-diff() {
