@@ -56,8 +56,7 @@ push-container-versions: update-container-versions
 push-container-versions-cdpcp: update-container-versions-cdpcp
 	git add include/cloudbreak.bash
 	git commit -m "Updated CDPCP container versions to $(CDPCP_VERSION)"
-	git tag $(CDPCP_VERSION)
-	git push origin HEAD:$(GIT_BRANCH) --tags
+	git push origin HEAD:$(GIT_BRANCH)
 
 build: bindata ## Creates linux an osx binaries in "build/$OS"
 	go test
