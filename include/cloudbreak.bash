@@ -59,15 +59,15 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_LOGROTATE 1.0.1
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
 
-    env-import DOCKER_IMAGE_CAAS_MOCK hortonworks/cloudbreak-mock-caas
-    env-import DOCKER_IMAGE_CLOUDBREAK hortonworks/cloudbreak
-    env-import DOCKER_IMAGE_CLOUDBREAK_WEB hortonworks/hdc-web
-    env-import DOCKER_IMAGE_CLOUDBREAK_AUTH hortonworks/hdc-auth
-    env-import DOCKER_IMAGE_CLOUDBREAK_PERISCOPE hortonworks/cloudbreak-autoscale
-    env-import DOCKER_IMAGE_CLOUDBREAK_DATALAKE hortonworks/cloudbreak-datalake
-    env-import DOCKER_IMAGE_CLOUDBREAK_REDBEAMS hortonworks/cloudbreak-redbeams
-    env-import DOCKER_IMAGE_CLOUDBREAK_ENVIRONMENT hortonworks/cloudbreak-environment
-    env-import DOCKER_IMAGE_CLOUDBREAK_FREEIPA hortonworks/cloudbreak-freeipa
+    env-import DOCKER_IMAGE_CAAS_MOCK docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-caas
+    env-import DOCKER_IMAGE_CLOUDBREAK docker-private.infra.cloudera.com/cloudera/cloudbreak
+    env-import DOCKER_IMAGE_CLOUDBREAK_WEB docker-private.infra.cloudera.com/cloudera/hdc-web
+    env-import DOCKER_IMAGE_CLOUDBREAK_AUTH docker-private.infra.cloudera.com/cloudera/hdc-auth
+    env-import DOCKER_IMAGE_CLOUDBREAK_PERISCOPE docker-private.infra.cloudera.com/cloudera/cloudbreak-autoscale
+    env-import DOCKER_IMAGE_CLOUDBREAK_DATALAKE docker-private.infra.cloudera.com/cloudera/cloudbreak-datalake
+    env-import DOCKER_IMAGE_CLOUDBREAK_REDBEAMS docker-private.infra.cloudera.com/cloudera/cloudbreak-redbeams
+    env-import DOCKER_IMAGE_CLOUDBREAK_ENVIRONMENT docker-private.infra.cloudera.com/cloudera/cloudbreak-environment
+    env-import DOCKER_IMAGE_CLOUDBREAK_FREEIPA docker-private.infra.cloudera.com/cloudera/cloudbreak-freeipa
     env-import DOCKER_IMAGE_CBD_SMARTSENSE hortonworks/cbd-smartsense
 
     env-import DOCKER_IMAGE_IDBMMS docker-private.infra.cloudera.com/cloudera/thunderhead-idbrokermappingmanagement
