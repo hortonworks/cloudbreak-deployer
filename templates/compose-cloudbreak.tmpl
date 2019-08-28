@@ -91,6 +91,7 @@
             - "CB_SHOW_TERMINATED_CLUSTERS_HOURS={{{get . "CB_SHOW_TERMINATED_CLUSTERS_HOURS"}}}"
             - "CB_SHOW_TERMINATED_CLUSTERS_MINUTES={{{get . "CB_SHOW_TERMINATED_CLUSTERS_MINUTES"}}}"
             - "NOTIFICATION_URLS={{{get . "CB_DEFAULT_SUBSCRIPTION_ADDRESS"}}}"
+            - OPENTRACING_JAEGER_UDP-SENDER_HOST={{{get . "JAEGER_HOST"}}}
         labels:
         - traefik.port=8080
         - traefik.frontend.rule=PathPrefix:/cb/
