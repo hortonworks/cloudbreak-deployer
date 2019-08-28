@@ -27,6 +27,7 @@
             - VAULT_ROOT_TOKEN={{{get . "VAULT_ROOT_TOKEN"}}}
             - "NOTIFICATION_URLS={{{get . "CB_DEFAULT_SUBSCRIPTION_ADDRESS"}}}"
             - "ALTUS_UMS_HOST={{{get . "UMS_HOST"}}}"
+            - OPENTRACING_JAEGER_UDP-SENDER_HOST={{{get . "JAEGER_HOST"}}}
         labels:
             - traefik.port=8080
             - traefik.frontend.rule=PathPrefix:/dl/
