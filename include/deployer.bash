@@ -579,6 +579,12 @@ start-wait-cmd() {
 
 start-requested-services() {
     declare services="$@"
+
+    if [ ! -f "etc/license.txt" ]; then
+      error "License file not found (etc/license.txt). Please provide a license file.";
+      _exit 1
+    fi
+
     cloudbreak-config
 
     deployer-generate
