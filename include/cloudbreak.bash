@@ -52,7 +52,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_FREEIPA 2.14.0-dev.52
     env-import DOCKER_TAG_ULUWATU 2.14.0-dev.52
 
-    env-import DOCKER_TAG_IDBMMS d4f8f7e4106895e3dec7bfd354e4aefb087823c6
+    env-import DOCKER_TAG_IDBMMS 76df5355c0f5776c2288a38f731cf46c30e9c146
     env-import DOCKER_TAG_ENVIRONMENTS2_API d4f8f7e4106895e3dec7bfd354e4aefb087823c6
 
     env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
@@ -209,12 +209,18 @@ cloudbreak-conf-defaults() {
     env-import ENVIRONMENT_HOST $(host-from-url "$ENVIRONMENT_URL")
     env-import FREEIPA_HOST $(host-from-url "$FREEIPA_URL")
 
+    env-import DATALAKE_HOST $(host-from-url "$DATALAKE_URL")
+    env-import CLUSTER_PROXY_HOST $(host-from-url "$CLUSTER_PROXY_URL")
+
     env-import IDBMMS_URL $(service-url idbmms "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8990" "8982")
     env-import IDBMMS_HOST $(host-from-url "$IDBMMS_URL")
     env-import ENVIRONMENTS2_API_URL $(service-url environments2-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8984" "8982")
 
     env-import ENVIRONMENT_PORT $(port-from-url "$ENVIRONMENT_URL")
     env-import FREEIPA_PORT $(port-from-url "$FREEIPA_URL")
+
+    env-import DATALAKE_PORT $(port-from-url "$DATALAKE_URL")
+    env-import CLUSTER_PROXY_PORT $(port-from-url "$CLUSTER_PROXY_URL")
 
     env-import IDBMMS_PORT $(port-from-url "$IDBMMS_URL")
     env-import IDBMMS_HEALTHZ_PORT 8991
