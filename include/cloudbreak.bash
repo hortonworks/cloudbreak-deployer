@@ -58,6 +58,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
     env-import DOCKER_TAG_LOGROTATE 1.0.1
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
+    env-import DOCKER_TAG_CLUSTER_PROXY 2.1.0.0-127
 
     env-import DOCKER_IMAGE_CAAS_MOCK docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-caas
     env-import DOCKER_IMAGE_CLOUDBREAK docker-private.infra.cloudera.com/cloudera/cloudbreak
@@ -72,6 +73,7 @@ cloudbreak-conf-tags() {
 
     env-import DOCKER_IMAGE_IDBMMS docker-private.infra.cloudera.com/cloudera/thunderhead-idbrokermappingmanagement
     env-import DOCKER_IMAGE_ENVIRONMENTS2_API docker-private.infra.cloudera.com/cloudera/thunderhead-environments2-api
+    env-import DOCKER_IMAGE_CLUSTER_PROXY docker-private.infra.cloudera.com/cloudera/dps-cluster-proxy
 
     env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu:3000/notifications
 
@@ -137,6 +139,10 @@ cloudbreak-conf-db() {
     env-import IDBMMS_DB_ENV_PASS ""
     env-import IDBMMS_DB_PORT_5432_TCP_ADDR "$COMMON_DB"
     env-import IDBMMS_DB_PORT_5432_TCP_PORT "5432"
+
+    env-import CLUSTER_PROXY_DB_ENV_DB "cluster_proxy"
+    env-import CLUSTER_PROXY_DB_ENV_USER "postgres"
+    env-import CLUSTER_PROXY_DB_ENV_PASS ""
 
     env-import VAULT_DB_SCHEMA "vault"
 }
