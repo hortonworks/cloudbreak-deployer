@@ -68,8 +68,8 @@ func TestComposeGenerationWithoutDps(t *testing.T) {
 	out := catchStdInStdOut(t, inputVars, func() {
 		GenerateComposeYaml([]string{})
 	})
-	should := []string{`(?m)^\s*periscope:`, `(?m)^\s*datalake:`, `(?m)^\s*redbeams:`}
-	shouldnt := []string{`(?m)^\s*cloudbreak:`, `(?m)^\s*cluster-proxy:`, `(?m)^\s*core-gateway:`}
+	should := []string{`(?m)^\s*periscope:`, `(?m)^\s*cluster-proxy:`, `(?m)^\s*datalake:`, `(?m)^\s*redbeams:`}
+	shouldnt := []string{`(?m)^\s*cloudbreak:`, `(?m)^\s*core-gateway:`}
 	for _, s := range should {
 		re := regexp.MustCompile(s)
 		if res := re.FindString(out); len(res) == 0 {

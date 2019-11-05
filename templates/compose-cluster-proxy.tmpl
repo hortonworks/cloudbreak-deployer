@@ -1,18 +1,23 @@
 {{{define "cluster-proxy"}}}
     cluster-proxy:
-        build: {{{get . "DPS_REPO"}}}/cluster-proxy
-        image: hortonworks/dps-cluster-proxy:{{{get . "DPS_VERSION"}}}
-        volumes:
-        - {{{get . "DPS_REPO"}}}/resources/dev-setup/serviceaccount:/var/run/secrets/kubernetes.io/serviceaccount
+        image: {{{get . "DOCKER_IMAGE_CLUSTER_PROXY"}}}:{{{get . "DOCKER_TAG_CLUSTER_PROXY"}}}
         environment:
-        - DB_HOST={{{get . "COMMON_DB"}}}
-        - "CAAS_ADDRESS=http://{{{get . "CAAS_URL"}}}"
-        - K8S_TOKEN_PATH=/var/run/secrets/kubernetes.io/serviceaccount/token
+            - DB_HOST={{{get . "COMMON_DB"}}}
+            - DB_USERNAME={{{get . "CLUSTER_PROXY_DB_ENV_USER"}}}
+            - DB_PASSWORD="{{{get . "CLUSTER_PROXY_DB_ENV_PASS"}}}"
+            - UMS_HOST={{{get . "UMS_HOST"}}}
+            - UMS_PORT={{{get . "UMS_PORT"}}}
+            - ENABLE_VAULT=true
+            - VAULT_ADDRESS=http://vault:{{{get . "VAULT_BIND_PORT"}}}
+            - VAULT_ROOT_TOKEN={{{get . "VAULT_ROOT_TOKEN"}}}
+            - VAULT_API_PATH=/v1/secret/data
         networks:
-        - {{{get . "DOCKER_NETWORK_NAME"}}}
+            - {{{get . "DOCKER_NETWORK_NAME"}}}
         restart: always
         labels:
-        - "traefik.backend=cluster-proxy"
-        - "traefik.frontend.rule=PathPrefix:/cluster-proxy"
-        - "traefik.port=10080"
+            - "traefik.backend=cluster-proxy"
+            - "traefik.frontend.rule=PathPrefix:/cluster-proxy"
+            - "traefik.port=10080"
+        ports:
+            - 10080:10080
 {{{end}}}
