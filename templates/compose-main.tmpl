@@ -156,6 +156,7 @@ services:
                 max-file: "5"
         image: {{{get . "DOCKER_IMAGE_CLOUDBREAK_WEB"}}}:{{{get . "DOCKER_TAG_ULUWATU"}}}
 {{{ block "dps" .}}}{{{end}}}
+{{{ block "cluster-proxy" .}}}{{{end}}}
 {{{- block "cloudbreak" .}}}{{{end}}}
 {{{- block "datalake" .}}}{{{end}}}
 {{{- block "environment" .}}}{{{end}}}

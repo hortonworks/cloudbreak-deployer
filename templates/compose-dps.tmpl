@@ -91,7 +91,6 @@
         - "traefik.backend=core-ui"
         - "traefik.frontend.rule=PathPrefix:/core"
         - "traefik.port=9080"
-{{{ block "cluster-proxy" .}}}{{{end}}}
 {{{- block "core-gateway" .}}}{{{end}}}
 
 {{{end}}}
