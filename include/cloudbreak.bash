@@ -250,6 +250,7 @@ cloudbreak-conf-defaults() {
     fi
 
     env-import UMS_PORT "8982"
+    env-import CLUSTERPROXY_ENABLED "true"
 }
 
 cloudbreak-conf-autscale() {
