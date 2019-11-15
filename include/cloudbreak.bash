@@ -58,7 +58,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
     env-import DOCKER_TAG_LOGROTATE 1.0.1
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
-    env-import DOCKER_TAG_CLUSTER_PROXY 2.1.0.0-127
+    env-import DOCKER_TAG_CLUSTER_PROXY 2.1.0.0-135
 
     env-import DOCKER_IMAGE_CAAS_MOCK docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-caas
     env-import DOCKER_IMAGE_CLOUDBREAK docker-private.infra.cloudera.com/cloudera/cloudbreak
@@ -227,6 +227,8 @@ cloudbreak-conf-defaults() {
 
     env-import DATALAKE_PORT $(port-from-url "$DATALAKE_URL")
     env-import CLUSTER_PROXY_PORT $(port-from-url "$CLUSTER_PROXY_URL")
+    env-import CLUSTER_PROXY_TUNNEL_MANAGEMENT_HOST "$BRIDGE_ADDRESS"
+    env-import CLUSTER_PROXY_TUNNEL_MANAGEMENT_PORT 9012
 
     env-import IDBMMS_PORT $(port-from-url "$IDBMMS_URL")
     env-import IDBMMS_HEALTHZ_PORT 8991
