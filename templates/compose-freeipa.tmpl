@@ -31,7 +31,9 @@
             - "ALTUS_UMS_HOST={{{get . "UMS_HOST"}}}"
             - "NOTIFICATION_URLS={{{get . "CB_DEFAULT_SUBSCRIPTION_ADDRESS"}}}"
             - OPENTRACING_JAEGER_UDP-SENDER_HOST={{{get . "JAEGER_HOST"}}}
+            {{{- if get . "CB_DEFAULT_GATEWAY_CIDR"}}}
             - FREEIPA_DEFAULT_GATEWAY_CIDR={{{get . "CB_DEFAULT_GATEWAY_CIDR"}}}
+            {{{- end}}}
         labels:
             - traefik.port=8080
             - traefik.frontend.rule=PathPrefix:/freeipa/
