@@ -34,6 +34,9 @@
             {{{- if get . "CB_DEFAULT_GATEWAY_CIDR"}}}
             - FREEIPA_DEFAULT_GATEWAY_CIDR={{{get . "CB_DEFAULT_GATEWAY_CIDR"}}}
             {{{- end}}}
+            {{{- if get . "FREEIPA_IMAGE_CATALOG_URL"}}}
+            - FREEIPA_IMAGE_CATALOG_URL
+            {{{- end}}}
         labels:
             - traefik.port=8080
             - traefik.frontend.rule=PathPrefix:/freeipa/
