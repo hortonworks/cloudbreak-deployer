@@ -83,6 +83,7 @@ cloudbreak-conf-images() {
     declare desc="Defines image catalog urls"
 
     env-import CB_IMAGE_CATALOG_URL ""
+    env-import FREEIPA_IMAGE_CATALOG_URL ""
 }
 
 cloudbreak-conf-capabilities() {

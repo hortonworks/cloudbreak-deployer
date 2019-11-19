@@ -146,6 +146,7 @@ FREEIPA_DB_ENV_USER - User for the FreeIpa database authentication
 FREEIPA_LOG_LEVEL - Log level of the FreeIpa service
 FREEIPA_SCHEMA_MIGRATION_AUTO - Flag for FreeIpa automatic database schema update
 FREEIPA_SCHEMA_SCRIPTS_LOCATION - Location of FreeIpa schema update files
+FREEIPA_IMAGE_CATALOG_URL - FreeIPA image catalog url
 DB_DUMP_VOLUME - Name of the database dump volume
 DB_MIGRATION_LOG - Database migration log file
 DOCKER_CONSUL_OPTIONS - Extra options for Consul
