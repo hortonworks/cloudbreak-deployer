@@ -58,7 +58,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
     env-import DOCKER_TAG_LOGROTATE 1.0.1
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
-    env-import DOCKER_TAG_CLUSTER_PROXY 2.1.0.0-135
+    env-import DOCKER_TAG_CLUSTER_PROXY 2.1.0.0-154
 
     env-import DOCKER_IMAGE_CAAS_MOCK docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-caas
     env-import DOCKER_IMAGE_CLOUDBREAK docker-private.infra.cloudera.com/cloudera/cloudbreak
