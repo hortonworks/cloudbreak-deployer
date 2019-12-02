@@ -41,7 +41,13 @@ compose-pull() {
 
     [ -f docker-compose.yml ] || deployer-generate
 
+    info "Starting to pull docker images"
+    start=`date +%s`
     dockerCompose pull
+    end=`date +%s`
+    runtime=$((end-start))
+    info "Finished to pull docker images and it took $((runtime/60)) minutes and $((runtime%60)) seconds."
+
 }
 
 compose-up() {
