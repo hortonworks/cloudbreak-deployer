@@ -210,7 +210,7 @@ cloudbreak-conf-defaults() {
     env-import REDBEAMS_URL $(service-url redbeams "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8087" "8080")
     env-import ENVIRONMENT_URL $(service-url environment "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8088" "8088")
     env-import FREEIPA_URL $(service-url freeipa "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8090" "8080")
-    env-import CLUSTER_PROXY_URL $(service-url cluster-proxy "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "10081" "8080")
+    env-import CLUSTER_PROXY_URL "$(service-url cluster-proxy "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "10180" "10080")/cluster-proxy"
     env-import JAEGER_HOST "$BRIDGE_ADDRESS"
 
     env-import ENVIRONMENT_HOST $(host-from-url "$ENVIRONMENT_URL")
