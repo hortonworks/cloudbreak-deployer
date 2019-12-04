@@ -6,8 +6,12 @@
             - AWS_GOV_ACCESS_KEY_ID
             - AWS_GOV_SECRET_ACCESS_KEY
             - CB_AWS_ACCOUNT_ID
-            - http_proxy={{{get . "HTTP_PROXY"}}}
-            - https_proxy={{{get . "HTTPS_PROXY"}}}
+            {{{- if get . "HTTP_PROXY"}}}
+            - "http_proxy={{{get . "HTTP_PROXY"}}}"
+            {{{- end}}}
+            {{{- if get . "HTTPS_PROXY"}}}
+            - "https_proxy={{{get . "HTTPS_PROXY"}}}"
+            {{{- end}}}
             - CERT_VALIDATION
             - REST_DEBUG
             - 'FREEIPA_JAVA_OPTS={{{getEscaped . "FREEIPA_JAVA_OPTS"}}}'
@@ -37,6 +41,10 @@
             {{{- if get . "FREEIPA_IMAGE_CATALOG_URL"}}}
             - FREEIPA_IMAGE_CATALOG_URL
             {{{- end}}}
+            - CLUSTERPROXY_ENABLED
+            - "CLUSTERPROXY_URL={{{get . "CLUSTER_PROXY_URL"}}}"
+            - ALTUS_MINASSHDMGMT_HOST={{{get . "ALTUS_TUNNEL_MANAGEMENT_HOST"}}}
+            - ALTUS_MINASSHDMGMT_PORT={{{get . "ALTUS_TUNNEL_MANAGEMENT_PORT"}}}
         labels:
             - traefik.port=8080
             - traefik.frontend.rule=PathPrefix:/freeipa/

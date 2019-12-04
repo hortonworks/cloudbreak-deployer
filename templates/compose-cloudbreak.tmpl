@@ -6,8 +6,12 @@
             - AWS_GOV_ACCESS_KEY_ID
             - AWS_GOV_SECRET_ACCESS_KEY
             - CB_AWS_ACCOUNT_ID
+            {{{- if get . "HTTP_PROXY"}}}
             - "http_proxy={{{get . "HTTP_PROXY"}}}"
+            {{{- end}}}
+            {{{- if get . "HTTPS_PROXY"}}}
             - "https_proxy={{{get . "HTTPS_PROXY"}}}"
+            {{{- end}}}
             - 'CB_JAVA_OPTS={{{getEscaped . "CB_JAVA_OPTS"}}}'
             - "HTTPS_PROXYFORCLUSTERCONNECTION={{{get . "HTTPS_PROXYFORCLUSTERCONNECTION"}}}"
             - CB_CLUSTERDEFINITION_AMBARI_DEFAULTS
@@ -93,6 +97,9 @@
             - "NOTIFICATION_URLS={{{get . "CB_DEFAULT_SUBSCRIPTION_ADDRESS"}}}"
             - OPENTRACING_JAEGER_UDP-SENDER_HOST={{{get . "JAEGER_HOST"}}}
             - CLUSTERPROXY_ENABLED
+            - "CLUSTERPROXY_URL={{{get . "CLUSTER_PROXY_URL"}}}"
+            - ALTUS_MINASSHDMGMT_HOST={{{get . "ALTUS_TUNNEL_MANAGEMENT_HOST"}}}
+            - ALTUS_MINASSHDMGMT_PORT={{{get . "ALTUS_TUNNEL_MANAGEMENT_PORT"}}}
         labels:
         - traefik.port=8080
         - traefik.frontend.rule=PathPrefix:/cb/
