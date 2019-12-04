@@ -228,8 +228,8 @@ cloudbreak-conf-defaults() {
 
     env-import DATALAKE_PORT $(port-from-url "$DATALAKE_URL")
     env-import CLUSTER_PROXY_PORT $(port-from-url "$CLUSTER_PROXY_URL")
-    env-import CLUSTER_PROXY_TUNNEL_MANAGEMENT_HOST "$BRIDGE_ADDRESS"
-    env-import CLUSTER_PROXY_TUNNEL_MANAGEMENT_PORT 9012
+    env-import ALTUS_TUNNEL_MANAGEMENT_HOST "$BRIDGE_ADDRESS"
+    env-import ALTUS_TUNNEL_MANAGEMENT_PORT 9012
 
     env-import IDBMMS_PORT $(port-from-url "$IDBMMS_URL")
     env-import IDBMMS_HEALTHZ_PORT 8991
