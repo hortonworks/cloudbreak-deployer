@@ -12,14 +12,16 @@ Export GOPATH and add to PATH the $GOPATH/bin directory:
 
 Get cloudbreak-deployer project with GO:
 ```
-go get github.com/hortonworks/cloudbreak-deployer
+go get -d github.com/hortonworks/cloudbreak-deployer
 ``` 
 
 Development process happens on separate branches. Open a pull-request to contribute your changes.
 
 To build the project:
 ```
-# make deps needed only once
+cd $GOPATH/src/github.com/hortonworks/cloudbreak-deployer
+# make deps and bindata only need to be run once
+make bindata
 make deps
 
 make install
