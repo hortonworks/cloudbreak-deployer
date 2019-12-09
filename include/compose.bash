@@ -1,9 +1,15 @@
 compose-init() {
-    if (docker-compose --version 2>&1| grep -q 1.2.0); then
+    local required_compose=1.23.2
+    local compose_version=$(docker-compose --version 2>&1 | grep -E -o "([0-9]+\.)+[0-9]+")
+
+    local compare_result=$(compare-versions ${compose_version} ${required_compose})
+
+    if [[ ${compare_result} -eq 2 ]]; then
         echo "* removing old docker-compose binary" | yellow
         rm -f .deps/bin/docker-compose
     fi
-    deps-require docker-compose 1.13.0
+
+    deps-require docker-compose ${required_compose}
     env-import CB_COMPOSE_PROJECT cbreak
     env-import COMPOSE_HTTP_TIMEOUT 120
     env-import DOCKER_STOP_TIMEOUT 60
@@ -214,457 +220,451 @@ compose-generate-yaml-force() {
         export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_KEY
     fi
     cat > ${composeFile} <<EOF
-traefik:
-    ports:
-        - "$PRIVATE_IP:8081:8080"
-        - $PUBLIC_HTTP_PORT:80
-        - $PUBLIC_HTTPS_PORT:443
-    links:
-        - consul
-        - identity
-        - sultans
-        - uluwatu
-    volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - $CBD_CERT_ROOT_PATH/traefik:/certs/traefik
-        - ./logs/traefik:/opt/traefik/log/
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CBD_TRAEFIK:$DOCKER_TAG_TRAEFIK
-    restart: on-failure
-    command: --debug --web --InsecureSkipVerify=true \
-        --defaultEntryPoints=http,https \
-        --entryPoints='Name:http Address::80 Redirect.EntryPoint:https' \
-        --entryPoints='Name:https Address::443 TLS:$CBD_TRAEFIK_TLS' \
-        --maxidleconnsperhost=$TRAEFIK_MAX_IDLE_CONNECTION \
-        --traefikLogsFile=/opt/traefik/log/traefik.log \
-        --accessLogsFile=/opt/traefik/log/access.log \
-        --docker \
-        --consul --consul.endpoint=consul:8500
-haveged:
-    labels:
-      - traefik.enable=false
-    privileged: true
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CBD_HAVEGED:$DOCKER_TAG_HAVEGED
-
-consul:
-    labels:
-      - traefik.enable=false
-    privileged: true
-    environment:
-        - http_proxy=$HTTP_PROXY
-        - https_proxy=$HTTPS_PROXY
-    volumes:
-        - "/var/run/docker.sock:/var/run/docker.sock"
-        - consul-data:/data
-        - "./etc/custom-consul-config.json:/consul-config/custom-consul-config.json"
-    ports:
-        - "$PRIVATE_IP:53:8600/udp"
-        - "8400:8400"
-        - "$( if [[ -n "$CB_LOCAL_DEV" ]]; then echo "8500:"; fi )8500"
-    hostname: node1
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CBD_CONSUL:$DOCKER_TAG_CONSUL
-    command: --bootstrap --advertise $PRIVATE_IP $DOCKER_CONSUL_OPTIONS --config-file=/consul-config/custom-consul-config.json
-
-registrator:
-    labels:
-      - traefik.enable=false
-    privileged: true
-    volumes:
-        - "/var/run/docker.sock:/tmp/docker.sock"
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CBD_REGISTRATOR:$DOCKER_TAG_REGISTRATOR
-    links:
-        - consul
-    restart: on-failure
-    command: consul://consul:8500
-
-logsink:
-    labels:
-      - traefik.enable=false
-    ports:
-        - 3333
-    environment:
-        - SERVICE_NAME=logsink
-    volumes:
-        - ./logs:/tmp
-    image: $DOCKER_IMAGE_CBD_LOGSINK:$DOCKER_TAG_LOGSINK
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    command: socat -u TCP-LISTEN:3333,reuseaddr,fork OPEN:/tmp/cbreak.log,creat,append
-
-logspout:
-    labels:
-      - traefik.enable=false
-    ports:
-        - 8000:80
-    environment:
-        - SERVICE_NAME=logspout
-        - DEBUG=true
-        - LOGSPOUT=ignore
-        - "RAW_FORMAT={{.Container.Name}} | {{.Data}}\n"
-    links:
-        - logsink
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    entrypoint: ["/bin/sh"]
-    command: -c 'sleep 1; (ROUTE_URIS=\$\$LOGSINK_PORT_3333_TCP /bin/logspout) & LSPID=\$\$!; trap "kill \$\$LSPID; wait \$\$LSPID" SIGINT SIGTERM; wait \$\$LSPID'
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CBD_LOGSPOUT:$DOCKER_TAG_LOGSPOUT
-
-logrotate:
-    environment:
-        - "CRON_EXPR=0 * * * *"
-        - "LOGROTATE_LOGFILES=/var/log/cloudbreak-deployer/*.log /var/log/cloudbreak-deployer/*/*.log"
-        - LOGROTATE_FILESIZE=10M
-    volumes:
-        - ./logs:/var/log/cloudbreak-deployer
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CBD_LOGROTATE:$DOCKER_TAG_LOGROTATE
-
-smartsense:
-    labels:
+version: '3'
+volumes:
+    $COMMON_DB_VOL:
+networks:
+    $DOCKER_NETWORK_NAME:
+      driver: bridge
+      ipam:
+          driver: default
+          config:
+              - subnet: 172.200.0.0/16
+services:
+    traefik:
+        ports:
+            - "8081:8080"
+            - $PUBLIC_HTTP_PORT:80
+            - $PUBLIC_HTTPS_PORT:443
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - $CBD_CERT_ROOT_PATH/traefik:/certs/traefik
+            - ./logs/traefik:/opt/traefik/log/
+            - ./traefik.toml:/etc/traefik/traefik.toml
+        networks:
+            - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: $DOCKER_IMAGE_CBD_TRAEFIK:$DOCKER_TAG_TRAEFIK
+        restart: on-failure
+        command: --debug --api --ping --web --InsecureSkipVerify=true \
+            --defaultEntryPoints=http,https \
+            --entryPoints='Name:http Address::80 Redirect.EntryPoint:https' \
+            --entryPoints='Name:https Address::443 TLS:$CBD_TRAEFIK_TLS' \
+            --maxidleconnsperhost=$TRAEFIK_MAX_IDLE_CONNECTION \
+            --traefiklog.filepath=/opt/traefik/log/traefik.log \
+            --accesslog.filepath=/opt/traefik/log/access.log \
+            --docker
+    haveged:
+        labels:
         - traefik.enable=false
-    ports:
-        - "9000:9000"
-    environment:
-        - ACCOUNT_ID=$AWS_ACCOUNT_ID
-        - CB_VERSION=$(echo $(bin-version))
-        - CB_SMARTSENSE_CONFIGURE
-        - CB_SMARTSENSE_ID
-        - CB_SMARTSENSE_CLUSTER_NAME_PREFIX
-        - CB_INSTANCE_UUID
-        - CB_INSTANCE_PROVIDER
-        - CB_INSTANCE_REGION
-        - CB_PRODUCT_ID
-        - CB_COMPONENT_ID
-        - CAPTURE_CRON_EXPRESSION
-        - UAA_FLEX_USAGE_CLIENT_ID
-        - UAA_FLEX_USAGE_CLIENT_SECRET
-        - SMARTSENSE_UPLOAD_HOST
-        - SMARTSENSE_UPLOAD_USERNAME
-        - SMARTSENSE_UPLOAD_PASSWORD
-    dns: $PRIVATE_IP
-    volumes:
-        - .:/var/lib/cloudbreak-deployment
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CBD_SMARTSENSE:$DOCKER_TAG_CBD_SMARTSENSE
+        privileged: true
+        networks:
+            - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: $DOCKER_IMAGE_CBD_HAVEGED:$DOCKER_TAG_HAVEGED
 
-commondb:
-    labels:
-      - traefik.enable=false
-    privileged: true
-    ports:
-        - "$PRIVATE_IP:5432:5432"
-    environment:
-      - SERVICE_NAME=$COMMON_DB
-        #- SERVICE_CHECK_CMD=bash -c 'psql -h 127.0.0.1 -p 5432  -U postgres -c "select 1"'
-    volumes:
-        - "$COMMON_DB_VOL:/var/lib/postgresql/data"
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CBD_POSTGRES:$DOCKER_TAG_POSTGRES
-    entrypoint: ["/bin/bash"]
-    command: -c 'cd /var/lib/postgresql; touch .ash_history .psql_history; chown -R postgres:postgres /var/lib/postgresql; (/docker-entrypoint.sh postgres -c max_connections=300) & PGPID="\$\$!"; echo "PGPID \$\$PGPID"; trap "kill \$\$PGPID; wait \$\$PGPID" SIGINT SIGTERM; cd /var/lib/postgresql; (tail -f .*history) & wait "\$\$PGPID"'
+    logsink:
+        labels:
+        - traefik.enable=false
+        ports:
+            - 3333
+        environment:
+            - SERVICE_NAME=logsink
+        volumes:
+            - ./logs:/tmp
+        networks:
+            - $DOCKER_NETWORK_NAME
+        image: $DOCKER_IMAGE_CBD_LOGSINK:$DOCKER_TAG_LOGSINK
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        command: -u TCP-LISTEN:3333,reuseaddr,fork OPEN:/tmp/cbreak.log,creat,append
 
-identity:
-    labels:
-      - traefik.port=8080
-      - traefik.frontend.rule=PathPrefix:/identity/check_token,/identity/oauth,/identity/Users,/identity/login.do,/identity/Groups;PathPrefixStrip:/identity
-      - traefik.backend=identity-backend
-      - traefik.frontend.priority=10
-    ports:
-        - $UAA_PORT:8080
-    environment:
-        - http_proxy=$HTTP_PROXY
-        - https_proxy=$HTTPS_PROXY
-        - SERVICE_NAME=identity
-        # - SERVICE_CHECK_HTTP=/login
-        - IDENTITY_DB_URL
-        - IDENTITY_DB_NAME
-        - IDENTITY_DB_USER
-        - IDENTITY_DB_PASS
-    dns: $PRIVATE_IP
-    volumes:
-        - "$CBD_CERT_ROOT_PATH:/certs"
-        - ./uaa.yml:/uaa/uaa.yml
-        - ./logs/identity:/tomcat/logs/
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CLOUDBREAK_UAA:$DOCKER_TAG_UAA
+    logspout:
+        labels:
+        - traefik.enable=false
+        ports:
+            - 8000:80
+        environment:
+            - SERVICE_NAME=logspout
+            - DEBUG=true
+            - LOGSPOUT=ignore
+            - "RAW_FORMAT={{.Container.Name}} | {{.Data}}\n"
+        volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - $DOCKER_NETWORK_NAME
+        entrypoint: ["/bin/sh"]
+        command: -c 'sleep 1; (ROUTE_URIS=\$\$LOGSINK_PORT_3333_TCP /bin/logspout) & LSPID=\$\$!; trap "kill \$\$LSPID; wait \$\$LSPID" SIGINT SIGTERM; wait \$\$LSPID'
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: $DOCKER_IMAGE_CBD_LOGSPOUT:$DOCKER_TAG_LOGSPOUT
 
-cloudbreak:
-    environment:
-        - AMBARI_CLIENT_LOG_LEVEL=$AMBARI_CLIENT_LOG_LEVEL
-        - AWS_ACCESS_KEY_ID
-        - AWS_SECRET_ACCESS_KEY
-        - AWS_GOV_ACCESS_KEY_ID
-        - AWS_GOV_SECRET_ACCESS_KEY
-        - "SERVICE_NAME=cloudbreak"
-          #- SERVICE_CHECK_HTTP=/info
-        - "http_proxy=$HTTP_PROXY"
-        - "https_proxy=$HTTPS_PROXY"
-        - 'CB_JAVA_OPTS=$(escape-string-compose-yaml "$CB_JAVA_OPTS" \')'
-        - "HTTPS_PROXYFORCLUSTERCONNECTION=$HTTPS_PROXYFORCLUSTERCONNECTION"
-        - "CB_CLIENT_ID=$UAA_CLOUDBREAK_ID"
-        - 'CB_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_CLOUDBREAK_SECRET \')'
-        - CB_BLUEPRINT_DEFAULTS
-        - CB_BLUEPRINT_INTERNAL
-        - CB_TEMPLATE_DEFAULTS
-        - CB_HBM2DDL_STRATEGY
-        - CB_CAPABILITIES
-        $( if [[ -n "$INFO_APP_CAPABILITIES" ]]; then echo "- INFO_APP_CAPABILITIES"; fi )
-        - "ENDPOINTS_AUTOCONFIG_ENABLED=false"
-        - "ENDPOINTS_DUMP_ENABLED=false"
-        - "ENDPOINTS_TRACE_ENABLED=false"
-        - "ENDPOINTS_CONFIGPROPS_ENABLED=false"
-        - "ENDPOINTS_METRICS_ENABLED=false"
-        - "ENDPOINTS_MAPPINGS_ENABLED=false"
-        - "ENDPOINTS_BEANS_ENABLED=false"
-        - "ENDPOINTS_ENV_ENABLED=false"
-        - "CB_ADDRESS_RESOLVING_TIMEOUT"
-        - "CB_IDENTITY_SERVICEID=identity.service.consul"
-        - CB_DB_PORT_5432_TCP_ADDR
-        - CB_DB_PORT_5432_TCP_PORT
-        - CB_DB_ENV_USER
-        - CB_DB_ENV_PASS
-        - CB_DB_ENV_SSL
-        - CB_DB_ENV_CERT_FILE
-        - CB_DB_ENV_DB
-        - CB_DB_ENV_SCHEMA
-        - "CB_DB_SERVICEID=$COMMON_DB.service.consul"
-        - CB_SCHEMA_SCRIPTS_LOCATION
-        - CB_SCHEMA_MIGRATION_AUTO
-        - "SPRING_CLOUD_CONSUL_HOST=consul.service.consul"
-        - CB_AWS_HOSTKEY_VERIFY
-        - CB_GCP_HOSTKEY_VERIFY
-        - REST_DEBUG
-        - CB_AWS_DEFAULT_CF_TAG
-        - CB_AWS_CUSTOM_CF_TAGS
-        - CERT_VALIDATION
-        - CB_HOST_DISCOVERY_CUSTOM_DOMAIN
-        - CB_SMARTSENSE_CONFIGURE
-        - CB_SMARTSENSE_ID
-        - "CB_BYOS_DFS_DATA_DIR=$CB_BYOS_DFS_DATA_DIR"
-        - HWX_CLOUD_TEMPLATE_VERSION
-        - "HWX_CLOUD_ADDRESS=$PUBLIC_IP"
-        - CB_PLATFORM_DEFAULT_REGIONS
-        - CB_DEFAULT_SUBSCRIPTION_ADDRESS
-        $( if [[ -n "$CB_IMAGE_CATALOG_URL" ]]; then echo "- CB_IMAGE_CATALOG_URL"; fi )
-        - CB_AWS_DEFAULT_INBOUND_SECURITY_GROUP
-        - CB_AWS_VPC
-        - CB_ENABLEDPLATFORMS
-        - CB_ENABLED_LINUX_TYPES
-        - CB_MAX_SALT_NEW_SERVICE_RETRY
-        - CB_MAX_SALT_NEW_SERVICE_RETRY_ONERROR
-        - CB_MAX_SALT_RECIPE_EXECUTION_RETRY
-        - CB_INSTANCE_UUID
-        - CB_INSTANCE_NODE_ID
-        - CB_INSTANCE_PROVIDER
-        - CB_INSTANCE_REGION
-        - CB_PRODUCT_ID
-        - CB_COMPONENT_ID
-        - CB_COMPONENT_CREATED
-        - CB_COMPONENT_CLUSTER_ID
-        - CB_LOG_LEVEL
-        - CB_DEFAULT_GATEWAY_CIDR
-        $( if [[ "$CB_AUDIT_FILE_ENABLED" = true ]]; then echo "- CB_AUDIT_FILEPATH=/cloudbreak-log/cb-audit.log"; fi )
-        $( if [[ -n "$CB_KAFKA_BOOTSTRAP_SERVERS" ]]; then echo "- CB_KAFKA_BOOTSTRAP_SERVERS"; fi )
-        - CB_DISABLE_SHOW_CLI
-        - CB_DISABLE_SHOW_BLUEPRINT
-        - SMARTSENSE_UPLOAD_HOST
-        - SMARTSENSE_UPLOAD_USERNAME
-        - SMARTSENSE_UPLOAD_PASSWORD
-        - CB_UPSCALE_MAX_NODECOUNT
-    labels:
-      - traefik.port=8080
-      - traefik.frontend.rule=PathPrefix:/cb/
-      - traefik.backend=cloudbreak-backend
-      - traefik.frontend.priority=10
-    ports:
-        - $CB_PORT:8080
-    volumes:
-        - "$CBD_CERT_ROOT_PATH:/certs"
-        - /dev/urandom:/dev/random
-        - ./logs/cloudbreak:/cloudbreak-log
-        - ./etc/:/etc/cloudbreak
-    dns: $PRIVATE_IP
-    links:
-        - consul
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CLOUDBREAK:$DOCKER_TAG_CLOUDBREAK
-    command: bash
+    logrotate:
+        environment:
+            - "CRON_EXPR=0 * * * *"
+            - "LOGROTATE_LOGFILES=/var/log/cloudbreak-deployer/*.log /var/log/cloudbreak-deployer/*/*.log"
+            - LOGROTATE_FILESIZE=10M
+        volumes:
+            - ./logs:/var/log/cloudbreak-deployer
+        networks:
+            - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: $DOCKER_IMAGE_CBD_LOGROTATE:$DOCKER_TAG_LOGROTATE
 
-sultans:
-    environment:
-        - http_proxy=$HTTP_PROXY
-        - https_proxy=$HTTPS_PROXY
-        - SL_CLIENT_ID=$UAA_SULTANS_ID
-        - 'SL_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_SULTANS_SECRET \')'
-        - SERVICE_NAME=sultans
-        - SERVICE_3000_NAME=sultans
-          #- SERVICE_CHECK_HTTP=/
-        - SL_PORT=3000
-        - HWX_CLOUD_COLLECTOR=$CLOUDBREAK_TELEMETRY_MAIL_ADDRESS
-        - HWX_CLOUD_USER=$UAA_DEFAULT_USER_EMAIL
-        - HWX_CLOUD_TYPE
-        - HWX_CLOUD_TEMPLATE_VERSION
-        - AWS_AMI_ID
-        - AWS_INSTANCE_ID
-        - AWS_ACCOUNT_ID
-        - HWX_DOC_LINK
-        - SL_SMARTSENSE_CONFIGURE=$CB_SMARTSENSE_CONFIGURE
-        - SL_CB_ADDRESS=$ULU_HOST_ADDRESS
-        - SL_ADDRESS=$ULU_SULTANS_ADDRESS
-        - SL_HWX_CLOUD_DEFAULT_REGION=$ULU_HWX_CLOUD_DEFAULT_REGION
-        - SL_ADDRESS_RESOLVING_TIMEOUT
-        - NODE_TLS_REJECT_UNAUTHORIZED=$SL_NODE_TLS_REJECT_UNAUTHORIZED
-        - SL_UAA_SERVICEID=identity.service.consul
-        - SL_DISPLAY_TERMS_AND_SERVICES=$HWX_DISPLAY_TERMS_AND_CONDITIONS
-    labels:
-      - traefik.port=3000
-      - traefik.frontend.rule=PathPrefixStrip:/sl
-      - traefik.backend=sultans-backend
-      - traefik.frontend.priority=10
-    ports:
-        - 3001:3000
-    volumes:
-        - $SULTANS_VOLUME_HOST:$SULTANS_VOLUME_CONTAINER
-    dns: $PRIVATE_IP
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CLOUDBREAK_AUTH:$DOCKER_TAG_SULTANS
+    smartsense:
+        labels:
+            - traefik.enable=false
+        ports:
+            - "9000:9000"
+        environment:
+            - ACCOUNT_ID=$AWS_ACCOUNT_ID
+            - CB_VERSION=$(echo $(bin-version))
+            - CB_SMARTSENSE_CONFIGURE
+            - CB_SMARTSENSE_ID
+            - CB_SMARTSENSE_CLUSTER_NAME_PREFIX
+            - CB_INSTANCE_UUID
+            - CB_INSTANCE_PROVIDER
+            - CB_INSTANCE_REGION
+            - CB_PRODUCT_ID
+            - CB_COMPONENT_ID
+            - CAPTURE_CRON_EXPRESSION
+            - UAA_FLEX_USAGE_CLIENT_ID
+            - UAA_FLEX_USAGE_CLIENT_SECRET
+            - SMARTSENSE_UPLOAD_HOST
+            - SMARTSENSE_UPLOAD_USERNAME
+            - SMARTSENSE_UPLOAD_PASSWORD
+        volumes:
+            - .:/var/lib/cloudbreak-deployment
+        networks:
+            - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: $DOCKER_IMAGE_CBD_SMARTSENSE:$DOCKER_TAG_CBD_SMARTSENSE
 
-uluwatu:
-    environment:
-        - http_proxy=$HTTP_PROXY
-        - https_proxy=$HTTPS_PROXY
-        - SERVICE_NAME=uluwatu
-          #- SERVICE_CHECK_HTTP=/
-        - ULU_OAUTH_REDIRECT_URI
-        - ULU_DEFAULT_SSH_KEY
-        - ULU_SULTANS_ADDRESS
-        - ULU_OAUTH_CLIENT_ID=$UAA_ULUWATU_ID
-        - 'ULU_OAUTH_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_ULUWATU_SECRET \')'
-        - ULU_HOST_ADDRESS
-        - NODE_TLS_REJECT_UNAUTHORIZED=$ULU_NODE_TLS_REJECT_UNAUTHORIZED
-        - ULU_HWX_CLOUD_DEFAULT_CREDENTIAL
-        - ULU_HWX_CLOUD_DEFAULT_REGION
-        - ULU_HWX_CLOUD_DEFAULT_SSH_KEY
-        - ULU_HWX_CLOUD_DEFAULT_VPC_ID
-        - ULU_HWX_CLOUD_DEFAULT_IGW_ID
-        - ULU_HWX_CLOUD_DEFAULT_SUBNET_ID
-        - ULU_HWX_CLOUD_DEFAULT_ARM_VIRTUAL_NETWORK_ID
-        - HWX_CLOUD_TEMPLATE_VERSION
-        - HWX_CLOUD_ENABLE_GOVERNANCE_AND_SECURITY
-        - ULU_ADDRESS_RESOLVING_TIMEOUT
-        - ULU_SULTANS_SERVICEID=sultans.service.consul
-        - ULU_IDENTITY_SERVICEID=identity.service.consul
-        - ULU_CLOUDBREAK_SERVICEID=cloudbreak.service.consul
-        - ULU_PERISCOPE_SERVICEID=periscope.service.consul
-        - ULU_HWX_CLOUD_REGISTRATION_URL
-        - ULU_SUBSCRIBE_TO_NOTIFICATIONS
-        - AWS_INSTANCE_ID
-        - HWX_HCC_AVAILABLE
-        - AWS_ACCOUNT_ID
-        - AWS_AMI_ID
-        - HWX_DOC_LINK
-        - AZURE_TENANT_ID
-        - AZURE_SUBSCRIPTION_ID
-        - AWS_ACCESS_KEY_ID
-        - AWS_SECRET_ACCESS_KEY
-    labels:
-      - traefik.port=3000
-      - traefik.frontend.rule=Host:$PUBLIC_IP,$CB_TRAEFIK_HOST_ADDRESS
-      - traefik.backend=uluwatu-backend
-      - traefik.frontend.priority=5
-    ports:
-        - 3000:3000
-    volumes:
-        - $ULUWATU_VOLUME_HOST:$ULUWATU_VOLUME_CONTAINER
-    dns: $PRIVATE_IP
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CLOUDBREAK_WEB:$DOCKER_TAG_ULUWATU
+    commondb:
+        labels:
+        - traefik.enable=false
+        privileged: true
+        ports:
+            - "5432:5432"
+        environment:
+        - SERVICE_NAME=$COMMON_DB
+            #- SERVICE_CHECK_CMD=bash -c 'psql -h 127.0.0.1 -p 5432  -U postgres -c "select 1"'
+        volumes:
+            - "$COMMON_DB_VOL:/var/lib/postgresql/data"
+        networks:
+            - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: $DOCKER_IMAGE_CBD_POSTGRES:$DOCKER_TAG_POSTGRES
+        entrypoint: ["/bin/bash"]
+        command: -c 'cd /var/lib/postgresql; touch .ash_history .psql_history; chown -R postgres:postgres /var/lib/postgresql; (/docker-entrypoint.sh postgres -c max_connections=300) & PGPID="\$\$!"; echo "PGPID \$\$PGPID"; trap "kill \$\$PGPID; wait \$\$PGPID" SIGINT SIGTERM; cd /var/lib/postgresql; (tail -f .*history) & wait "\$\$PGPID"'
 
-periscope:
-    environment:
-        - http_proxy=$HTTP_PROXY
-        - https_proxy=$HTTPS_PROXY
-        - PERISCOPE_HBM2DDL_STRATEGY
-        - PERISCOPE_DB_PORT_5432_TCP_ADDR
-        - PERISCOPE_DB_PORT_5432_TCP_PORT
-        - PERISCOPE_DB_ENV_USER
-        - PERISCOPE_DB_ENV_PASS
-        - PERISCOPE_DB_ENV_DB
-        - PERISCOPE_DB_ENV_SCHEMA
-        - PERISCOPE_DB_ENV_SSL
-        - PERISCOPE_DB_ENV_CERT_FILE
-        - "HTTPS_PROXYFORCLUSTERCONNECTION=$HTTPS_PROXYFORCLUSTERCONNECTION"
-        - SERVICE_NAME=periscope
-          #- SERVICE_CHECK_HTTP=/info
-        - 'CB_JAVA_OPTS=$(escape-string-compose-yaml "$CB_JAVA_OPTS" \')'
-        - PERISCOPE_CLIENT_ID=$UAA_PERISCOPE_ID
-        - 'PERISCOPE_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_PERISCOPE_SECRET \')'
-        - PERISCOPE_HOSTNAME_RESOLUTION=public
-        - ENDPOINTS_AUTOCONFIG_ENABLED=false
-        - ENDPOINTS_DUMP_ENABLED=false
-        - ENDPOINTS_TRACE_ENABLED=false
-        - ENDPOINTS_CONFIGPROPS_ENABLED=false
-        - ENDPOINTS_METRICS_ENABLED=false
-        - ENDPOINTS_MAPPINGS_ENABLED=false
-        - ENDPOINTS_BEANS_ENABLED=false
-        - ENDPOINTS_ENV_ENABLED=false
-        - PERISCOPE_ADDRESS_RESOLVING_TIMEOUT
-        - PERISCOPE_DB_SERVICEID=$COMMON_DB.service.consul
-        - PERISCOPE_CLOUDBREAK_SERVICEID=cloudbreak.service.consul
-        - PERISCOPE_IDENTITY_SERVICEID=identity.service.consul
-        - PERISCOPE_SCHEMA_SCRIPTS_LOCATION
-        - PERISCOPE_SCHEMA_MIGRATION_AUTO
-        - PERISCOPE_INSTANCE_NODE_ID=$CB_INSTANCE_NODE_ID
-        - PERISCOPE_LOG_LEVEL
-        - REST_DEBUG
-        - CERT_VALIDATION
-        - CB_DEFAULT_SUBSCRIPTION_ADDRESS
-        - CB_UPSCALE_MAX_NODECOUNT
-    labels:
-      - traefik.port=8080
-      - traefik.frontend.rule=PathPrefix:/as/
-      - traefik.backend=periscope-backend
-      - traefik.frontend.priority=10
-    ports:
-        - 8085:8080
-    dns: $PRIVATE_IP
-    volumes:
-        - "$CBD_CERT_ROOT_PATH:/certs"
-        - ./logs/autoscale:/autoscale-log
-        - /dev/urandom:/dev/random
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CLOUDBREAK_PERISCOPE:$DOCKER_TAG_PERISCOPE
+    identity:
+        labels:
+        - traefik.port=8080
+        - traefik.frontend.rule=PathPrefix:/identity/check_token,/identity/oauth,/identity/Users,/identity/login.do,/identity/Groups;PathPrefixStrip:/identity
+        - traefik.backend=identity-backend
+        - traefik.frontend.priority=100
+        ports:
+            - $UAA_PORT:8080
+        environment:
+            - http_proxy=$HTTP_PROXY
+            - https_proxy=$HTTPS_PROXY
+            - SERVICE_NAME=identity
+            # - SERVICE_CHECK_HTTP=/login
+            - IDENTITY_DB_URL
+            - IDENTITY_DB_NAME
+            - IDENTITY_DB_USER
+            - IDENTITY_DB_PASS
+        volumes:
+            - "$CBD_CERT_ROOT_PATH:/certs"
+            - ./uaa.yml:/uaa/uaa.yml
+            - ./logs/identity:/tomcat/logs/
+        networks:
+            - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: $DOCKER_IMAGE_CLOUDBREAK_UAA:$DOCKER_TAG_UAA
+
+    sultans:
+        environment:
+            - http_proxy=$HTTP_PROXY
+            - https_proxy=$HTTPS_PROXY
+            - SL_CLIENT_ID=$UAA_SULTANS_ID
+            - 'SL_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_SULTANS_SECRET \')'
+            - SERVICE_NAME=sultans
+            - SERVICE_3000_NAME=sultans
+            #- SERVICE_CHECK_HTTP=/
+            - SL_PORT=3000
+            - HWX_CLOUD_COLLECTOR=$CLOUDBREAK_TELEMETRY_MAIL_ADDRESS
+            - HWX_CLOUD_USER=$UAA_DEFAULT_USER_EMAIL
+            - HWX_CLOUD_TYPE
+            - HWX_CLOUD_TEMPLATE_VERSION
+            - AWS_AMI_ID
+            - AWS_INSTANCE_ID
+            - AWS_ACCOUNT_ID
+            - HWX_DOC_LINK
+            - SL_SMARTSENSE_CONFIGURE=$CB_SMARTSENSE_CONFIGURE
+            - SL_CB_ADDRESS=$ULU_HOST_ADDRESS
+            - SL_ADDRESS=$ULU_SULTANS_ADDRESS
+            - SL_HWX_CLOUD_DEFAULT_REGION=$ULU_HWX_CLOUD_DEFAULT_REGION
+            - SL_ADDRESS_RESOLVING_TIMEOUT
+            - NODE_TLS_REJECT_UNAUTHORIZED=$SL_NODE_TLS_REJECT_UNAUTHORIZED
+            - SL_DISPLAY_TERMS_AND_SERVICES=$HWX_DISPLAY_TERMS_AND_CONDITIONS
+            - SL_UAA_ADDRESS=http://identity:8080
+        labels:
+        - traefik.port=3000
+        - traefik.frontend.rule=PathPrefixStrip:/sl
+        - traefik.backend=sultans-backend
+        - traefik.frontend.priority=10
+        ports:
+            - 3001:3000
+        volumes:
+            - $SULTANS_VOLUME_HOST:$SULTANS_VOLUME_CONTAINER
+        networks:
+            - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: $DOCKER_IMAGE_CLOUDBREAK_AUTH:$DOCKER_TAG_SULTANS
+
+    uluwatu:
+        environment:
+            - http_proxy=$HTTP_PROXY
+            - https_proxy=$HTTPS_PROXY
+            - SERVICE_NAME=uluwatu
+            #- SERVICE_CHECK_HTTP=/
+            - ULU_OAUTH_REDIRECT_URI
+            - ULU_DEFAULT_SSH_KEY
+            - ULU_SULTANS_ADDRESS
+            - ULU_OAUTH_CLIENT_ID=$UAA_ULUWATU_ID
+            - 'ULU_OAUTH_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_ULUWATU_SECRET \')'
+            - ULU_HOST_ADDRESS
+            - NODE_TLS_REJECT_UNAUTHORIZED=$ULU_NODE_TLS_REJECT_UNAUTHORIZED
+            - ULU_HWX_CLOUD_DEFAULT_CREDENTIAL
+            - ULU_HWX_CLOUD_DEFAULT_REGION
+            - ULU_HWX_CLOUD_DEFAULT_SSH_KEY
+            - ULU_HWX_CLOUD_DEFAULT_VPC_ID
+            - ULU_HWX_CLOUD_DEFAULT_IGW_ID
+            - ULU_HWX_CLOUD_DEFAULT_SUBNET_ID
+            - ULU_HWX_CLOUD_DEFAULT_ARM_VIRTUAL_NETWORK_ID
+            - HWX_CLOUD_TEMPLATE_VERSION
+            - HWX_CLOUD_ENABLE_GOVERNANCE_AND_SECURITY
+            - ULU_ADDRESS_RESOLVING_TIMEOUT
+            - "ULU_IDENTITY_ADDRESS=http://identity:8080"
+            - "ULU_CLOUDBREAK_ADDRESS=$CLOUDBREAK_URL"
+            - "ULU_PERISCOPE_ADDRESS=$PERISCOPE_URL"
+            - ULU_SUBSCRIBE_TO_NOTIFICATIONS
+            - AWS_INSTANCE_ID
+            - HWX_HCC_AVAILABLE
+            - AWS_ACCOUNT_ID
+            - AWS_AMI_ID
+            - HWX_DOC_LINK
+            - AZURE_TENANT_ID
+            - AZURE_SUBSCRIPTION_ID
+            - AWS_ACCESS_KEY_ID
+            - AWS_SECRET_ACCESS_KEY
+        labels:
+        - traefik.port=3000
+        - traefik.frontend.rule=Host:$PUBLIC_IP,$CB_TRAEFIK_HOST_ADDRESS
+        - traefik.backend=uluwatu-backend
+        - traefik.frontend.priority=5
+        ports:
+            - 3000:3000
+        volumes:
+            - $ULUWATU_VOLUME_HOST:$ULUWATU_VOLUME_CONTAINER
+        networks:
+            - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: $DOCKER_IMAGE_CLOUDBREAK_WEB:$DOCKER_TAG_ULUWATU
+EOF
+
+    if [[ "$CB_LOCAL_DEV" == "false" ]]; then
+        cat >> ${composeFile} <<EOF
+    cloudbreak:
+        environment:
+            - AMBARI_CLIENT_LOG_LEVEL=$AMBARI_CLIENT_LOG_LEVEL
+            - AWS_ACCESS_KEY_ID
+            - AWS_SECRET_ACCESS_KEY
+            - AWS_GOV_ACCESS_KEY_ID
+            - AWS_GOV_SECRET_ACCESS_KEY
+            - "SERVICE_NAME=cloudbreak"
+            #- SERVICE_CHECK_HTTP=/info
+            - "http_proxy=$HTTP_PROXY"
+            - "https_proxy=$HTTPS_PROXY"
+            - 'CB_JAVA_OPTS=$(escape-string-compose-yaml "$CB_JAVA_OPTS" \')'
+            - "HTTPS_PROXYFORCLUSTERCONNECTION=$HTTPS_PROXYFORCLUSTERCONNECTION"
+            - "CB_CLIENT_ID=$UAA_CLOUDBREAK_ID"
+            - 'CB_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_CLOUDBREAK_SECRET \')'
+            - CB_BLUEPRINT_DEFAULTS
+            - CB_BLUEPRINT_INTERNAL
+            - CB_TEMPLATE_DEFAULTS
+            - CB_HBM2DDL_STRATEGY
+            - CB_CAPABILITIES
+            $( if [[ -n "$INFO_APP_CAPABILITIES" ]]; then echo "- INFO_APP_CAPABILITIES"; fi )
+            - "ENDPOINTS_AUTOCONFIG_ENABLED=false"
+            - "ENDPOINTS_DUMP_ENABLED=false"
+            - "ENDPOINTS_TRACE_ENABLED=false"
+            - "ENDPOINTS_CONFIGPROPS_ENABLED=false"
+            - "ENDPOINTS_METRICS_ENABLED=false"
+            - "ENDPOINTS_MAPPINGS_ENABLED=false"
+            - "ENDPOINTS_BEANS_ENABLED=false"
+            - "ENDPOINTS_ENV_ENABLED=false"
+            - "CB_ADDRESS_RESOLVING_TIMEOUT"
+            - "CB_IDENTITY_SERVER_URL=http://identity:8080"
+            - "CB_DB_PORT_5432_TCP_ADDR=$COMMON_DB"
+            - "CB_DB_PORT_5432_TCP_PORT=5432"
+            - CB_DB_ENV_USER
+            - CB_DB_ENV_PASS
+            - CB_DB_ENV_SSL
+            - CB_DB_ENV_CERT_FILE
+            - CB_DB_ENV_DB
+            - CB_DB_ENV_SCHEMA
+            - CB_SCHEMA_SCRIPTS_LOCATION
+            - CB_SCHEMA_MIGRATION_AUTO
+            - CB_AWS_HOSTKEY_VERIFY
+            - CB_GCP_HOSTKEY_VERIFY
+            - REST_DEBUG
+            - CB_AWS_DEFAULT_CF_TAG
+            - CB_AWS_CUSTOM_CF_TAGS
+            - CERT_VALIDATION
+            - CB_HOST_DISCOVERY_CUSTOM_DOMAIN
+            - CB_SMARTSENSE_CONFIGURE
+            - CB_SMARTSENSE_ID
+            - "CB_BYOS_DFS_DATA_DIR=$CB_BYOS_DFS_DATA_DIR"
+            - HWX_CLOUD_TEMPLATE_VERSION
+            - "HWX_CLOUD_ADDRESS=$PUBLIC_IP"
+            - CB_PLATFORM_DEFAULT_REGIONS
+            - CB_DEFAULT_SUBSCRIPTION_ADDRESS
+            $( if [[ -n "$CB_IMAGE_CATALOG_URL" ]]; then echo "- CB_IMAGE_CATALOG_URL"; fi )
+            - CB_AWS_DEFAULT_INBOUND_SECURITY_GROUP
+            - CB_AWS_VPC
+            - CB_ENABLEDPLATFORMS
+            - CB_ENABLED_LINUX_TYPES
+            - CB_MAX_SALT_NEW_SERVICE_RETRY
+            - CB_MAX_SALT_NEW_SERVICE_RETRY_ONERROR
+            - CB_MAX_SALT_RECIPE_EXECUTION_RETRY
+            - CB_INSTANCE_UUID
+            - CB_INSTANCE_NODE_ID
+            - CB_INSTANCE_PROVIDER
+            - CB_INSTANCE_REGION
+            - CB_PRODUCT_ID
+            - CB_COMPONENT_ID
+            - CB_COMPONENT_CREATED
+            - CB_COMPONENT_CLUSTER_ID
+            - CB_LOG_LEVEL
+            - CB_DEFAULT_GATEWAY_CIDR
+            $( if [[ "$CB_AUDIT_FILE_ENABLED" = true ]]; then echo "- CB_AUDIT_FILEPATH=/cloudbreak-log/cb-audit.log"; fi )
+            $( if [[ -n "$CB_KAFKA_BOOTSTRAP_SERVERS" ]]; then echo "- CB_KAFKA_BOOTSTRAP_SERVERS"; fi )
+            - CB_DISABLE_SHOW_CLI
+            - CB_DISABLE_SHOW_BLUEPRINT
+            - SMARTSENSE_UPLOAD_HOST
+            - SMARTSENSE_UPLOAD_USERNAME
+            - SMARTSENSE_UPLOAD_PASSWORD
+            - CB_UPSCALE_MAX_NODECOUNT
+        labels:
+        - traefik.port=8080
+        - traefik.frontend.rule=PathPrefix:/cb/
+        - traefik.backend=cloudbreak-backend
+        - traefik.frontend.priority=10
+        ports:
+            - $CB_PORT:8080
+        volumes:
+            - "$CBD_CERT_ROOT_PATH:/certs"
+            - /dev/urandom:/dev/random
+            - ./logs/cloudbreak:/cloudbreak-log
+            - ./etc/:/etc/cloudbreak
+        networks:
+            - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: $DOCKER_IMAGE_CLOUDBREAK:$DOCKER_TAG_CLOUDBREAK
+        command: bash
+
+    periscope:
+        environment:
+            - http_proxy=$HTTP_PROXY
+            - https_proxy=$HTTPS_PROXY
+            - PERISCOPE_HBM2DDL_STRATEGY
+            - "PERISCOPE_DB_PORT_5432_TCP_ADDR=$COMMON_DB"
+            - "PERISCOPE_DB_PORT_5432_TCP_PORT=5432"
+            - PERISCOPE_DB_ENV_USER
+            - PERISCOPE_DB_ENV_PASS
+            - PERISCOPE_DB_ENV_DB
+            - PERISCOPE_DB_ENV_SCHEMA
+            - PERISCOPE_DB_ENV_SSL
+            - PERISCOPE_DB_ENV_CERT_FILE
+            - "HTTPS_PROXYFORCLUSTERCONNECTION=$HTTPS_PROXYFORCLUSTERCONNECTION"
+            - SERVICE_NAME=periscope
+            #- SERVICE_CHECK_HTTP=/info
+            - 'CB_JAVA_OPTS=$(escape-string-compose-yaml "$CB_JAVA_OPTS" \')'
+            - PERISCOPE_CLIENT_ID=$UAA_PERISCOPE_ID
+            - 'PERISCOPE_CLIENT_SECRET=$(escape-string-compose-yaml $UAA_PERISCOPE_SECRET \')'
+            - PERISCOPE_HOSTNAME_RESOLUTION=public
+            - ENDPOINTS_AUTOCONFIG_ENABLED=false
+            - ENDPOINTS_DUMP_ENABLED=false
+            - ENDPOINTS_TRACE_ENABLED=false
+            - ENDPOINTS_CONFIGPROPS_ENABLED=false
+            - ENDPOINTS_METRICS_ENABLED=false
+            - ENDPOINTS_MAPPINGS_ENABLED=false
+            - ENDPOINTS_BEANS_ENABLED=false
+            - ENDPOINTS_ENV_ENABLED=false
+            - PERISCOPE_ADDRESS_RESOLVING_TIMEOUT
+            - "PERISCOPE_CLOUDBREAK_URL=$CLOUDBREAK_URL"
+            - PERISCOPE_IDENTITY_SERVER_URL=http://identity:8080
+            - PERISCOPE_SCHEMA_SCRIPTS_LOCATION
+            - PERISCOPE_SCHEMA_MIGRATION_AUTO
+            - PERISCOPE_INSTANCE_NODE_ID=$CB_INSTANCE_NODE_ID
+            - PERISCOPE_LOG_LEVEL
+            - REST_DEBUG
+            - CERT_VALIDATION
+            - CB_DEFAULT_SUBSCRIPTION_ADDRESS
+            - CB_UPSCALE_MAX_NODECOUNT
+        labels:
+        - traefik.port=8080
+        - traefik.frontend.rule=PathPrefix:/as/
+        - traefik.backend=periscope-backend
+        - traefik.frontend.priority=10
+        ports:
+            - 8085:8080
+        volumes:
+            - "$CBD_CERT_ROOT_PATH:/certs"
+            - ./logs/autoscale:/autoscale-log
+            - /dev/urandom:/dev/random
+        networks:
+            - $DOCKER_NETWORK_NAME
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: $DOCKER_IMAGE_CLOUDBREAK_PERISCOPE:$DOCKER_TAG_PERISCOPE
 
 EOF
+    fi
 }

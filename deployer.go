@@ -152,8 +152,8 @@ func main() {
 		"include/export.bash",
 		"include/fn.bash",
 		"include/migrate.bash",
-		"include/machine.bash",
 		"include/module.bash",
+		"include/utils.bash",
 	}, Asset, false)
 
 }

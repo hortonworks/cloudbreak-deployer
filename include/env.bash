@@ -132,8 +132,6 @@ DOCKER_IMAGE_CLOUDBREAK_UAA - Cloudbreak UAA (Identity) Docker image name
 DOCKER_IMAGE_CBD_SMARTSENSE - SmartSense Docker image name
 DOCKER_IMAGE_CBD_TRAEFIK - Traefik Docker image name
 DOCKER_IMAGE_CBD_HAVEGED - Haveged Docker image name
-DOCKER_IMAGE_CBD_CONSUL - Consul Docker image name
-DOCKER_IMAGE_CBD_REGISTRATOR - Registrator Docker image name
 DOCKER_IMAGE_CBD_LOGSINK - Logsink Docker image name
 DOCKER_IMAGE_CBD_LOGSPOUT - Logspout Docker image name
 DOCKER_IMAGE_CBD_LOGROTATE - Logrotate Docker image name
@@ -142,13 +140,11 @@ DOCKER_TAG_ALPINE - Alpine container version
 DOCKER_TAG_CBD_SMARTSENSE - SmartSense container version
 DOCKER_TAG_CERT_TOOL - Cert tool container version
 DOCKER_TAG_CLOUDBREAK - Cloudbreak container version
-DOCKER_TAG_CONSUL - Consul container version
 DOCKER_TAG_HAVEGED - Haveged container version
 DOCKER_TAG_MIGRATION - Migration container version
 DOCKER_TAG_PERISCOPE - Autoscale container version
 DOCKER_TAG_POSTGRES - Postgresql container version
 DOCKER_TAG_LOGROTATE - Logrotate container version
-DOCKER_TAG_REGISTRATOR - Registrator container version
 DOCKER_TAG_SULTANS - Authentication service container version
 DOCKER_TAG_TRAEFIK - Traefik container version
 DOCKER_TAG_UAA - Identity container version
@@ -215,18 +211,16 @@ ULU_SUBSCRIBE_TO_NOTIFICATIONS - Flag for automatic subscriptions for CLoudbreak
 ULU_SULTANS_ADDRESS - Authentication service address
 VERBOSE_MIGRATION - Flag of verbose database migration
 
-CB_LOCAL_DEV_BIND_ADDR - Ambassador external address for local development of Cloudbreak and Autoscale
 CB_SCHEMA_SCRIPTS_LOCATION - Location of Cloudbreak schema update files
 DOCKER_TAG_AMBASSADOR - Ambassador container version for local development
 PERISCOPE_SCHEMA_SCRIPTS_LOCATION - Location of Cloudbreak schema update files
-PRIVATE_IP - Ip address or hostname of the private interface
 REMOVE_CONTAINER - Keeps side effect containers for debug purpose
 SULTANS_VOLUME_HOST - Location of the locally developed Authentication service project
 UAA_SCHEMA_SCRIPTS_LOCATION - Location of Identity schema update files
 ULUWATU_VOLUME_HOST - Location of the locally developed Web UI project
 
-DOCKER_MACHINE - Name of the Docker Machine where Cloudbreak runs
 DOCKER_PROFILE - Profile file for Docker Machine related environment variables
+DOCKER_NETWORK_NAME - Network name for docker, created by docker-compose
 MACHINE_CPU - Number of the CPU cores on the Docker Machine instance
 MACHINE_MEM - Amount of RAM on the Docker Machine instance
 MACHINE_NAME - Name of the Docker Machine instance

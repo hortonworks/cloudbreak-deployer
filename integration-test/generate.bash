@@ -2,11 +2,10 @@
 
 setup() {
     : ${CBD_TMPDIR:=$(mktemp -d delme-XXXXXX)}
-    
+
     cat > "$CBD_TMPDIR/Profile" <<EOF
 export PUBLIC_IP=1.2.3.4
 export BRIDGE_IP=172.17.42.1
-export DOCKER_CONSUL_OPTIONS="-recursor 192.168.1.1"
 EOF
     if ! [ -e "$CBD_TMPDIR/.deps" ]; then
         if [ -e /cbd/.deps ]; then
@@ -84,7 +83,7 @@ T_regenerateShouldntBackupIfNoChanges() {
         $T_fail "there should be no backup files: uaa-XXXX.yml "
         return
     fi
-    
+
     teardown
 }
 
@@ -105,7 +104,7 @@ T_regenerateShouldBackup() {
         $T_fail "there should be a backup: uaa-XXXX.yml "
         return
     fi
-    
+
     teardown
 }
 

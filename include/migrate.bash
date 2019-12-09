@@ -22,7 +22,7 @@ migrate-startdb() {
 }
 
 migrateDebug() {
-    declare desc="prints to migrate log file and to stderr"
+    declare desc="Prints to migrate log file and to stderr"
     echo "[MIGRATE] $*" | tee -a "$DB_MIGRATION_LOG" | debug-cat
 }
 
@@ -55,9 +55,12 @@ migrate-execute-mybatis-migrations() {
     fi
     migrateDebug "Scripts location:  $new_scripts_location"
     local migrateResult=$(docker run \
+        --rm \
+        --network "$CB_COMPOSE_PROJECT"_"$DOCKER_NETWORK_NAME" \
         -e DB_ENV_POSTGRES_SCHEMA=$service_name \
+        -e DB_PORT_5432_TCP_ADDR=$COMMON_DB \
+        -e DB_PORT_5432_TCP_PORT=5432 \
         --label cbreak.sidekick=true \
-        --link $container_name:db \
         -v $new_scripts_location:/migrate/scripts \
         hortonworks/mybatis-migrations:$DOCKER_TAG_MIGRATION "$@" \
       | tee -a "$DB_MIGRATION_LOG")
@@ -110,6 +113,33 @@ execute-migration() {
         migrate-one-db periscopedb up
         migrate-one-db periscopedb pending
     else
+        if [[ "$2" == "new" ]] && [[ "$CB_LOCAL_DEV" == "true" ]]; then
+            case $1 in
+                cbdb)
+                    if [ "$CB_SCHEMA_SCRIPTS_LOCATION" = "container" ]; then
+                        migrateError "CB_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the cloudbreak project's schema location"
+                        _exit 127
+                    fi
+                    ;;
+                periscopedb)
+                    if [ "$PERISCOPE_SCHEMA_SCRIPTS_LOCATION" = "container" ]; then
+                        migrateError "PERISCOPE_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the autoscale project's schema location"
+                        _exit 127
+                    fi
+                    ;;
+                uaadb)
+                    if [ "$UAA_SCHEMA_SCRIPTS_LOCATION" = "container" ]; then
+                        migrateError "UAA_SCHEMA_SCRIPTS_LOCATION environment variable must be set and points to the identity project's schema location"
+                        _exit 127
+                    fi
+                    ;;
+                *)
+                    migrateError "Invalid database service name: $1. Supported databases: cbdb, periscopedb and uaadb"
+                    return 1
+                    ;;
+            esac
+        fi
+
         VERBOSE_MIGRATION=true
         migrate-one-db "$@"
     fi

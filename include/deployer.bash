@@ -139,7 +139,7 @@ cbd-version() {
 }
 
 cbd-update() {
-    declare desc="Binary selfupdater. Updates to lates official release"
+    declare desc="Binary selfupdater. Updates to latest official release"
 
     if [[ "$1" ]]; then
         # cbd-update-snap $1
@@ -318,6 +318,12 @@ load-profile() {
 public-ip-init() {
     declare desc="Tries to guess PUBLIC_IP if not found"
 
+    if is_macos; then
+        debug "PUBLIC_IP and CB_TRAEFIK_HOST_ADDRESS will be 127.0.0.1"
+        export PUBLIC_IP="127.0.0.1"
+        export CB_TRAEFIK_HOST_ADDRESS="localhost"
+    fi
+
     if [[ ! "$PUBLIC_IP" ]]; then
         debug "PUBLIC_IP not found, try to guess"
         ipcommand=$(public-ip-resolver-command)
@@ -378,9 +384,6 @@ doctor() {
     cbd-version
     if [[ "$(uname)" == "Darwin" ]]; then
         debug "checking OSX specific dependencies..."
-        if [[ "$DOCKER_MACHINE" ]]; then
-          docker-check-docker-machine
-        fi
 
         if [[ $(is-sub-path $(dirname ~/.) $(pwd)) == 0 ]]; then
           info "deployer location: OK"
@@ -396,7 +399,7 @@ doctor() {
         compose-generate-check-diff verbose
     fi
     if [[ -e uaa.yml ]]; then
-        generate_uaa_check_diff verbose
+        generate-uaa-check-diff verbose
     fi
 }
 
@@ -471,6 +474,7 @@ deployer-generate() {
     cloudbreak-generate-cert
     compose-generate-yaml
     generate_uaa_config
+    generate-toml-file-for-localdev
 }
 
 deployer-regenerate() {
@@ -486,7 +490,7 @@ deployer-regenerate() {
     fi
     compose-generate-yaml
 
-    if ! generate_uaa_check_diff; then
+    if ! generate-uaa-check-diff; then
         info renaming: uaa.yml to: uaa-${datetime}.yml
         mv uaa.yml uaa-${datetime}.yml
     fi
@@ -556,12 +560,16 @@ start-requested-services() {
         debug "All services must be started"
         if [[ "$(docker-compose -p cbreak ps $COMMON_DB | tail -1)" == *"Up"* ]]; then
             debug "DB services: $COMMON_DB are already running, start only other services"
-            services=$(sed -n "/^[a-z]/ s/:.*//p" docker-compose.yml | grep -v "db$" | xargs)
+            services=$(yq r -j docker-compose.yml | jq -r ".services|keys[]" | grep -v "db$" | xargs)
         fi
     fi
 
     compose-up $services
     hdc-cli-downloadable
+
+    if [[ "$CB_LOCAL_DEV" == "true" ]]; then
+        util-local-dev
+    fi
 }
 
 hdc-cli-downloadable() {
@@ -647,9 +655,6 @@ main() {
     circle-init
     compose-init
     aws-init
-    if is_macos; then
-        machine-init
-    fi
     db-init
 
     debug "Cloudbreak Deployer $(bin-version)"
@@ -671,10 +676,6 @@ main() {
     cmd-export aws-list-roles
     cmd-export aws-certs-upload-s3
     cmd-export aws-certs-restore-s3
-
-    cmd-export-ns machine "Docker-machine"
-    cmd-export machine-create
-    cmd-export machine-check
 
     cmd-export-ns db "Db operations namespace"
     cmd-export db-dump

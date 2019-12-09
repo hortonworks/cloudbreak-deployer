@@ -14,7 +14,7 @@ create-bundle() {
 
     local collectdir="tmp_collected_$(date +%s)"
     mkdir -p $archivename
-    mkdir -p $collectdir 
+    mkdir -p $collectdir
 
     export-psql-history $collectdir
     export-prerequisites $collectdir
@@ -30,7 +30,7 @@ create-bundle() {
 }
 
 export-psql-history() {
-    ! docker exec -t cbreak_commondb_1 cat /var/lib/postgresql/.psql_history > "$1/.psql_history"
+    ! docker exec -t cbreak_${COMMON_DB}_1 cat /var/lib/postgresql/.psql_history > "$1/.psql_history"
     check-export-success "$1/.psql_history"
 }
 
@@ -95,7 +95,7 @@ export-cbd-version() {
 
 export-cbd-ps() {
     ! compose-ps &> "$1/cbd_ps.out"
-    check-export-success "$1/cbd_ps.out" 
+    check-export-success "$1/cbd_ps.out"
 }
 
 archive-directory() {
@@ -135,10 +135,9 @@ anonymize-exported-files() {
         -v $(pwd):/var/lib/cloudbreak-deployment \
         -v $(pwd)/$1:/var/lib/cloudbreak-deployment/cfg \
         -v $(pwd)/$2:/var/lib/cloudbreak-deployment/hst_bundle \
-        --dns=$PRIVATE_IP \
         -p 9001:9000 \
         $DOCKER_IMAGE_CBD_SMARTSENSE:$DOCKER_TAG_CBD_SMARTSENSE &> /dev/null
-    
+
     rm -rf cfg
     rm -rf hst_bundle
 

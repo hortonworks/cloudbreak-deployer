@@ -1,8 +1,10 @@
 
 cloudbreak-config() {
-  : ${BRIDGE_IP:=$(docker run --rm --name=cbreak_cbd_bridgeip --label cbreak.sidekick=true alpine sh -c 'ip ro | grep default | cut -d" " -f 3')}
-  env-import PRIVATE_IP $BRIDGE_IP
-  env-import DOCKER_MACHINE ""
+  if is_macos; then
+    : ${BRIDGE_ADDRESS:=host.docker.internal}
+  else
+    : ${BRIDGE_ADDRESS:=$(docker run --rm --name=cbreak_cbd_bridgeip --label cbreak.sidekick=true alpine sh -c 'ip ro | grep default | cut -d" " -f 3')}
+  fi
   cloudbreak-conf-tags
   cloudbreak-conf-images
   cloudbreak-conf-capabilities
@@ -15,7 +17,6 @@ cloudbreak-config() {
   cloudbreak-conf-rest-client
   cloudbreak-conf-ui
   cloudbreak-conf-java
-  cloudbreak-conf-consul
   cloudbreak-conf-proxy
   migrate-config
 }
@@ -23,11 +24,11 @@ cloudbreak-config() {
 cloudbreak-conf-tags() {
     declare desc="Defines docker image tags"
 
+    env-import DOCKER_NETWORK_NAME default
+
     env-import DOCKER_TAG_ALPINE 3.1
-    env-import DOCKER_TAG_HAVEGED 1.1.0
-    env-import DOCKER_TAG_TRAEFIK v1.6.6-alpine
-    env-import DOCKER_TAG_CONSUL 0.5
-    env-import DOCKER_TAG_REGISTRATOR v7
+    env-import DOCKER_TAG_HAVEGED 1.2.0
+    env-import DOCKER_TAG_TRAEFIK v1.7.19-alpine
     env-import DOCKER_TAG_UAA 3.6.5-certs
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.2.0
@@ -37,11 +38,11 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_ULUWATU 2.9.2-rc.103
     env-import DOCKER_TAG_SULTANS 2.9.2-rc.103
 
-    env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
-    env-import DOCKER_TAG_LOGROTATE 1.0.1
+    env-import DOCKER_TAG_POSTGRES 9.6.16-alpine
+    env-import DOCKER_TAG_LOGROTATE 1.0.2
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
-    env-import DOCKER_TAG_LOGSINK 1.0.0
-    env-import DOCKER_TAG_LOGSPOUT v3.2.2
+    env-import DOCKER_TAG_LOGSINK 1.0.5
+    env-import DOCKER_TAG_LOGSPOUT v3.2.6
 
     env-import DOCKER_IMAGE_CLOUDBREAK hortonworks/cloudbreak
     env-import DOCKER_IMAGE_CLOUDBREAK_WEB hortonworks/hdc-web
@@ -52,14 +53,12 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CLOUDBREAK_UAA hortonworks/cloudbreak-uaa
     env-import DOCKER_IMAGE_CBD_TRAEFIK traefik
     env-import DOCKER_IMAGE_CBD_HAVEGED hortonworks/haveged
-    env-import DOCKER_IMAGE_CBD_CONSUL gliderlabs/consul-server
-    env-import DOCKER_IMAGE_CBD_REGISTRATOR gliderlabs/registrator
-    env-import DOCKER_IMAGE_CBD_LOGSINK hortonworks/socat
+    env-import DOCKER_IMAGE_CBD_LOGSINK alpine/socat
     env-import DOCKER_IMAGE_CBD_LOGSPOUT hortonworks/logspout
     env-import DOCKER_IMAGE_CBD_LOGROTATE hortonworks/logrotate
     env-import DOCKER_IMAGE_CBD_POSTGRES postgres
 
-    env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu.service.consul:3000/notifications
+    env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu:3000/notifications
     env-import CERTS_BUCKET ""
 
 }
@@ -71,33 +70,6 @@ docker-ip() {
     else
         echo none
     fi
-}
-
-consul-recursors() {
-    declare desc="Generates consul agent recursor option, by reading the hosts resolv.conf"
-    declare resolvConf=${1:? 'required 1.param: resolv.conf file'}
-    declare bridge=${2:? 'required 2.param: bridge ip'}
-    declare dockerIP=${3:- none}
-
-    local nameservers=$(sed -n "/^nameserver/ s/^.*nameserver[^0-9]*//p;" $resolvConf)
-    debug "nameservers on host:\n$nameservers"
-    if [[ "$nameservers" ]]; then
-        debug bridge=$bridge
-        echo "$nameservers" | grep -v "$bridge\|$dockerIP" | sed -n '{s/^/ -recursor /;H;}; $ {x;s/[\n\r]//g;p}'
-    else
-        echo
-    fi
-}
-
-cloudbreak-conf-consul() {
-    [[ "$cloudbreakConfConsulExecuted" ]] && return
-
-    env-import DOCKER_CONSUL_OPTIONS ""
-    if ! [[ $DOCKER_CONSUL_OPTIONS =~ .*recursor.* ]]; then
-        DOCKER_CONSUL_OPTIONS="$DOCKER_CONSUL_OPTIONS $(consul-recursors <(cat /etc/resolv.conf 2>/dev/null || echo) ${BRIDGE_IP} $(docker-ip))"
-    fi
-    debug "DOCKER_CONSUL_OPTIONS=$DOCKER_CONSUL_OPTIONS"
-    cloudbreakConfConsulExecuted=1
 }
 
 cloudbreak-conf-images() {
@@ -149,7 +121,7 @@ cloudbreak-conf-db() {
     env-import PERISCOPE_DB_ENV_CERT_FILE ""
     env-import PERISCOPE_HBM2DDL_STRATEGY "validate"
 
-    env-import IDENTITY_DB_URL "${COMMON_DB}.service.consul:5432"
+    env-import IDENTITY_DB_URL "${COMMON_DB}:5432"
     env-import IDENTITY_DB_NAME "uaadb"
     env-import IDENTITY_DB_USER "postgres"
     env-import IDENTITY_DB_PASS ""
@@ -170,16 +142,6 @@ cloudbreak-delete-dbs() {
         _exit 1
     fi
     docker volume rm $COMMON_DB_VOL 1>/dev/null || :
-}
-
-cloudbreak-delete-consul-data() {
-    declare desc="deletes consul data-dir (volume)"
-
-    if [[ $(docker-compose -p cbreak ps -q consul | wc -l) -eq 1 ]]; then
-        error "Consul container is running, delete not allowed"
-        _exit 1
-    fi
-    docker volume rm consul-data 1>/dev/null || :
 }
 
 cloudbreak-delete-certs() {
@@ -241,7 +203,6 @@ cloudbreak-conf-defaults() {
     fi;
     env-import CB_AUDIT_FILE_ENABLED false
     env-import CB_KAFKA_BOOTSTRAP_SERVERS ""
-    env-import CB_LOCAL_DEV_BIND_ADDR "192.168.64.1"
     env-import ADDRESS_RESOLVING_TIMEOUT 120000
     env-import CB_UI_MAX_WAIT 400
     env-import CB_HOST_DISCOVERY_CUSTOM_DOMAIN ""
@@ -252,7 +213,7 @@ cloudbreak-conf-defaults() {
     env-import CB_MAX_SALT_NEW_SERVICE_RETRY 90
     env-import CB_MAX_SALT_NEW_SERVICE_RETRY_ONERROR 10
     env-import CB_MAX_SALT_RECIPE_EXECUTION_RETRY 90
-    env-import CB_LOG_LEVEL "INFO"
+    env-import CB_LOG_LEVEL "DEBUG"
     env-import AMBARI_CLIENT_LOG_LEVEL "ERROR"
     env-import CB_PORT 8080
 
@@ -267,10 +228,20 @@ cloudbreak-conf-defaults() {
     env-import PUBLIC_HTTP_PORT 80
     env-import PUBLIC_HTTPS_PORT 443
     env-import CB_UPSCALE_MAX_NODECOUNT 100
+
+    env-import CB_LOCAL_DEV "false"
+
+    if [[ "$CB_LOCAL_DEV" == "true" ]]; then
+        env-import CLOUDBREAK_URL "http://$BRIDGE_ADDRESS:9091"
+        env-import PERISCOPE_URL "http://$BRIDGE_ADDRESS:8085"
+    else
+        env-import CLOUDBREAK_URL "http://cloudbreak:8080"
+        env-import PERISCOPE_URL "http://periscope:8080"
+    fi
 }
 
 cloudbreak-conf-autscale() {
-    env-import PERISCOPE_LOG_LEVEL "INFO"
+    env-import PERISCOPE_LOG_LEVEL "DEBUG"
 }
 
 cloudbreak-conf-cloud-provider() {
@@ -315,7 +286,7 @@ cloudbreak-conf-ui() {
     env-import HWX_DOC_LINK ""
     env-import ULU_NODE_TLS_REJECT_UNAUTHORIZED "0"
     env-import SL_NODE_TLS_REJECT_UNAUTHORIZED "0"
-    env-import ULU_SUBSCRIBE_TO_NOTIFICATIONS "false"
+    env-import ULU_SUBSCRIBE_TO_NOTIFICATIONS "true"
     env-import HWX_CLOUD_ENABLE_GOVERNANCE_AND_SECURITY "false"
 }
 
@@ -400,7 +371,39 @@ cloudbreak-generate-cert() {
     fi
 }
 
-generate_uaa_check_diff() {
+generate-toml-file-for-localdev() {
+    if [[ "$CB_LOCAL_DEV" == "true" ]]; then
+        cat > traefik.toml << EOF
+[file]
+
+[backends]
+    [backends.cloudbreak]
+        [backends.cloudbreak.servers]
+            [backends.cloudbreak.servers.server0]
+            url = "$CLOUDBREAK_URL"
+    [backends.periscope]
+        [backends.periscope.servers]
+            [backends.periscope.servers.server0]
+            url = "$PERISCOPE_URL"
+
+[frontends]
+    [frontends.cloudbreak-frontend]
+    backend = "cloudbreak"
+        [frontends.cloudbreak-frontend.routes.frontendrule]
+        rule = "PathPrefix:/cb/"
+        priority = 100
+    [frontends.periscope-frontend]
+    backend = "periscope"
+        [frontends.periscope-frontend.routes.frontendrule]
+        rule = "PathPrefix:/as/"
+        priority = 100
+EOF
+    else
+        echo "" > traefik.toml
+    fi
+}
+
+generate-uaa-check-diff() {
     local verbose="$1"
 
     if [ -f uaa.yml ]; then
@@ -435,7 +438,7 @@ generate_uaa_check_diff() {
 generate_uaa_config() {
     cloudbreak-config
 
-    if ! generate_uaa_check_diff; then
+    if ! generate-uaa-check-diff; then
         if [[ "$CBD_FORCE_START" ]]; then
             warn "You have forced to start ..."
         else
@@ -471,11 +474,9 @@ database:
 zones:
  internal:
    hostnames:
-     - ${PRIVATE_IP}
      - ${PUBLIC_IP}
-     - node1.node.dc1.consul
-     - identity.service.consul
      - ${UAA_ZONE_DOMAIN}
+     - identity
 
 oauth:
   client:
@@ -599,8 +600,8 @@ util-generate-ldap-mapping() {
     local mapping_file="mapping.sql"
     generate-ldap-mapping "$1" "$mapping_file"
     info "Group mapping file has been created: $mapping_file"
-    info "To apply the $mapping_file please run the following command: docker exec cbreak_commondb_1 psql -U postgres -d uaadb -c \"\$(cat $mapping_file)\""
-    info "To clean up the group mapping please run the following command: docker exec cbreak_commondb_1 psql -U postgres -d uaadb -c \"delete from external_group_mapping\""
+    info "To apply the $mapping_file please run the following command: docker exec cbreak_commondb_1 psql -U postgres -d $IDENTITY_DB_NAME -c \"\$(cat $mapping_file)\""
+    info "To clean up the group mapping please run the following command: docker exec cbreak_commondb_1 psql -U postgres -d $IDENTITY_DB_NAME -c \"delete from external_group_mapping\""
     info "Note: you must log out and log back in with your LDAP/AD users after the mapping change"
 }
 
@@ -613,7 +614,7 @@ util-execute-ldap-mapping() {
     local mapping_file="$TEMP_DIR/mapping-delme.yml"
     generate-ldap-mapping "$1" "$mapping_file"
     info "Applying LDAP/AD mapping"
-    docker exec cbreak_commondb_1 psql -U postgres -d uaadb -c "$(cat $mapping_file)"
+    docker exec cbreak_commondb_1 psql -U postgres -d $IDENTITY_DB_NAME -c "$(cat $mapping_file)"
     rm -f "$mapping_file"
     info "Successfully applied LDAP/AD mapping"
     info "Note: you must log out and log back in with your LDAP/AD users after the mapping change"
@@ -632,7 +633,7 @@ util-delete-ldap-mapping() {
     fi
 
     info "Remove LDAP/AD mappings"
-    docker exec cbreak_commondb_1 psql -U postgres -d uaadb -c "delete from external_group_mapping"
+    docker exec cbreak_commondb_1 psql -U postgres -d $IDENTITY_DB_NAME -c "delete from external_group_mapping"
     info "Successfully removed LDAP/AD mappings"
     info "Note: you must log out and log back in with your LDAP/AD users after the mapping change"
 }
@@ -653,7 +654,7 @@ generate-ldap-mapping() {
         _exit 1
     fi
 
-    local scopes=$(docker exec $container psql -U postgres -d uaadb -c "select displayname from groups where displayname like 'cloudbreak%' or displayname like 'periscope%' or displayname='sequenceiq.cloudbreak.user';" | tail -n +3 | grep -v rows)
+    local scopes=$(docker exec $container psql -U postgres -d $IDENTITY_DB_NAME -c "select displayname from groups where displayname like 'cloudbreak%' or displayname like 'periscope%' or displayname='sequenceiq.cloudbreak.user';" | tail -n +3 | grep -v rows)
     rm -f ${mapping_file}
     for scope in ${scopes}; do
     local line="INSERT INTO external_group_mapping (group_id, external_group, added, origin) VALUES ((select id from groups where displayname='$scope'), '$group', '2016-09-30 19:28:24.255', 'ldap');"
@@ -678,7 +679,7 @@ exitOnRemoteDatabase() {
     ;;
     esac
 
-    if [[ -n "$db" ]] && [[ $db != "$COMMON_DB.service.consul"* ]]; then
+    if [[ -n "$db" ]] && [[ $db != "$COMMON_DB"* ]]; then
         error "Remote database not supported as $1"
         _exit 543
     fi
@@ -722,43 +723,9 @@ util-local-dev() {
       _exit 127
     fi
 
-    debug stopping original cloudbreak container
-    dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} cloudbreak
-    dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} periscope
-
-    docker rm -f cloudbreak-proxy 2> /dev/null || :
-    docker rm -f periscope-proxy 2> /dev/null || :
-
-    debug starting an ambassador to be registered as cloudbreak.service.consul.
-    debug "all traffic to ambassador will be proxied to localhost"
-
-    docker run -d \
-        --name cloudbreak-proxy \
-        -p 8080:8080 \
-        -e PORT=8080 \
-        -e SERVICE_NAME=cloudbreak \
-        -e SERVICE_8080_NAME=cloudbreak \
-        -l traefik.port=8080 \
-        -l traefik.frontend.rule=PathPrefix:/cb/ \
-        -l traefik.backend=cloudbreak-backend \
-        -l traefik.frontend.priority=10 \
-        hortonworks/ambassadord:$DOCKER_TAG_AMBASSADOR $CB_LOCAL_DEV_BIND_ADDR:$port
-
-    docker run -d \
-        --name periscope-proxy \
-        -p 8085:8085 \
-        -e PORT=8085 \
-        -e SERVICE_NAME=periscope \
-        -e SERVICE_8085_NAME=periscope \
-        -l traefik.port=8085 \
-        -l traefik.frontend.rule=PathPrefix:/as/ \
-        -l traefik.backend=periscope-backend \
-        -l traefik.frontend.priority=10 \
-        hortonworks/ambassadord:$DOCKER_TAG_AMBASSADOR $CB_LOCAL_DEV_BIND_ADDR:8085
-
-    create-migrate-log
-    migrate-one-db cbdb up
-    migrate-one-db periscopedb up
+    debug stopping original cloudbreak containers
+    dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} cloudbreak 2> /dev/null || :
+    dockerCompose stop --timeout ${DOCKER_STOP_TIMEOUT} periscope 2> /dev/null || :
 }
 
 util-get-usage() {
