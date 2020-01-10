@@ -27,7 +27,7 @@ jobs:
           name: tar linux
           command: tar -czvf cbd-linux.tgz -C build/Linux cbd
       - run:
-          name: tar darwin  
+          name: tar darwin
           command: tar -czvf cbd-darwin.tgz -C build/Darwin cbd
       - run:
           name: run tests
@@ -92,12 +92,13 @@ workflows:
                 - rc-2.4
                 - rc-2.7
                 - rc-2.9
+                - rc-2.10
           requires:
             - build
       - upload-snapshot:
           filters:
             branches:
-              only: 
+              only:
                 - master
           requires:
             - build
