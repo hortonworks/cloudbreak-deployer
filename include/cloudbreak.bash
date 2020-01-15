@@ -36,10 +36,8 @@ cloudbreak-conf-tags() {
     env-import DOCKER_NETWORK_NAME default
 
     env-import DOCKER_TAG_ALPINE 3.8
-    env-import DOCKER_TAG_HAVEGED 1.1.0
-    env-import DOCKER_TAG_TRAEFIK v1.7.9-alpine
-    env-import DOCKER_TAG_CONSUL 1.4.0
-    env-import DOCKER_TAG_REGISTRATOR v7
+    env-import DOCKER_TAG_HAVEGED 1.2.0
+    env-import DOCKER_TAG_TRAEFIK v1.7.19-alpine
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.2.0
 
@@ -55,8 +53,8 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_IDBMMS 76df5355c0f5776c2288a38f731cf46c30e9c146
     env-import DOCKER_TAG_ENVIRONMENTS2_API d4f8f7e4106895e3dec7bfd354e4aefb087823c6
 
-    env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
-    env-import DOCKER_TAG_LOGROTATE 1.0.1
+    env-import DOCKER_TAG_POSTGRES 9.6.16-alpine
+    env-import DOCKER_TAG_LOGROTATE 1.0.2
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
     env-import DOCKER_TAG_CLUSTER_PROXY 2.1.0.0-154
 

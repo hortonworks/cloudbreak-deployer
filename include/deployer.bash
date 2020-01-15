@@ -138,7 +138,7 @@ cbd-version() {
 }
 
 cbd-update() {
-    declare desc="Binary selfupdater. Updates to lates official release"
+    declare desc="Binary selfupdater. Updates to latest official release"
 
     if [[ "$1" ]]; then
         # cbd-update-snap $1
@@ -172,7 +172,7 @@ cbd-update-release() {
         if docker volume inspect $COMMON_DB_VOL &>/dev/null; then
             info "Backing up databases"
 
-	    for db in $CB_DB_ENV_DB $PERISCOPE_DB_ENV_DB $DATALAKE_DB_ENV_DB $ENVIRONMENT_DB_ENV_DB $REDBEAMS_DB_ENV_DB $FREEIPA_DB_ENV_DB; do
+	        for db in $CB_DB_ENV_DB $PERISCOPE_DB_ENV_DB $DATALAKE_DB_ENV_DB $ENVIRONMENT_DB_ENV_DB $REDBEAMS_DB_ENV_DB $FREEIPA_DB_ENV_DB; do
                 debug "Backing up $db"
                 db-dump $db
             done
@@ -569,10 +569,10 @@ start-wait-cmd() {
 
     start-requested-services "$@"
     wait-for-service "cloudbreak" "cb" "$CB_HOST_ADDRESS"
-    wait-for-service "environment" "environmentservice" "$ENVIRONMENT_HOST_ADDRESS"	
-    wait-for-service "periscope" "as" "$PERISCOPE_HOST_ADDRESS"	
-    wait-for-service "redbeams" "redbeams" "$REDBEAMS_HOST_ADDRESS"		
-    wait-for-service "freeipa" "freeipa" "$FREEIPA_HOST_ADDRESS"		
+    wait-for-service "environment" "environmentservice" "$ENVIRONMENT_HOST_ADDRESS"
+    wait-for-service "periscope" "as" "$PERISCOPE_HOST_ADDRESS"
+    wait-for-service "redbeams" "redbeams" "$REDBEAMS_HOST_ADDRESS"
+    wait-for-service "freeipa" "freeipa" "$FREEIPA_HOST_ADDRESS"
     wait-for-service "datalake" "dl" "$DATALAKE_HOST_ADDRESS"
     deployer-login
 }

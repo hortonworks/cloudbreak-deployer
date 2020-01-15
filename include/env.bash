@@ -167,7 +167,6 @@ DOCKER_TAG_CBD_SMARTSENSE - SmartSense container version
 DOCKER_TAG_CERT_TOOL - Cert tool container version
 DOCKER_TAG_CLOUDBREAK - Cloudbreak container version
 DOCKER_TAG_CAAS_MOCK - Caas mock image name
-DOCKER_TAG_CONSUL - Consul container version
 DOCKER_TAG_HAVEGED - Haveged container version
 DOCKER_TAG_IDBMMS - IDBMMS container version
 DOCKER_TAG_MIGRATION - Migration container version
@@ -179,7 +178,6 @@ DOCKER_TAG_ENVIRONMENTS2_API - Environments2 API container version
 DOCKER_TAG_FREEIPA - FreeIpa container version
 DOCKER_TAG_POSTGRES - Postgresql container version
 DOCKER_TAG_LOGROTATE - Logrotate container version
-DOCKER_TAG_REGISTRATOR - Registrator container version
 DOCKER_TAG_TRAEFIK - Traefik container version
 DOCKER_TAG_ULUWATU - Web UI container version
 DOCKER_STOP_TIMEOUT - Specify a shutdown timeout in seconds for containers

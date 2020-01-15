@@ -1,3 +1,37 @@
+compare-versions () {
+    if [[ $1 == $2 ]]
+    then
+        echo 0
+        return
+    fi
+    local IFS=.
+    local i ver1=($1) ver2=($2)
+    # fill empty fields in ver1 with zeros
+    for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
+    do
+        ver1[i]=0
+    done
+    for ((i=0; i<${#ver1[@]}; i++))
+    do
+        if [[ -z ${ver2[i]} ]]
+        then
+            # fill empty fields in ver2 with zeros
+            ver2[i]=0
+        fi
+        if ((10#${ver1[i]} > 10#${ver2[i]}))
+        then
+            echo 1
+            return
+        fi
+        if ((10#${ver1[i]} < 10#${ver2[i]}))
+        then
+            echo 2
+            return
+        fi
+    done
+    echo 0
+}
+
 is_linux() {
     [[ "$(uname)" == Linux ]]
 }
@@ -59,7 +93,7 @@ append-variable-to-profile() {
 remove-variable-from-profile() {
     declare desc="Remove variable from the Profile"
     : ${1:=required}
-    
+
     local tmp="$CBD_PROFILE.$(date +"%s")"
     cat $CBD_PROFILE | grep -v "export ${1}=" > $tmp
     mv $tmp $CBD_PROFILE
