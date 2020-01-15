@@ -1,9 +1,15 @@
 compose-init() {
-    if (docker-compose --version 2>&1| grep -q 1.2.0); then
+    local required_compose=1.23.2
+    local compose_version=$(docker-compose --version 2>&1 | grep -E -o "([0-9]+\.)+[0-9]+")
+
+    local compare_result=$(compare-versions ${compose_version} ${required_compose})
+
+    if [[ ${compare_result} -eq 2 ]]; then
         echo "* removing old docker-compose binary" | yellow
         rm -f .deps/bin/docker-compose
     fi
-    deps-require docker-compose 1.23.2
+
+    deps-require docker-compose ${required_compose}
     env-import CB_COMPOSE_PROJECT cbreak
     env-import COMPOSE_HTTP_TIMEOUT 120
     env-import DOCKER_STOP_TIMEOUT 60

@@ -138,7 +138,7 @@ cbd-version() {
 }
 
 cbd-update() {
-    declare desc="Binary selfupdater. Updates to lates official release"
+    declare desc="Binary selfupdater. Updates to latest official release"
 
     if [[ "$1" ]]; then
         # cbd-update-snap $1
@@ -569,10 +569,10 @@ start-wait-cmd() {
 
     start-requested-services "$@"
     wait-for-service "cloudbreak" "cb" "$CB_HOST_ADDRESS"
-    wait-for-service "environment" "environmentservice" "$ENVIRONMENT_HOST_ADDRESS"	
-    wait-for-service "periscope" "as" "$PERISCOPE_HOST_ADDRESS"	
-    wait-for-service "redbeams" "redbeams" "$REDBEAMS_HOST_ADDRESS"		
-    wait-for-service "freeipa" "freeipa" "$FREEIPA_HOST_ADDRESS"		
+    wait-for-service "environment" "environmentservice" "$ENVIRONMENT_HOST_ADDRESS"
+    wait-for-service "periscope" "as" "$PERISCOPE_HOST_ADDRESS"
+    wait-for-service "redbeams" "redbeams" "$REDBEAMS_HOST_ADDRESS"
+    wait-for-service "freeipa" "freeipa" "$FREEIPA_HOST_ADDRESS"
     wait-for-service "datalake" "dl" "$DATALAKE_HOST_ADDRESS"
     deployer-login
 }
