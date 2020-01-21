@@ -129,6 +129,14 @@ execute-migration() {
         migrate-one-db cbdb pending
         migrate-one-db periscopedb up
         migrate-one-db periscopedb pending
+        migrate-one-db datalakedb up
+        migrate-one-db datalakedb pending
+        migrate-one-db redbeamsdb up
+        migrate-one-db redbeamsdb pending
+        migrate-one-db environmentdb up
+        migrate-one-db environmentdb pending
+        migrate-one-db freeipadb up
+        migrate-one-db freeipadb pending
     else
         if [[ "$2" == "new" ]]; then
             case $1 in
