@@ -302,6 +302,7 @@ cloudbreak-conf-host-addr() {
 
 cloudbreak-conf-java() {
     env-import CB_JAVA_OPTS ""
+    env-import FREEIPA_JAVA_OPTS ""
 }
 
 cloudbreak-conf-proxy() {
