@@ -602,7 +602,6 @@ start-requested-services() {
         init_vault
     fi
 
-    compose-pull || :
     compose-up $services
 }
 
