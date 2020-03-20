@@ -1,5 +1,7 @@
 NAME=cloudbreak-deployer
 BINARYNAME=cbd
+BINARY=cbd
+
 ARTIFACTS=LICENSE.txt NOTICE.txt VERSION README
 ARCH=$(shell uname -m)
 VERSION_FILE=$(shell cat VERSION)
