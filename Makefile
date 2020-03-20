@@ -82,13 +82,6 @@ upload-snapshot: create-snapshot-tgz
 		anigeo/awscli s3 cp snapshots/ $(S3_TARGET) --recursive --include "$(NAME)_$(VERSION)_*.tgz"
 	rm -rf snapshots
 
-bindata:
-	deps
-	go-bindata include templates .deps/bin
-
-install: build ## Installs OS specific binary into: /usr/local/bin
-	install build/$(shell uname -s)/$(BINARYNAME) /usr/local/bin
-
 deps: deps-bindata ## Installs required cli tools (only needed for new envs)
 	go get -u github.com/progrium/gh-release/...
 	go get -u github.com/kardianos/govendor
@@ -100,6 +93,12 @@ deps-bindata:
 ifeq ($(shell which go-bindata),)
 	go get -u github.com/go-bindata/go-bindata/...
 endif
+
+bindata: deps
+	go-bindata include templates .deps/bin
+
+install: build ## Installs OS specific binary into: /usr/local/bin
+	install build/$(shell uname -s)/$(BINARYNAME) /usr/local/bin
 
 prepare-release:
 	rm -rf release && mkdir release
