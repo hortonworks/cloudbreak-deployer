@@ -98,6 +98,17 @@ deps: deps-bindata ## Installs required cli tools (only needed for new envs)
 #	go get github.com/github/hub
 	go get || true
 
+build-version: build-darwin-version build-linux-version build-windows-version
+
+build-darwin-version:
+	GOOS=darwin GO111MODULE=on CGO_ENABLED=0 go build -a ${FLAGS} -o build/Darwin/${BINARY} main.go
+
+build-linux-version:
+	GOOS=linux GO111MODULE=on CGO_ENABLED=0 go build -a ${FLAGS} -o build/Linux/${BINARY} main.go
+
+build-windows-version:
+	GOOS=windows GO111MODULE=on CGO_ENABLED=0 go build -a ${FLAGS} -o build/Windows/${BINARY}.exe main.go
+
 release: build
 	rm -rf release
 	mkdir release
