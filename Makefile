@@ -110,7 +110,7 @@ prepare-release:
 	cp $(ARTIFACTS) build/Darwin/
 	tar -zcf release/$(NAME)_$(VERSION)_Darwin_$(ARCH).tgz -C build/Darwin $(ARTIFACTS) $(BINARYNAME)
 
-build-version: deps bindata build-darwin-version build-linux-version build-windows-version
+build-version: deps bindata build-darwin-version build-linux-version
 
 build-darwin-version:
 	go test
@@ -120,10 +120,6 @@ build-linux-version:
 	go test
 	GOOS=linux go build -ldflags $(FLAGS) -o build/Linux/${BINARY}
 
-build-windows-version:
-	go test
-	GOOS=windows go build -ldflags $(FLAGS) -o build/Windows/${BINARY}.exe
-
 release: build
 	rm -rf release
 	mkdir release
@@ -131,7 +127,6 @@ release: build
 	git push https://${GITHUB_ACCESS_TOKEN}@github.com/hortonworks/cloudbreak-deployer.git v${VERSION}
 	tar -zcvf release/cdp_${VERSION}_Darwin_x86_64.tgz -C build/Darwin "${BINARY}"
 	tar -zcvf release/cdp_${VERSION}_Linux_x86_64.tgz -C build/Linux "${BINARY}"
-	tar -zcvf release/cdp_${VERSION}_Windows_x86_64.tgz -C build/Windows "${BINARY}.exe"
 
 release-version: build-version
 	rm -rf release
@@ -140,7 +135,6 @@ release-version: build-version
 	git push https://${GITHUB_ACCESS_TOKEN}@github.com/hortonworks/cloudbreak-deployer.git v${VERSION}
 	tar -zcvf release/cdp_${VERSION}_Darwin_x86_64.tgz -C build/Darwin "${BINARY}"
 	tar -zcvf release/cdp_${VERSION}_Linux_x86_64.tgz -C build/Linux "${BINARY}"
-	tar -zcvf release/cdp_${VERSION}_Windows_x86_64.tgz -C build/Windows "${BINARY}.exe"
 
 release-docker:
 	@USER_NS='-u $(shell id -u $(whoami)):$(shell id -g $(whoami))'
