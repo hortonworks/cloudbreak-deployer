@@ -101,13 +101,13 @@ deps: deps-bindata ## Installs required cli tools (only needed for new envs)
 build-version: bindata build-darwin-version build-linux-version build-windows-version
 
 build-darwin-version:
-	GOOS=darwin go build -ldflags $(FLAGS) -o build/Darwin/${BINARY} main.go
+	GOOS=darwin go build -ldflags $(FLAGS) -o build/Darwin/${BINARY}
 
 build-linux-version:
-	GOOS=linux go build -ldflags $(FLAGS) -o build/Linux/${BINARY} main.go
+	GOOS=linux go build -ldflags $(FLAGS) -o build/Linux/${BINARY}
 
 build-windows-version:
-	GOOS=windows go build -ldflags $(FLAGS) -o build/Windows/${BINARY}.exe main.go
+	GOOS=windows go build -ldflags $(FLAGS) -o build/Windows/${BINARY}.exe
 
 release: build
 	rm -rf release
