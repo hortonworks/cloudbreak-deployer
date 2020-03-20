@@ -98,7 +98,7 @@ deps: deps-bindata ## Installs required cli tools (only needed for new envs)
 #	go get github.com/github/hub
 	go get || true
 
-build-version: bindata build-darwin-version build-linux-version build-windows-version
+build-version: deps bindata build-darwin-version build-linux-version build-windows-version
 
 build-darwin-version:
 	GOOS=darwin go build -ldflags $(FLAGS) -o build/Darwin/${BINARY}
