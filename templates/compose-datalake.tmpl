@@ -32,6 +32,7 @@
             - OPENTRACING_JAEGER_UDP-SENDER_HOST={{{get . "JAEGER_HOST"}}}
             - "ALTUS_IDBMMS_HOST={{{get . "IDBMMS_HOST"}}}"
             - "ALTUS_IDBMMS_PORT={{{get . "IDBMMS_PORT"}}}"
+            - STATUSCHECKER_ENABLED
         labels:
             - traefik.port=8080
             - traefik.frontend.rule=PathPrefix:/dl/
