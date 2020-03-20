@@ -45,6 +45,7 @@
             - "CLUSTERPROXY_URL={{{get . "CLUSTER_PROXY_URL"}}}"
             - ALTUS_MINASSHDMGMT_HOST={{{get . "ALTUS_TUNNEL_MANAGEMENT_HOST"}}}
             - ALTUS_MINASSHDMGMT_PORT={{{get . "ALTUS_TUNNEL_MANAGEMENT_PORT"}}}
+            - STATUSCHECKER_ENABLED
         labels:
             - traefik.port=8080
             - traefik.frontend.rule=PathPrefix:/freeipa/
