@@ -111,12 +111,15 @@ prepare-release:
 build-version: deps bindata build-darwin-version build-linux-version build-windows-version
 
 build-darwin-version:
+	go test
 	GOOS=darwin go build -ldflags $(FLAGS) -o build/Darwin/${BINARY}
 
 build-linux-version:
+	go test
 	GOOS=linux go build -ldflags $(FLAGS) -o build/Linux/${BINARY}
 
 build-windows-version:
+	go test
 	GOOS=windows go build -ldflags $(FLAGS) -o build/Windows/${BINARY}.exe
 
 release: build
