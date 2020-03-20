@@ -83,6 +83,7 @@ upload-snapshot: create-snapshot-tgz
 	rm -rf snapshots
 
 bindata: deps-bindata
+	deps
 	go-bindata include templates .deps/bin
 
 install: build ## Installs OS specific binary into: /usr/local/bin
@@ -100,8 +101,6 @@ deps: deps-bindata ## Installs required cli tools (only needed for new envs)
 #	go get github.com/github/hub
 	go get || true
 
-build-version: deps bindata build-darwin-version build-linux-version
-
 prepare-release:
 	rm -rf release && mkdir release
 
@@ -109,16 +108,6 @@ prepare-release:
 	tar -zcf release/$(NAME)_$(VERSION)_Linux_$(ARCH).tgz -C build/Linux $(ARTIFACTS) $(BINARYNAME)
 	cp $(ARTIFACTS) build/Darwin/
 	tar -zcf release/$(NAME)_$(VERSION)_Darwin_$(ARCH).tgz -C build/Darwin $(ARTIFACTS) $(BINARYNAME)
-
-build-version: deps bindata build-darwin-version build-linux-version
-
-build-darwin-version:
-	go test
-	GOOS=darwin go build -ldflags $(FLAGS) -o build/Darwin/${BINARY}
-
-build-linux-version:
-	go test
-	GOOS=linux go build -ldflags $(FLAGS) -o build/Linux/${BINARY}
 
 release: build
 	rm -rf release
@@ -128,7 +117,7 @@ release: build
 	tar -zcvf release/cdp_${VERSION}_Darwin_x86_64.tgz -C build/Darwin "${BINARY}"
 	tar -zcvf release/cdp_${VERSION}_Linux_x86_64.tgz -C build/Linux "${BINARY}"
 
-release-version: build-version
+release-version: build
 	rm -rf release
 	mkdir release
 	#git tag v${VERSION}
