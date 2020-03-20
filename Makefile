@@ -100,7 +100,7 @@ deps: deps-bindata ## Installs required cli tools (only needed for new envs)
 #	go get github.com/github/hub
 	go get || true
 
-build-version: deps bindata build-darwin-version build-linux-version build-windows-version
+build-version: deps bindata build-darwin-version build-linux-version
 
 prepare-release:
 	rm -rf release && mkdir release
