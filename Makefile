@@ -133,7 +133,7 @@ release-docker-version:
 	docker run --rm ${USER_NS} -v "${PWD}":/go/src/github.com/hortonworks/cloudbreak-deployer -w /go/src/github.com/hortonworks/cloudbreak-deployer -e VERSION=${VERSION} -e GITHUB_ACCESS_TOKEN=${GITHUB_TOKEN} golang:1.13.1 bash -c "make release-version"
 
 upload_s3:
-	ls -1 release | xargs -I@ aws s3 cp release/@ s3://cbd-teestcbd-teest/@ --acl public-read
+	ls -1 release | xargs -I@ aws s3 cp release/@ s3://cbd-teest/@ --acl public-read
 
 
 circleci:
