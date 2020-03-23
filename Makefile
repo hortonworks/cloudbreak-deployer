@@ -112,7 +112,7 @@ release: build
 	rm -rf release
 	mkdir release
 	#git tag v${VERSION}
-	git push https://${GITHUB_ACCESS_TOKEN}@github.com/hortonworks/cloudbreak-deployer.git v${VERSION}
+	#git push https://${GITHUB_ACCESS_TOKEN}@github.com/hortonworks/cloudbreak-deployer.git v${VERSION}
 	tar -zcvf release/cdp_${VERSION}_Darwin_x86_64.tgz -C build/Darwin "${BINARY}"
 	tar -zcvf release/cdp_${VERSION}_Linux_x86_64.tgz -C build/Linux "${BINARY}"
 
