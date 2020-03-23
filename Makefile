@@ -82,17 +82,17 @@ upload-snapshot: create-snapshot-tgz
 		anigeo/awscli s3 cp snapshots/ $(S3_TARGET) --recursive --include "$(NAME)_$(VERSION)_*.tgz"
 	rm -rf snapshots
 
+deps-bindata:
+ifeq ($(shell which go-bindata),)
+	go get -u github.com/go-bindata/go-bindata/...
+endif
+
 deps: deps-bindata ## Installs required cli tools (only needed for new envs)
 	go get -u github.com/progrium/gh-release/...
 	go get -u github.com/kardianos/govendor
 	go get github.com/progrium/basht
 #	go get github.com/github/hub
 	go get || true
-
-deps-bindata:
-ifeq ($(shell which go-bindata),)
-	go get -u github.com/go-bindata/go-bindata/...
-endif
 
 bindata: deps
 	go-bindata include templates .deps/bin
@@ -133,7 +133,7 @@ release-docker-version:
 	docker run --rm ${USER_NS} -v "${PWD}":/go/src/github.com/hortonworks/cloudbreak-deployer -w /go/src/github.com/hortonworks/cloudbreak-deployer -e VERSION=${VERSION} -e GITHUB_ACCESS_TOKEN=${GITHUB_TOKEN} golang:1.13.1 bash -c "make release-version"
 
 upload_s3:
-	ls -1 release | xargs -I@ aws s3 cp release/@ s3://public-repo-1.hortonworks.com/HDP/cloudbreak/@ --acl public-read
+	ls -1 release | xargs -I@ aws s3 cp release/@ s3://cbd-teestcbd-teest/@ --acl public-read
 
 
 circleci:
