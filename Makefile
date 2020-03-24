@@ -69,14 +69,14 @@ prepare-release:
 release: build
 	rm -rf release
 	mkdir release
-	tar -zcvf release/cdp_${VERSION}_Darwin_x86_64.tgz -C build/Darwin "${BINARY}"
-	tar -zcvf release/cdp_${VERSION}_Linux_x86_64.tgz -C build/Linux "${BINARY}"
+	tar -zcvf release/$(NAME)_${VERSION}_Darwin_x86_64.tgz -C build/Darwin "${BINARY}"
+	tar -zcvf release/$(NAME)_${VERSION}_Linux_x86_64.tgz -C build/Linux "${BINARY}"
 
 release-version: build
 	rm -rf release
 	mkdir release
-	tar -zcvf release/cdp_${VERSION}_Darwin_x86_64.tgz -C build/Darwin "${BINARY}"
-	tar -zcvf release/cdp_${VERSION}_Linux_x86_64.tgz -C build/Linux "${BINARY}"
+	tar -zcvf release/$(NAME)_${VERSION}_Darwin_x86_64.tgz -C build/Darwin "${BINARY}"
+	tar -zcvf release/$(NAME)_${VERSION}_Linux_x86_64.tgz -C build/Linux "${BINARY}"
 
 release-docker:
 	@USER_NS='-u $(shell id -u $(whoami)):$(shell id -g $(whoami))'
