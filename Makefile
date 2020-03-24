@@ -8,6 +8,9 @@ VERSION_FILE=$(shell cat VERSION)
 GIT_REV=$(shell git rev-parse --short HEAD)
 GIT_BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
 S3_TARGET?=s3://public-repo-1.hortonworks.com/HDP/cloudbreak/
+ifeq ($(VERSION),)
+    	VERSION = $(shell echo \${GIT_BRANCH}-snapshot)
+endif
 FLAGS=" -X main.Version=$(VERSION)"
 
 update-container-versions:
