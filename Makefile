@@ -7,33 +7,8 @@ ARCH=$(shell uname -m)
 VERSION_FILE=$(shell cat VERSION)
 GIT_REV=$(shell git rev-parse --short HEAD)
 GIT_BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
-GIT_TAG=$(shell git describe --exact-match --tags 2>/dev/null )
 S3_TARGET?=s3://public-repo-1.hortonworks.com/HDP/cloudbreak/
-
-# if on a git tag, use that as a version number
-ifeq ($(GIT_TAG),)
-	  VERSION=$(VERSION_FILE)-$(GIT_BRANCH)
-else
-	  VERSION=$(GIT_TAG)
-endif
-
-# if on release branch dont use git revision
-ifeq ($(GIT_BRANCH), release)
-  FLAGS=" -X main.Version=$(VERSION)"
-  VERSION=$(VERSION_FILE)
-else
-	FLAGS=" -X main.Version=$(VERSION) -X main.GitRevision=$(GIT_REV)"
-endif
-
-echo_version:
-	echo GIT_TAG[$(GIT_TAG)]
-ifeq ($(GIT_TAG),)
-	echo EMPTY TAG
- else
-	echo NOT_EMPTY_TAG
-endif
-
-	echo VERSION=$(VERSION)
+FLAGS=" -X main.Version=$(VERSION)"
 
 update-container-versions:
 	sed -i "0,/DOCKER_TAG_CAAS_MOCK/  s/DOCKER_TAG_CAAS_MOCK .*/DOCKER_TAG_CAAS_MOCK $(CB_VERSION)/" include/cloudbreak.bash
