@@ -26,6 +26,7 @@ update-container-versions:
 update-container-versions-cdpcp:
 	sed -i "0,/DOCKER_TAG_IDBMMS/ s/DOCKER_TAG_IDBMMS .*/DOCKER_TAG_IDBMMS $(CDPCP_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_ENVIRONMENTS2_API/ s/DOCKER_TAG_ENVIRONMENTS2_API .*/DOCKER_TAG_ENVIRONMENTS2_API $(CDPCP_VERSION)/" include/cloudbreak.bash
+	sed -i "0,/DOCKER_TAG_DATALAKE_API/ s/DOCKER_TAG_DATALAKE_API .*/DOCKER_TAG_DATALAKE_API $(CDPCP_VERSION)/" include/cloudbreak.bash
 
 push-container-versions: update-container-versions
 	git add include/cloudbreak.bash
