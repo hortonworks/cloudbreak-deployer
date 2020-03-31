@@ -315,15 +315,11 @@ public-ip-init() {
         ipcommand=$(public-ip-resolver-command)
         if [[ "$ipcommand" ]]; then
             export PUBLIC_IP=$(eval "$ipcommand")
-            debug "Used PUBLIC_IP: $PUBLIC_IP"
         else
-            warn "We can not guess your PUBLIC_IP, please run the following command: (replace 1.2.3.4 with a real IP)"
-            if is_macos; then
-                warn "On Mac OS the PUBLIC_IP should be the Docker host's bridge ip"
-            fi
-            echo "echo export PUBLIC_IP=1.2.3.4 >> $CBD_PROFILE" | blue
-            _exit 2
+            warn "We can not guess your PUBLIC_IP, defaulting to 127.0.0.1"
+            export PUBLIC_IP="127.0.0.1"
         fi
+        debug "Used PUBLIC_IP: $PUBLIC_IP"
     fi
 }
 
@@ -400,6 +396,7 @@ localdev-doctor() {
     localdev-doctor-service "cluster-proxy" "10081"
     localdev-doctor-service "idbmms" "8990"
     localdev-doctor-service "environments2-api" "8984"
+    localdev-doctor-service "datalake-api" "8986"
 }
 
 localdev-doctor-service() {
