@@ -55,6 +55,12 @@
             [backends.environments2-api.servers.server0]
             url = "{{{ .Environments2ApiURL }}}"
 {{{- end}}}
+{{{- if isLocal . "datalake-api" }}}
+    [backends.datalake-api]
+        [backends.datalake-api.servers]
+            [backends.datalake-api.servers.server0]
+            url = "{{{ .DatalakeApiURL }}}"
+{{{- end}}}
 
 [frontends]
 {{{- if isLocal . "cloudbreak"}}}
@@ -118,5 +124,12 @@
     backend = "environments2-api"
         [frontends.environments2-api-frontend.routes.frontendrule]
         rule = "PathPrefix:/api/v1/environments2/"
+        priority = 100
+{{{- end}}}
+{{{- if isLocal . "datalake-api"}}}
+    [frontends.datalake-api-frontend]
+    backend = "datalake-api"
+        [frontends.datalake-api-frontend.routes.frontendrule]
+        rule = "PathPrefix:/api/v1/datalake/"
         priority = 100
 {{{- end}}}

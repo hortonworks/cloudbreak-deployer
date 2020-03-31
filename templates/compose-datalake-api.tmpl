@@ -1,0 +1,33 @@
+{{{define "datalake-api"}}}
+    datalake-api:
+        environment:
+            - http_proxy={{{get . "HTTP_PROXY"}}}
+            - https_proxy={{{get . "HTTPS_PROXY"}}}
+            - "SERVICEDEPENDENCIES_UMSHOST={{{get . "UMS_HOST"}}}"
+            - "SERVICEDEPENDENCIES_UMSPORT={{{get . "UMS_PORT"}}}"
+            - "SERVICEDEPENDENCIES_DATALAKEHOST={{{get . "DATALAKE_HOST"}}}"
+            - "SERVICEDEPENDENCIES_DATALAKEPORT={{{get . "DATALAKE_PORT"}}}"
+            - "SERVICEDEPENDENCIES_CLUSTERHEALTHHOST=localhost"
+            - "SERVICEDEPENDENCIES_CLUSTERHEALTHPORT=8986"
+            - TELEMETRY_SERVICE_NAME=DatalakeApi
+        {{{- if get . "DATALAKE_API_TARGET_PATH"}}}
+        volumes:
+        - {{{get . "DATALAKE_API_TARGET_PATH"}}}/dependency-hard-links:/thunderhead-datalake-api-service/lib
+        - {{{get . "DATALAKE_API_TARGET_PATH"}}}/thunderhead-datalake-api-service-0.1-SNAPSHOT.jar:/thunderhead-datalake-api-service/thunderhead-datalake-api-service-0.1-SNAPSHOT.jar
+        {{{- end}}}
+        labels:
+            - traefik.port=8982
+            - traefik.frontend.rule=PathPrefix:/api/v1/datalake/
+            - traefik.backend=datalake-api-backend
+            - traefik.frontend.priority=10
+        ports:
+            - 8986:8982
+            - {{{get . "DATALAKE_API_HEALTHZ_PORT"}}}:8983
+        networks:
+            - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: {{{get . "DOCKER_IMAGE_DATALAKE_API"}}}:{{{get . "DOCKER_TAG_DATALAKE_API"}}}
+{{{end}}}
