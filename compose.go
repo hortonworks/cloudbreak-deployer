@@ -42,6 +42,7 @@ func GenerateComposeYaml(args []string) {
 		insertIntoTemplateIfNotLocal(t, localDevList, "core-gateway")
 		insertIntoTemplate(t, "dps")
 	}
+	insertIntoTemplateIfNotLocal(t, localDevList, "cadence")
 	insertIntoTemplateIfNotLocal(t, localDevList, "cluster-proxy")
 	insertIntoTemplateIfNotLocal(t, localDevList, "cloudbreak")
 	insertIntoTemplateIfNotLocal(t, localDevList, "datalake")
