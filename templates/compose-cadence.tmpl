@@ -1,0 +1,76 @@
+{{{define "cadence"}}}
+    statsd:
+        image: {{{get . "DOCKER_IMAGE_STATSD"}}}:{{{get . "DOCKER_TAG_STATSD"}}}
+        ports:
+            - "{{{get . "STATSD_WEB_PORT"}}}:80"
+            - "{{{get . "STATSD_CARBON_RECEIVER_PORT"}}}:2003"
+            - "{{{get . "STATSD_PORT"}}}:8125"
+            - "{{{get . "STATSD_ADMIN_PORT"}}}:8126"
+    cadence:
+        image: {{{get . "DOCKER_IMAGE_CADENCE"}}}:{{{get . "DOCKER_TAG_CADENCE"}}}
+        ports:
+            - "{{{get . "CADENCE_FRONTEND_PORT"}}}:7933"
+            - "{{{get . "CADENCE_HISTORY_PORT"}}}:7934"
+            - "{{{get . "CADENCE_MATCHING_PORT"}}}:7935"
+            - "{{{get . "CADENCE_WORKER_PORT"}}}:7939"
+        environment:
+            - "POSTGRES_SEEDS={{{get . "COMMON_DB"}}}"
+            - "DB_PORT={{{get . "CADENCE_DB_PORT"}}}"
+            - "DB={{{get . "CADENCE_DB_DRIVER"}}}"
+            - "DBNAME={{{get . "CADENCE_DB_ENV_DB"}}}"
+            - "VISIBILITY_DBNAME={{{get . "CADENCE_DB_ENV_VISIBILITY_DB"}}}"
+            - "POSTGRES_USER={{{get . "CADENCE_DB_ENV_USER"}}}"
+            {{{- if eq (get . "CADENCE_DB_ENV_PASS") "" }}}
+            # If the password is empty then work around a bug in cadence. The password parameter should not be present in the connection string,
+            # otherwise there is no value so the next parameter host=hostname is interpreted as the password and the default host 127.0.0.1 is
+            # used. See these links for more details:
+            # https://github.com/uber/cadence/blob/62ef53da9271263189a234b69aa095d34968d8a9/common/persistence/sql/sqlplugin/postgres/plugin.go#L39
+            # https://github.com/uber/cadence/blob/62ef53da9271263189a234b69aa095d34968d8a9/common/persistence/sql/sqlplugin/postgres/plugin.go#L92
+            #
+            # Upstream fix https://github.com/uber/cadence/pull/3177
+            - "POSTGRES_PWD=;"
+            {{{- else }}}
+            - "POSTGRES_PWD={{{get . "CADENCE_DB_ENV_PASS"}}}"
+            {{{- end }}}
+            - "STATSD_ENDPOINT=statsd:8125"
+            - "DYNAMIC_CONFIG_FILE_PATH=/etc/cadence/config/dynamicconfig/development.yaml"
+        {{{- if eq (get . "CADENCE_DB_ENV_PASS") "" }}}
+        # If the password is empty then work around a bug in cadence. If the password paramter is an empty string,
+        # then the -p argument for the port number is interpreted as the password and the port number is an unknown argument.
+        # The password string is actually two double quotes, not just an empty string.
+        # See https://github.com/uber/cadence/blob/62ef53da9271263189a234b69aa095d34968d8a9/docker/start.sh#L43-L49
+        #
+        # Upstream fix https://github.com/uber/cadence/pull/3177
+        #
+        #
+        # Fix the teardown so that the cadence-server runs as PID 1 and gracefully exits
+        #
+        # Upstream fix https://github.com/uber/cadence/pull/3175
+        # Upstream fix https://github.com/uber/cadence/commit/873f32c04737bec1af42c216be9ae167b1f67cb0
+        entrypoint: ["/bin/bash"]
+        command: -c 'sed -i "s/\$$POSTGRES_PWD/\"\\\\\"\\\\\"\"/;s@bash /start-cadence.sh@exec /start-cadence.sh@" /start.sh; sed -i "s/set -e/set -ex/;s@dockerize.*cadence-server.*@dockerize -template /etc/cadence/config/config_template.yaml:/etc/cadence/config/docker.yaml\nexec cadence-server --root $$CADENCE_HOME --env docker start --services=$$SERVICES@" /start-cadence.sh; exec /docker-entrypoint.sh /start.sh'
+        {{{- else }}}
+        # Fix the teardown so that the cadence-server runs as PID 1 and gracefully exits
+        #
+        # Upstream fix https://github.com/uber/cadence/pull/3175
+        # Upstream fix https://github.com/uber/cadence/commit/873f32c04737bec1af42c216be9ae167b1f67cb0
+        entrypoint: ["/bin/bash"]
+        command: -c 's@bash /start-cadence.sh@exec /start-cadence.sh@" /start.sh; sed -i "s/set -e/set -ex/;s@dockerize.*cadence-server.*@dockerize -template /etc/cadence/config/config_template.yaml:/etc/cadence/config/docker.yaml\nexec cadence-server --root $$CADENCE_HOME --env docker start --services=$$SERVICES@" /start-cadence.sh; exec /docker-entrypoint.sh /start.sh'
+        {{{- end }}}
+        depends_on:
+            - {{{get . "COMMON_DB"}}}
+    cadence-web:
+        image: {{{get . "DOCKER_IMAGE_CADENCE_WEB"}}}:{{{get . "DOCKER_TAG_CADENCE_WEB"}}}
+        environment:
+            - "CADENCE_TCHANNEL_PEERS=cadence:{{{get . "CADENCE_PORT_1"}}}"
+        ports:
+            - "{{{get . "CADENCE_WEB_PORT"}}}:8088"
+        depends_on:
+            - cadence
+        # Without changing the docker image to have an init program, the node program will not gracefully exit.
+        # So don't wait for the timeout and just set the kill signal immediatly.
+        # See https://www.elastic.io/nodejs-as-pid-1-under-docker-images/
+        #
+        # Upstream fix https://github.com/uber/cadence-web/pull/141
+        stop_signal: SIGKILL
+{{{end}}}
