@@ -145,6 +145,7 @@ cloudbreak-conf-db() {
     env-import CLUSTER_PROXY_DB_ENV_USER "postgres"
     env-import CLUSTER_PROXY_DB_ENV_PASS ""
     env-import DATALAKE_API_TARGET_PATH ""
+    env-import ENVIRONMENTS2_API_TARGET_PATH ""
 
     env-import VAULT_DB_SCHEMA "vault"
 }
