@@ -62,7 +62,7 @@
     cadence-web:
         image: {{{get . "DOCKER_IMAGE_CADENCE_WEB"}}}:{{{get . "DOCKER_TAG_CADENCE_WEB"}}}
         environment:
-            - "CADENCE_TCHANNEL_PEERS=cadence:{{{get . "CADENCE_PORT_1"}}}"
+            - "CADENCE_TCHANNEL_PEERS={{{get . "CADENCE_WEB_CADENCE_HOST"}}}:{{{get . "CADENCE_WEB_CADENCE_PORT"}}}"
         ports:
             - "{{{get . "CADENCE_WEB_PORT"}}}:8088"
         depends_on:
