@@ -2,6 +2,8 @@
     cluster-proxy:
         image: {{{get . "DOCKER_IMAGE_CLUSTER_PROXY"}}}:{{{get . "DOCKER_TAG_CLUSTER_PROXY"}}}
         environment:
+            - CADENCE_HOST={{{get . "CLUSTER_PROXY_CADENCE_HOST"}}}
+            - CADENCE_PORT={{{get . "CLUSTER_PROXY_CADENCE_PORT"}}}
             - DB_HOST={{{get . "COMMON_DB"}}}
             - DB_USERNAME={{{get . "CLUSTER_PROXY_DB_ENV_USER"}}}
             - DB_PASSWORD="{{{get . "CLUSTER_PROXY_DB_ENV_PASS"}}}"
@@ -23,4 +25,17 @@
             - "traefik.port=10080"
         ports:
             - 10180:10080
+
+    cluster-proxy-health-check-worker:
+        image: {{{get . "DOCKER_IMAGE_CLUSTER_PROXY_HEALTH_CHECK_WORKER"}}}:{{{get . "DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER"}}}
+        container_name: {{{get . "DOCKER_CONTAINER_NAME_CLUSTER_PROXY_HEALTH_CHECK_WORKER"}}}
+        environment:
+            - CADENCE_HOST={{{get . "CLUSTER_PROXY_CADENCE_HOST"}}}
+            - CADENCE_PORT={{{get . "CLUSTER_PROXY_CADENCE_PORT"}}}
+            - CLUSTER_PROXY_HOST=cluster-proxy
+            - CLUSTER_PROXY_PORT=10080
+        restart: always
+        depends_on:
+            - cadence
+        entrypoint: ["/usr/cluster-proxy/bin/cluster-proxy","-main", "com.cloudera.cdp.WorkflowMain"]
 {{{end}}}
