@@ -12,6 +12,11 @@
             - "SERVICEDEPENDENCIES_FMSHOST={{{get . "FREEIPA_HOST"}}}"
             - "SERVICEDEPENDENCIES_FMSPORT={{{get . "FREEIPA_PORT"}}}"
             - TELEMETRY_SERVICE_NAME=Environments2Api
+        {{{- if get . "ENVIRONMENTS2_API_TARGET_PATH"}}}
+        volumes:
+        - {{{get . "ENVIRONMENTS2_API_TARGET_PATH"}}}/dependency-hard-links:/thunderhead-environments2-api-service/lib
+        - {{{get . "ENVIRONMENTS2_API_TARGET_PATH"}}}/thunderhead-environments2-api-service-0.1-SNAPSHOT.jar:/thunderhead-environments2-api-service/thunderhead-environments2-api-service-0.1-SNAPSHOT.jar
+        {{{- end}}}
         labels:
             - traefik.port=8982
             - traefik.frontend.rule=PathPrefix:/api/v1/environments2/
