@@ -5,7 +5,9 @@
 
 main() {
     local os=$(uname -s)
-    local url=$(echo "https://public-repo-1.hortonworks.com/HDP/cloudbreak/cloudbreak-deployer_snapshot_${os}_x86_64.tgz")
+    local latest_version=$(curl "https://raw.githubusercontent.com/hortonworks/cloudbreak-deployer/master/VERSION")
+    local latest_tag=$(curl "http://release.infra.cloudera.com/hwre-api/listbuilds?stack=CB&release=${latest_version}&type=dev" | jq -r '.latest_build_version')
+    local url=$(echo "https://public-repo-1.hortonworks.com/HDP/cloudbreak/cloudbreak-deployer_${latest_tag}_${os}_x86_64.tgz")
 
     local dest=/usr/bin
     hash -r > /dev/null
