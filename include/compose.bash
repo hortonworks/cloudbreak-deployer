@@ -364,7 +364,7 @@ services:
             - "5432:5432"
         environment:
         - SERVICE_NAME=$COMMON_DB
-        - POSTGRES_PASSWORD=""
+        - "POSTGRES_PASSWORD=$POSTGRES_PASSWORD"
             #- SERVICE_CHECK_CMD=bash -c 'psql -h 127.0.0.1 -p 5432  -U postgres -c "select 1"'
         volumes:
             - "$COMMON_DB_VOL:/var/lib/postgresql/data"

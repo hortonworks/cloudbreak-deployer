@@ -103,11 +103,12 @@ cloudbreak-conf-db() {
         env-import CB_DB_ROOT_PATH "/var/lib/boot2docker/cloudbreak"
     fi
 
+    env-import POSTGRES_PASSWORD $UAA_DEFAULT_SECRET
     env-import COMMON_DB commondb
     env-import COMMON_DB_VOL common
     env-import CB_DB_ENV_USER "postgres"
     env-import CB_DB_ENV_DB "cbdb"
-    env-import CB_DB_ENV_PASS ""
+    env-import CB_DB_ENV_PASS $POSTGRES_PASSWORD
     env-import CB_DB_ENV_SCHEMA "public"
     env-import CB_DB_ENV_SSL "false"
     env-import CB_DB_ENV_CERT_FILE ""
@@ -115,7 +116,7 @@ cloudbreak-conf-db() {
 
     env-import PERISCOPE_DB_ENV_USER "postgres"
     env-import PERISCOPE_DB_ENV_DB "periscopedb"
-    env-import PERISCOPE_DB_ENV_PASS ""
+    env-import PERISCOPE_DB_ENV_PASS $POSTGRES_PASSWORD
     env-import PERISCOPE_DB_ENV_SCHEMA "public"
     env-import PERISCOPE_DB_ENV_SSL "false"
     env-import PERISCOPE_DB_ENV_CERT_FILE ""
@@ -124,7 +125,7 @@ cloudbreak-conf-db() {
     env-import IDENTITY_DB_URL "${COMMON_DB}:5432"
     env-import IDENTITY_DB_NAME "uaadb"
     env-import IDENTITY_DB_USER "postgres"
-    env-import IDENTITY_DB_PASS ""
+    env-import IDENTITY_DB_PASS $POSTGRES_PASSWORD
 }
 
 cloudbreak-conf-cert() {
