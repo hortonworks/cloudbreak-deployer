@@ -29,7 +29,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_ALPINE 3.1
     env-import DOCKER_TAG_HAVEGED 1.2.0
     env-import DOCKER_TAG_TRAEFIK v1.7.19-alpine
-    env-import DOCKER_TAG_UAA 3.6.5-certs
+    env-import DOCKER_TAG_UAA 74.17.0
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.2.0
 
@@ -436,6 +436,13 @@ generate-uaa-check-diff() {
 
 }
 
+indent() {
+  local indentSize=2
+  local indent=1
+  if [ -n "$1" ]; then indent=$1; fi
+  pr -to $(($indent * $indentSize))
+}
+
 generate_uaa_config() {
     cloudbreak-config
 
@@ -461,7 +468,8 @@ generate_uaa_config_force() {
     declare uaaFile=${1:? required: uaa config file path}
 
     debug "Generating Identity server config: ${uaaFile} ..."
-
+    key="$(cat ${CBD_CERT_ROOT_PATH}/traefik/client-ca-key.pem | indent 5)"
+    cert="$(cat ${CBD_CERT_ROOT_PATH}/traefik/client-ca.pem | indent 5)"
     cat > ${uaaFile} << EOF
 spring_profiles: postgresql
 
@@ -478,6 +486,27 @@ zones:
      - ${PUBLIC_IP}
      - ${UAA_ZONE_DOMAIN}
      - identity
+
+jwt:
+  token:
+    signing-key: ${UAA_CLOUDBREAK_SECRET}
+    verification-key: ${UAA_CLOUDBREAK_SECRET}
+login: 
+  saml:
+    activeKeyId: key-1
+    keys:
+      key-1:
+        key: |
+${key}
+        passphrase: ${UAA_DEFAULT_USER_PW}
+        certificate: |
+${cert}
+          
+encryption:
+  encryption_keys:
+  - label: uaa-encryption-key-1
+    passphrase: ${UAA_DEFAULT_SECRET}
+  active_key_label: uaa-encryption-key-1
 
 oauth:
   client:
