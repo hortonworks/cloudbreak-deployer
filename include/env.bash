@@ -93,6 +93,7 @@ CB_INSTANCE_REGION - Cloud region of the Cloudbreak instance
 CB_INSTANCE_UUID - Unique identifier of Cloudbreak deployment
 CB_JAVA_OPTS - Extra Java options for Autoscale and Cloudbreak
 CB_AUDIT_FILE_ENABLED - Enable audit log file
+CB_AUDIT_SERVICE_ENABLED - Start Audit Service Container
 CB_KAFKA_BOOTSTRAP_SERVERS - Kafka server endpoints for structured audit logs (eg. server1:123,server2:456)
 CB_LOG_LEVEL - Log level of the Cloudbreak service
 CB_DEFAULT_GATEWAY_CIDR - Cidr for default security rules
@@ -150,6 +151,7 @@ FREEIPA_IMAGE_CATALOG_URL - FreeIPA image catalog url
 DB_DUMP_VOLUME - Name of the database dump volume
 DB_MIGRATION_LOG - Database migration log file
 DOCKER_CONSUL_OPTIONS - Extra options for Consul
+DOCKER_IMAGE_AUDIT - Audit Service Docker image name
 DOCKER_IMAGE_CBD_SMARTSENSE - SmartSense Docker image name
 DOCKER_IMAGE_CAAS_MOCK - Caas mock image name
 DOCKER_IMAGE_CLOUDBREAK - Cloudbreak Docker image name
@@ -162,6 +164,7 @@ DOCKER_IMAGE_CLOUDBREAK_FREEIPA - FreeIpa Docker image name
 DOCKER_IMAGE_CLOUDBREAK_WEB - Web UI Docker image name
 DOCKER_IMAGE_ENVIRONMENTS2_API - Environments2 API Docker image name
 DOCKER_IMAGE_IDBMMS - IDBMMS Docker image name
+DOCKER_TAG_AUDIT - Audit Service container version
 DOCKER_TAG_ALPINE - Alpine container version
 DOCKER_TAG_CBD_SMARTSENSE - SmartSense container version
 DOCKER_TAG_CERT_TOOL - Cert tool container version

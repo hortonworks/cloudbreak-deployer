@@ -89,7 +89,7 @@ services:
         image: postgres:{{{get . "DOCKER_TAG_POSTGRES"}}}
         entrypoint: ["/bin/bash"]
         command: -c 'cd /var/lib/postgresql; touch .ash_history .psql_history; chown -R postgres:postgres /var/lib/postgresql; (/docker-entrypoint.sh postgres -c max_connections=300 -c shared_preload_libraries='pg_stat_statements') & PGPID="$$!"; echo "PGPID $$PGPID"; trap "kill $$PGPID; wait $$PGPID" SIGINT SIGTERM; cd /var/lib/postgresql; (tail -f .*history) & wait "$$PGPID"'
-    
+
     vault:
         labels:
         - traefik.port=8200
@@ -167,3 +167,7 @@ services:
 {{{- block "idbmms" .}}}{{{end}}}
 {{{- block "environments2-api" .}}}{{{end}}}
 {{{- block "datalake-api" .}}}{{{end}}}
+
+{{{- if eq (get . "CB_AUDIT_SERVICE_ENABLED") "true" }}}
+{{{- block "audit" .}}}{{{end}}}
+{{{- end}}}

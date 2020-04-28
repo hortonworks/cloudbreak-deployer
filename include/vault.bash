@@ -152,6 +152,8 @@ init_vault() {
         fi
     fi
 
+    create-token-file
+
     if [[ "$(get-vault-status | jq -r .sealed 2>/dev/null)" == "false" ]]; then
         debug "Checking kv engine version"
         local secretStoreVersion=$(docker run \
@@ -161,7 +163,7 @@ init_vault() {
                 -e VAULT_ADDR=$vault_endpoint \
                 --entrypoint /bin/sh \
                 $VAULT_DOCKER_IMAGE:$VAULT_DOCKER_IMAGE_TAG -c "vault secrets list -format=json" | jq -r '.["secret/"].options.version')
-        
+
         if [[ "$secretStoreVersion" == "1" ]] || [[ "$secretStoreVersion" == "null" ]]; then
             debug "Converting kv engine $secretStoreVersion to v2"
             docker run \
@@ -231,6 +233,12 @@ cloudbreak-delete-vault-data() {
 
     remove-variable-from-profile VAULT_UNSEAL_KEYS
     remove-variable-from-profile VAULT_ROOT_TOKEN
-    
+
     rm -rf $VAULT_CONFIG_FILE
+}
+
+create-token-file() {
+    mkdir -p ./etc
+    # token file is needed for Audit Service with a UUID inside it. This is temporary until Thunderhead codebase is updated to accept real root tokens.
+    uuidgen > "./etc/vault-dev-root-token.txt"
 }
