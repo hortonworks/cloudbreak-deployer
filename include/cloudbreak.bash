@@ -61,6 +61,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_STATSD 1.1.7-2
     env-import DOCKER_TAG_CADENCE 0.11.0-auto-setup
     env-import DOCKER_TAG_CADENCE_WEB 1.0.0-b24
+    env-import DOCKER_TAG_AUDIT 1.0.0-b666
 
     env-import DOCKER_IMAGE_CAAS_MOCK docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-caas
     env-import DOCKER_IMAGE_CLOUDBREAK docker-private.infra.cloudera.com/cloudera/cloudbreak
@@ -72,6 +73,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CLOUDBREAK_ENVIRONMENT docker-private.infra.cloudera.com/cloudera/cloudbreak-environment
     env-import DOCKER_IMAGE_CLOUDBREAK_FREEIPA docker-private.infra.cloudera.com/cloudera/cloudbreak-freeipa
     env-import DOCKER_IMAGE_CBD_SMARTSENSE hortonworks/cbd-smartsense
+    env-import DOCKER_IMAGE_AUDIT docker-private.infra.cloudera.com/cloudera/thunderhead-audit
 
     env-import DOCKER_IMAGE_IDBMMS docker-private.infra.cloudera.com/cloudera/thunderhead-idbrokermappingmanagement
     env-import DOCKER_IMAGE_ENVIRONMENTS2_API docker-private.infra.cloudera.com/cloudera/thunderhead-environments2-api
@@ -154,6 +156,8 @@ cloudbreak-conf-db() {
     env-import ENVIRONMENTS2_API_TARGET_PATH ""
 
     env-import VAULT_DB_SCHEMA "vault"
+
+    env-import AUDIT_DB_ENV_DB "audit"
 }
 
 cloudbreak-conf-cert() {
@@ -177,6 +181,7 @@ cloudbreak-conf-defaults() {
         env-import CB_DEFAULT_GATEWAY_CIDR
     fi;
     env-import CB_AUDIT_FILE_ENABLED false
+    env-import CB_AUDIT_SERVICE_ENABLED false
     env-import CB_KAFKA_BOOTSTRAP_SERVERS ""
     env-import ADDRESS_RESOLVING_TIMEOUT 120000
     env-import CB_UI_MAX_WAIT 400
@@ -244,6 +249,8 @@ cloudbreak-conf-defaults() {
     env-import IDBMMS_HEALTHZ_PORT 8991
     env-import ENVIRONMENTS2_API_HEALTHZ_PORT 8983
     env-import DATALAKE_API_HEALTHZ_PORT 8985
+    env-import AUDIT_HTTP_PORT 8987
+    env-import AUDIT_GRPC_PORT 8989
 
     env-import UAA_ULUWATU_SECRET "dummysecret"
 

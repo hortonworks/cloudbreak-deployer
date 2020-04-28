@@ -1,0 +1,32 @@
+{{{define "audit"}}}
+    audit:
+        environment:
+            - TELEMETRY_SERVICE_NAME=Audit
+            - DB_HOST={{{get . "COMMON_DB"}}}
+            - DB_PORT=5432
+            - DB_NAME={{{get . "AUDIT_DB_ENV_DB"}}}
+            - DB_USER=postgres
+            - DB_PASSWORD=""
+            - DB_DEBUG=true
+            - VAULT_ADDR=http://vault:{{{get . "VAULT_BIND_PORT"}}}
+            - KUBE_TOKEN_PATH=/etc/vault-root-token.txt
+            - SERVICEDEPENDENCIES_CLOUDBREAKENVHOST=cloudbreak-environment.cloudbreak
+            - SERVICEDEPENDENCIES_CLOUDBREAKENVPORT={{{get . "CB_PORT"}}}
+        volumes:
+            - ./etc/vault-dev-root-token.txt:/etc/vault-root-token.txt
+        labels:
+            - traefik.port=8983
+            - traefik.frontend.rule=PathPrefix:/api/v1/audit/
+            - traefik.backend=audit
+            - traefik.frontend.priority=10
+        ports:
+            - {{{get . "AUDIT_GRPC_PORT"}}}:8982
+            - {{{get . "AUDIT_HTTP_PORT"}}}:8983
+        networks:
+            - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: {{{get . "DOCKER_IMAGE_AUDIT"}}}:{{{get . "DOCKER_TAG_AUDIT"}}}
+{{{end}}}
