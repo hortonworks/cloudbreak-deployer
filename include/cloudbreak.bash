@@ -244,6 +244,8 @@ cloudbreak-conf-defaults() {
     env-import ENVIRONMENTS2_API_HEALTHZ_PORT 8983
     env-import DATALAKE_API_HEALTHZ_PORT 8985
 
+    env-import DATALAKE_DB_AVAILABILITY "NON_HA"
+
     env-import UAA_ULUWATU_SECRET "dummysecret"
 
     if [[ "$CAAS_MOCK" == "true" ]]; then
