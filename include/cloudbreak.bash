@@ -263,6 +263,8 @@ cloudbreak-conf-defaults() {
     env-import AUDIT_HTTP_PORT 8987
     env-import AUDIT_GRPC_PORT 8989
 
+    env-import DATALAKE_DB_AVAILABILITY "NON_HA"
+
     env-import UAA_ULUWATU_SECRET "dummysecret"
 
     if [[ "$CAAS_MOCK" == "true" ]]; then
@@ -294,6 +296,13 @@ cloudbreak-conf-defaults() {
     env-import CADENCE_WEB_PORT "7940"
     env-import CADENCE_WEB_CADENCE_HOST "cadence"
     env-import CADENCE_WEB_CADENCE_PORT "7933"
+
+    env-import CADENCE_DB_PORT "5432"
+    env-import CADENCE_DB_DRIVER "postgres"
+    env-import CADENCE_DB_ENV_DB "cadencedb"
+    env-import CADENCE_DB_ENV_VISIBILITY_DB "cadence_visitiblitydb"
+    env-import CADENCE_DB_ENV_USER "postgres"
+    env-import CADENCE_DB_ENV_PASS ""
 
     env-import CLUSTER_PROXY_CADENCE_HOST "cadence"
     env-import CLUSTER_PROXY_CADENCE_PORT "7933"

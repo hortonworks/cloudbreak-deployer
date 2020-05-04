@@ -129,6 +129,7 @@ DATALAKE_DB_PORT_5432_TCP_PORT - Port number of the Datalake database
 DATALAKE_LOG_LEVEL - Log level of the Datalake service
 DATALAKE_SCHEMA_MIGRATION_AUTO - Flag for Datalake automatic database schema update
 DATALAKE_SCHEMA_SCRIPTS_LOCATION - Location of Datalake schema update files
+DATALAKE_DB_AVAILABILITY - Configures the external Database created by Datalake service. Default value is NON_HA. Possible values NONE,NON_HA,HA
 ENVIRONMENT_DB_HOST - Address of the Environment database
 ENVIRONMENT_DB_PORT - Port number of the Environment database
 ENVIRONMENT_DB_ENV_DB - Name of the Environment database
