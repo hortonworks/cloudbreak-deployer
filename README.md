@@ -23,7 +23,6 @@ cd $GOPATH/src/github.com/hortonworks/cloudbreak-deployer
 # make deps and bindata only need to be run once
 make bindata
 make deps
-
 make install
 ```
 
@@ -33,23 +32,13 @@ To run the unit tests:
 make tests
 ```
 
-If you want to test the binary CircleCI build from your branch named `fix-something`, to validate the PR binary `cbd` tool will be tested. It is built by CircleCI for each branch.
-
-```
-branch=fix-something
-circle_url=https://circleci.com/api/v1/project/hortonworks/cloudbreak-deployer
-circle_token=[CIRCLE_TOKEN]
-latest_build=$(curl -s -G -d circle-token=${circle_token} ${circle_url}/tree/${branch}?filter=completed\&limit=1 | grep -m 1 build_num | sed 's/[^0-9]*//g')
-curl -sL $(curl -s -G -d circle-token=${circle_token} ${circle_url}/${latest_build}/artifacts | grep url | grep -i $(uname) | cut -d\" -f 4) | tar -xz -C $(dirname $(which cbd))
-```
-
 ### Snapshots
 
 We recommend that you always use the latest release, but you might also want to check new features or bugfixes in the `master` branch.
 All successful builds from the `master` branch are uploaded to the public S3 bucket. You can download it using:
 
 ```
-curl -L s3.amazonaws.com/public-repo-1.hortonworks.com/HDP/cloudbreak/cloudbreak-deployer_snapshot_$(uname)_x86_64.tgz | tar -xz
+curl -s https://raw.githubusercontent.com/hortonworks/cloudbreak-deployer/master/install-dev | sh && cbd --version
 ```
 
 Instead of overwriting the released version, download it to a **local directory** and use it by referring to it as `./cbd`
@@ -71,7 +60,7 @@ make tests
 
 ### Release Process for the Clodbreak Deployer Tool
 
-The master branch is always built on [CircleCI](https://circleci.com/gh/hortonworks/cloudbreak-deployer).
+The master branch is always built on [Jenkins](http://build.eng.hortonworks.com:8080/job/cbd-container-updater/).
 
 When you want to create a new release, run:
 
@@ -94,7 +83,7 @@ The `make release-next-ver` performs the following steps:
 
 Now you should test this release. You can update to it by running `curl -L -s https://github.com/hortonworks/cloudbreak-deployer/archive/release-x.y.z.tar.gz | tar -xz -C $(dirname $(which cbd))`. Comment with LGTM (Looking Good To Me).
 
-Once the PR is merged, CircleCI will:
+Once the PR is merged, CircleCI will build it:
 
 * Create a new release on [GitHub releases tab](https://github.com/hortonworks/cloudbreak-deployer/releases), with the
  help of [gh-release](https://github.com/progrium/gh-release).
