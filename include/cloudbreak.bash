@@ -85,8 +85,6 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CADENCE ubercadence/server
     env-import DOCKER_IMAGE_CADENCE_WEB docker-private.infra.cloudera.com/cloudera/cadence-web
 
-    env-import DOCKER_CONTAINER_NAME_CLUSTER_PROXY_HEALTH_CHECK_WORKER cluster-proxy-health-check-worker
-
     env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu:3000/notifications
 
 }

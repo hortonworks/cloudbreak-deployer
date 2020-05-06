@@ -28,7 +28,6 @@
 
     cluster-proxy-health-check-worker:
         image: {{{get . "DOCKER_IMAGE_CLUSTER_PROXY_HEALTH_CHECK_WORKER"}}}:{{{get . "DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER"}}}
-        container_name: {{{get . "DOCKER_CONTAINER_NAME_CLUSTER_PROXY_HEALTH_CHECK_WORKER"}}}
         environment:
             - CADENCE_HOST={{{get . "CLUSTER_PROXY_CADENCE_HOST"}}}
             - CADENCE_PORT={{{get . "CLUSTER_PROXY_CADENCE_PORT"}}}
