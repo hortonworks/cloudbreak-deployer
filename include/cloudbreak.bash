@@ -59,7 +59,6 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
     env-import DOCKER_TAG_CLUSTER_PROXY 2.1.0.0-257
     env-import DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER 2.1.0.0-257
-    env-import DOCKER_TAG_STATSD 1.1.7-2
     env-import DOCKER_TAG_CADENCE 0.11.0-auto-setup
     env-import DOCKER_TAG_CADENCE_WEB 1.0.0-b24
     env-import DOCKER_TAG_AUDIT 1.0.0-b666
@@ -81,7 +80,6 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_DATALAKE_API docker-private.infra.cloudera.com/cloudera/thunderhead-datalake-api
     env-import DOCKER_IMAGE_CLUSTER_PROXY docker-private.infra.cloudera.com/cloudera/dps-cluster-proxy
     env-import DOCKER_IMAGE_CLUSTER_PROXY_HEALTH_CHECK_WORKER docker-private.infra.cloudera.com/cloudera/dps-cluster-proxy
-    env-import DOCKER_IMAGE_STATSD graphiteapp/graphite-statsd
     env-import DOCKER_IMAGE_CADENCE ubercadence/server
     env-import DOCKER_IMAGE_CADENCE_WEB docker-private.infra.cloudera.com/cloudera/cadence-web
 
@@ -283,10 +281,6 @@ cloudbreak-conf-defaults() {
     env-import UMS_PORT "8982"
     env-import CLUSTERPROXY_ENABLED "true"
 
-    env-import STATSD_WEB_PORT "7941"
-    env-import STATSD_CARBON_RECEIVER_PORT "2003"
-    env-import STATSD_PORT "8125"
-    env-import STATSD_ADMIN_PORT "8126"
     env-import CADENCE_FRONTEND_PORT "7933"
     env-import CADENCE_HISTORY_PORT "7934"
     env-import CADENCE_MATCHING_PORT "7935"

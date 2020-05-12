@@ -1,11 +1,4 @@
 {{{define "cadence"}}}
-    statsd:
-        image: {{{get . "DOCKER_IMAGE_STATSD"}}}:{{{get . "DOCKER_TAG_STATSD"}}}
-        ports:
-            - "{{{get . "STATSD_WEB_PORT"}}}:80"
-            - "{{{get . "STATSD_CARBON_RECEIVER_PORT"}}}:2003"
-            - "{{{get . "STATSD_PORT"}}}:8125"
-            - "{{{get . "STATSD_ADMIN_PORT"}}}:8126"
     cadence:
         image: {{{get . "DOCKER_IMAGE_CADENCE"}}}:{{{get . "DOCKER_TAG_CADENCE"}}}
         ports:
@@ -32,7 +25,6 @@
             {{{- else }}}
             - "POSTGRES_PWD={{{get . "CADENCE_DB_ENV_PASS"}}}"
             {{{- end }}}
-            - "STATSD_ENDPOINT=statsd:8125"
             - "DYNAMIC_CONFIG_FILE_PATH=/etc/cadence/config/dynamicconfig/development.yaml"
         {{{- if eq (get . "CADENCE_DB_ENV_PASS") "" }}}
         # If the password is empty then work around a bug in cadence. If the password paramter is an empty string,
