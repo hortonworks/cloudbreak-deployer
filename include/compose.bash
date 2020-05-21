@@ -79,6 +79,7 @@ compose-kill() {
     docker rm -f cbreak_idbmms_1 2> /dev/null || :
     docker rm -f cbreak_environments2-api_1 2> /dev/null || :
     docker rm -f cbreak_datalake-api_1 2> /dev/null || :
+    docker rm -f cbreak_distrox-api_1 2> /dev/null || :
 }
 
 util-cleanup() {
