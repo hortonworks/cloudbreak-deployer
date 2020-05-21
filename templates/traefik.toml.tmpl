@@ -61,6 +61,12 @@
             [backends.datalake-api.servers.server0]
             url = "{{{ .DatalakeApiURL }}}"
 {{{- end}}}
+{{{- if isLocal . "distrox-api" }}}
+    [backends.distrox-api]
+        [backends.distrox-api.servers]
+            [backends.distrox-api.servers.server0]
+            url = "{{{ .DistroxApiURL }}}"
+{{{- end}}}
 
 [frontends]
 {{{- if isLocal . "cloudbreak"}}}
@@ -131,5 +137,12 @@
     backend = "datalake-api"
         [frontends.datalake-api-frontend.routes.frontendrule]
         rule = "PathPrefix:/api/v1/datalake/"
+        priority = 100
+{{{- end}}}
+{{{- if isLocal . "distrox-api"}}}
+    [frontends.distrox-api-frontend]
+    backend = "distrox-api"
+        [frontends.distrox-api-frontend.routes.frontendrule]
+        rule = "PathPrefix:/api/v1/datahub/"
         priority = 100
 {{{- end}}}
