@@ -248,7 +248,7 @@ cloudbreak-conf-defaults() {
     env-import IDBMMS_HOST $(host-from-url "$IDBMMS_URL")
     env-import ENVIRONMENTS2_API_URL $(service-url environments2-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8984" "8982")
     env-import DATALAKE_API_URL $(service-url datalake-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8986" "8984")
-    env-import DISTROX_API_URL $(service-url distrox-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8988" "8989")
+    env-import DISTROX_API_URL $(service-url distrox-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8988" "8992")
 
     env-import ENVIRONMENT_PORT $(port-from-url "$ENVIRONMENT_URL")
     env-import FREEIPA_PORT $(port-from-url "$FREEIPA_URL")
@@ -262,7 +262,7 @@ cloudbreak-conf-defaults() {
     env-import IDBMMS_HEALTHZ_PORT 8991
     env-import ENVIRONMENTS2_API_HEALTHZ_PORT 8983
     env-import DATALAKE_API_HEALTHZ_PORT 8985
-    env-import DISTROX_API_HEALTHZ_PORT 8989
+    env-import DISTROX_API_HEALTHZ_PORT 8992
     env-import AUDIT_HTTP_PORT 8987
     env-import AUDIT_GRPC_PORT 8989
 
