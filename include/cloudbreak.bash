@@ -41,14 +41,14 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.2.0
 
-    env-import DOCKER_TAG_CAAS_MOCK 2.24.0-b64
-    env-import DOCKER_TAG_PERISCOPE 2.24.0-b64
-    env-import DOCKER_TAG_CLOUDBREAK 2.24.0-b64
-    env-import DOCKER_TAG_DATALAKE 2.24.0-b64
-    env-import DOCKER_TAG_REDBEAMS 2.24.0-b64
-    env-import DOCKER_TAG_ENVIRONMENT 2.24.0-b64
-    env-import DOCKER_TAG_FREEIPA 2.24.0-b64
-    env-import DOCKER_TAG_ULUWATU 2.24.0-b64
+    env-import DOCKER_TAG_CAAS_MOCK 2.23.0-b132
+    env-import DOCKER_TAG_PERISCOPE 2.23.0-b132
+    env-import DOCKER_TAG_CLOUDBREAK 2.23.0-b132
+    env-import DOCKER_TAG_DATALAKE 2.23.0-b132
+    env-import DOCKER_TAG_REDBEAMS 2.23.0-b132
+    env-import DOCKER_TAG_ENVIRONMENT 2.23.0-b132
+    env-import DOCKER_TAG_FREEIPA 2.23.0-b132
+    env-import DOCKER_TAG_ULUWATU 2.23.0-b132
 
     env-import DOCKER_TAG_IDBMMS 17fd200ed122134be60a89a6d331102dfa1f1a36
     env-import DOCKER_TAG_ENVIRONMENTS2_API 17fd200ed122134be60a89a6d331102dfa1f1a36
