@@ -204,6 +204,7 @@ cloudbreak-conf-defaults() {
     env-import CB_MAX_SALT_RECIPE_EXECUTION_RETRY 90
     env-import CB_LOG_LEVEL "DEBUG"
     env-import CB_PORT 8080
+    env-import PERISCOPE_PORT 8080 
 
     env-import CB_INSTANCE_UUID
     env-import CB_INSTANCE_NODE_ID
