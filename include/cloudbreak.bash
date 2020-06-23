@@ -50,10 +50,10 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_FREEIPA 2.21.0-rc.86
     env-import DOCKER_TAG_ULUWATU 2.21.0-rc.86
 
-    env-import DOCKER_TAG_IDBMMS 17fd200ed122134be60a89a6d331102dfa1f1a36
-    env-import DOCKER_TAG_ENVIRONMENTS2_API 17fd200ed122134be60a89a6d331102dfa1f1a36
-    env-import DOCKER_TAG_DATALAKE_API 17fd200ed122134be60a89a6d331102dfa1f1a36
-    env-import DOCKER_TAG_DISTROX_API 17fd200ed122134be60a89a6d331102dfa1f1a36
+    env-import DOCKER_TAG_IDBMMS 1.0.0-b878
+    env-import DOCKER_TAG_ENVIRONMENTS2_API 1.0.0-b878
+    env-import DOCKER_TAG_DATALAKE_API 1.0.0-b878
+    env-import DOCKER_TAG_DISTROX_API 1.0.0-b878
 
     env-import DOCKER_TAG_POSTGRES 9.6.16-alpine
     env-import DOCKER_TAG_LOGROTATE 1.0.2
