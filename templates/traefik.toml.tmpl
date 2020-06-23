@@ -67,6 +67,12 @@
             [backends.distrox-api.servers.server0]
             url = "{{{ .DistroxApiURL }}}"
 {{{- end}}}
+{{{- if isLocal . "iam-api" }}}
+    [backends.iam-api]
+        [backends.iam-api.servers]
+            [backends.iam-api.servers.server0]
+            url = "{{{ .IamApiURL }}}"
+{{{- end}}}
 
 [frontends]
 {{{- if isLocal . "cloudbreak"}}}
@@ -144,5 +150,12 @@
     backend = "distrox-api"
         [frontends.distrox-api-frontend.routes.frontendrule]
         rule = "PathPrefix:/api/v1/datahub/"
+        priority = 100
+{{{- end}}}
+{{{- if isLocal . "iam-api"}}}
+    [frontends.iam-api-frontend]
+    backend = "iam-api"
+        [frontends.iam-api-frontend.routes.frontendrule]
+        rule = "PathPrefix:/api/v1/iam/"
         priority = 100
 {{{- end}}}

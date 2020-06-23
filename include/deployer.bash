@@ -398,6 +398,7 @@ localdev-doctor() {
     localdev-doctor-service "environments2-api" "8984"
     localdev-doctor-service "datalake-api" "8986"
     localdev-doctor-service "distrox-api" "8988"
+    localdev-doctor-service "iam-api" "8997"
 }
 
 localdev-doctor-service() {

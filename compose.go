@@ -55,6 +55,7 @@ func GenerateComposeYaml(args []string) {
 	insertIntoTemplateIfNotLocal(t, localDevList, "datalake-api")
 	insertIntoTemplateIfNotLocal(t, localDevList, "audit")
 	insertIntoTemplateIfNotLocal(t, localDevList, "distrox-api")
+	insertIntoTemplateIfNotLocal(t, localDevList, "iam-api")
 
 	t.Execute(os.Stdout, dataMap)
 }

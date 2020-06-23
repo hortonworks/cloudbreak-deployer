@@ -20,11 +20,12 @@ type traefikTomlParams struct {
 	Environments2ApiURL string
 	DatalakeApiURL      string
 	DistroxApiURL       string
+	IamApiURL           string
 	LocalDevList        string
 }
 
 func GenerateTraefikToml(args []string) {
-	params := traefikTomlParams{args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11]}
+	params := traefikTomlParams{args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], args[12]}
 	if len(params.LocalDevList) == 0 {
 		fmt.Print("")
 	} else {
