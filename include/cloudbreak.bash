@@ -18,7 +18,7 @@ cloudbreak-config() {
   cloudbreak-conf-host-addr
   cloudbreak-conf-java
   cloudbreak-conf-vault
-  cloudbreak-conf-caas
+  cloudbreak-conf-thunderhead
   cloudbreak-conf-proxy
   cloudbreak-conf-statuschecker
   migrate-config
@@ -33,10 +33,10 @@ cloudbreak-conf-statuschecker() {
     env-import ENVIRONMENT_STATUSCHECKER_ENABLED true
 }
 
-cloudbreak-conf-caas() {
-    declare desc="Defines CAAS related configs"
+cloudbreak-conf-thunderhead() {
+    declare desc="Defines ThunderHead Mock related configs"
 
-    env-import CAAS_URL "caas-mock:8080"
+    env-import THUNDERHEAD_URL "thunderhead-mock:8080"
 }
 
 cloudbreak-conf-tags() {
@@ -50,7 +50,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.2.0
 
-    env-import DOCKER_TAG_CAAS_MOCK 2.26.0-b4
+    env-import DOCKER_TAG_THUNDERHEAD_MOCK 2.26.0-b4
     env-import DOCKER_TAG_PERISCOPE 2.26.0-b4
     env-import DOCKER_TAG_CLOUDBREAK 2.26.0-b4
     env-import DOCKER_TAG_DATALAKE 2.26.0-b4
@@ -73,7 +73,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_CADENCE_WEB 1.0.0-b24
     env-import DOCKER_TAG_AUDIT 1.0.0-b1241
 
-    env-import DOCKER_IMAGE_CAAS_MOCK docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-caas
+    env-import DOCKER_IMAGE_THUNDERHEAD_MOCK docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-thunderhead
     env-import DOCKER_IMAGE_CLOUDBREAK docker-private.infra.cloudera.com/cloudera/cloudbreak
     env-import DOCKER_IMAGE_CLOUDBREAK_WEB docker-private.infra.cloudera.com/cloudera/hdc-web
     env-import DOCKER_IMAGE_CLOUDBREAK_AUTH docker-private.infra.cloudera.com/cloudera/hdc-auth
@@ -234,7 +234,7 @@ cloudbreak-conf-defaults() {
     env-import DPS_VERSION "latest"
     env-import DPS_REPO ""
     env-import UMS_ENABLED "true"
-    env-import CAAS_MOCK "true"
+    env-import THUNDERHEAD_MOCK "true"
     env-import INGRESS_URLS "localhost,manage.dps.local"
 
     env-import CLOUDBREAK_URL $(service-url cloudbreak "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "9091" "8080")
@@ -278,18 +278,18 @@ cloudbreak-conf-defaults() {
 
     env-import UAA_ULUWATU_SECRET "dummysecret"
 
-    if [[ "$CAAS_MOCK" == "true" ]]; then
+    if [[ "$THUNDERHEAD_MOCK" == "true" ]]; then
         env-import ULUWATU_FRONTEND_RULE "PathPrefix:/"
-        env-import CAAS_URL $(service-url auth-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8080" "8080")
+        env-import THUNDERHEAD_URL $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8080" "8080")
         env-import GATEWAY_DEFAULT_REDIRECT_PATH "/environments"
         if [[ "$UMS_ENABLED" == "true" ]]; then
-            env-import UMS_HOST $(service-url auth-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
+            env-import UMS_HOST $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
         fi
     else
         env-import GATEWAY_DEFAULT_REDIRECT_PATH "/cloud"
-        env-import CAAS_URL $(service-url caas-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8080" "10080")
+        env-import THUNDERHEAD_URL $(service-url thunderhead-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8080" "10080")
         if [[ "$UMS_ENABLED" == "true" ]]; then
-            env-import UMS_HOST $(service-url caas-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
+            env-import UMS_HOST $(service-url thunderhead-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
         fi
     fi
 
@@ -442,7 +442,7 @@ generate-toml-file-for-localdev() {
 
 generate-toml-file-for-localdev-force() {
     declare traefikFile=${1:-traefik.toml}
-    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$DATALAKE_URL" "$ENVIRONMENT_URL" "$REDBEAMS_URL" "$FREEIPA_URL" "http://$CAAS_URL" "$CLUSTER_PROXY_URL" "$ENVIRONMENTS2_API_URL" "$DATALAKE_API_URL" "$DISTROX_API_URL" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
+    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$DATALAKE_URL" "$ENVIRONMENT_URL" "$REDBEAMS_URL" "$FREEIPA_URL" "http://$THUNDERHEAD_URL" "$CLUSTER_PROXY_URL" "$ENVIRONMENTS2_API_URL" "$DATALAKE_API_URL" "$DISTROX_API_URL" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
 }
 
 generate-traefik-check-diff() {
