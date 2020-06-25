@@ -38,7 +38,7 @@
             - OPENTRACING_JAEGER_UDP-SENDER_HOST={{{get . "JAEGER_HOST"}}}
             - "ALTUS_IDBMMS_HOST={{{get . "IDBMMS_HOST"}}}"
             - "ALTUS_IDBMMS_PORT={{{get . "IDBMMS_PORT"}}}"
-            - STATUSCHECKER_ENABLED
+            - STATUSCHECKER_ENABLED={{{get . "ENVIRONMENT_STATUSCHECKER_ENABLED"}}}
             - ENVIRONMENT_AUTOSYNC_UPDATE_STATUS
             - ENVIRONMENT_AUTOSYNC_ENABLED
         labels:

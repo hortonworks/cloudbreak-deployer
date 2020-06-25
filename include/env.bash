@@ -114,6 +114,7 @@ CB_SHOW_TERMINATED_CLUSTERS_ACTIVE - Show terminated clusters
 CB_SHOW_TERMINATED_CLUSTERS_DAYS - Days part of timeout to show terminated clusters
 CB_SHOW_TERMINATED_CLUSTERS_HOURS - Hours part of timeout to show terminated clusters
 CB_SHOW_TERMINATED_CLUSTERS_MINUTES - Minutes part of timeout to show terminated clusters
+CB_STATUSCHECKER_ENABLED - Automatic status check enabled (default: true)
 CERT_VALIDATION - Enables cert validation in Cloudbreak and Autoscale
 COMMON_DB - Name of the database container
 COMMON_DB_VOL - Name of the database volume
@@ -129,6 +130,7 @@ DATALAKE_DB_PORT_5432_TCP_PORT - Port number of the Datalake database
 DATALAKE_LOG_LEVEL - Log level of the Datalake service
 DATALAKE_SCHEMA_MIGRATION_AUTO - Flag for Datalake automatic database schema update
 DATALAKE_SCHEMA_SCRIPTS_LOCATION - Location of Datalake schema update files
+DATALAKE_STATUSCHECKER_ENABLED - Automatic status check enabled (default: true)
 DATALAKE_DB_AVAILABILITY - Configures the external Database created by Datalake service. Default value is NON_HA. Possible values NONE,NON_HA,HA
 ENVIRONMENT_DB_HOST - Address of the Environment database
 ENVIRONMENT_DB_PORT - Port number of the Environment database
@@ -140,6 +142,7 @@ ENVIRONMENT_HBM2DDL_STRATEGY - Configures hibernate.hbm2ddl.auto in Environment
 ENVIRONMENT_LOG_LEVEL - Log level of the Environment service
 ENVIRONMENT_SCHEMA_MIGRATION_AUTO - Flag for Environment automatic database schema update
 ENVIRONMENT_SCHEMA_SCRIPTS_LOCATION - Location of Environment schema update files
+ENVIRONMENT_STATUSCHECKER_ENABLED - Automatic status check enabled (default: true)
 FREEIPA_HBM2DDL_STRATEGY - Configures hibernate.hbm2ddl.auto in FreeIpa
 FREEIPA_DB_ENV_DB - Name of the FreeIpa database
 FREEIPA_DB_ENV_PASS - Password for the FreeIpa database authentication
@@ -148,6 +151,7 @@ FREEIPA_DB_ENV_USER - User for the FreeIpa database authentication
 FREEIPA_LOG_LEVEL - Log level of the FreeIpa service
 FREEIPA_SCHEMA_MIGRATION_AUTO - Flag for FreeIpa automatic database schema update
 FREEIPA_SCHEMA_SCRIPTS_LOCATION - Location of FreeIpa schema update files
+FREEIPA_STATUSCHECKER_ENABLED - Automatic status check enabled (default: true)
 FREEIPA_IMAGE_CATALOG_URL - FreeIPA image catalog url
 DB_DUMP_VOLUME - Name of the database dump volume
 DB_MIGRATION_LOG - Database migration log file
