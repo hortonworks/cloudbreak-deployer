@@ -20,9 +20,18 @@ cloudbreak-config() {
   cloudbreak-conf-vault
   cloudbreak-conf-caas
   cloudbreak-conf-proxy
+  cloudbreak-conf-statuschecker
   migrate-config
 }
 
+cloudbreak-conf-statuschecker() {
+    declare desc="Defines statuschecker related configs"
+
+    env-import CB_STATUSCHECKER_ENABLED true
+    env-import DATALAKE_STATUSCHECKER_ENABLED true
+    env-import FREEIPA_STATUSCHECKER_ENABLED true
+    env-import ENVIRONMENT_STATUSCHECKER_ENABLED true
+}
 
 cloudbreak-conf-caas() {
     declare desc="Defines CAAS related configs"
