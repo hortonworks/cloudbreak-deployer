@@ -36,6 +36,7 @@
             - "CAAS_URL={{{get . "CAAS_URL"}}}"
             - "NOTIFICATION_URLS={{{get . "CB_DEFAULT_SUBSCRIPTION_ADDRESS"}}}"
             - "ALTUS_UMS_HOST={{{get . "UMS_HOST"}}}"
+            - ALTUS_AUDIT_ENDPOINT
             - OPENTRACING_JAEGER_UDP-SENDER_HOST={{{get . "JAEGER_HOST"}}}
         labels:
         - traefik.port=8080
