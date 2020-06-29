@@ -44,6 +44,7 @@
             {{{- end}}}
             - CLUSTERPROXY_ENABLED
             - "CLUSTERPROXY_URL={{{get . "CLUSTER_PROXY_URL"}}}"
+            - "FREEIPA_SDX_URL={{{get . "DATALAKE_URL"}}}"
             - ALTUS_MINASSHDMGMT_HOST={{{get . "ALTUS_TUNNEL_MANAGEMENT_HOST"}}}
             - ALTUS_MINASSHDMGMT_PORT={{{get . "ALTUS_TUNNEL_MANAGEMENT_PORT"}}}
             - STATUSCHECKER_ENABLED={{{get . "FREEIPA_STATUSCHECKER_ENABLED"}}}
