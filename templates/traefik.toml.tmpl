@@ -37,11 +37,11 @@
             [backends.freeipa.servers.server0]
             url = "{{{ .FreeIpaURL }}}"
 {{{- end}}}
-{{{- if isLocal . "thunderhead-api" }}}
-    [backends.thunderhead-api]
-        [backends.thunderhead-api.servers]
-            [backends.thunderhead-api.servers.server0]
-            url = "{{{ .ThunderheadURL }}}"
+{{{- if isLocal . "caas-api" }}}
+    [backends.caas-api]
+        [backends.caas-api.servers]
+            [backends.caas-api.servers.server0]
+            url = "{{{ .CaasURL }}}"
 {{{- end}}}
 {{{- if isLocal . "cluster-proxy" }}}
     [backends.cluster-proxy]
@@ -111,11 +111,11 @@
         rule = "PathPrefix:/freeipa/"
         priority = 100
 {{{- end}}}
-{{{- if isLocal . "thunderhead-api"}}}
-    [frontends.thunderhead-api-frontend]
-    backend = "thunderhead-api"
-        [frontends.thunderhead-api-frontend.routes.frontendrule]
-        rule = "PathPrefix:/auth,/oidc,/idp,/thunderhead"
+{{{- if isLocal . "caas-api"}}}
+    [frontends.caas-api-frontend]
+    backend = "caas-api"
+        [frontends.caas-api-frontend.routes.frontendrule]
+        rule = "PathPrefix:/auth,/oidc,/idp,/caas"
         priority = 100
 {{{- end}}}
 {{{- if isLocal . "cluster-proxy"}}}

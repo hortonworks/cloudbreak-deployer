@@ -1,0 +1,18 @@
+{{{define "auth-mock"}}}
+    auth-mock:
+        image: {{{get . "DOCKER_IMAGE_CAAS_MOCK"}}}:{{{get . "DOCKER_TAG_CAAS_MOCK"}}}
+        restart: on-failure
+        volumes:
+        - {{{get . "CAAS_MOCK_VOLUME_HOST"}}}:{{{get . "CAAS_MOCK_VOLUME_CONTAINER"}}}
+        - ./etc/:/etc/auth
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        ports:
+        - "{{{get . "CAAS_MOCK_BIND_PORT"}}}:8080"
+        - "{{{get . "UMS_PORT"}}}:8982"
+        labels:
+        - traefik.frontend.priority=100
+        - traefik.frontend.rule=PathPrefix:/auth,/oidc,/idp,/caas
+        - traefik.port=8080
+        - traefik.backend=caas-backend
+{{{end}}}
