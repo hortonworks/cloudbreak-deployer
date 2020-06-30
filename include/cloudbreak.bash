@@ -71,7 +71,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER 2.1.0.0-300
     env-import DOCKER_TAG_CADENCE 0.11.0-auto-setup
     env-import DOCKER_TAG_CADENCE_WEB 1.0.0-b24
-    env-import DOCKER_TAG_AUDIT 1.0.0-b769
+    env-import DOCKER_TAG_AUDIT 1.0.0-b1241
 
     env-import DOCKER_IMAGE_CAAS_MOCK docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-caas
     env-import DOCKER_IMAGE_CLOUDBREAK docker-private.infra.cloudera.com/cloudera/cloudbreak
