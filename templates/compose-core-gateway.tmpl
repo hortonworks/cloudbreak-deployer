@@ -10,11 +10,11 @@
         networks:
         - {{{get . "DOCKER_NETWORK_NAME"}}}
         environment:
-        - "CAAS_ADDRESS=http://{{{get . "THUNDERHEAD_URL"}}}"
+        - "CAAS_ADDRESS=http://{{{get . "CAAS_URL"}}}"
         - GATEWAY_DPS_JWT_COOKIE_NAME=dps-jwt
         - GATEWAY_UPSTREAM_HOSTNAME=traefik
         - GATEWAY_UPSTREAM_PORT=80
-        - GATEWAY_UNAUTHENTICATED_PATHS=pathPrefix:/auth,pathPrefix:/idp,pathPrefix:/oidc,pathPrefix:/thunderhead,!pathPrefix:/thunderhead/api,pathPrefix:/core,!pathPrefix:/core/api,pathPrefix:/cloud/cb/info,pathPrefix:/cb/info,pathPrefix:/environmentservice/info,pathPrefix:/dl/info,pathPrefix:/freeipa/info
+        - GATEWAY_UNAUTHENTICATED_PATHS=pathPrefix:/auth,pathPrefix:/idp,pathPrefix:/oidc,pathPrefix:/caas,!pathPrefix:/caas/api,pathPrefix:/core,!pathPrefix:/core/api,pathPrefix:/cloud/cb/info,pathPrefix:/cb/info,pathPrefix:/environmentservice/info,pathPrefix:/dl/info,pathPrefix:/freeipa/info
         - UMS_HOST={{{get . "UMS_HOST"}}}
         - GATEWAY_DEFAULT_REDIRECT_PATH={{{get . "GATEWAY_DEFAULT_REDIRECT_PATH"}}}
 

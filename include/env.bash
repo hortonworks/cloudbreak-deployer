@@ -57,7 +57,7 @@ AWS_ACCESS_KEY_ID - Access key of the AWS account
 AWS_SECRET_ACCESS_KEY - Secret access key of the AWS account
 AZURE_SUBSCRIPTION_ID - Azure subscription ID for interactive login in Web UI
 AZURE_TENANT_ID - Azure tenant ID for interactive login in Web UI
-THUNDERHEAD_URL - THUNDERHEAD API container address with port
+CAAS_URL - CAAS API container address with port
 CAPTURE_CRON_EXPRESSION - SmartSense bundle generation time interval in Cron format
 CBD_CERT_ROOT_PATH - Path where deployer stores Cloudbreak certificates
 CBD_TRAEFIK_TLS - Path inside of the Traefik container where TLS files located
@@ -158,7 +158,7 @@ DB_MIGRATION_LOG - Database migration log file
 DOCKER_CONSUL_OPTIONS - Extra options for Consul
 DOCKER_IMAGE_AUDIT - Audit Service Docker image name
 DOCKER_IMAGE_CBD_SMARTSENSE - SmartSense Docker image name
-DOCKER_IMAGE_THUNDERHEAD_MOCK - Thunderhead mock image name
+DOCKER_IMAGE_CAAS_MOCK - Caas mock image name
 DOCKER_IMAGE_CLOUDBREAK - Cloudbreak Docker image name
 DOCKER_IMAGE_CLOUDBREAK_AUTH - Authentication service Docker image name
 DOCKER_IMAGE_CLOUDBREAK_PERISCOPE - Autoscale Docker image name
@@ -174,7 +174,7 @@ DOCKER_TAG_ALPINE - Alpine container version
 DOCKER_TAG_CBD_SMARTSENSE - SmartSense container version
 DOCKER_TAG_CERT_TOOL - Cert tool container version
 DOCKER_TAG_CLOUDBREAK - Cloudbreak container version
-DOCKER_TAG_THUNDERHEAD_MOCK - Thunderhead mock image name
+DOCKER_TAG_CAAS_MOCK - Caas mock image name
 DOCKER_TAG_HAVEGED - Haveged container version
 DOCKER_TAG_IDBMMS - IDBMMS container version
 DOCKER_TAG_MIGRATION - Migration container version
@@ -226,13 +226,13 @@ SL_ADDRESS_RESOLVING_TIMEOUT - DNS lookup timeout of Authentication service for 
 TRAEFIK_MAX_IDLE_CONNECTION - Configures --maxidleconnsperhost for Traefik
 PUBLIC_HTTP_PORT - Configures the public http port for Cloudbreak
 PUBLIC_HTTPS_PORT - Configures the public https port for Cloudbreak
-THUNDERHEAD_MOCK_CONTAINER_PATH - Default project location in Thunderhead mock container
+CAAS_MOCK_CONTAINER_PATH - Default project location in Caas mock container
 ULU_HOST_ADDRESS - Web UI host
 ULU_NODE_TLS_REJECT_UNAUTHORIZED - Enables self signed certifications in Web UI
 ULU_SUBSCRIBE_TO_NOTIFICATIONS - Flag for automatic subscriptions for CLoudbreak events
 VERBOSE_MIGRATION - Flag of verbose database migration
 VAULT_BIND_PORT - Bind Port for Vault
-THUNDERHEAD_MOCK_BIND_PORT - Bind Port for Thunderhead Mock
+CAAS_MOCK_BIND_PORT - Bind Port for Caas Mock
 VAULT_CONFIG_FILE - Name of the config file that will be created for Vault
 VAULT_DB_SCHEMA - Postgres DB name for storing the secrets
 VAULT_DOCKER_IMAGE - Vault Docker image name
@@ -246,7 +246,7 @@ DOCKER_TAG_AMBASSADOR - Ambassador container version for local development
 PERISCOPE_SCHEMA_SCRIPTS_LOCATION - Location of Cloudbreak schema update files
 REMOVE_CONTAINER - Keeps side effect containers for debug purpose
 ULUWATU_VOLUME_HOST - Location of the locally developed Web UI project
-THUNDERHEAD_MOCK_VOLUME_HOST - Location of the locally developed Thunderhead mock
+CAAS_MOCK_VOLUME_HOST - Location of the locally developed Caas mock
 
 COMPOSE_TLS_VERSION - TLS version used by Docker Compose
 DOCKER_NETWORK_NAME - Network name for docker, created by docker-compose
@@ -256,6 +256,6 @@ DPS_REPO - Location of your DPS repo on host. If it has value, DPS environment w
 UMS_HOST - Host address of Altus UMS service
 UMS_PORT - Port of Altus UMS service
 UMS_ENABLED - Enable UMS, default value is true
-THUNDERHEAD_MOCK - Enables authentication mock
+CAAS_MOCK - Enables authentication mock
 ''' | grep "$1 " | sed "s/^.* - //" || echo Deprecated
 }

@@ -1,0 +1,96 @@
+{{{define "dps"}}}
+    caas-api:
+        build: {{{get . "DPS_REPO"}}}/caas-api
+        image: hortonworks/dps-caas-api:{{{get . "DPS_VERSION"}}}
+        ports:
+        - "{{{get . "CAAS_MOCK_BIND_PORT"}}}:10080"
+        volumes:
+        - {{{get . "DPS_REPO"}}}/resources/dev-setup/serviceaccount:/var/run/secrets/kubernetes.io/serviceaccount
+        environment:
+        # address where knox will try to find caas at
+        # docker for mac  => host.docker.internal
+        # docker-compose  => caas-api
+        # kubernetes      => localhost
+        # dev sans docker => localhost
+        - DB_HOST={{{get . "COMMON_DB"}}}
+        - CAAS_HOST=caas-api
+        - K8S_TOKEN_PATH=/var/run/secrets/kubernetes.io/serviceaccount/token
+        - K8S_CACERT_PATH=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        - EXTERNAL_HOSTNAME=dps.local
+        - |
+          TENANTS_PRE_CONFIG=[{
+                "name": "manage",
+                "label": "Manage Tenant",
+                "su": {
+                "username": "admin",
+                "password": "admin",
+                "name": "Administrator",
+                "email": "dps.hwx@gmail.com"
+                }
+            }, {
+                "name": "hortonworks",
+                "label": "Hortonworks",
+                "su": {
+                "username": "dps.hwx@gmail.com",
+                "password": "admin",
+                "name": "Jane Doe",
+                "email": "dps.hwx@gmail.com"
+                }
+            }, {
+                "name": "cloudera",
+                "label": "Cloudera",
+                "su": {
+                "username": "dps.hwx@gmail.com",
+                "password": "admin",
+                "name": "Jane Doe",
+                "email": "dps.hwx@gmail.com"
+                }
+            }]
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        restart: always
+        labels:
+        - "traefik.frontend.priority=100"
+        - "traefik.backend=caas-api"
+        - "traefik.frontend.rule=PathPrefix:/caas/api,/auth,/oidc,/idp"
+        - "traefik.port=10080"
+
+    caas-ui:
+        build: {{{get . "DPS_REPO"}}}/caas-ui
+        image: hortonworks/dps-caas-ui:{{{get . "DPS_VERSION"}}}
+        labels:
+        - "traefik.backend=caas-ui"
+        - "traefik.frontend.rule=PathPrefix:/caas"
+        - "traefik.port=9080"
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+
+    core-api:
+        build: {{{get . "DPS_REPO"}}}/core-api
+        image: hortonworks/dps-core-api:{{{get . "DPS_VERSION"}}}
+        volumes:
+        - {{{get . "DPS_REPO"}}}/resources/dev-setup/serviceaccount:/var/run/secrets/kubernetes.io/serviceaccount
+        environment:
+        - DB_HOST={{{get . "COMMON_DB"}}}
+        - "CAAS_ADDRESS=http://{{{get . "CAAS_URL"}}}"
+        - K8S_TOKEN_PATH=/var/run/secrets/kubernetes.io/serviceaccount/token
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        restart: always
+        labels:
+        - "traefik.backend=core-api"
+        - "traefik.frontend.rule=PathPrefix:/core/api"
+        - "traefik.port=10080"
+
+    core-ui:
+        build: {{{get . "DPS_REPO"}}}/core-ui
+        image: hortonworks/dps-core-ui:{{{get . "DPS_VERSION"}}}
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        labels:
+        - "traefik.backend=core-ui"
+        - "traefik.frontend.rule=PathPrefix:/core"
+        - "traefik.port=9080"
+{{{- block "core-gateway" .}}}{{{end}}}
+
+{{{end}}}
