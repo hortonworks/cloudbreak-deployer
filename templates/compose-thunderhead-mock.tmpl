@@ -4,7 +4,7 @@
         restart: on-failure
         volumes:
         - {{{get . "THUNDERHEAD_MOCK_VOLUME_HOST"}}}:{{{get . "THUNDERHEAD_MOCK_VOLUME_CONTAINER"}}}
-        - ./etc/:/etc/thunderhead
+        - ./etc/:/etc/auth
         networks:
         - {{{get . "DOCKER_NETWORK_NAME"}}}
         ports:
