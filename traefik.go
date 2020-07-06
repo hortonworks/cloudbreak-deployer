@@ -15,7 +15,7 @@ type traefikTomlParams struct {
 	EnvironmentURL      string
 	RedbeamsURL         string
 	FreeIpaURL          string
-	CaasURL             string
+	ThunderheadURL      string
 	ClusterProxyURL     string
 	Environments2ApiURL string
 	DatalakeApiURL      string

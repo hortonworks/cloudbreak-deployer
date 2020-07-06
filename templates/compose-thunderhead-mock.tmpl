@@ -1,0 +1,18 @@
+{{{define "thunderhead-mock"}}}
+    thunderhead-mock:
+        image: {{{get . "DOCKER_IMAGE_THUNDERHEAD_MOCK"}}}:{{{get . "DOCKER_TAG_THUNDERHEAD_MOCK"}}}
+        restart: on-failure
+        volumes:
+        - {{{get . "THUNDERHEAD_MOCK_VOLUME_HOST"}}}:{{{get . "THUNDERHEAD_MOCK_VOLUME_CONTAINER"}}}
+        - ./etc/:/etc/auth
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        ports:
+        - "{{{get . "THUNDERHEAD_MOCK_BIND_PORT"}}}:8080"
+        - "{{{get . "UMS_PORT"}}}:8982"
+        labels:
+        - traefik.frontend.priority=100
+        - traefik.frontend.rule=PathPrefix:/thunderhead,/oidc,/idp,/thunderhead
+        - traefik.port=8080
+        - traefik.backend=thunderhead-backend
+{{{end}}}
