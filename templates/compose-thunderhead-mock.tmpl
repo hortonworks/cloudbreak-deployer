@@ -12,7 +12,7 @@
         - "{{{get . "UMS_PORT"}}}:8982"
         labels:
         - traefik.frontend.priority=100
-        - traefik.frontend.rule=PathPrefix:/thunderhead,/oidc,/idp,/thunderhead
+        - traefik.frontend.rule=PathPrefix:/oidc,/idp,/thunderhead
         - traefik.port=8080
         - traefik.backend=thunderhead-backend
 {{{end}}}
