@@ -19,7 +19,7 @@ services:
             options:
                 max-size: "10M"
                 max-file: "5"
-        image: hortonworks/haveged:{{{get . "DOCKER_TAG_HAVEGED"}}}
+        image: docker-private.infra.cloudera.com/cloudera_thirdparty/haveged/haveged:{{{get . "DOCKER_TAG_HAVEGED"}}}
 
     logsink:
         labels:
@@ -71,7 +71,7 @@ services:
             options:
                 max-size: "10M"
                 max-file: "5"
-        image: hortonworks/logrotate:{{{get . "DOCKER_TAG_LOGROTATE"}}}
+        image: docker-private.infra.cloudera.com/cloudera_thirdparty/logrotate/logrotate:{{{get . "DOCKER_TAG_LOGROTATE"}}}
 
     {{{get . "COMMON_DB"}}}:
         labels:

@@ -52,7 +52,7 @@ export-prerequisites() {
     fi
 
     printf "\n### Open ports\n" >> $out
-    ! docker run --rm --name=cbreak_export_netstat --network=host alpine:3.7 netstat -tulnp >> $out
+    ! docker run --rm --name=cbreak_export_netstat --network=host docker-private.infra.cloudera.com/cloudera_thirdparty/alpine/alpine:3.7 netstat -tulnp >> $out
 
     if command_exists iptables; then
         printf "\n### IPTABLES\n" >> $out
