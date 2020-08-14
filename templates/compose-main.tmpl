@@ -30,7 +30,7 @@ services:
             - ./logs:/tmp
         networks:
         - {{{get . "DOCKER_NETWORK_NAME"}}}
-        image: hortonworks/socat:1.0.0
+        image: docker-private.infra.cloudera.com/cloudera_thirdparty/socat/socat:1.0.0
         logging:
             options:
                 max-size: "10M"
@@ -56,7 +56,7 @@ services:
             options:
                 max-size: "10M"
                 max-file: "5"
-        image: hortonworks/logspout:v3.2.2
+        image: docker-private.infra.cloudera.com/cloudera_thirdparty/logspout/logspout:v3.2.2
 
     logrotate:
         environment:
@@ -109,7 +109,7 @@ services:
         command: server
 
     jaeger:
-        image: jaegertracing/all-in-one:1.13
+        image: docker-private.infra.cloudera.com/cloudera_thirdparty/jaegertracing/all-in-one:1.13
         networks:
             - {{{get . "DOCKER_NETWORK_NAME"}}}
         ports:
