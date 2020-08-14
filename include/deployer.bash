@@ -439,14 +439,14 @@ network-doctor() {
     fi
 
     echo-n "ping 8.8.8.8 in container: "
-    if docker run --rm --name=cbreak_doctor_gdns --label cbreak.sidekick=true alpine sh -c 'ping -c 1 -W 1 8.8.8.8' &> /dev/null; then
+    if docker run --rm --name=cbreak_doctor_gdns --label cbreak.sidekick=true docker-private.infra.cloudera.com/cloudera_thirdparty/alpine/alpine:latest sh -c 'ping -c 1 -W 1 8.8.8.8' &> /dev/null; then
         info "OK"
     else
         error
     fi
 
     echo-n "ping github.com in container: "
-    if docker run --rm --name=cbreak_doctor_github --label cbreak.sidekick=true alpine sh -c 'ping -c 1 -W 1 github.com' &> /dev/null; then
+    if docker run --rm --name=cbreak_doctor_github --label cbreak.sidekick=true docker-private.infra.cloudera.com/cloudera_thirdparty/alpine/alpine:latest sh -c 'ping -c 1 -W 1 github.com' &> /dev/null; then
         info "OK"
     else
         error

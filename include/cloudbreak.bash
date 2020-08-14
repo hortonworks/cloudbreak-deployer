@@ -3,7 +3,7 @@ cloudbreak-config() {
   if is_macos; then
     : ${BRIDGE_ADDRESS:=host.docker.internal}
   else
-    : ${BRIDGE_ADDRESS:=$(docker run --rm --name=cbreak_cbd_bridgeip --label cbreak.sidekick=true alpine sh -c 'ip ro | grep default | cut -d" " -f 3')}
+    : ${BRIDGE_ADDRESS:=$(docker run --rm --name=cbreak_cbd_bridgeip --label cbreak.sidekick=true docker-private.infra.cloudera.com/cloudera_thirdparty/alpine/alpine:latest sh -c 'ip ro | grep default | cut -d" " -f 3')}
   fi
   cloudbreak-conf-tags
   cloudbreak-conf-images
@@ -392,7 +392,7 @@ cloudbreak-generate-cert() {
           --label cbreak.sidekick=true \
           $run_as_user \
           -v ${CBD_CERT_ROOT_PATH}:/certs \
-          hortonworks/certm:${DOCKER_TAG_CERT_TOOL} \
+          docker-private.infra.cloudera.com/cloudera_thirdparty/ehazlett/certm:${DOCKER_TAG_CERT_TOOL} \
           -d /certs/traefik ca generate -o=local &> $cbd_ca_cert_gen_out || CA_CERT_EXIT_CODE=$? && true;
       if [[ $CA_CERT_EXIT_CODE -ne 0 ]]; then
           cat $cbd_ca_cert_gen_out;
@@ -404,7 +404,7 @@ cloudbreak-generate-cert() {
           --label cbreak.sidekick=true \
           $run_as_user \
           -v ${CBD_CERT_ROOT_PATH}:/certs \
-          hortonworks/certm:${DOCKER_TAG_CERT_TOOL} \
+          docker-private.infra.cloudera.com/cloudera_thirdparty/ehazlett/certm:${DOCKER_TAG_CERT_TOOL} \
           -d /certs/traefik client generate --common-name=${PUBLIC_IP} -o=local &> $cbd_client_cert_gen_out || CLIENT_CERT_EXIT_CODE=$? && true;
       if [[ $CLIENT_CERT_EXIT_CODE -ne 0 ]]; then
          cat $cbd_client_cert_gen_out;
