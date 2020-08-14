@@ -3,7 +3,7 @@
         {{{- if get . "DPS_REPO"}}}
         build: {{{get . "DPS_REPO"}}}/core-gateway
         {{{- end}}}
-        image: hortonworks/dps-gateway:{{{get . "DPS_VERSION"}}}
+        image: docker-private.infra.cloudera.com/cloudera_thirdparty/dps-gateway/dps-gateway:{{{get . "DPS_VERSION"}}}
         # ports:
             # - {{{get . "PUBLIC_HTTP_PORT"}}}:3000
             # - {{{get . "PUBLIC_HTTPS_PORT"}}}:443
@@ -20,7 +20,7 @@
         - GATEWAY_REDIRECT_ENDPOINT_PATH=/thunderhead/auth/in
 
     dev-gateway:
-        image: abiosoft/caddy:1.0.1-no-stats
+        image: docker-private.infra.cloudera.com/cloudera_thirdparty/abiosoft/caddy:1.0.1-no-stats
         environment:
         - GATEWAY_HOST=core-gateway
         networks:
