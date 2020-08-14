@@ -69,7 +69,7 @@ migrate-execute-mybatis-migrations() {
         -e DB_PORT_5432_TCP_PORT=5432 \
         --label cbreak.sidekick=true \
         -v $new_scripts_location:/migrate/scripts \
-        hortonworks/mybatis-migrations:$DOCKER_TAG_MIGRATION "$@" \
+        docker-private.infra.cloudera.com/cloudera_thirdparty/mybatis/mybatis-migrations:$DOCKER_TAG_MIGRATION "$@" \
       | tee -a "$DB_MIGRATION_LOG")
 
     if ${VERBOSE_MIGRATION}; then
