@@ -157,6 +157,7 @@ DB_DUMP_VOLUME - Name of the database dump volume
 DB_MIGRATION_LOG - Database migration log file
 DOCKER_CONSUL_OPTIONS - Extra options for Consul
 DOCKER_IMAGE_AUDIT - Audit Service Docker image name
+DOCKER_IMAGE_AUDIT_API - Audit Service Public API Docker image name
 DOCKER_IMAGE_CBD_SMARTSENSE - SmartSense Docker image name
 DOCKER_IMAGE_THUNDERHEAD_MOCK - Thunderhead mock image name
 DOCKER_IMAGE_CLOUDBREAK - Cloudbreak Docker image name

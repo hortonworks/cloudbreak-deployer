@@ -71,7 +71,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER 2.1.0.0-362
     env-import DOCKER_TAG_CADENCE 0.11.0-auto-setup
     env-import DOCKER_TAG_CADENCE_WEB 1.0.0-b24
-    env-import DOCKER_TAG_AUDIT 1.0.0-b1241
+    env-import DOCKER_TAG_AUDIT 1.0.0-b1843
 
     env-import DOCKER_IMAGE_THUNDERHEAD_MOCK docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-thunderhead
     env-import DOCKER_IMAGE_CLOUDBREAK docker-private.infra.cloudera.com/cloudera/cloudbreak
@@ -84,6 +84,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CLOUDBREAK_FREEIPA docker-private.infra.cloudera.com/cloudera/cloudbreak-freeipa
     env-import DOCKER_IMAGE_CBD_SMARTSENSE hortonworks/cbd-smartsense
     env-import DOCKER_IMAGE_AUDIT docker-private.infra.cloudera.com/cloudera/thunderhead-audit
+    env-import DOCKER_IMAGE_AUDIT_API docker-private.infra.cloudera.com/cloudera/thunderhead-audit-api
 
     env-import DOCKER_IMAGE_IDBMMS docker-private.infra.cloudera.com/cloudera/thunderhead-idbrokermappingmanagement
     env-import DOCKER_IMAGE_ENVIRONMENTS2_API docker-private.infra.cloudera.com/cloudera/thunderhead-environments2-api
@@ -257,6 +258,7 @@ cloudbreak-conf-defaults() {
     env-import ENVIRONMENTS2_API_URL $(service-url environments2-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8984" "8982")
     env-import DATALAKE_API_URL $(service-url datalake-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8986" "8984")
     env-import DISTROX_API_URL $(service-url distrox-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8988" "8992")
+    env-import AUDIT_API_URL $(service-url audit-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8982" "8994")
 
     env-import ENVIRONMENT_PORT $(port-from-url "$ENVIRONMENT_URL")
     env-import FREEIPA_PORT $(port-from-url "$FREEIPA_URL")
@@ -271,8 +273,11 @@ cloudbreak-conf-defaults() {
     env-import ENVIRONMENTS2_API_HEALTHZ_PORT 8983
     env-import DATALAKE_API_HEALTHZ_PORT 8985
     env-import DISTROX_API_HEALTHZ_PORT 8992
+
     env-import AUDIT_HTTP_PORT 8987
     env-import AUDIT_GRPC_PORT 8989
+    env-import AUDIT_API_HTTP_PORT 8993
+    env-import AUDIT_API_GRPC_PORT 8992
 
     env-import DATALAKE_DB_AVAILABILITY "NON_HA"
 
@@ -359,6 +364,7 @@ cloudbreak-conf-host-addr() {
     env-import REDBEAMS_HOST_ADDRESS  "http://$PUBLIC_IP"
     env-import PERISCOPE_HOST_ADDRESS  "http://$PUBLIC_IP"
     env-import DATALAKE_HOST_ADDRESS  "http://$PUBLIC_IP"
+    env-import AUDIT_HOST_ADDRESS  "http://$PUBLIC_IP"
 }
 
 cloudbreak-conf-java() {

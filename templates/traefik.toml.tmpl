@@ -55,6 +55,12 @@
             [backends.environments2-api.servers.server0]
             url = "{{{ .Environments2ApiURL }}}"
 {{{- end}}}
+{{{- if isLocal . "audit-api" }}}
+    [backends.audit-api]
+        [backends.audit-api.servers]
+            [backends.audit-api.servers.server0]
+            url = "{{{ .AuditApiURL }}}"
+{{{- end}}}
 {{{- if isLocal . "datalake-api" }}}
     [backends.datalake-api]
         [backends.datalake-api.servers]
@@ -144,5 +150,12 @@
     backend = "distrox-api"
         [frontends.distrox-api-frontend.routes.frontendrule]
         rule = "PathPrefix:/api/v1/datahub/"
+        priority = 100
+{{{- end}}}
+{{{- if isLocal . "audit-api"}}}
+    [frontends.audit-api-frontend]
+    backend = "audit-api"
+        [frontends.audit-api-frontend.routes.frontendrule]
+        rule = "PathPrefix:/api/v1/audit/"
         priority = 100
 {{{- end}}}
