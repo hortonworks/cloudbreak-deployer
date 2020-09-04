@@ -4,13 +4,13 @@
             - TELEMETRY_SERVICE_NAME=AuditApi
             - SERVICEDEPENDENCIES_UMSHOST={{{get . "UMS_HOST"}}}
             - SERVICEDEPENDENCIES_UMSPORT=8982
-            - SERVICEDEPENDENCIES_AUDITPUBLICAPIHOST=http://audit-api
-            - SERVICEDEPENDENCIES_AUDITPUBLICAPIPORT={{{get . "AUDIT_GRPC_PORT"}}}
+            - SERVICEDEPENDENCIES_AUDITPUBLICAPIHOST=audit
+            - SERVICEDEPENDENCIES_AUDITPUBLICAPIPORT=8982
         volumes:
             - ./etc/vault-dev-root-token.txt:/etc/vault-root-token.txt
         labels:
-            - traefik.port=8983
-            - traefik.frontend.rule=PathPrefixStrip:/api/v1/audit/
+            - traefik.port=8982
+            - traefik.frontend.rule=PathPrefix:/api/v1/audit/
             - traefik.backend=audit-api-backend
             - traefik.frontend.priority=10
         ports:

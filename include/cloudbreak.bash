@@ -71,7 +71,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER 2.1.0.0-362
     env-import DOCKER_TAG_CADENCE 0.11.0-auto-setup
     env-import DOCKER_TAG_CADENCE_WEB 1.0.0-b24
-    env-import DOCKER_TAG_AUDIT 1.0.0-b1843
+    env-import DOCKER_TAG_AUDIT 1.0.0-b1898
 
     env-import DOCKER_IMAGE_THUNDERHEAD_MOCK docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-thunderhead
     env-import DOCKER_IMAGE_CLOUDBREAK docker-private.infra.cloudera.com/cloudera/cloudbreak
@@ -274,10 +274,11 @@ cloudbreak-conf-defaults() {
     env-import DATALAKE_API_HEALTHZ_PORT 8985
     env-import DISTROX_API_HEALTHZ_PORT 8992
 
-    env-import AUDIT_HTTP_PORT 8987
-    env-import AUDIT_GRPC_PORT 8989
-    env-import AUDIT_API_HTTP_PORT 8993
-    env-import AUDIT_API_GRPC_PORT 8992
+    env-import AUDIT_HTTP_PORT 8977
+    env-import AUDIT_GRPC_PORT 8979
+    env-import AUDIT_API_GRPC_PORT 8972
+    env-import AUDIT_API_HTTP_PORT 8973
+   
 
     env-import DATALAKE_DB_AVAILABILITY "NON_HA"
 
