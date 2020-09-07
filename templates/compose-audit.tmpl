@@ -16,7 +16,6 @@
             - ./etc/vault-dev-root-token.txt:/etc/vault-root-token.txt
         labels:
             - traefik.port=8983
-            - traefik.frontend.rule=PathPrefix:/api/v1/audit/
             - traefik.backend=audit
             - traefik.frontend.priority=10
         ports:

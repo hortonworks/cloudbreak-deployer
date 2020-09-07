@@ -1,0 +1,26 @@
+{{{define "audit-api"}}}
+    audit-api:
+        environment:
+            - TELEMETRY_SERVICE_NAME=AuditApi
+            - SERVICEDEPENDENCIES_UMSHOST={{{get . "UMS_HOST"}}}
+            - SERVICEDEPENDENCIES_UMSPORT=8982
+            - SERVICEDEPENDENCIES_AUDITPUBLICAPIHOST=audit
+            - SERVICEDEPENDENCIES_AUDITPUBLICAPIPORT=8982
+        volumes:
+            - ./etc/vault-dev-root-token.txt:/etc/vault-root-token.txt
+        labels:
+            - traefik.port=8982
+            - traefik.frontend.rule=PathPrefix:/api/v1/audit/
+            - traefik.backend=audit-api-backend
+            - traefik.frontend.priority=10
+        ports:
+            - {{{get . "AUDIT_API_GRPC_PORT"}}}:8982
+            - {{{get . "AUDIT_API_HTTP_PORT"}}}:8983
+        networks:
+            - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: {{{get . "DOCKER_IMAGE_AUDIT_API"}}}:{{{get . "DOCKER_TAG_AUDIT"}}}
+{{{end}}}
