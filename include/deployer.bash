@@ -132,7 +132,7 @@ cbd-version() {
 
     if [ -e docker-compose.yml ]; then
         echo "docker images:"
-        sed -n "s/.*image://p" docker-compose.yml | grep "sequenceiq\|hortonworks" |green
+        sed -n "s/.*image://p" docker-compose.yml | grep "sequenceiq\|hortonworks\|cloudera\|cloudera_thirdparty" |green
     fi
 
 }
