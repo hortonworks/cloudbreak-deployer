@@ -59,10 +59,10 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_FREEIPA 2.31.0-b14
     env-import DOCKER_TAG_ULUWATU 2.31.0-b14
 
-    env-import DOCKER_TAG_IDBMMS 1.0.0-b1865
-    env-import DOCKER_TAG_ENVIRONMENTS2_API 1.0.0-b1865
-    env-import DOCKER_TAG_DATALAKE_API 1.0.0-b1865
-    env-import DOCKER_TAG_DISTROX_API 1.0.0-b1865
+    env-import DOCKER_TAG_IDBMMS 1.0.0-b1987
+    env-import DOCKER_TAG_ENVIRONMENTS2_API 1.0.0-b1987
+    env-import DOCKER_TAG_DATALAKE_API 1.0.0-b1987
+    env-import DOCKER_TAG_DISTROX_API 1.0.0-b1987
 
     env-import DOCKER_TAG_POSTGRES 9.6.16-alpine
     env-import DOCKER_TAG_LOGROTATE 1.0.2
@@ -214,7 +214,7 @@ cloudbreak-conf-defaults() {
     env-import CB_MAX_SALT_RECIPE_EXECUTION_RETRY 90
     env-import CB_LOG_LEVEL "DEBUG"
     env-import CB_PORT 8080
-    env-import PERISCOPE_PORT 8080 
+    env-import PERISCOPE_PORT 8080
 
     env-import CB_INSTANCE_UUID
     env-import CB_INSTANCE_NODE_ID
@@ -278,7 +278,7 @@ cloudbreak-conf-defaults() {
     env-import AUDIT_GRPC_PORT 8979
     env-import AUDIT_API_GRPC_PORT 8972
     env-import AUDIT_API_HTTP_PORT 8973
-   
+
 
     env-import DATALAKE_DB_AVAILABILITY "NON_HA"
 
