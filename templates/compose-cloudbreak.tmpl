@@ -122,4 +122,9 @@
                 max-file: "5"
         image: {{{get . "DOCKER_IMAGE_CLOUDBREAK"}}}:{{{get . "DOCKER_TAG_CLOUDBREAK"}}}
         command: bash
+        deploy:
+            resources:
+                limits:
+                    memory: {{{get . "MEMORY_FOR_CLOUDBREAK"}}}
+                    cpus: {{{get . "CPUS_FOR_CLOUDBREAK"}}}
 {{{end}}}
