@@ -1,5 +1,5 @@
 compose-init() {
-    local required_compose=1.23.2
+    local required_compose=1.27.2
     local compose_version=$(docker-compose --version 2>&1 | grep -E -o "([0-9]+\.)+[0-9]+")
 
     local compare_result=$(compare-versions ${compose_version} ${required_compose})
@@ -10,6 +10,10 @@ compose-init() {
     fi
 
     deps-require docker-compose ${required_compose}
+    env-import CPUS_FOR_CLOUDBREAK 2.0
+    env-import CPUS_FOR_SERVICES 1.0
+    env-import MEMORY_FOR_CLOUDBREAK 4096M
+    env-import MEMORY_FOR_OTHER_SERVICES 2048M
     env-import CB_COMPOSE_PROJECT cbreak
     env-import COMPOSE_HTTP_TIMEOUT 120
     env-import DOCKER_STOP_TIMEOUT 60
@@ -32,7 +36,7 @@ compose-init() {
 
 dockerCompose() {
     debug "docker-compose -p ${CB_COMPOSE_PROJECT} $@"
-    docker-compose -p ${CB_COMPOSE_PROJECT} "$@"
+    docker-compose --compatibility -p ${CB_COMPOSE_PROJECT} "$@"
 }
 
 compose-ps() {

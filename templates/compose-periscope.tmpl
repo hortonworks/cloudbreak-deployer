@@ -56,4 +56,9 @@
                 max-size: "10M"
                 max-file: "5"
         image: {{{get . "DOCKER_IMAGE_CLOUDBREAK_PERISCOPE"}}}:{{{get . "DOCKER_TAG_PERISCOPE"}}}
+        deploy:
+            resources:
+                limits:
+                    memory: {{{get . "MEMORY_FOR_OTHER_SERVICES"}}}
+                    cpus: {{{get . "CPUS_FOR_SERVICES"}}}
 {{{end}}}

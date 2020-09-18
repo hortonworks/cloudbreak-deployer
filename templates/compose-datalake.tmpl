@@ -56,4 +56,9 @@
                 max-file: "5"
         image: {{{get . "DOCKER_IMAGE_CLOUDBREAK_DATALAKE"}}}:{{{get . "DOCKER_TAG_DATALAKE"}}}
         command: bash
+        deploy:
+            resources:
+                limits:
+                    memory: {{{get . "MEMORY_FOR_OTHER_SERVICES"}}}
+                    cpus: {{{get . "CPUS_FOR_SERVICES"}}}
 {{{end}}}
