@@ -11,6 +11,7 @@ cloudbreak-config() {
   cloudbreak-conf-cert
   cloudbreak-conf-db
   cloudbreak-conf-defaults
+  cloudbreak-conf-integration-test
   cloudbreak-conf-autscale
   cloudbreak-conf-cloud-provider
   cloudbreak-conf-rest-client
@@ -106,6 +107,11 @@ cloudbreak-conf-images() {
     env-import FREEIPA_IMAGE_CATALOG_URL ""
 }
 
+cloudbreak-conf-integration-test() {
+    declare desc="Defines Integration Test related configs"
+
+    env-import INTEGRATION_TEST_LOG_LEVEL "DEBUG"
+}
 cloudbreak-conf-capabilities() {
     declare desc="Enables capabilities"
 
