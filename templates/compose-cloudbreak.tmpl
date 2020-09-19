@@ -69,6 +69,7 @@
             - CB_COMPONENT_CREATED
             - CB_COMPONENT_CLUSTER_ID
             - CB_LOG_LEVEL
+            - INTEGRATION_TEST_LOG_LEVEL
             - CB_DEFAULT_GATEWAY_CIDR
             {{{- if eq (get . "CB_AUDIT_FILE_ENABLED") "true"}}}
             - CB_AUDIT_FILEPATH=/cloudbreak-log/cb-audit.log
