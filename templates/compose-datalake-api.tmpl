@@ -30,4 +30,9 @@
                 max-size: "10M"
                 max-file: "5"
         image: {{{get . "DOCKER_IMAGE_DATALAKE_API"}}}:{{{get . "DOCKER_TAG_DATALAKE_API"}}}
+        deploy:
+          resources:
+            limits:
+              memory: 1024M
+              cpus: 1.0
 {{{end}}}

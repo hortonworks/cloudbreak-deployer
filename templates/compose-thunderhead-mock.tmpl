@@ -15,4 +15,9 @@
         - traefik.frontend.rule=PathPrefix:/oidc,/idp,/thunderhead
         - traefik.port=8080
         - traefik.backend=thunderhead-backend
+        deploy:
+          resources:
+            limits:
+              memory: 512M
+              cpus: 1.0
 {{{end}}}

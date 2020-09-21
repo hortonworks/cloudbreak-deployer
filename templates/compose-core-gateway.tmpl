@@ -18,6 +18,11 @@
         - UMS_HOST={{{get . "UMS_HOST"}}}
         - GATEWAY_DEFAULT_REDIRECT_PATH={{{get . "GATEWAY_DEFAULT_REDIRECT_PATH"}}}
         - GATEWAY_REDIRECT_ENDPOINT_PATH=/thunderhead/auth/in
+        deploy:
+          resources:
+            limits:
+              memory: 256M
+              cpus: 1.0
 
     dev-gateway:
         image: docker-private.infra.cloudera.com/cloudera_thirdparty/abiosoft/caddy:1.0.1-no-stats
@@ -30,6 +35,11 @@
         - 443:443
         volumes:
         - ./Caddyfile:/etc/Caddyfile
+        deploy:
+          resources:
+            limits:
+              memory: 256M
+              cpus: 1.0
 
     traefik:
         ports:
@@ -47,5 +57,10 @@
         image: traefik:{{{get . "DOCKER_TAG_TRAEFIK"}}}
         restart: on-failure
         command: --debug --api --rest --ping --metrics --InsecureSkipVerify=true --defaultEntryPoints=http,https --maxidleconnsperhost={{{get . "TRAEFIK_MAX_IDLE_CONNECTION"}}} --traefiklog.filepath=/opt/traefik/log/traefik.log --accessLog.filePath=/opt/traefik/log/access.log --docker
+        deploy:
+          resources:
+            limits:
+              memory: 256M
+              cpus: 1.0
     
 {{{end}}}
