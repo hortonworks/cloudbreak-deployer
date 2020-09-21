@@ -27,4 +27,9 @@
                 max-size: "10M"
                 max-file: "5"
         image: {{{get . "DOCKER_IMAGE_IDBMMS"}}}:{{{get . "DOCKER_TAG_IDBMMS"}}}
+        deploy:
+          resources:
+            limits:
+              memory: 1024M
+              cpus: 1.0
 {{{end}}}

@@ -18,4 +18,9 @@
         image: traefik:{{{get . "DOCKER_TAG_TRAEFIK"}}}
         restart: on-failure
         command: --debug --api --rest --ping --metrics --InsecureSkipVerify=true --defaultEntryPoints=http,https --entryPoints='Name:http Address::80 Redirect.EntryPoint:https' --entryPoints='Name:https Address::443 TLS:{{{get . "CBD_TRAEFIK_TLS"}}}' --maxidleconnsperhost={{{get . "TRAEFIK_MAX_IDLE_CONNECTION"}}} --traefiklog.filepath=/opt/traefik/log/traefik.log --accessLog.filePath=/opt/traefik/log/access.log --docker
+        deploy:
+          resources:
+            limits:
+              memory: 256M
+              cpus: 1.0
 {{{end}}}

@@ -51,6 +51,11 @@
         {{{- end }}}
         depends_on:
             - {{{get . "COMMON_DB"}}}
+        deploy:
+          resources:
+            limits:
+              memory: 1024M
+              cpus: 1.0
     cadence-web:
         image: {{{get . "DOCKER_IMAGE_CADENCE_WEB"}}}:{{{get . "DOCKER_TAG_CADENCE_WEB"}}}
         environment:
@@ -65,4 +70,9 @@
         #
         # Upstream fix https://github.com/uber/cadence-web/pull/141
         stop_signal: SIGKILL
+        deploy:
+          resources:
+            limits:
+              memory: 1024M
+              cpus: 1.0
 {{{end}}}

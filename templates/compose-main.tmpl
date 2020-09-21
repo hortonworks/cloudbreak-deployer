@@ -20,6 +20,11 @@ services:
                 max-size: "10M"
                 max-file: "5"
         image: docker-private.infra.cloudera.com/cloudera_thirdparty/haveged/haveged:{{{get . "DOCKER_TAG_HAVEGED"}}}
+        deploy:
+          resources:
+            limits:
+              memory: 512M
+              cpus: 1.0
 
     {{{get . "COMMON_DB"}}}:
         labels:
@@ -37,6 +42,11 @@ services:
         image: postgres:{{{get . "DOCKER_TAG_POSTGRES"}}}
         entrypoint: ["/bin/bash"]
         command: -c 'cd /var/lib/postgresql; touch .ash_history .psql_history; chown -R postgres:postgres /var/lib/postgresql; (/docker-entrypoint.sh postgres -c max_connections=300 -c shared_preload_libraries='pg_stat_statements') & PGPID="$$!"; echo "PGPID $$PGPID"; trap "kill $$PGPID; wait $$PGPID" SIGINT SIGTERM; cd /var/lib/postgresql; (tail -f .*history) & wait "$$PGPID"'
+        deploy:
+          resources:
+            limits:
+              memory: 512M
+              cpus: 1.0
 
     vault:
         labels:
@@ -55,6 +65,11 @@ services:
         image: {{{get . "VAULT_DOCKER_IMAGE"}}}:{{{get . "VAULT_DOCKER_IMAGE_TAG"}}}
         restart: on-failure
         command: server
+        deploy:
+          resources:
+            limits:
+              memory: 512M
+              cpus: 1.0
 
     jaeger:
         image: docker-private.infra.cloudera.com/cloudera_thirdparty/jaegertracing/all-in-one:1.13
@@ -63,6 +78,11 @@ services:
         ports:
             - "6831:6831/udp"
             - "16686:16686"
+        deploy:
+          resources:
+            limits:
+              memory: 1024M
+              cpus: 1.0
 
     uluwatu:
         environment:
@@ -104,6 +124,11 @@ services:
                 max-size: "10M"
                 max-file: "5"
         image: {{{get . "DOCKER_IMAGE_CLOUDBREAK_WEB"}}}:{{{get . "DOCKER_TAG_ULUWATU"}}}
+        deploy:
+          resources:
+            limits:
+              memory: 1024M
+              cpus: 1.0
 {{{ block "dps" .}}}{{{end}}}
 {{{ block "cadence" .}}}{{{end}}}
 {{{ block "cluster-proxy" .}}}{{{end}}}

@@ -32,4 +32,9 @@
                 max-size: "10M"
                 max-file: "5"
         image: {{{get . "DOCKER_IMAGE_DISTROX_API"}}}:{{{get . "DOCKER_TAG_DISTROX_API"}}}
+        deploy:
+          resources:
+            limits:
+              memory: 1024M
+              cpus: 1.0
 {{{end}}}

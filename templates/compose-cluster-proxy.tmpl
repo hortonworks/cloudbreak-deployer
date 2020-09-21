@@ -25,6 +25,11 @@
             - "traefik.port=10080"
         ports:
             - 10180:10080
+        deploy:
+          resources:
+            limits:
+              memory: 1024M
+              cpus: 1.0
 
     cluster-proxy-health-check-worker:
         image: {{{get . "DOCKER_IMAGE_CLUSTER_PROXY_HEALTH_CHECK_WORKER"}}}:{{{get . "DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER"}}}
@@ -37,4 +42,9 @@
         depends_on:
             - cadence
         entrypoint: ["/usr/cluster-proxy/bin/cluster-proxy","-main", "com.cloudera.cdp.WorkflowMain"]
+        deploy:
+          resources:
+            limits:
+              memory: 1024M
+              cpus: 1.0
 {{{end}}}
