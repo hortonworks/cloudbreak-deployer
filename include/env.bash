@@ -186,7 +186,6 @@ DOCKER_TAG_ENVIRONMENT - Environment container version
 DOCKER_TAG_ENVIRONMENTS2_API - Environments2 API container version
 DOCKER_TAG_FREEIPA - FreeIpa container version
 DOCKER_TAG_POSTGRES - Postgresql container version
-DOCKER_TAG_LOGROTATE - Logrotate container version
 DOCKER_TAG_TRAEFIK - Traefik container version
 DOCKER_TAG_ULUWATU - Web UI container version
 DOCKER_STOP_TIMEOUT - Specify a shutdown timeout in seconds for containers

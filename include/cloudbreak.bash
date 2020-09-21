@@ -66,7 +66,6 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_DISTROX_API 1.0.0-b1987
 
     env-import DOCKER_TAG_POSTGRES 9.6.16-alpine
-    env-import DOCKER_TAG_LOGROTATE 1.0.2
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
     env-import DOCKER_TAG_CLUSTER_PROXY 2.1.0.0-362
     env-import DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER 2.1.0.0-362

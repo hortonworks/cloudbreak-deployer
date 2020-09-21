@@ -21,58 +21,6 @@ services:
                 max-file: "5"
         image: docker-private.infra.cloudera.com/cloudera_thirdparty/haveged/haveged:{{{get . "DOCKER_TAG_HAVEGED"}}}
 
-    logsink:
-        labels:
-        - traefik.enable=false
-        ports:
-            - 3333
-        volumes:
-            - ./logs:/tmp
-        networks:
-        - {{{get . "DOCKER_NETWORK_NAME"}}}
-        image: docker-private.infra.cloudera.com/cloudera_thirdparty/socat/socat:1.0.0
-        logging:
-            options:
-                max-size: "10M"
-                max-file: "5"
-        command: socat -u TCP-LISTEN:3333,reuseaddr,fork OPEN:/tmp/cbreak.log,creat,append
-
-    logspout:
-        labels:
-        - traefik.enable=false
-        ports:
-            - 8000:80
-        environment:
-            - DEBUG=true
-            - LOGSPOUT=ignore
-            - "RAW_FORMAT={{.Container.Name}} | {{.Data}}\n"
-        volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        networks:
-        - {{{get . "DOCKER_NETWORK_NAME"}}}
-        entrypoint: ["/bin/sh"]
-        command: -c 'sleep 1; (ROUTE_URIS=$$LOGSINK_PORT_3333_TCP /bin/logspout) & LSPID=$$!; trap "kill $$LSPID; wait $$LSPID" SIGINT SIGTERM; wait $$LSPID'
-        logging:
-            options:
-                max-size: "10M"
-                max-file: "5"
-        image: docker-private.infra.cloudera.com/cloudera_thirdparty/logspout/logspout:v3.2.2
-
-    logrotate:
-        environment:
-            - "CRON_EXPR=0 * * * *"
-            - "LOGROTATE_LOGFILES=/var/log/cloudbreak-deployer/*.log /var/log/cloudbreak-deployer/*/*.log"
-            - LOGROTATE_FILESIZE=10M
-        volumes:
-            - ./logs:/var/log/cloudbreak-deployer
-        networks:
-        - {{{get . "DOCKER_NETWORK_NAME"}}}
-        logging:
-            options:
-                max-size: "10M"
-                max-file: "5"
-        image: docker-private.infra.cloudera.com/cloudera_thirdparty/logrotate/logrotate:{{{get . "DOCKER_TAG_LOGROTATE"}}}
-
     {{{get . "COMMON_DB"}}}:
         labels:
         - traefik.enable=false
