@@ -10,8 +10,8 @@ compose-init() {
     fi
 
     deps-require docker-compose ${required_compose}
-    env-import CPUS_FOR_CLOUDBREAK 4.0
-    env-import CPUS_FOR_SERVICES 2.0
+    env-import CPUS_FOR_CLOUDBREAK 8.0
+    env-import CPUS_FOR_SERVICES 4.0
     env-import MEMORY_FOR_CLOUDBREAK 4096M
     env-import MEMORY_FOR_OTHER_SERVICES 2048M
     env-import CB_COMPOSE_PROJECT cbreak
