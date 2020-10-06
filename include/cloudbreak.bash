@@ -375,6 +375,7 @@ cloudbreak-conf-host-addr() {
 
 cloudbreak-conf-java() {
     env-import CB_JAVA_OPTS ""
+    env-import PERISCOPE_JAVA_OPTS ""
     env-import FREEIPA_JAVA_OPTS ""
     env-import REDBEAMS_JAVA_OPTS ""
     env-import DATALAKE_JAVA_OPTS ""

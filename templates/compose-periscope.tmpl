@@ -11,7 +11,7 @@
             - PERISCOPE_DB_ENV_DB
             - PERISCOPE_DB_ENV_SCHEMA
             - "HTTPS_PROXYFORCLUSTERCONNECTION={{{get . "HTTPS_PROXYFORCLUSTERCONNECTION"}}}"
-            - 'CB_JAVA_OPTS={{{getEscaped . "CB_JAVA_OPTS"}}}'
+            - 'PERISCOPE_JAVA_OPTS={{{getEscaped . "PERISCOPE_JAVA_OPTS"}}}'
             - PERISCOPE_HOSTNAME_RESOLUTION=public
             - ENDPOINTS_AUTOCONFIG_ENABLED=false
             - ENDPOINTS_DUMP_ENABLED=false

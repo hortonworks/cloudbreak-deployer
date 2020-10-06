@@ -91,7 +91,7 @@ CB_INSTANCE_NODE_ID - Unique identifier of the Cloudbreak node
 CB_INSTANCE_PROVIDER - Cloud provider of the Cloudbreak instance
 CB_INSTANCE_REGION - Cloud region of the Cloudbreak instance
 CB_INSTANCE_UUID - Unique identifier of Cloudbreak deployment
-CB_JAVA_OPTS - Extra Java options for Autoscale and Cloudbreak
+CB_JAVA_OPTS - Extra Java options for Cloudbreak
 CB_AUDIT_FILE_ENABLED - Enable audit log file
 CB_AUDIT_SERVICE_ENABLED - Start Audit Service Container
 CB_KAFKA_BOOTSTRAP_SERVERS - Kafka server endpoints for structured audit logs (eg. server1:123,server2:456)
@@ -202,6 +202,7 @@ PROXY_PASSWORD - Proxy password (basic auth)
 NON_PROXY_HOSTS - Indicates the hosts that should be accessed without going through the proxy. Typically this defines internal hosts. The value of this property is a list of hosts, separated by the "|" character. In addition the wildcard character "*" can be used for pattern matching. For example ”*.foo.com|localhost” will indicate that every hosts in the foo.com domain and the localhost should be accessed directly even if a proxy server is specified. Warning: *.consul should be included!
 HTTPS_PROXYFORCLUSTERCONNECTION - if set to true, Cloudbreak will use the proxy to connect Ambari server. Default: false
 PERISCOPE_HBM2DDL_STRATEGY - Configures hibernate.hbm2ddl.auto in Autoscale
+PERISCOPE_JAVA_OPTS - Extra Java options for Autoscale
 PERISCOPE_DB_ENV_DB - Name of the Autoscale database
 PERISCOPE_DB_ENV_PASS - Password for the Autoscale database authentication
 PERISCOPE_DB_ENV_SCHEMA - Used schema in the Autoscale database
