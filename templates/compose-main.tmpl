@@ -62,12 +62,14 @@ services:
         command: server
 
     jaeger:
-        image: docker-private.infra.cloudera.com/cloudera_thirdparty/jaegertracing/all-in-one:1.13
+        image: docker-private.infra.cloudera.com/cloudera_thirdparty/jaegertracing/all-in-one:1.20
         networks:
             - {{{get . "DOCKER_NETWORK_NAME"}}}
         ports:
-            - "6831:6831/udp"
-            - "16686:16686"
+            - 5778:5778
+            - 6831:6831/udp
+            - 14268:14268
+            - 16686:16686
         deploy:
           resources:
             limits:
@@ -89,6 +91,8 @@ services:
             - "ULU_PERISCOPE_ADDRESS={{{get . "PERISCOPE_URL"}}}"
             - "ULU_FREEIPA_ADDRESS={{{get . "FREEIPA_URL"}}}"
             - 'ULU_SESSION_STORE_SECRET={{{getEscaped . "UAA_ULUWATU_SECRET"}}}'
+            - JAEGER_ENDPOINT=http://{{{get . "JAEGER_HOST"}}}:14268/api/traces
+            - JAEGER_SAMPLER_MANAGER_HOST_PORT=http://{{{get . "JAEGER_HOST"}}}:5778/sampling
             - ULU_SUBSCRIBE_TO_NOTIFICATIONS
             - AWS_INSTANCE_ID
             - AWS_ACCOUNT_ID
