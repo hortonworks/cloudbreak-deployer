@@ -55,6 +55,7 @@ func GenerateComposeYaml(args []string) {
 	insertIntoTemplateIfNotLocal(t, localDevList, "audit")
 	insertIntoTemplateIfNotLocal(t, localDevList, "audit-api")
 	insertIntoTemplateIfNotLocal(t, localDevList, "distrox-api")
+	insertIntoTemplateIfNotLocal(t, localDevList, "mock-infrastructure")
 
 	t.Execute(os.Stdout, dataMap)
 }

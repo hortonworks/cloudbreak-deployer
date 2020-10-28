@@ -20,6 +20,7 @@ cloudbreak-config() {
   cloudbreak-conf-java
   cloudbreak-conf-vault
   cloudbreak-conf-thunderhead
+  cloudbreak-conf-mock-infrastructure
   cloudbreak-conf-proxy
   cloudbreak-conf-statuschecker
   migrate-config
@@ -40,6 +41,13 @@ cloudbreak-conf-thunderhead() {
     env-import THUNDERHEAD_URL "thunderhead-mock:8080"
 }
 
+
+cloudbreak-conf-mock-infrastructure() {
+    declare desc="Defines Infrastructure mock related configs"
+
+    env-import MOCK_INFRASTRUCTURE_URL "mock-infrastructure:10090"
+}
+
 cloudbreak-conf-tags() {
     declare desc="Defines docker image tags"
 
@@ -52,6 +60,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_CERT_TOOL 0.2.0
 
     env-import DOCKER_TAG_THUNDERHEAD_MOCK 2.34.0-b2
+    env-import DOCKER_TAG_MOCK_INFRASTRUCTURE 2.34.0-b2
     env-import DOCKER_TAG_PERISCOPE 2.34.0-b2
     env-import DOCKER_TAG_CLOUDBREAK 2.34.0-b2
     env-import DOCKER_TAG_DATALAKE 2.34.0-b2
@@ -74,6 +83,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_AUDIT 1.0.0-b1898
 
     env-import DOCKER_IMAGE_THUNDERHEAD_MOCK docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-thunderhead
+    env-import DOCKER_IMAGE_MOCK_INFRASTRUCTURE docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-infrastructure
     env-import DOCKER_IMAGE_CLOUDBREAK docker-private.infra.cloudera.com/cloudera/cloudbreak
     env-import DOCKER_IMAGE_CLOUDBREAK_WEB docker-private.infra.cloudera.com/cloudera/hdc-web
     env-import DOCKER_IMAGE_CLOUDBREAK_AUTH docker-private.infra.cloudera.com/cloudera/hdc-auth
@@ -251,6 +261,9 @@ cloudbreak-conf-defaults() {
     env-import FREEIPA_URL $(service-url freeipa "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8090" "8080")
     env-import CLUSTER_PROXY_URL "$(service-url cluster-proxy "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "10180" "10080")/cluster-proxy"
     env-import JAEGER_HOST "$BRIDGE_ADDRESS"
+
+    env-import MOCK_INFRASTRUCTURE_BIND_PORT 10090
+    env-import MOCK_INFRASTRUCTURE_URL $(service-url mock-infrastructure "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "https://" "$MOCK_INFRASTRUCTURE_BIND_PORT" "10090")
 
     env-import ENVIRONMENT_HOST $(host-from-url "$ENVIRONMENT_URL")
     env-import FREEIPA_HOST $(host-from-url "$FREEIPA_URL")
