@@ -1,0 +1,23 @@
+{{{define "mock-infrastructure"}}}
+    mock-infrastructure:
+        image: {{{get . "DOCKER_IMAGE_MOCK_INFRASTRUCTURE"}}}:{{{get . "DOCKER_TAG_MOCK_INFRASTRUCTURE"}}}
+        restart: on-failure
+        volumes:
+        - {{{get . "MOCK_INFRASTRUCTURE_VOLUME_HOST"}}}:{{{get . "MOCK_INFRASTRUCTURE_VOLUME_CONTAINER"}}}
+        - ./logs/mock-infrastructure:/mock-infrastructure-log
+        - ./etc/:/etc/mock-infrastructure
+        networks:
+        - {{{get . "DOCKER_NETWORK_NAME"}}}
+        ports:
+        - "{{{get . "MOCK_INFRASTRUCTURE_BIND_PORT"}}}:10090"
+        labels:
+        - traefik.frontend.priority=100
+        - traefik.frontend.rule=PathPrefix:/mock-infrastructure
+        - traefik.port=8080
+        - traefik.backend=mock-infrastructure-backend
+        deploy:
+          resources:
+            limits:
+              memory: 512M
+              cpus: 1.0
+{{{end}}}

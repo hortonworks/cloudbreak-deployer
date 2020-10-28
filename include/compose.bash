@@ -20,6 +20,8 @@ compose-init() {
     env-import ULUWATU_VOLUME_HOST /dev/null
     env-import THUNDERHEAD_MOCK_VOLUME_HOST /dev/null
     env-import THUNDERHEAD_MOCK_CONTAINER_PATH /mock-thunderhead.jar
+    env-import MOCK_INFRASTRUCTURE_VOLUME_HOST /dev/null
+    env-import MOCK_INFRASTRUCTURE_CONTAINER_PATH /mock-infrastructure.jar
 
     if [[ "$ULUWATU_VOLUME_HOST" != "/dev/null" ]]; then
       env-import ULUWATU_VOLUME_CONTAINER /hortonworks-cloud-web
@@ -31,6 +33,12 @@ compose-init() {
       env-import THUNDERHEAD_MOCK_VOLUME_CONTAINER "${THUNDERHEAD_MOCK_CONTAINER_PATH}"
     else
       env-import THUNDERHEAD_MOCK_VOLUME_CONTAINER /tmp/null
+    fi
+
+    if [[ "$MOCK_INFRASTRUCTURE_VOLUME_HOST" != "/dev/null" ]]; then
+      env-import MOCK_INFRASTRUCTURE_VOLUME_CONTAINER "${MOCK_INFRASTRUCTURE_CONTAINER_PATH}"
+    else
+      env-import MOCK_INFRASTRUCTURE_VOLUME_CONTAINER /tmp/null
     fi
 }
 
