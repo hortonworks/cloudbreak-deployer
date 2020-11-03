@@ -276,7 +276,7 @@ cloudbreak-conf-defaults() {
     env-import ENVIRONMENTS2_API_URL $(service-url environments2-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8984" "8982")
     env-import DATALAKE_API_URL $(service-url datalake-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8986" "8984")
     env-import DISTROX_API_URL $(service-url distrox-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8988" "8992")
-    env-import AUDIT_API_URL $(service-url audit-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8982" "8994")
+    env-import AUDIT_API_URL $(service-url audit-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8972" "8982")
 
     env-import ENVIRONMENT_PORT $(port-from-url "$ENVIRONMENT_URL")
     env-import FREEIPA_PORT $(port-from-url "$FREEIPA_URL")
