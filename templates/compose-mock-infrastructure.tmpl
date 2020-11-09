@@ -1,5 +1,7 @@
 {{{define "mock-infrastructure"}}}
     mock-infrastructure:
+        environment:
+            - MOCK_INFRASTRUCTURE_HOST
         image: {{{get . "DOCKER_IMAGE_MOCK_INFRASTRUCTURE"}}}:{{{get . "DOCKER_TAG_MOCK_INFRASTRUCTURE"}}}
         restart: on-failure
         volumes:
