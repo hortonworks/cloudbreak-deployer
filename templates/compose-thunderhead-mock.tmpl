@@ -1,5 +1,7 @@
 {{{define "thunderhead-mock"}}}
     thunderhead-mock:
+        environment:
+            - MOCK_INFRASTRUCTURE_HOST
         image: {{{get . "DOCKER_IMAGE_THUNDERHEAD_MOCK"}}}:{{{get . "DOCKER_TAG_THUNDERHEAD_MOCK"}}}
         restart: on-failure
         volumes:
