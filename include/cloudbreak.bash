@@ -265,6 +265,8 @@ cloudbreak-conf-defaults() {
     env-import MOCK_INFRASTRUCTURE_BIND_PORT 10090
     env-import MOCK_INFRASTRUCTURE_URL $(service-url mock-infrastructure "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "https://" "$MOCK_INFRASTRUCTURE_BIND_PORT" "10090")
 
+    env-import CLOUDBREAK_HOST $(host-from-url "$CLOUDBREAK_URL")
+    env-import PERISCOPE_HOST $(host-from-url "$PERISCOPE_URL")
     env-import ENVIRONMENT_HOST $(host-from-url "$ENVIRONMENT_URL")
     env-import FREEIPA_HOST $(host-from-url "$FREEIPA_URL")
 
@@ -274,8 +276,14 @@ cloudbreak-conf-defaults() {
     env-import IDBMMS_URL $(service-url idbmms "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8990" "8982")
     env-import IDBMMS_HOST $(host-from-url "$IDBMMS_URL")
     env-import ENVIRONMENTS2_API_URL $(service-url environments2-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8984" "8982")
+    env-import ENVIRONMENTS2_DEBUG false
+    env-import ENVIRONMENTS2_DEBUG_PORT 5001
     env-import DATALAKE_API_URL $(service-url datalake-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8986" "8984")
+    env-import DATALAKE_API_DEBUG false
+    env-import DATALAKE_API_DEBUG_PORT 5002
     env-import DISTROX_API_URL $(service-url distrox-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8988" "8992")
+    env-import DISTROX_API_DEBUG false
+    env-import DISTROX_API_DEBUG_PORT 5003
     env-import AUDIT_API_URL $(service-url audit-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8972" "8982")
 
     env-import ENVIRONMENT_PORT $(port-from-url "$ENVIRONMENT_URL")
