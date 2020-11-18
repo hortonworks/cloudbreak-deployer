@@ -12,6 +12,7 @@
             - "SERVICEDEPENDENCIES_FMSHOST={{{get . "FREEIPA_HOST"}}}"
             - "SERVICEDEPENDENCIES_FMSPORT={{{get . "FREEIPA_PORT"}}}"
             - TELEMETRY_SERVICE_NAME=Environments2Api
+            - DEBUG={{{get . "ENVIRONMENTS2_DEBUG"}}}
         {{{- if get . "ENVIRONMENTS2_API_TARGET_PATH"}}}
         volumes:
         - {{{get . "ENVIRONMENTS2_API_TARGET_PATH"}}}/dependency-hard-links:/thunderhead-environments2-api-service/lib
@@ -23,6 +24,7 @@
             - traefik.backend=environments2-api-backend
             - traefik.frontend.priority=10
         ports:
+            - {{{get . "ENVIRONMENTS2_DEBUG_PORT"}}}:5005
             - 8984:8982
             - {{{get . "ENVIRONMENTS2_API_HEALTHZ_PORT"}}}:8983
         networks:

@@ -5,13 +5,14 @@
             - https_proxy={{{get . "HTTPS_PROXY"}}}
             - "SERVICEDEPENDENCIES_UMSHOST={{{get . "UMS_HOST"}}}"
             - "SERVICEDEPENDENCIES_UMSPORT={{{get . "UMS_PORT"}}}"
-            - "SERVICEDEPENDENCIES_CLOUDBREAKHOST={{{get . "CB_HOST_ADDRESS"}}}"
+            - "SERVICEDEPENDENCIES_CLOUDBREAKHOST={{{get . "CLOUDBREAK_HOST"}}}"
             - "SERVICEDEPENDENCIES_CLOUDBREAKPORT={{{get . "CB_PORT"}}}"
-            - "SERVICEDEPENDENCIES_PERISCOPEHOST={{{get . "PERISCOPE_HOST_ADDRESS"}}}"
+            - "SERVICEDEPENDENCIES_PERISCOPEHOST={{{get . "PERISCOPE_HOST"}}}"
             - "SERVICEDEPENDENCIES_PERISCOPEPORT={{{get . "PERISCOPE_PORT"}}}"
             - "SERVICEDEPENDENCIES_CLUSTERHEALTHHOST=localhost"
             - "SERVICEDEPENDENCIES_CLUSTERHEALTHPORT={{{get . "DISTROX_API_HEALTHZ_PORT"}}}"
             - TELEMETRY_SERVICE_NAME=DistroxApi
+            - DEBUG={{{get . "DISTROX_API_DEBUG"}}}
         {{{- if get . "DISTROX_API_TARGET_PATH"}}}
         volumes:
         - {{{get . "DISTROX_API_TARGET_PATH"}}}/dependency-hard-links:/thunderhead-distrox-api-service/lib
@@ -23,6 +24,7 @@
             - traefik.backend=distrox-api-backend
             - traefik.frontend.priority=10
         ports:
+            - {{{get . "DISTROX_API_DEBUG_PORT"}}}:5005
             - 8988:8982
             - {{{get . "DISTROX_API_HEALTHZ_PORT"}}}:8983
         networks:
