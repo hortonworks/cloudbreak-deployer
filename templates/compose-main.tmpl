@@ -90,6 +90,7 @@ services:
             - "ULU_ENVIRONMENT_ADDRESS={{{get . "ENVIRONMENT_URL"}}}"
             - "ULU_PERISCOPE_ADDRESS={{{get . "PERISCOPE_URL"}}}"
             - "ULU_FREEIPA_ADDRESS={{{get . "FREEIPA_URL"}}}"
+            - "ULU_REDBEAMS_ADDRESS={{{get . "REDBEAMS_URL"}}}"
             - 'ULU_SESSION_STORE_SECRET={{{getEscaped . "UAA_ULUWATU_SECRET"}}}'
             - JAEGER_ENDPOINT=http://{{{get . "JAEGER_HOST"}}}:14268/api/traces
             - JAEGER_SAMPLER_MANAGER_HOST_PORT=http://{{{get . "JAEGER_HOST"}}}:5778/sampling
