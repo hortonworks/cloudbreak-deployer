@@ -73,6 +73,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_ENVIRONMENTS2_API 1.0.0-b2601
     env-import DOCKER_TAG_DATALAKE_API 1.0.0-b2601
     env-import DOCKER_TAG_DISTROX_API 1.0.0-b2601
+    env-import DOCKER_TAG_AUDIT 1.0.0-b2601
 
     env-import DOCKER_TAG_POSTGRES 9.6.16-alpine
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
@@ -80,7 +81,6 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER 2.1.0.0-394
     env-import DOCKER_TAG_CADENCE 0.11.0-auto-setup
     env-import DOCKER_TAG_CADENCE_WEB 1.0.0-b24
-    env-import DOCKER_TAG_AUDIT 1.0.0-b1898
 
     env-import DOCKER_IMAGE_THUNDERHEAD_MOCK docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-thunderhead
     env-import DOCKER_IMAGE_MOCK_INFRASTRUCTURE docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-infrastructure
