@@ -228,8 +228,6 @@ cloudbreak-conf-defaults() {
     env-import CB_MAX_SALT_NEW_SERVICE_RETRY_ONERROR 10
     env-import CB_MAX_SALT_RECIPE_EXECUTION_RETRY 90
     env-import CB_LOG_LEVEL "DEBUG"
-    env-import CB_PORT 8080
-    env-import PERISCOPE_PORT 8080
 
     env-import CB_INSTANCE_UUID
     env-import CB_INSTANCE_NODE_ID
@@ -286,6 +284,8 @@ cloudbreak-conf-defaults() {
     env-import DISTROX_API_DEBUG_PORT 5003
     env-import AUDIT_API_URL $(service-url audit-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8972" "8982")
 
+    env-import CB_PORT $(port-from-url "$CLOUDBREAK_URL")
+    env-import PERISCOPE_PORT $(port-from-url "$PERISCOPE_URL")
     env-import ENVIRONMENT_PORT $(port-from-url "$ENVIRONMENT_URL")
     env-import FREEIPA_PORT $(port-from-url "$FREEIPA_URL")
 
