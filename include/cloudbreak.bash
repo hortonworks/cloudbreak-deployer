@@ -305,10 +305,11 @@ cloudbreak-conf-defaults() {
     env-import AUDIT_API_GRPC_PORT 8972
     env-import AUDIT_API_HTTP_PORT 8973
 
-
     env-import DATALAKE_DB_AVAILABILITY "NON_HA"
 
     env-import UAA_ULUWATU_SECRET "dummysecret"
+
+    env-import ENVIRONMENT_EXPERIENCE_SCAN_ENABLED false
 
     if [[ "$THUNDERHEAD_MOCK" == "true" ]]; then
         env-import ULUWATU_FRONTEND_RULE "PathPrefix:/"
