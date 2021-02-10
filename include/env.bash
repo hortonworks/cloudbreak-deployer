@@ -144,6 +144,7 @@ ENVIRONMENT_LOG_LEVEL - Log level of the Environment service
 ENVIRONMENT_SCHEMA_MIGRATION_AUTO - Flag for Environment automatic database schema update
 ENVIRONMENT_SCHEMA_SCRIPTS_LOCATION - Location of Environment schema update files
 ENVIRONMENT_STATUSCHECKER_ENABLED - Automatic status check enabled (default: true)
+ENVIRONMENT_EXPERIENCE_SCAN_ENABLED - External Experience scan for deletion (default: false)
 FREEIPA_HBM2DDL_STRATEGY - Configures hibernate.hbm2ddl.auto in FreeIpa
 FREEIPA_DB_ENV_DB - Name of the FreeIpa database
 FREEIPA_DB_ENV_PASS - Password for the FreeIpa database authentication

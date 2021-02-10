@@ -44,6 +44,7 @@
             - STATUSCHECKER_ENABLED={{{get . "ENVIRONMENT_STATUSCHECKER_ENABLED"}}}
             - ENVIRONMENT_AUTOSYNC_UPDATE_STATUS
             - ENVIRONMENT_AUTOSYNC_ENABLED
+            - ENVIRONMENT_EXPERIENCE_SCAN_ENABLED
         labels:
             - traefik.port=8088
             - traefik.frontend.rule=PathPrefix:/environmentservice/
@@ -69,4 +70,4 @@
                 limits:
                     memory: {{{get . "MEMORY_FOR_OTHER_SERVICES"}}}
                     cpus: {{{get . "CPUS_FOR_SERVICES"}}}
-  {{{end}}}  
+  {{{end}}}
