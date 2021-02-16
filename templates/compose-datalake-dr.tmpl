@@ -1,0 +1,37 @@
+{{{define "datalake-dr"}}}
+    datalake-dr:
+        environment:
+            - http_proxy={{{get . "HTTP_PROXY"}}}
+            - https_proxy={{{get . "HTTPS_PROXY"}}}
+            - "SERVICEDEPENDENCIES_UMSHOST={{{get . "UMS_HOST"}}}"
+            - "SERVICEDEPENDENCIES_UMSPORT={{{get . "UMS_PORT"}}}"
+            - "SERVICEDEPENDENCIES_DATALAKEHOST={{{get . "DATALAKE_HOST"}}}"
+            - "SERVICEDEPENDENCIES_DATALAKEPORT={{{get . "DATALAKE_PORT"}}}"
+            - "SERVICEDEPENDENCIES_CLUSTERPROXYHOST={{{get . "CLUSTER_PROXY_HOST"}}}"
+            - "SERVICEDEPENDENCIES_CLUSTERPROXYPORT={{{get . "CLUSTER_PROXY_PORT"}}}"
+            - "SERVICEDEPENDENCIES_AUDITHOST={{{get . "UMS_HOST"}}}"
+            - "SERVICEDEPENDENCIES_AUDITPORT={{{get . "UMS_PORT"}}}"
+            - DB_HOST={{{get . "COMMON_DB"}}}
+            - DB_NAME={{{get . "DATALAKE_DR_DB_ENV_DB"}}}
+            - DB_USERNAME={{{get . "DATALAKE_DR_DB_ENV_USER"}}}
+            - DB_PASSWORD={{{get . "DATALAKE_DR_DB_ENV_PASS"}}}
+        labels:
+            - traefik.port=8982
+            - traefik.frontend.rule=PathPrefix:/datalake-dr
+            - traefik.backend=datalake-dr
+            - traefik.frontend.priority=10
+        ports:
+            - 8989:8982
+        networks:
+            - {{{get . "DOCKER_NETWORK_NAME"}}}
+        logging:
+            options:
+                max-size: "10M"
+                max-file: "5"
+        image: {{{get . "DOCKER_IMAGE_DATALAKE_DR"}}}:{{{get . "DOCKER_TAG_DATALAKE_DR"}}}
+        deploy:
+          resources:
+            limits:
+              memory: 1024M
+              cpus: 1.0
+{{{end}}}

@@ -74,6 +74,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_DATALAKE_API 1.0.0-b3063
     env-import DOCKER_TAG_DISTROX_API 1.0.0-b3063
     env-import DOCKER_TAG_AUDIT 1.0.0-b3063
+    env-import DOCKER_TAG_DATALAKE_DR 1.0.0-b3073
 
     env-import DOCKER_TAG_POSTGRES 9.6.16-alpine
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
@@ -100,6 +101,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_ENVIRONMENTS2_API docker-private.infra.cloudera.com/cloudera/thunderhead-environments2-api
     env-import DOCKER_IMAGE_DATALAKE_API docker-private.infra.cloudera.com/cloudera/thunderhead-datalake-api
     env-import DOCKER_IMAGE_DISTROX_API docker-private.infra.cloudera.com/cloudera/thunderhead-distrox-api
+    env-import DOCKER_IMAGE_DATALAKE_DR docker-private.infra.cloudera.com/cloudera/thunderhead-datalakedr
     env-import DOCKER_IMAGE_CLUSTER_PROXY docker-private.infra.cloudera.com/cloudera/cloud/cluster-proxy
     env-import DOCKER_IMAGE_CLUSTER_PROXY_HEALTH_CHECK_WORKER docker-private.infra.cloudera.com/cloudera/cloud/cluster-proxy
     env-import DOCKER_IMAGE_CADENCE ubercadence/server
@@ -193,6 +195,10 @@ cloudbreak-conf-db() {
     env-import VAULT_DB_SCHEMA "vault"
 
     env-import AUDIT_DB_ENV_DB "audit"
+
+    env-import DATALAKE_DR_DB_ENV_DB "datalakdr"
+    env-import DATALAKE_DR_DB_ENV_USER "postgres"
+    env-import DATALAKE_DR_DB_ENV_PASS ""
 }
 
 cloudbreak-conf-cert() {
@@ -283,6 +289,8 @@ cloudbreak-conf-defaults() {
     env-import DISTROX_API_DEBUG false
     env-import DISTROX_API_DEBUG_PORT 5003
     env-import AUDIT_API_URL $(service-url audit-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8972" "8982")
+    env-import DATALAKE_DR_ENDPOINT $(service-url datalake-dr "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8989" "8982")
+    env-import DATALAKE_DR_ENABLED false
 
     env-import CB_PORT $(port-from-url "$CLOUDBREAK_URL")
     env-import PERISCOPE_PORT $(port-from-url "$PERISCOPE_URL")
