@@ -142,3 +142,6 @@ services:
 {{{- block "audit" .}}}{{{end}}}
 {{{- block "audit-api" .}}}{{{end}}}
 {{{- end}}}
+{{{- if eq (get . "DATALAKE_DR_ENABLED") "true" }}}
+{{{ block "datalake-dr" .}}}{{{end}}}
+{{{- end}}}
