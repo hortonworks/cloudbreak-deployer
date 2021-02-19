@@ -45,6 +45,10 @@
             - ENVIRONMENT_AUTOSYNC_UPDATE_STATUS
             - ENVIRONMENT_AUTOSYNC_ENABLED
             - ENVIRONMENT_EXPERIENCE_SCAN_ENABLED
+            - MOCK_LIFTIE_ADDRESS=mock-infrastructure
+            - MOCK_LIFTIE_PORT={{{get . "MOCK_INFRASTRUCTURE_BIND_PORT"}}}
+            - MOCK_DWX_ADDRESS=mock-infrastructure
+            - MOCK_DWX_PORT={{{get . "MOCK_INFRASTRUCTURE_BIND_PORT"}}}
         labels:
             - traefik.port=8088
             - traefik.frontend.rule=PathPrefix:/environmentservice/
