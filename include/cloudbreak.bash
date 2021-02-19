@@ -273,6 +273,7 @@ cloudbreak-conf-defaults() {
     env-import PERISCOPE_HOST $(host-from-url "$PERISCOPE_URL")
     env-import ENVIRONMENT_HOST $(host-from-url "$ENVIRONMENT_URL")
     env-import FREEIPA_HOST $(host-from-url "$FREEIPA_URL")
+    env-import MOCK_INFRASTRUCTURE_HOST $(host-from-url "$MOCK_INFRASTRUCTURE_URL")
 
     env-import DATALAKE_HOST $(host-from-url "$DATALAKE_URL")
     env-import CLUSTER_PROXY_HOST $(host-from-url "$CLUSTER_PROXY_URL")
