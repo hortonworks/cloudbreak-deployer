@@ -10,8 +10,8 @@
             - DB_DEBUG=true
             - VAULT_ADDR=http://vault:{{{get . "VAULT_BIND_PORT"}}}
             - KUBE_TOKEN_PATH=/etc/vault-root-token.txt
-            - SERVICEDEPENDENCIES_CLOUDBREAKENVHOST=cloudbreak-environment.cloudbreak
-            - SERVICEDEPENDENCIES_CLOUDBREAKENVPORT={{{get . "CB_PORT"}}}
+            - SERVICEDEPENDENCIES_CLOUDBREAKENVHOST={{{get . "ENVIRONMENT_HOST"}}}
+            - SERVICEDEPENDENCIES_CLOUDBREAKENVPORT={{{get . "ENVIRONMENT_PORT"}}}
         volumes:
             - ./etc/vault-dev-root-token.txt:/etc/vault-root-token.txt
         labels:
