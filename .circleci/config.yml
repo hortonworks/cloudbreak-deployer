@@ -104,6 +104,7 @@ workflows:
       - release:
           filters:
             branches:
-              only: release
+              only: 
+                - release
           requires:
             - build
