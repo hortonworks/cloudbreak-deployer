@@ -11,7 +11,6 @@ cloudbreak-config() {
   cloudbreak-conf-defaults
   cloudbreak-conf-autscale
   cloudbreak-conf-uaa
-  cloudbreak-conf-smtp
   cloudbreak-conf-cloud-provider
   cloudbreak-conf-rest-client
   cloudbreak-conf-ui
@@ -29,15 +28,14 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_TRAEFIK v1.6.6-alpine
     env-import DOCKER_TAG_CONSUL 0.5
     env-import DOCKER_TAG_REGISTRATOR v7
-    env-import DOCKER_TAG_POSTFIX latest
     env-import DOCKER_TAG_UAA 3.6.5-certs
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.2.0
 
-    env-import DOCKER_TAG_PERISCOPE 2.9.1
-    env-import DOCKER_TAG_CLOUDBREAK 2.9.1
-    env-import DOCKER_TAG_ULUWATU 2.9.1
-    env-import DOCKER_TAG_SULTANS 2.9.1
+    env-import DOCKER_TAG_PERISCOPE 2.9.2
+    env-import DOCKER_TAG_CLOUDBREAK 2.9.2
+    env-import DOCKER_TAG_ULUWATU 2.9.2
+    env-import DOCKER_TAG_SULTANS 2.9.2
 
     env-import DOCKER_TAG_POSTGRES 9.6.1-alpine
     env-import DOCKER_TAG_LOGROTATE 1.0.1
@@ -59,7 +57,6 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CBD_LOGSINK hortonworks/socat
     env-import DOCKER_IMAGE_CBD_LOGSPOUT hortonworks/logspout
     env-import DOCKER_IMAGE_CBD_LOGROTATE hortonworks/logrotate
-    env-import DOCKER_IMAGE_CBD_POSTFIX catatnight/postfix
     env-import DOCKER_IMAGE_CBD_POSTGRES postgres
 
     env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu.service.consul:3000/notifications
@@ -115,23 +112,6 @@ cloudbreak-conf-capabilities() {
     env-import CB_CAPABILITIES ""
     CB_CAPABILITIES=$(echo $CB_CAPABILITIES | awk '{print toupper($0)}')
     env-import INFO_APP_CAPABILITIES "$CB_CAPABILITIES"
-}
-
-cloudbreak-conf-smtp() {
-    env-import LOCAL_SMTP_PASSWORD "$UAA_DEFAULT_USER_PW"
-    if ! [[ "$LOCAL_SMTP_PASSWORD" ]]; then
-        LOCAL_SMTP_PASSWORD="cloudbreak"
-    fi
-
-    env-import CLOUDBREAK_SMTP_SENDER_USERNAME "admin"
-    env-import CLOUDBREAK_SMTP_SENDER_PASSWORD "$LOCAL_SMTP_PASSWORD"
-    env-import CLOUDBREAK_SMTP_SENDER_HOST "smtp.service.consul"
-    env-import CLOUDBREAK_SMTP_SENDER_PORT 25
-    env-import CLOUDBREAK_SMTP_SENDER_FROM "noreply@hortonworks.com"
-    env-import CLOUDBREAK_SMTP_AUTH "true"
-    env-import CLOUDBREAK_SMTP_STARTTLS_ENABLE "false"
-    env-import CLOUDBREAK_SMTP_TYPE "smtp"
-    env-import CLOUDBREAK_TELEMETRY_MAIL_ADDRESS "aws-marketplace@hortonworks.com"
 }
 
 is_linux() {
@@ -240,7 +220,7 @@ cloudbreak-conf-uaa() {
     env-import UAA_DEFAULT_USER_LASTNAME Admin
     env-import UAA_ZONE_DOMAIN example.com
 
-    env-import UAA_DEFAULT_USER_GROUPS "openid,cloudbreak.networks,cloudbreak.securitygroups,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,sequenceiq.cloudbreak.admin,sequenceiq.cloudbreak.user,cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,periscope.cluster,cloudbreak.recipes,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read"
+    env-import UAA_DEFAULT_USER_GROUPS "openid,cloudbreak.networks,cloudbreak.securitygroups,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,sequenceiq.cloudbreak.admin,sequenceiq.cloudbreak.user,cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,periscope.cluster,cloudbreak.recipes,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read,cloudbreak.periscope.user"
 
     env-import UAA_FLEX_USAGE_CLIENT_ID flex_usage_client
     env-import UAA_FLEX_USAGE_CLIENT_SECRET $UAA_DEFAULT_SECRET
@@ -273,7 +253,11 @@ cloudbreak-conf-defaults() {
     env-import CB_MAX_SALT_NEW_SERVICE_RETRY_ONERROR 10
     env-import CB_MAX_SALT_RECIPE_EXECUTION_RETRY 90
     env-import CB_LOG_LEVEL "INFO"
+    env-import AMBARI_CLIENT_LOG_LEVEL "ERROR"
     env-import CB_PORT 8080
+    env-import CB_PAYWALL_USERNAME ""
+    env-import CB_PAYWALL_PASSWORD ""
+
 
     env-import CB_INSTANCE_UUID
     env-import CB_INSTANCE_NODE_ID
@@ -285,6 +269,7 @@ cloudbreak-conf-defaults() {
 
     env-import PUBLIC_HTTP_PORT 80
     env-import PUBLIC_HTTPS_PORT 443
+    env-import CB_UPSCALE_MAX_NODECOUNT 100
 }
 
 cloudbreak-conf-autscale() {
@@ -388,7 +373,7 @@ cloudbreak-generate-cert() {
           --label cbreak.sidekick=true \
           $run_as_user \
           -v ${CBD_CERT_ROOT_PATH}:/certs \
-          ehazlett/certm:${DOCKER_TAG_CERT_TOOL} \
+          hortonworks/certm:${DOCKER_TAG_CERT_TOOL} \
           -d /certs/traefik ca generate -o=local &> $cbd_ca_cert_gen_out || CA_CERT_EXIT_CODE=$? && true;
       if [[ $CA_CERT_EXIT_CODE -ne 0 ]]; then
           cat $cbd_ca_cert_gen_out;
@@ -400,7 +385,7 @@ cloudbreak-generate-cert() {
           --label cbreak.sidekick=true \
           $run_as_user \
           -v ${CBD_CERT_ROOT_PATH}:/certs \
-          ehazlett/certm:${DOCKER_TAG_CERT_TOOL} \
+          hortonworks/certm:${DOCKER_TAG_CERT_TOOL} \
           -d /certs/traefik client generate --common-name=${PUBLIC_IP} -o=local &> $cbd_client_cert_gen_out || CLIENT_CERT_EXIT_CODE=$? && true;
       if [[ $CLIENT_CERT_EXIT_CODE -ne 0 ]]; then
          cat $cbd_client_cert_gen_out;
@@ -529,7 +514,7 @@ oauth:
     ${UAA_CLOUDBREAK_SHELL_ID}:
       id: ${UAA_CLOUDBREAK_SHELL_ID}
       authorized-grant-types: implicit
-      scope: cloudbreak.networks,cloudbreak.securitygroups,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,cloudbreak.recipes,openid,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read,periscope.cluster
+      scope: cloudbreak.networks,cloudbreak.securitygroups,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,cloudbreak.recipes,openid,cloudbreak.blueprints.read,cloudbreak.templates.read,cloudbreak.credentials.read,cloudbreak.recipes.read,cloudbreak.networks.read,cloudbreak.securitygroups.read,cloudbreak.stacks.read,cloudbreak.sssdconfigs,cloudbreak.sssdconfigs.read,cloudbreak.platforms,cloudbreak.platforms.read,periscope.cluster,cloudbreak.periscope.user
       authorities: uaa.none
       redirect-uri: http://cloudbreak.shell
     ${UAA_FLEX_USAGE_CLIENT_ID}:

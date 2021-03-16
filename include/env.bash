@@ -53,6 +53,7 @@ env-export() {
 _env-description() {
 echo '''
 ADDRESS_RESOLVING_TIMEOUT - DNS lookup timeout for internal service discovery
+AMBARI_CLIENT_LOG_LEVEL - Sets the log level of the Ambari client
 AWS_ACCESS_KEY_ID - Access key of the AWS account
 AWS_ROLE_NAME - Name of the AWS role for the `cbd aws [generate-rol, show role]` commands
 AWS_SECRET_ACCESS_KEY - Secret access key of the AWS account
@@ -105,6 +106,8 @@ CB_MAX_SALT_NEW_SERVICE_RETRY - Salt orchestrator max retry count
 CB_MAX_SALT_NEW_SERVICE_RETRY_ONERROR - Salt orchestrator max retry count in case of error
 CB_MAX_SALT_RECIPE_EXECUTION_RETRY - Salt orchestrator max retry count for recipes
 CB_PLATFORM_DEFAULT_REGIONS - Comma separated list of default regions by platform (AWS:eu-west-1)
+CB_PAYWALL_USERNAME - User name for paywall
+CB_PAYWALL_PASSWORD - Password for paywall
 CB_PRODUCT_ID - SmartSense product ID
 CB_PORT - Cloudbreak port
 CB_SCHEMA_MIGRATION_AUTO - Flag for Cloudbreak automatic database schema update
@@ -113,16 +116,9 @@ CB_SMARTSENSE_CLUSTER_NAME_PREFIX - SmartSense Cloudbreak cluster name prefix
 CB_SMARTSENSE_ID - SmartSense subscription ID
 CB_TEMPLATE_DEFAULTS - Comma separated list of the default templates what Cloudbreak initialize in database
 CB_UI_MAX_WAIT - Wait timeout for `cbd start-wait` command
+CB_UPSCALE_MAX_NODECOUNT - Max number of nodes with which upscale is allowed (default is 100)
 CERTS_BUCKET - S3 bucket name for backup and restore certificates via `cbd aws [certs-restore-s3  certs-upload-s3]` commands
 CERT_VALIDATION - Enables cert validation in Cloudbreak and Autoscale
-CLOUDBREAK_SMTP_AUTH - Configures mail.smtp.auth in Cloudbreak
-CLOUDBREAK_SMTP_SENDER_FROM - Email address of the sender
-CLOUDBREAK_SMTP_SENDER_HOST - SMTP server address ot hostname
-CLOUDBREAK_SMTP_SENDER_PASSWORD - Password
-CLOUDBREAK_SMTP_SENDER_PORT - Port of the SMTP server
-CLOUDBREAK_SMTP_SENDER_USERNAME - User name for SMTP authentication
-CLOUDBREAK_SMTP_STARTTLS_ENABLE - Configures mail.smtp.starttls.enable in Cloudbreak
-CLOUDBREAK_SMTP_TYPE - Defines mail.transport.protocol in CLoudbreak
 COMMON_DB - Name of the database container
 COMMON_DB_VOL - Name of the database volume
 CURL_CONNECT_TIMEOUT - Timeout for curl command
@@ -143,7 +139,6 @@ DOCKER_IMAGE_CBD_REGISTRATOR - Registrator Docker image name
 DOCKER_IMAGE_CBD_LOGSINK - Logsink Docker image name
 DOCKER_IMAGE_CBD_LOGSPOUT - Logspout Docker image name
 DOCKER_IMAGE_CBD_LOGROTATE - Logrotate Docker image name
-DOCKER_IMAGE_CBD_POSTFIX - Postfix Docker image name
 DOCKER_IMAGE_CBD_POSTGRES - Postgres Docker image name
 DOCKER_TAG_ALPINE - Alpine container version
 DOCKER_TAG_CBD_SMARTSENSE - SmartSense container version
@@ -153,7 +148,6 @@ DOCKER_TAG_CONSUL - Consul container version
 DOCKER_TAG_HAVEGED - Haveged container version
 DOCKER_TAG_MIGRATION - Migration container version
 DOCKER_TAG_PERISCOPE - Autoscale container version
-DOCKER_TAG_POSTFIX - Postfix container version
 DOCKER_TAG_POSTGRES - Postgresql container version
 DOCKER_TAG_LOGROTATE - Logrotate container version
 DOCKER_TAG_REGISTRATOR - Registrator container version
@@ -175,7 +169,6 @@ IDENTITY_DB_NAME - Name of the Identity database
 IDENTITY_DB_PASS - Password for the Identity database authentication
 IDENTITY_DB_URL - Url for the Identity database connection included the port number
 IDENTITY_DB_USER - User for the Identity database authentication
-LOCAL_SMTP_PASSWORD - Default password for the internal mail server
 PERISCOPE_HBM2DDL_STRATEGY - Configures hibernate.hbm2ddl.auto in Autoscale
 PERISCOPE_DB_ENV_DB - Name of the Autoscale database
 PERISCOPE_DB_ENV_PASS - Password for the Autoscale database authentication
@@ -210,6 +203,7 @@ UAA_FLEX_USAGE_CLIENT_SECRET - Secret of the Flex usage generator scope in Ident
 UAA_PERISCOPE_ID - Identity of the Autoscale scope in Identity
 UAA_PERISCOPE_SECRET - Secret of the Autoscale scope in Identity
 UAA_PORT - Identity service public port
+ULU_CLIENT_TIMEOUT - Timout for UI activites in minutes
 UAA_SULTANS_ID - Identity of the Authentication service scope in Identity
 UAA_SULTANS_SECRET - Secret of the Authentication service scope in Identity
 UAA_ULUWATU_ID - Identity of the Web UI scope in Identity

@@ -10,6 +10,7 @@ compose-init() {
     env-import CBD_LOG_NAME cbreak
     env-import ULUWATU_VOLUME_HOST /dev/null
     env-import ULUWATU_CONTAINER_PATH /hortonworks-cloud-web
+    env-import ULU_CLIENT_TIMEOUT 60
 
     if [[ "$ULUWATU_VOLUME_HOST" != "/dev/null" ]]; then
       ULUWATU_VOLUME_CONTAINER=${ULUWATU_CONTAINER_PATH}
@@ -261,16 +262,17 @@ consul:
     volumes:
         - "/var/run/docker.sock:/var/run/docker.sock"
         - consul-data:/data
+        - "./etc/custom-consul-config.json:/consul-config/custom-consul-config.json"
     ports:
         - "$PRIVATE_IP:53:8600/udp"
         - "8400:8400"
-        - "8500:8500"
+        - "$( if [[ -n "$CB_LOCAL_DEV" ]]; then echo "8500:"; fi )8500"
     hostname: node1
     log_opt:
         max-size: "10M"
         max-file: "5"
     image: $DOCKER_IMAGE_CBD_CONSUL:$DOCKER_TAG_CONSUL
-    command: --bootstrap --advertise $PRIVATE_IP $DOCKER_CONSUL_OPTIONS
+    command: --bootstrap --advertise $PRIVATE_IP $DOCKER_CONSUL_OPTIONS --config-file=/consul-config/custom-consul-config.json
 
 registrator:
     labels:
@@ -334,22 +336,6 @@ logrotate:
         max-size: "10M"
         max-file: "5"
     image: $DOCKER_IMAGE_CBD_LOGROTATE:$DOCKER_TAG_LOGROTATE
-
-mail:
-    labels:
-      - traefik.enable=false
-    ports:
-        - "$PRIVATE_IP:25:25"
-    environment:
-        - SERVICE_NAME=smtp
-        - maildomain=example.com
-        - 'smtp_user=admin:$(escape-string-compose-yaml $LOCAL_SMTP_PASSWORD \')'
-    entrypoint: ["/bin/sh"]
-    command: -c '/opt/install.sh; (/usr/bin/supervisord -c /etc/supervisor/supervisord.conf) & SUPERVISORDPID="\$\$!"; trap "kill \$\$SUPERVISORDPID; wait \$\$SUPERVISORDPID" INT TERM; wait \$\$SUPERVISORDPID'
-    log_opt:
-        max-size: "10M"
-        max-file: "5"
-    image: $DOCKER_IMAGE_CBD_POSTFIX:$DOCKER_TAG_POSTFIX
 
 smartsense:
     labels:
@@ -428,6 +414,7 @@ identity:
 
 cloudbreak:
     environment:
+        - AMBARI_CLIENT_LOG_LEVEL=$AMBARI_CLIENT_LOG_LEVEL
         - AWS_ACCESS_KEY_ID
         - AWS_SECRET_ACCESS_KEY
         - AWS_GOV_ACCESS_KEY_ID
@@ -446,11 +433,6 @@ cloudbreak:
         - CB_HBM2DDL_STRATEGY
         - CB_CAPABILITIES
         $( if [[ -n "$INFO_APP_CAPABILITIES" ]]; then echo "- INFO_APP_CAPABILITIES"; fi )
-        - "CB_SMTP_SENDER_USERNAME=$CLOUDBREAK_SMTP_SENDER_USERNAME"
-        - 'CB_SMTP_SENDER_PASSWORD=$(escape-string-compose-yaml $CLOUDBREAK_SMTP_SENDER_PASSWORD \')'
-        - "CB_SMTP_SENDER_HOST=$CLOUDBREAK_SMTP_SENDER_HOST"
-        - "CB_SMTP_SENDER_PORT=$CLOUDBREAK_SMTP_SENDER_PORT"
-        - "CB_SMTP_SENDER_FROM=$CLOUDBREAK_SMTP_SENDER_FROM"
         - "ENDPOINTS_AUTOCONFIG_ENABLED=false"
         - "ENDPOINTS_DUMP_ENABLED=false"
         - "ENDPOINTS_TRACE_ENABLED=false"
@@ -470,9 +452,6 @@ cloudbreak:
         - CB_DB_ENV_DB
         - CB_DB_ENV_SCHEMA
         - "CB_DB_SERVICEID=$COMMON_DB.service.consul"
-        - "CB_MAIL_SMTP_AUTH=$CLOUDBREAK_SMTP_AUTH"
-        - "CB_MAIL_SMTP_STARTTLS_ENABLE=$CLOUDBREAK_SMTP_STARTTLS_ENABLE"
-        - "CB_MAIL_SMTP_TYPE=$CLOUDBREAK_SMTP_TYPE"
         - CB_SCHEMA_SCRIPTS_LOCATION
         - CB_SCHEMA_MIGRATION_AUTO
         - "SPRING_CLOUD_CONSUL_HOST=consul.service.consul"
@@ -515,6 +494,9 @@ cloudbreak:
         - SMARTSENSE_UPLOAD_HOST
         - SMARTSENSE_UPLOAD_USERNAME
         - SMARTSENSE_UPLOAD_PASSWORD
+        - CB_UPSCALE_MAX_NODECOUNT
+        - CB_PAYWALL_USERNAME=$CB_PAYWALL_USERNAME
+        - CB_PAYWALL_PASSWORD=$CB_PAYWALL_PASSWORD
     labels:
       - traefik.port=8080
       - traefik.frontend.rule=PathPrefix:/cb/
@@ -546,11 +528,6 @@ sultans:
         - SERVICE_3000_NAME=sultans
           #- SERVICE_CHECK_HTTP=/
         - SL_PORT=3000
-        - SL_SMTP_SENDER_HOST=$CLOUDBREAK_SMTP_SENDER_HOST
-        - SL_SMTP_SENDER_PORT=$CLOUDBREAK_SMTP_SENDER_PORT
-        - SL_SMTP_SENDER_USERNAME=$CLOUDBREAK_SMTP_SENDER_USERNAME
-        - "SL_SMTP_SENDER_PASSWORD=$(escape-string-compose-yaml $CLOUDBREAK_SMTP_SENDER_PASSWORD \")"
-        - SL_SMTP_SENDER_FROM=$CLOUDBREAK_SMTP_SENDER_FROM
         - HWX_CLOUD_COLLECTOR=$CLOUDBREAK_TELEMETRY_MAIL_ADDRESS
         - HWX_CLOUD_USER=$UAA_DEFAULT_USER_EMAIL
         - HWX_CLOUD_TYPE
@@ -602,6 +579,7 @@ uluwatu:
         - ULU_HWX_CLOUD_DEFAULT_IGW_ID
         - ULU_HWX_CLOUD_DEFAULT_SUBNET_ID
         - ULU_HWX_CLOUD_DEFAULT_ARM_VIRTUAL_NETWORK_ID
+        - ULU_CLIENT_TIMEOUT
         - HWX_CLOUD_TEMPLATE_VERSION
         - HWX_CLOUD_ENABLE_GOVERNANCE_AND_SECURITY
         - ULU_ADDRESS_RESOLVING_TIMEOUT
@@ -674,6 +652,7 @@ periscope:
         - REST_DEBUG
         - CERT_VALIDATION
         - CB_DEFAULT_SUBSCRIPTION_ADDRESS
+        - CB_UPSCALE_MAX_NODECOUNT
     labels:
       - traefik.port=8080
       - traefik.frontend.rule=PathPrefix:/as/
