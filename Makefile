@@ -142,8 +142,8 @@ upload-tagged: prepare-release
 		anigeo/awscli s3 cp release/ $(S3_TARGET) --recursive --include "$(NAME)_$(VERSION)_*.tgz"
 
 release: deps upload-release
-	gh-release checksums sha256
-	gh-release create hortonworks/$(NAME) $(VERSION) $(GIT_BRANCH) v$(VERSION)
+	DEBUG=1 gh-release checksums sha256
+	DEBUG=1 gh-release create hortonworks/$(NAME) $(VERSION) $(GIT_BRANCH) v$(VERSION)
 
 release-next-ver: deps
 	./release-next-ver.sh
