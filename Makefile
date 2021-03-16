@@ -85,8 +85,8 @@ ifeq ($(shell which go-bindata),)
 	go get -u github.com/jteeuwen/go-bindata/...
 endif
 
-deps: deps-bindata ## Installs required cli tools (only needed for new envs)
-	go get -u github.com/progrium/gh-release/...
+deps: deps-bindata ## Installs required cli tools (only needed for new envs) gh-release 2.2.1 version
+	go get -u github.com/progrium/gh-release/@ab15f8262e7ea2da632ccddba80947a4c2fb7c6b
 	go get -u github.com/kardianos/govendor
 	go get github.com/progrium/basht
 #	go get github.com/github/hub
