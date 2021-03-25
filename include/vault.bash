@@ -240,5 +240,5 @@ cloudbreak-delete-vault-data() {
 create-token-file() {
     mkdir -p ./etc
     # token file is needed for Audit Service with a UUID inside it. This is temporary until Thunderhead codebase is updated to accept real root tokens.
-    uuidgen > "./etc/vault-dev-root-token.txt"
+    echo $VAULT_ROOT_TOKEN > "./etc/vault-dev-root-token.txt"
 }

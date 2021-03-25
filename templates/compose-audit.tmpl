@@ -3,6 +3,8 @@
         environment:
             - TELEMETRY_SERVICE_NAME=Audit
             - DB_HOST={{{get . "COMMON_DB"}}}
+            - AWS_ACCESS_KEY_ID
+            - AWS_SECRET_ACCESS_KEY
             - DB_PORT=5432
             - DB_NAME={{{get . "AUDIT_DB_ENV_DB"}}}
             - DB_USER=postgres
