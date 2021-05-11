@@ -292,6 +292,9 @@ cloudbreak-conf-defaults() {
     env-import AUDIT_API_URL $(service-url audit-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8972" "8982")
     env-import DATALAKE_DR_ENDPOINT $(service-url datalake-dr "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8989" "8982")
     env-import DATALAKE_DR_ENABLED false
+    env-import DATALAKE_DR_HOST $(host-from-url "$DATALAKE_DR_ENDPOINT")
+    env-import DATALAKE_DR_PORT $(port-from-url "$DATALAKE_DR_ENDPOINT")
+    env-import CADENCE_ENABLED false
 
     env-import CB_PORT $(port-from-url "$CLOUDBREAK_URL")
     env-import PERISCOPE_PORT $(port-from-url "$PERISCOPE_URL")
