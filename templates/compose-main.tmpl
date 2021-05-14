@@ -33,6 +33,8 @@ services:
             - "5432:5432"
         volumes:
             - "{{{get . "COMMON_DB_VOL"}}}:/var/lib/postgresql/data"
+        environment:
+            - POSTGRES_HOST_AUTH_METHOD=trust
         networks:
         - {{{get . "DOCKER_NETWORK_NAME"}}}
         logging:
@@ -41,7 +43,7 @@ services:
                 max-file: "5"
         image: postgres:{{{get . "DOCKER_TAG_POSTGRES"}}}
         entrypoint: ["/bin/bash"]
-        command: -c 'cd /var/lib/postgresql; touch .ash_history .psql_history; chown -R postgres:postgres /var/lib/postgresql; (/docker-entrypoint.sh postgres -c max_connections=300 -c shared_preload_libraries='pg_stat_statements') & PGPID="$$!"; echo "PGPID $$PGPID"; trap "kill $$PGPID; wait $$PGPID" SIGINT SIGTERM; cd /var/lib/postgresql; (tail -f .*history) & wait "$$PGPID"'
+        command: -c 'cd /var/lib/postgresql; touch .ash_history .psql_history; chown -R postgres:postgres /var/lib/postgresql; (/usr/local/bin/docker-entrypoint.sh postgres -c max_connections=300 -c shared_preload_libraries='pg_stat_statements') & PGPID="$$!"; echo "PGPID $$PGPID"; trap "kill $$PGPID; wait $$PGPID" SIGINT SIGTERM; cd /var/lib/postgresql; (tail -f .*history) & wait "$$PGPID"'
 
     vault:
         labels:
