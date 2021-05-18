@@ -50,6 +50,7 @@ func GenerateComposeYaml(args []string) {
 	insertIntoTemplateIfNotLocal(t, localDevList, "redbeams")
 	insertIntoTemplateIfNotLocal(t, localDevList, "freeipa")
 	insertIntoTemplateIfNotLocal(t, localDevList, "idbmms")
+	insertIntoTemplateIfNotLocal(t, localDevList, "workloadiam")
 	insertIntoTemplateIfNotLocal(t, localDevList, "environments2-api")
 	insertIntoTemplateIfNotLocal(t, localDevList, "datalake-api")
 	insertIntoTemplateIfNotLocal(t, localDevList, "audit")

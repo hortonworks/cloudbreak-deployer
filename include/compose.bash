@@ -89,6 +89,7 @@ compose-kill() {
     docker rm -f cbreak_environment_1 2> /dev/null || :
     docker rm -f cbreak_freeipa_1 2> /dev/null || :
     docker rm -f cbreak_idbmms_1 2> /dev/null || :
+    docker rm -f cbreak_workloadiam_1 2> /dev/null || :
     docker rm -f cbreak_environments2-api_1 2> /dev/null || :
     docker rm -f cbreak_audit-api_1 2> /dev/null || :
     docker rm -f cbreak_datalake-api_1 2> /dev/null || :

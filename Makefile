@@ -26,6 +26,7 @@ update-container-versions:
 
 update-container-versions-cdpcp:
 	sed -i "0,/DOCKER_TAG_IDBMMS/ s/DOCKER_TAG_IDBMMS .*/DOCKER_TAG_IDBMMS $(CDPCP_VERSION)/" include/cloudbreak.bash
+	sed -i "0,/DOCKER_TAG_WORKLOADIAM/ s/DOCKER_TAG_WORKLOADIAM .*/DOCKER_TAG_WORKLOADIAM $(CDPCP_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_ENVIRONMENTS2_API/ s/DOCKER_TAG_ENVIRONMENTS2_API .*/DOCKER_TAG_ENVIRONMENTS2_API $(CDPCP_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_DATALAKE_API/ s/DOCKER_TAG_DATALAKE_API .*/DOCKER_TAG_DATALAKE_API $(CDPCP_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_DISTROX_API/ s/DOCKER_TAG_DISTROX_API .*/DOCKER_TAG_DISTROX_API $(CDPCP_VERSION)/" include/cloudbreak.bash
