@@ -174,6 +174,7 @@ DOCKER_IMAGE_CLOUDBREAK_FREEIPA - FreeIpa Docker image name
 DOCKER_IMAGE_CLOUDBREAK_WEB - Web UI Docker image name
 DOCKER_IMAGE_ENVIRONMENTS2_API - Environments2 API Docker image name
 DOCKER_IMAGE_IDBMMS - IDBMMS Docker image name
+DOCKER_IMAGE_WORKLOADIAM - WorkloadIam Docker image name
 DOCKER_TAG_AUDIT - Audit Service container version
 DOCKER_TAG_ALPINE - Alpine container version
 DOCKER_TAG_CBD_SMARTSENSE - SmartSense container version
@@ -183,6 +184,7 @@ DOCKER_TAG_THUNDERHEAD_MOCK - Thunderhead mock container version
 DOCKER_TAG_THUNDERHEAD_MOCK - Infrastructure mock container version
 DOCKER_TAG_HAVEGED - Haveged container version
 DOCKER_TAG_IDBMMS - IDBMMS container version
+DOCKER_TAG_WORKLOADIAM - WorkloadIam container version
 DOCKER_TAG_MIGRATION - Migration container version
 DOCKER_TAG_PERISCOPE - Autoscale container version
 DOCKER_TAG_DATALAKE - Datalake container version
@@ -201,6 +203,11 @@ IDBMMS_DB_ENV_PASS - Password for the IDBMMS database authentication
 IDBMMS_DB_ENV_USER - User for the IDBMMS database authentication
 IDBMMS_DB_PORT_5432_TCP_ADDR - Address of the IDBMMS database
 IDBMMS_DB_PORT_5432_TCP_PORT - Port number of the IDBMMS database
+WORKLOADIAM_DB_ENV_DB - Name of the WorkloadIam database
+WORKLOADIAM_DB_ENV_PASS - Password for the WorkloadIam database authentication
+WORKLOADIAM_DB_ENV_USER - User for the WorkloadIam database authentication
+WORKLOADIAM_DB_PORT_5432_TCP_ADDR - Address of the WorkloadIam database
+WORKLOADIAM_DB_PORT_5432_TCP_PORT - Port number of the WorkloadIam database
 PROXY_PORT - Proxy port
 PROXY_USER - Proxy user (basic auth)
 PROXY_PASSWORD - Proxy password (basic auth)

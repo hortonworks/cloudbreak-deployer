@@ -70,6 +70,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_ULUWATU 2.44.0-b35
 
     env-import DOCKER_TAG_IDBMMS 1.0.0-b3944
+    env-import DOCKER_TAG_WORKLOADIAM 1.0.0-b3944
     env-import DOCKER_TAG_ENVIRONMENTS2_API 1.0.0-b3944
     env-import DOCKER_TAG_DATALAKE_API 1.0.0-b3944
     env-import DOCKER_TAG_DISTROX_API 1.0.0-b3944
@@ -98,6 +99,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_AUDIT_API docker-private.infra.cloudera.com/cloudera/thunderhead-audit-api
 
     env-import DOCKER_IMAGE_IDBMMS docker-private.infra.cloudera.com/cloudera/thunderhead-idbrokermappingmanagement
+    env-import DOCKER_IMAGE_WORKLOADIAM docker-private.infra.cloudera.com/cloudera/thunderhead-workloadiam
     env-import DOCKER_IMAGE_ENVIRONMENTS2_API docker-private.infra.cloudera.com/cloudera/thunderhead-environments2-api
     env-import DOCKER_IMAGE_DATALAKE_API docker-private.infra.cloudera.com/cloudera/thunderhead-datalake-api
     env-import DOCKER_IMAGE_DISTROX_API docker-private.infra.cloudera.com/cloudera/thunderhead-distrox-api
@@ -108,7 +110,6 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CADENCE_WEB docker-private.infra.cloudera.com/cloudera/cadence-web
 
     env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu:3000/notifications
-
 }
 
 cloudbreak-conf-images() {
@@ -177,6 +178,12 @@ cloudbreak-conf-db() {
     env-import IDBMMS_DB_ENV_PASS ""
     env-import IDBMMS_DB_PORT_5432_TCP_ADDR "$COMMON_DB"
     env-import IDBMMS_DB_PORT_5432_TCP_PORT "5432"
+
+    env-import WORKLOADIAM_DB_ENV_USER "postgres"
+    env-import WORKLOADIAM_DB_ENV_DB "workloadiamdb"
+    env-import WORKLOADIAM_DB_ENV_PASS ""
+    env-import WORKLOADIAM_DB_PORT_5432_TCP_ADDR "$COMMON_DB"
+    env-import WORKLOADIAM_DB_PORT_5432_TCP_PORT "5432"
 
     env-import CLUSTER_PROXY_DB_ENV_DB "cluster_proxy"
     env-import CLUSTER_PROXY_DB_ENV_USER "postgres"
@@ -280,6 +287,8 @@ cloudbreak-conf-defaults() {
 
     env-import IDBMMS_URL $(service-url idbmms "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8990" "8982")
     env-import IDBMMS_HOST $(host-from-url "$IDBMMS_URL")
+    env-import WORKLOADIAM_URL $(service-url workloadiam "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8996" "8982")
+    env-import WORKLOADIAM_HOST $(host-from-url "$WORKLOADIAM_URL")
     env-import ENVIRONMENTS2_API_URL $(service-url environments2-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8984" "8982")
     env-import ENVIRONMENTS2_DEBUG false
     env-import ENVIRONMENTS2_DEBUG_PORT 5001
@@ -308,6 +317,8 @@ cloudbreak-conf-defaults() {
 
     env-import IDBMMS_PORT $(port-from-url "$IDBMMS_URL")
     env-import IDBMMS_HEALTHZ_PORT 8991
+    env-import WORKLOADIAM_PORT $(port-from-url "$WORKLOADIAM_URL")
+    env-import WORKLOADIAM_HEALTHZ_PORT 8997
     env-import ENVIRONMENTS2_API_HEALTHZ_PORT 8983
     env-import DATALAKE_API_HEALTHZ_PORT 8985
     env-import DISTROX_API_HEALTHZ_PORT 8992
