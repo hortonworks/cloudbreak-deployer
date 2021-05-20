@@ -2,6 +2,7 @@
     cluster-proxy:
         image: {{{get . "DOCKER_IMAGE_CLUSTER_PROXY"}}}:{{{get . "DOCKER_TAG_CLUSTER_PROXY"}}}
         environment:
+            - ENABLE_HTTPS=false
             - CADENCE_HOST={{{get . "CLUSTER_PROXY_CADENCE_HOST"}}}
             - CADENCE_PORT={{{get . "CLUSTER_PROXY_CADENCE_PORT"}}}
             - DB_HOST={{{get . "COMMON_DB"}}}
