@@ -136,7 +136,9 @@ services:
 {{{- block "redbeams" .}}}{{{end}}}
 {{{- block "freeipa" .}}}{{{end}}}
 {{{- block "idbmms" .}}}{{{end}}}
+{{{- if eq (get . "WORKLOADIAM_ENABLED") "true" }}}
 {{{- block "workloadiam" .}}}{{{end}}}
+{{{- end}}}
 {{{- block "environments2-api" .}}}{{{end}}}
 {{{- block "datalake-api" .}}}{{{end}}}
 {{{- block "distrox-api" .}}}{{{end}}}
