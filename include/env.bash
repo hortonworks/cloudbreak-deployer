@@ -208,6 +208,7 @@ WORKLOADIAM_DB_ENV_PASS - Password for the WorkloadIam database authentication
 WORKLOADIAM_DB_ENV_USER - User for the WorkloadIam database authentication
 WORKLOADIAM_DB_PORT_5432_TCP_ADDR - Address of the WorkloadIam database
 WORKLOADIAM_DB_PORT_5432_TCP_PORT - Port number of the WorkloadIam database
+WORKLOADIAM_ENABLED - Start WorkloadIam container (default: false)
 PROXY_PORT - Proxy port
 PROXY_USER - Proxy user (basic auth)
 PROXY_PASSWORD - Proxy password (basic auth)

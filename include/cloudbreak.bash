@@ -288,6 +288,7 @@ cloudbreak-conf-defaults() {
     env-import IDBMMS_URL $(service-url idbmms "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8990" "8982")
     env-import IDBMMS_HOST $(host-from-url "$IDBMMS_URL")
     env-import WORKLOADIAM_URL $(service-url workloadiam "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8996" "8982")
+    env-import WORKLOADIAM_ENABLED false
     env-import WORKLOADIAM_HOST $(host-from-url "$WORKLOADIAM_URL")
     env-import ENVIRONMENTS2_API_URL $(service-url environments2-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8984" "8982")
     env-import ENVIRONMENTS2_DEBUG false
