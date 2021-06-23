@@ -274,6 +274,9 @@ init-profile() {
 
     if [ -f $CBD_PROFILE ]; then
         debug "Use existing profile: $CBD_PROFILE"
+        if [[ "$CBD_PROFILE" != *\/* ]]; then
+          debug "$CBD_PROFILE file will be searched in your $PATH not just the current directory"
+        fi
         module-load "$CBD_PROFILE"
     fi
 
