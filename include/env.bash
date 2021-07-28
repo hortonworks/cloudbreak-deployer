@@ -274,5 +274,9 @@ UMS_HOST - Host address of Altus UMS service
 UMS_PORT - Port of Altus UMS service
 UMS_ENABLED - Enable UMS, default value is true
 THUNDERHEAD_MOCK - Enables authentication mock
+
+CCMV2_MANAGEMENT_SERVICE_HOST - CCMv2 Management Service host address, should be available from container
+CCMV2_MANAGEMENT_SERVICE_PORT - CCMv2 Management Service port
+INVERTING_PROXY_SERVICE_PORT - Inverting Proxy Service port
 ''' | grep "$1 " | sed "s/^.* - //" || echo Deprecated
 }
