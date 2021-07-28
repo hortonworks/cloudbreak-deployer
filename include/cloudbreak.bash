@@ -315,9 +315,9 @@ cloudbreak-conf-defaults() {
     env-import CLUSTER_PROXY_PORT $(port-from-url "$CLUSTER_PROXY_URL")
     env-import ALTUS_TUNNEL_MANAGEMENT_HOST "$BRIDGE_ADDRESS"
     env-import ALTUS_TUNNEL_MANAGEMENT_PORT 9012
-    env-import CCMV2_MANAGEMENT_SERVICE_HOST "localhost"
-    env-import CCMV2_MANAGEMENT_SERVICE_PORT 8982
-    env-import INVERTING_PROXY_SERVICE_PORT 8090
+    env-import CCMV2_MANAGEMENT_SERVICE_HOST "$BRIDGE_ADDRESS"
+    env-import CCMV2_MANAGEMENT_SERVICE_PORT 9022
+    env-import INVERTING_PROXY_SERVICE_PORT 9021
 
     env-import IDBMMS_PORT $(port-from-url "$IDBMMS_URL")
     env-import IDBMMS_HEALTHZ_PORT 8991
