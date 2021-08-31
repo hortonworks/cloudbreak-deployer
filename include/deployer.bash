@@ -275,7 +275,10 @@ init-profile() {
     if [ -f $CBD_PROFILE ]; then
         debug "Use existing profile: $CBD_PROFILE"
         if [[ "$CBD_PROFILE" != *\/* ]]; then
-          debug "$CBD_PROFILE file will be searched in your $PATH not just the current directory"
+          PROFILES_ON_PATH="$(find $(echo $PATH | sed 's/:/ /g') -name 'Profile' -maxdepth 1 2>/dev/null | sort -u)" || true # for some reason I have to or true this
+          if [[ -n $PROFILES_ON_PATH ]]; then
+            warn "Multiple Profiles found on your path will be used, this might not be desirable:" $PROFILES_ON_PATH
+          fi
         fi
         module-load "$CBD_PROFILE"
     fi
