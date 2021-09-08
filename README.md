@@ -10,9 +10,11 @@ brew install go
 ```
 Export GOPATH and add to PATH the $GOPATH/bin directory:
 
-Get cloudbreak-deployer project with GO:
+Get cloudbreak-deployer project and dependencies with GO:
 ```
+export GO111MODULE=off
 go get -d github.com/hortonworks/cloudbreak-deployer
+go get -u github.com/jteeuwen/go-bindata/...
 ``` 
 
 Development process happens on separate branches. Open a pull-request to contribute your changes.
