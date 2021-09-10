@@ -43,6 +43,7 @@ compose-init() {
 }
 
 dockerCompose() {
+    docker ps 1>/dev/null || _exit 1
     debug "docker-compose -p ${CB_COMPOSE_PROJECT} $@"
     docker-compose --compatibility -p ${CB_COMPOSE_PROJECT} "$@"
 }
