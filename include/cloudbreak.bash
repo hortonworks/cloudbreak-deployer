@@ -5,6 +5,7 @@ cloudbreak-config() {
   else
     : ${BRIDGE_ADDRESS:=$(docker run --rm --name=cbreak_cbd_bridgeip --label cbreak.sidekick=true docker-private.infra.cloudera.com/cloudera_thirdparty/alpine/alpine:latest sh -c 'ip ro | grep default | cut -d" " -f 3')}
   fi
+  : ${BRIDGE_EXTERNAL_IP:=$(docker run --rm --name=cbreak_cbd_bridgeip --label cbreak.sidekick=true docker-private.infra.cloudera.com/cloudera_thirdparty/alpine/alpine:latest sh -c 'getent hosts host.docker.internal | cut -d" " -f 1')}
   cloudbreak-conf-tags
   cloudbreak-conf-images
   cloudbreak-conf-capabilities
@@ -217,6 +218,7 @@ cloudbreak-conf-cert() {
 
 cloudbreak-conf-defaults() {
     env-import PUBLIC_IP
+    env-import BRIDGE_EXTERNAL_IP
 
     if [[ ! -z "$CB_CLUSTERDEFINITION_AMBARI_DEFAULTS"  ]]; then
         env-import CB_CLUSTERDEFINITION_AMBARI_DEFAULTS
@@ -318,6 +320,7 @@ cloudbreak-conf-defaults() {
     env-import CCMV2_MANAGEMENT_SERVICE_HOST "$BRIDGE_ADDRESS"
     env-import CCMV2_MANAGEMENT_SERVICE_PORT 9022
     env-import INVERTING_PROXY_SERVICE_PORT 9021
+    env-import INVERTING_PROXY_SERVICE_HOST localhost
 
     env-import IDBMMS_PORT $(port-from-url "$IDBMMS_URL")
     env-import IDBMMS_HEALTHZ_PORT 8991
