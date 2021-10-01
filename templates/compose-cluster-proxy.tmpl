@@ -29,6 +29,8 @@
             - "traefik.port=10080"
         ports:
             - 10180:10080
+        extra_hosts:
+            - "{{{get . "INVERTING_PROXY_SERVICE_HOST"}}}:{{{get . "BRIDGE_EXTERNAL_IP"}}}"
         deploy:
           resources:
             limits:
