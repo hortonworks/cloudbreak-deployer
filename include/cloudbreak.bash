@@ -75,7 +75,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_DATALAKE_API 1.0.0-b4313
     env-import DOCKER_TAG_DISTROX_API 1.0.0-b4313
     env-import DOCKER_TAG_AUDIT 1.0.0-b4313
-    env-import DOCKER_TAG_DATALAKE_DR 1.0.0-b4313
+    env-import DOCKER_TAG_DATALAKE_DR 1.0.0-b5015
 
     env-import DOCKER_TAG_POSTGRES 13.2-alpine
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
