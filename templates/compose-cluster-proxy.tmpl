@@ -2,6 +2,7 @@
     cluster-proxy:
         image: {{{get . "DOCKER_IMAGE_CLUSTER_PROXY"}}}:{{{get . "DOCKER_TAG_CLUSTER_PROXY"}}}
         environment:
+            - ENABLE_HTTPS=false
             - CADENCE_HOST={{{get . "CLUSTER_PROXY_CADENCE_HOST"}}}
             - CADENCE_PORT={{{get . "CLUSTER_PROXY_CADENCE_PORT"}}}
             - DB_HOST={{{get . "COMMON_DB"}}}
@@ -16,6 +17,9 @@
             - TUNNEL_MANAGEMENT_HOST={{{get . "ALTUS_TUNNEL_MANAGEMENT_HOST"}}}
             - TUNNEL_MANAGEMENT_PORT={{{get . "ALTUS_TUNNEL_MANAGEMENT_PORT"}}}
             - DEBUG=true
+            - CCMV2_MANAGEMENT_SERVICE_HOST={{{get . "CCMV2_MANAGEMENT_SERVICE_HOST"}}}
+            - CCMV2_MANAGEMENT_SERVICE_PORT={{{get . "CCMV2_MANAGEMENT_SERVICE_PORT"}}}
+            - INVERTING_PROXY_SERVICE_PORT={{{get . "INVERTING_PROXY_SERVICE_PORT"}}}
         networks:
             - {{{get . "DOCKER_NETWORK_NAME"}}}
         restart: always

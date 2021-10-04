@@ -15,6 +15,9 @@
             - DB_NAME={{{get . "DATALAKE_DR_DB_ENV_DB"}}}
             - DB_USERNAME={{{get . "DATALAKE_DR_DB_ENV_USER"}}}
             - DB_PASSWORD={{{get . "DATALAKE_DR_DB_ENV_PASS"}}}
+            - cadence.enabled={{{get . "CADENCE_ENABLED"}}}
+            - cadence.host={{{get . "CLUSTER_PROXY_CADENCE_HOST"}}}
+            - cadence.port={{{get . "CLUSTER_PROXY_CADENCE_PORT"}}}
         labels:
             - traefik.port=8982
             - traefik.frontend.rule=PathPrefix:/datalake-dr

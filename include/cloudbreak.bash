@@ -59,27 +59,28 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_AMBASSADOR 0.5.0
     env-import DOCKER_TAG_CERT_TOOL 0.2.0
 
-    env-import DOCKER_TAG_THUNDERHEAD_MOCK 2.43.0-b50
-    env-import DOCKER_TAG_MOCK_INFRASTRUCTURE 2.43.0-b50
-    env-import DOCKER_TAG_PERISCOPE 2.43.0-b50
-    env-import DOCKER_TAG_CLOUDBREAK 2.43.0-b50
-    env-import DOCKER_TAG_DATALAKE 2.43.0-b50
-    env-import DOCKER_TAG_REDBEAMS 2.43.0-b50
-    env-import DOCKER_TAG_ENVIRONMENT 2.43.0-b50
-    env-import DOCKER_TAG_FREEIPA 2.43.0-b50
-    env-import DOCKER_TAG_ULUWATU 2.43.0-b50
+    env-import DOCKER_TAG_THUNDERHEAD_MOCK 2.49.0-b106
+    env-import DOCKER_TAG_MOCK_INFRASTRUCTURE 2.49.0-b106
+    env-import DOCKER_TAG_PERISCOPE 2.49.0-b106
+    env-import DOCKER_TAG_CLOUDBREAK 2.49.0-b106
+    env-import DOCKER_TAG_DATALAKE 2.49.0-b106
+    env-import DOCKER_TAG_REDBEAMS 2.49.0-b106
+    env-import DOCKER_TAG_ENVIRONMENT 2.49.0-b106
+    env-import DOCKER_TAG_FREEIPA 2.49.0-b106
+    env-import DOCKER_TAG_ULUWATU 2.49.0-b106
 
-    env-import DOCKER_TAG_IDBMMS 1.0.0-b3944
-    env-import DOCKER_TAG_ENVIRONMENTS2_API 1.0.0-b3944
-    env-import DOCKER_TAG_DATALAKE_API 1.0.0-b3944
-    env-import DOCKER_TAG_DISTROX_API 1.0.0-b3944
-    env-import DOCKER_TAG_AUDIT 1.0.0-b3944
+    env-import DOCKER_TAG_IDBMMS 1.0.0-b4313
+    env-import DOCKER_TAG_WORKLOADIAM 1.0.0-b4313
+    env-import DOCKER_TAG_ENVIRONMENTS2_API 1.0.0-b4313
+    env-import DOCKER_TAG_DATALAKE_API 1.0.0-b4313
+    env-import DOCKER_TAG_DISTROX_API 1.0.0-b4313
+    env-import DOCKER_TAG_AUDIT 1.0.0-b4313
     env-import DOCKER_TAG_DATALAKE_DR 1.0.0-b5015
 
-    env-import DOCKER_TAG_POSTGRES 9.6.16-alpine
+    env-import DOCKER_TAG_POSTGRES 13.2-alpine
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
-    env-import DOCKER_TAG_CLUSTER_PROXY 1.0.0-b40
-    env-import DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER 1.0.0-b40
+    env-import DOCKER_TAG_CLUSTER_PROXY 1.0.4-b19
+    env-import DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER 1.0.4-b19
     env-import DOCKER_TAG_CADENCE 0.11.0-auto-setup
     env-import DOCKER_TAG_CADENCE_WEB 1.0.0-b24
 
@@ -98,6 +99,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_AUDIT_API docker-private.infra.cloudera.com/cloudera/thunderhead-audit-api
 
     env-import DOCKER_IMAGE_IDBMMS docker-private.infra.cloudera.com/cloudera/thunderhead-idbrokermappingmanagement
+    env-import DOCKER_IMAGE_WORKLOADIAM docker-private.infra.cloudera.com/cloudera/thunderhead-workloadiam
     env-import DOCKER_IMAGE_ENVIRONMENTS2_API docker-private.infra.cloudera.com/cloudera/thunderhead-environments2-api
     env-import DOCKER_IMAGE_DATALAKE_API docker-private.infra.cloudera.com/cloudera/thunderhead-datalake-api
     env-import DOCKER_IMAGE_DISTROX_API docker-private.infra.cloudera.com/cloudera/thunderhead-distrox-api
@@ -108,7 +110,6 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CADENCE_WEB docker-private.infra.cloudera.com/cloudera/cadence-web
 
     env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu:3000/notifications
-
 }
 
 cloudbreak-conf-images() {
@@ -177,6 +178,12 @@ cloudbreak-conf-db() {
     env-import IDBMMS_DB_ENV_PASS ""
     env-import IDBMMS_DB_PORT_5432_TCP_ADDR "$COMMON_DB"
     env-import IDBMMS_DB_PORT_5432_TCP_PORT "5432"
+
+    env-import WORKLOADIAM_DB_ENV_USER "postgres"
+    env-import WORKLOADIAM_DB_ENV_DB "workloadiamdb"
+    env-import WORKLOADIAM_DB_ENV_PASS ""
+    env-import WORKLOADIAM_DB_PORT_5432_TCP_ADDR "$COMMON_DB"
+    env-import WORKLOADIAM_DB_PORT_5432_TCP_PORT "5432"
 
     env-import CLUSTER_PROXY_DB_ENV_DB "cluster_proxy"
     env-import CLUSTER_PROXY_DB_ENV_USER "postgres"
@@ -280,6 +287,9 @@ cloudbreak-conf-defaults() {
 
     env-import IDBMMS_URL $(service-url idbmms "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8990" "8982")
     env-import IDBMMS_HOST $(host-from-url "$IDBMMS_URL")
+    env-import WORKLOADIAM_URL $(service-url workloadiam "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8996" "8982")
+    env-import WORKLOADIAM_ENABLED false
+    env-import WORKLOADIAM_HOST $(host-from-url "$WORKLOADIAM_URL")
     env-import ENVIRONMENTS2_API_URL $(service-url environments2-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8984" "8982")
     env-import ENVIRONMENTS2_DEBUG false
     env-import ENVIRONMENTS2_DEBUG_PORT 5001
@@ -292,6 +302,9 @@ cloudbreak-conf-defaults() {
     env-import AUDIT_API_URL $(service-url audit-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8972" "8982")
     env-import DATALAKE_DR_ENDPOINT $(service-url datalake-dr "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8989" "8982")
     env-import DATALAKE_DR_ENABLED false
+    env-import DATALAKE_DR_HOST $(host-from-url "$DATALAKE_DR_ENDPOINT")
+    env-import DATALAKE_DR_PORT $(port-from-url "$DATALAKE_DR_ENDPOINT")
+    env-import CADENCE_ENABLED false
 
     env-import CB_PORT $(port-from-url "$CLOUDBREAK_URL")
     env-import PERISCOPE_PORT $(port-from-url "$PERISCOPE_URL")
@@ -302,9 +315,14 @@ cloudbreak-conf-defaults() {
     env-import CLUSTER_PROXY_PORT $(port-from-url "$CLUSTER_PROXY_URL")
     env-import ALTUS_TUNNEL_MANAGEMENT_HOST "$BRIDGE_ADDRESS"
     env-import ALTUS_TUNNEL_MANAGEMENT_PORT 9012
+    env-import CCMV2_MANAGEMENT_SERVICE_HOST "$BRIDGE_ADDRESS"
+    env-import CCMV2_MANAGEMENT_SERVICE_PORT 9022
+    env-import INVERTING_PROXY_SERVICE_PORT 9021
 
     env-import IDBMMS_PORT $(port-from-url "$IDBMMS_URL")
     env-import IDBMMS_HEALTHZ_PORT 8991
+    env-import WORKLOADIAM_PORT $(port-from-url "$WORKLOADIAM_URL")
+    env-import WORKLOADIAM_HEALTHZ_PORT 8997
     env-import ENVIRONMENTS2_API_HEALTHZ_PORT 8983
     env-import DATALAKE_API_HEALTHZ_PORT 8985
     env-import DISTROX_API_HEALTHZ_PORT 8992

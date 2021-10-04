@@ -274,6 +274,9 @@ init-profile() {
 
     if [ -f $CBD_PROFILE ]; then
         debug "Use existing profile: $CBD_PROFILE"
+        if [[ "$CBD_PROFILE" != *\/* ]]; then
+          debug "$CBD_PROFILE file will be searched in your $PATH not just the current directory"
+        fi
         module-load "$CBD_PROFILE"
     fi
 
@@ -395,6 +398,7 @@ localdev-doctor() {
     localdev-doctor-service "freeipa" "8090"
     localdev-doctor-service "cluster-proxy" "10081"
     localdev-doctor-service "idbmms" "8990"
+    localdev-doctor-service "workloadiam" "8996"
     localdev-doctor-service "environments2-api" "8984"
     localdev-doctor-service "audit-api" "8994"
     localdev-doctor-service "datalake-api" "8986"
