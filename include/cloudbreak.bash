@@ -208,6 +208,14 @@ cloudbreak-conf-db() {
     env-import DATALAKE_DR_DB_ENV_DB "datalakdr"
     env-import DATALAKE_DR_DB_ENV_USER "postgres"
     env-import DATALAKE_DR_DB_ENV_PASS ""
+
+    env-import ULU_ENABLE_DB_SESSION_STORE ""
+    env-import ULU_DB_ENV_DB "uluwatudb"
+    env-import ULU_DB_ENV_SCHEMA "public"
+    env-import ULU_DB_ENV_USER ""
+    env-import ULU_DB_ENV_PASS ""
+    env-import ULU_DB_HOST "$COMMON_DB"
+    env-import ULU_DB_PORT "5432"
 }
 
 cloudbreak-conf-cert() {

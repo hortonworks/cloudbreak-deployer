@@ -105,6 +105,14 @@ services:
             - AWS_ACCESS_KEY_ID
             - AWS_SECRET_ACCESS_KEY
             - CAAS_ENABLED=true
+            {{{- if eq (get . "ULU_ENABLE_DB_SESSION_STORE") "true" }}}
+            - "POSTGRES_HOST_ADDRESS={{{get . "ULU_DB_HOST"}}}"
+            - "POSTGRES_PORT={{{get . "ULU_DB_PORT"}}}"
+            - "POSTGRES_USER={{{get . "ULU_DB_ENV_USER"}}}"
+            - "POSTGRES_PASS={{{get . "ULU_DB_ENV_PASS"}}}"
+            - "POSTGRES_DB={{{get . "ULU_DB_ENV_DB"}}}"
+            - "POSTGRES_SCHEMA={{{get . "ULU_DB_ENV_SCHEMA"}}}"
+            {{{- end}}}
         labels:
         - traefik.frontend.rule={{{get . "ULUWATU_FRONTEND_RULE"}}}
         - traefik.port=3000
