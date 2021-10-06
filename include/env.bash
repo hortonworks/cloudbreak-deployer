@@ -245,6 +245,13 @@ MOCK_INFRASTRUCTURE_CONTAINER_PATH - Default project location in Infrastructure 
 ULU_HOST_ADDRESS - Web UI host
 ULU_NODE_TLS_REJECT_UNAUTHORIZED - Enables self signed certifications in Web UI
 ULU_SUBSCRIBE_TO_NOTIFICATIONS - Flag for automatic subscriptions for CLoudbreak events
+ULU_ENABLE_DB_SESSION_STORE - Enable database session store in Uluwatu
+ULU_DB_HOST - Address of the Uluwatu database
+ULU_DB_PORT - Port number of the Uluwatu database
+ULU_DB_ENV_DB - Name of the Uluwatu database
+ULU_DB_ENV_SCHEMA - Used schema in the Uluwatu database
+ULU_DB_ENV_USER - User for the Uluwatu database authentication
+ULU_DB_ENV_PASS - Password for the Uluwatu database authentication
 VERBOSE_MIGRATION - Flag of verbose database migration
 VAULT_BIND_PORT - Bind Port for Vault
 THUNDERHEAD_MOCK_BIND_PORT - Bind Port for Thunderhead Mock
