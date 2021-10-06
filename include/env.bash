@@ -278,5 +278,6 @@ THUNDERHEAD_MOCK - Enables authentication mock
 CCMV2_MANAGEMENT_SERVICE_HOST - CCMv2 Management Service host address, should be available from container
 CCMV2_MANAGEMENT_SERVICE_PORT - CCMv2 Management Service port
 INVERTING_PROXY_SERVICE_PORT - Inverting Proxy Service port
+INVERTING_PROXY_SERVICE_HOST - The real Inverting Proxy Service Host which Cluster Proxy tries to connect to.
 ''' | grep "$1 " | sed "s/^.* - //" || echo Deprecated
 }
