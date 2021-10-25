@@ -64,8 +64,9 @@ deps: deps-bindata ## Installs required cli tools (only needed for new envs)
 bindata: deps
 	go-bindata include templates .deps/bin
 
-install: build ## Installs OS specific binary into: /usr/local/bin
-	install build/$(shell uname -s)/$(BINARYNAME) /usr/local/bin
+install: build ## Installs OS specific binary into: /usr/local/bin and ~/.local/bin
+	install build/$(shell uname -s)/$(BINARYNAME) /usr/local/bin || true
+	install build/$(shell uname -s)/$(BINARYNAME) ~/.local/bin || true
 
 prepare-release:
 	rm -rf release && mkdir release
