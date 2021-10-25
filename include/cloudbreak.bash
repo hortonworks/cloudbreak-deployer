@@ -71,18 +71,18 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_FREEIPA 2.49.0-b182
     env-import DOCKER_TAG_ULUWATU 2.49.0-b182
 
-    env-import DOCKER_TAG_IDBMMS 1.0.0-b4313
-    env-import DOCKER_TAG_WORKLOADIAM 1.0.0-b4313
-    env-import DOCKER_TAG_ENVIRONMENTS2_API 1.0.0-b4313
-    env-import DOCKER_TAG_DATALAKE_API 1.0.0-b4313
-    env-import DOCKER_TAG_DISTROX_API 1.0.0-b4313
-    env-import DOCKER_TAG_AUDIT 1.0.0-b4313
-    env-import DOCKER_TAG_DATALAKE_DR 1.0.0-b5015
+    env-import DOCKER_TAG_IDBMMS 1.0.0-b5209
+    env-import DOCKER_TAG_WORKLOADIAM 1.0.0-b5209
+    env-import DOCKER_TAG_ENVIRONMENTS2_API 1.0.0-b5209
+    env-import DOCKER_TAG_DATALAKE_API 1.0.0-b5209
+    env-import DOCKER_TAG_DISTROX_API 1.0.0-b5209
+    env-import DOCKER_TAG_AUDIT 1.0.0-b5209
+    env-import DOCKER_TAG_DATALAKE_DR 1.0.0-b5209
 
     env-import DOCKER_TAG_POSTGRES 13.2-alpine
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
-    env-import DOCKER_TAG_CLUSTER_PROXY 1.0.4-b19
-    env-import DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER 1.0.4-b19
+    env-import DOCKER_TAG_CLUSTER_PROXY 1.0.5-b14
+    env-import DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER 1.0.5-b14
     env-import DOCKER_TAG_CADENCE 0.11.0-auto-setup
     env-import DOCKER_TAG_CADENCE_WEB 1.0.0-b24
 
