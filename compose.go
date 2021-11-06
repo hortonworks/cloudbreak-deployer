@@ -71,7 +71,7 @@ func insertIntoTemplate(t *template.Template, service string) {
 }
 
 func insertIntoTemplateIfNotLocal(t *template.Template, localDevList string, service string) {
-	if !strings.Contains(localDevList, service) {
+	if !checkIfServiceInLocal(service, localDevList) {
 		insertIntoTemplate(t, service)
 	}
 }

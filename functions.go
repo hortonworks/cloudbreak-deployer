@@ -82,7 +82,8 @@ func Checksum(args []string) {
 
 func ServiceURL(args []string) {
 	serviceName, bridgeAddress, localDevList, protocol, localDevPort, servicePort := unpackServiceURLArgs(args)
-	if strings.Contains(localDevList, serviceName) {
+	
+	if checkIfServiceInLocal(serviceName, localDevList) {
 		printServiceURL(bridgeAddress, protocol, localDevPort)
 	} else {
 		printServiceURL(serviceName, protocol, servicePort)
@@ -99,6 +100,18 @@ func printServiceURL(serviceName string, protocol string, port string) {
 
 func unpackServiceURLArgs(args []string) (string, string, string, string, string, string) {
 	return args[0], args[1], args[2], args[3], args[4], args[5]
+}
+
+// Checks if the service is in the local dev string by assuming the local dev string
+// is comma-separated and matching against the 4 possible ways a service may be present:
+// 		- "service"
+// 		- "other_services,service"
+// 		- "service,other_services"
+// 		- "other_services1,service,other_services2"
+// With any number of whitespace in between the services and the commas.
+func checkIfServiceInLocal(serviceName string, localDevList string) bool {
+	matched, _ := regexp.MatchString(`(,|^)\s*` + serviceName + `\s*(,|$)`, localDevList)
+	return matched
 }
 
 type caddyFileParams struct {

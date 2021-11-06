@@ -12,6 +12,10 @@ func TestServiceURL(t *testing.T) {
 	}{
 		{[]string{"cloudbreak", "bridge.address", "", "http://", "9091", "8080"}, "http://cloudbreak:8080"},
 		{[]string{"cloudbreak", "bridge.address", "cloudbreak", "http://", "9091", "8080"}, "http://bridge.address:9091"},
+		{[]string{"datalake", "bridge.address", "cloudbreak,datalake,environment", "http://", "8086", "8080"}, "http://bridge.address:8086"},
+		{[]string{"datalake", "bridge.address", "cloudbreak,datalake-api,datalake-dr,environment", "http://", "8086", "8080"}, "http://datalake:8080"},
+		{[]string{"datalake", "bridge.address", "datalake,environment", "http://", "8086", "8080"}, "http://bridge.address:8086"},
+		{[]string{"datalake", "bridge.address", "cloudbreak,datalake", "http://", "8086", "8080"}, "http://bridge.address:8086"},
 	}
 
 	for _, c := range testCases {

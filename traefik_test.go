@@ -41,10 +41,6 @@ var expectedMulti string = `[file]
         [backends.cloudbreak.servers]
             [backends.cloudbreak.servers.server0]
             url = "cloudbreakURL"
-    [backends.datalake]
-        [backends.datalake.servers]
-            [backends.datalake.servers.server0]
-            url = "datalakeURL"
     [backends.environment]
         [backends.environment.servers]
             [backends.environment.servers.server0]
@@ -61,17 +57,16 @@ var expectedMulti string = `[file]
         [backends.freeipa.servers]
             [backends.freeipa.servers.server0]
             url = "freeIpaURL"
+    [backends.datalake-api]
+        [backends.datalake-api.servers]
+            [backends.datalake-api.servers.server0]
+            url = "datalakeApiURL"
 
 [frontends]
     [frontends.cloudbreak-frontend]
     backend = "cloudbreak"
         [frontends.cloudbreak-frontend.routes.frontendrule]
         rule = "PathPrefix:/cb/"
-        priority = 100
-    [frontends.datalake-frontend]
-    backend = "datalake"
-        [frontends.datalake-frontend.routes.frontendrule]
-        rule = "PathPrefix:/dl/"
         priority = 100
     [frontends.environment-frontend]
     backend = "environment"
@@ -92,6 +87,11 @@ var expectedMulti string = `[file]
     backend = "freeipa"
         [frontends.freeipa-frontend.routes.frontendrule]
         rule = "PathPrefix:/freeipa/"
+        priority = 100
+    [frontends.datalake-api-frontend]
+    backend = "datalake-api"
+        [frontends.datalake-api-frontend.routes.frontendrule]
+        rule = "PathPrefix:/api/v1/datalake/"
         priority = 100
 
 # Tracing definition
@@ -129,7 +129,7 @@ func TestCloudbreakLocalService(t *testing.T) {
 
 func TestMultiLocalService(t *testing.T) {
 	out := catchStdOut(t, func() {
-		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "environmentURL", "redbeamsURL", "freeIpaURL", "thunderheadURL", "clusterProxyURL", "environments2ApiURL", "datalakeApiURL", "distroxApiURL", "JAEGER_HOST", "cloudbreak,periscope,datalake,environment,redbeams,freeipa"})
+		GenerateTraefikToml([]string{"cloudbreakURL", "periscopeURL", "datalakeURL", "environmentURL", "redbeamsURL", "freeIpaURL", "thunderheadURL", "clusterProxyURL", "environments2ApiURL", "datalakeApiURL", "distroxApiURL", "JAEGER_HOST", "cloudbreak,periscope,datalake-api,environment,redbeams,freeipa"})
 	})
 	if out != expectedMulti {
 		t.Errorf("If services were defined as local-dev, traefik.toml should contain the defined services. out:'%s'", out)

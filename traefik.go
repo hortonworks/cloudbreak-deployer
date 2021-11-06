@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 	"text/template"
 )
 
@@ -36,7 +35,7 @@ func GenerateTraefikToml(args []string) {
 		}
 		t := template.Must(template.New("traefik").Delims("{{{", "}}}").Funcs(template.FuncMap{
 			"isLocal": func(p traefikTomlParams, service string) bool {
-				return strings.Contains(p.LocalDevList, service)
+				return checkIfServiceInLocal(service, p.LocalDevList)
 			},
 		}).Parse(string(tmpl)))
 		t.Execute(os.Stdout, params)
