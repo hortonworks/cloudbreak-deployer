@@ -193,6 +193,7 @@ cloudbreak-conf-db() {
     env-import DATALAKE_API_TARGET_PATH ""
     env-import DISTROX_API_TARGET_PATH ""
     env-import ENVIRONMENTS2_API_TARGET_PATH ""
+    env-import DATALAKE_DR_TARGET_PATH ""
 
     env-import CADENCE_DB_DRIVER "postgres"
     env-import CADENCE_DB_ENV_DB "cadencedb"

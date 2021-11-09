@@ -20,6 +20,11 @@
             - cadence.enabled={{{get . "CADENCE_ENABLED"}}}
             - cadence.host={{{get . "CLUSTER_PROXY_CADENCE_HOST"}}}
             - cadence.port={{{get . "CLUSTER_PROXY_CADENCE_PORT"}}}
+        {{{- if get . "DATALAKE_DR_TARGET_PATH"}}}
+        volumes:
+        - {{{get . "DATALAKE_DR_TARGET_PATH"}}}/dependency-hard-links:/thunderhead-datalakedr-service/lib
+        - {{{get . "DATALAKE_DR_TARGET_PATH"}}}/thunderhead-datalakedr-service-0.1-SNAPSHOT.jar:/thunderhead-datalakedr-service/thunderhead-datalakedr-service-0.1-SNAPSHOT.jar
+        {{{- end}}}
         labels:
             - traefik.port=8982
             - traefik.frontend.rule=PathPrefix:/datalake-dr
