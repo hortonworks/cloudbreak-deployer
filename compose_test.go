@@ -6,7 +6,7 @@ import (
 )
 
 var inputVars = `
-export CB_LOCAL_DEV_LIST=cloudbreak
+export CB_LOCAL_DEV_LIST=cloudbreak,datalake-dr
 export THUNDERHEAD_MOCK_BIND_PORT=10080
 export THUNDERHEAD_MOCK_VOLUME_CONTAINER=/tmp/null
 export THUNDERHEAD_MOCK_VOLUME_HOST=/dev/null
@@ -67,8 +67,12 @@ func TestComposeGenerationWithoutDps(t *testing.T) {
 	out := catchStdInStdOut(t, inputVars, func() {
 		GenerateComposeYaml([]string{})
 	})
+
+	// Matches the services appearing in the compose.yml file by matching from the beginning of any
+	// string, ignoring any whitespace that may be present, and matching the service name 
+	// followed by a ':'.
 	should := []string{`(?m)^\s*periscope:`, `(?m)^\s*cluster-proxy:`, `(?m)^\s*datalake:`, `(?m)^\s*redbeams:`}
-	shouldnt := []string{`(?m)^\s*cloudbreak:`, `(?m)^\s*core-gateway:`}
+	shouldnt := []string{`(?m)^\s*cloudbreak:`, `(?m)^\s*core-gateway:`, `(?m)^\s*datalake-dr:`}
 	for _, s := range should {
 		re := regexp.MustCompile(s)
 		if res := re.FindString(out); len(res) == 0 {
@@ -88,7 +92,7 @@ func TestComposeGenerationWithDps(t *testing.T) {
 		GenerateComposeYaml([]string{})
 	})
 	should := []string{`(?m)^\s*periscope:`, `(?m)^\s*datalake:`, `(?m)^\s*redbeams:`, `(?m)^\s*cluster-proxy:`}
-	shouldnt := []string{`(?m)^\s*cloudbreak:`}
+	shouldnt := []string{`(?m)^\s*cloudbreak:`, `(?m)^\s*datalake-dr:`}
 	for _, s := range should {
 		re := regexp.MustCompile(s)
 		if res := re.FindString(out); len(res) == 0 {
