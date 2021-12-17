@@ -199,6 +199,46 @@ cbd-update-snap() {
     debug $SELF_EXECUTABLE is updated
 }
 
+cbd-update-to-dev() {
+    declare desc="Updates CBD to the latest CB version on mow-dev"
+
+    if [[ -z "$DEV_URL" ]]; then
+        error "You did not supply a dev url in your profile! Update your profile to have a DEV_URL variable pointed to the desired URL."
+        _exit 1
+    fi
+
+    local latest_build=$(curl -s "${DEV_URL}/cloud/cb/info" | jq -r ".app.version")
+    cbd-update-to-build "$latest_build"
+}
+
+cbd-update-to-build() {
+    declare desc="Updates CBD to the specified build"
+    local build="$1"
+    local binver=$(bin-version)
+    local osarch=$(uname -sm | tr " " _ )
+    debug $desc
+    debug binver=$binver lastver=$lastver osarch=$osarch | gray
+
+    if [[ -z "$build" ]]; then
+        error "You did not supply a build! Update terminated"
+        _exit 1
+    fi
+
+    if [[ ${binver} != ${build} ]]; then
+        debug upgrade needed | yellow
+
+        local url="https://public-repo-1.hortonworks.com/HDP/cloudbreak/cloudbreak-deployer_${build}_${osarch}.tgz"
+        info "Updating $SELF_EXECUTABLE from url: $url"
+        curl-proxy-aware -Ls $url | tar -zx -C $TEMP_DIR
+        mv $TEMP_DIR/cbd $SELF_EXECUTABLE
+        debug $SELF_EXECUTABLE is updated
+    else
+        debug you have the specified version | green
+    fi
+
+    echo "---> cbd version ${build} installed"
+}
+
 latest-version() {
     #curl -Ls https://raw.githubusercontent.com/hortonworks/cloudbreak-deployer/master/VERSION
     LATEST_URL="https://github.com/hortonworks/cloudbreak-deployer/releases/latest"
@@ -699,6 +739,8 @@ main() {
     cmd-export db-restore
 
     cmd-export cbd-update update
+    cmd-export cbd-update-to-dev update-to-dev
+    cmd-export cbd-update-to-build update-to-build
 
     cmd-export deployer-generate generate
     cmd-export deployer-regenerate regenerate
