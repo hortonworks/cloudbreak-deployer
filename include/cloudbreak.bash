@@ -358,6 +358,7 @@ cloudbreak-conf-defaults() {
         if [[ "$UMS_ENABLED" == "true" ]]; then
             env-import UMS_HOST $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
         fi
+        env-import CLUSTERDNS_HOST $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
     else
         env-import GATEWAY_DEFAULT_REDIRECT_PATH "/cloud"
         env-import THUNDERHEAD_URL $(service-url thunderhead-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8080" "10080")
