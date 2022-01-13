@@ -48,7 +48,7 @@
             - ENVIRONMENT_EXPERIENCE_SCAN_ENABLED
             - MOCK_INFRASTRUCTURE_ADDRESS={{{get . "MOCK_INFRASTRUCTURE_HOST"}}}
             - MOCK_INFRASTRUCTURE_BIND_PORT={{{get . "MOCK_INFRASTRUCTURE_BIND_PORT"}}}
-            - CLUSTERDNS_HOST
+            - "CLUSTERDNS_HOST={{{get . "CLUSTERDNS_HOST"}}}"
         labels:
             - traefik.port=8088
             - traefik.frontend.rule=PathPrefix:/environmentservice/
