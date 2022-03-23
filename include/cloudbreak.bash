@@ -407,6 +407,7 @@ cloudbreak-conf-cloud-provider() {
     env-import CB_GCP_HOSTKEY_VERIFY "false"
 
     env-import CB_AWS_ACCOUNT_ID ""
+    env-import CB_AWS_GOV_ACCOUNT_ID ""
 }
 
 cloudbreak-conf-rest-client() {
