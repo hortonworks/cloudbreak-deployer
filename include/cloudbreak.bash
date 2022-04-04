@@ -64,6 +64,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_THUNDERHEAD_MOCK 2.57.0-b27
     env-import DOCKER_TAG_MOCK_INFRASTRUCTURE 2.57.0-b27
     env-import DOCKER_TAG_PERISCOPE 2.57.0-b27
+    env-import DOCKER_TAG_CONSUMPTION 2.57.0-b27
     env-import DOCKER_TAG_CLOUDBREAK 2.57.0-b27
     env-import DOCKER_TAG_DATALAKE 2.57.0-b27
     env-import DOCKER_TAG_REDBEAMS 2.57.0-b27
