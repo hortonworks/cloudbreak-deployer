@@ -7,6 +7,12 @@
             [backends.cloudbreak.servers.server0]
             url = "{{{ .CloudbreakURL }}}"
 {{{- end}}}
+{{{- if isLocal . "consumption" }}}
+    [backends.consumption]
+        [backends.consumption.servers]
+            [backends.consumption.servers.server0]
+            url = "{{{ .ConsumptionURL }}}"
+{{{- end}}}
 {{{- if isLocal . "datalake" }}}
     [backends.datalake]
         [backends.datalake.servers]
@@ -80,6 +86,13 @@
     backend = "cloudbreak"
         [frontends.cloudbreak-frontend.routes.frontendrule]
         rule = "PathPrefix:/cb/"
+        priority = 100
+{{{- end}}}
+{{{- if isLocal . "consumption"}}}
+    [frontends.consumption-frontend]
+    backend = "consumption"
+        [frontends.consumption-frontend.routes.frontendrule]
+        rule = "PathPrefix:/consumption/"
         priority = 100
 {{{- end}}}
 {{{- if isLocal . "datalake"}}}

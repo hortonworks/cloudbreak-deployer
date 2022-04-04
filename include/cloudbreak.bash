@@ -95,6 +95,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CLOUDBREAK_DATALAKE docker-private.infra.cloudera.com/cloudera/cloudbreak-datalake
     env-import DOCKER_IMAGE_CLOUDBREAK_REDBEAMS docker-private.infra.cloudera.com/cloudera/cloudbreak-redbeams
     env-import DOCKER_IMAGE_CLOUDBREAK_ENVIRONMENT docker-private.infra.cloudera.com/cloudera/cloudbreak-environment
+    env-import DOCKER_IMAGE_CLOUDBREAK_CONSUMPTION docker-private.infra.cloudera.com/cloudera/cloudbreak-consumption
     env-import DOCKER_IMAGE_CLOUDBREAK_FREEIPA docker-private.infra.cloudera.com/cloudera/cloudbreak-freeipa
     env-import DOCKER_IMAGE_CBD_SMARTSENSE hortonworks/cbd-smartsense
     env-import DOCKER_IMAGE_AUDIT docker-private.infra.cloudera.com/cloudera/thunderhead-audit
@@ -186,6 +187,12 @@ cloudbreak-conf-db() {
     env-import WORKLOADIAM_DB_ENV_PASS ""
     env-import WORKLOADIAM_DB_PORT_5432_TCP_ADDR "$COMMON_DB"
     env-import WORKLOADIAM_DB_PORT_5432_TCP_PORT "5432"
+
+    env-import CONSUMPTION_DB_ENV_USER "postgres"
+    env-import CONSUMPTION_DB_ENV_DB "consumptiondb"
+    env-import CONSUMPTION_DB_ENV_PASS ""
+    env-import CONSUMPTION_DB_ENV_SCHEMA "public"
+    env-import CONSUMPTION_HBM2DDL_STRATEGY "validate"
 
     env-import CLUSTER_PROXY_DB_ENV_DB "cluster_proxy"
     env-import CLUSTER_PROXY_DB_ENV_USER "postgres"
