@@ -26,6 +26,7 @@ export DOCKER_IMAGE_THUNDERHEAD_MOCK=hortonworks/cloudbreak-mock-thunderhead
 export DOCKER_IMAGE_CLOUDBREAK=docker-private.infra.cloudera.com/cloudera/cloudbreak
 export DOCKER_IMAGE_CLOUDBREAK_DATALAKE=docker-private.infra.cloudera.com/cloudera/cloudbreak-datalake
 export DOCKER_IMAGE_CLOUDBREAK_ENVIRONMENT=docker-private.infra.cloudera.com/cloudera/cloudbreak-environment
+export DOCKER_IMAGE_CLOUDBREAK_CONSUMPTION=docker-private.infra.cloudera.com/cloudera/cloudbreak-consumption
 export DOCKER_IMAGE_CLOUDBREAK_PERISCOPE=docker-private.infra.cloudera.com/cloudera/cloudbreak-autoscale
 export DOCKER_IMAGE_CLOUDBREAK_REDBEAMS=docker-private.infra.cloudera.com/cloudera/cloudbreak-redbeams
 export DOCKER_IMAGE_CLOUDBREAK_FREEIPA=docker-private.infra.cloudera.com/cloudera/cloudbreak-freeipa
@@ -35,6 +36,7 @@ export DOCKER_TAG_THUNDERHEAD_MOCK=2.10.0-dev.669
 export DOCKER_TAG_CLOUDBREAK=2.10.0-dev.669
 export DOCKER_TAG_DATALAKE=2.10.0-dev.669
 export DOCKER_TAG_ENVIRONMENT=2.10.0-dev.805
+export DOCKER_TAG_CONSUMPTION=2.10.0-dev.805
 export DOCKER_TAG_HAVEGED=1.1.0
 export DOCKER_TAG_PERISCOPE=2.10.0-dev.669
 export DOCKER_TAG_POSTGRES=9.6.1-alpine
@@ -69,7 +71,7 @@ func TestComposeGenerationWithoutDps(t *testing.T) {
 	})
 
 	// Matches the services appearing in the compose.yml file by matching from the beginning of any
-	// string, ignoring any whitespace that may be present, and matching the service name 
+	// string, ignoring any whitespace that may be present, and matching the service name
 	// followed by a ':'.
 	should := []string{`(?m)^\s*periscope:`, `(?m)^\s*cluster-proxy:`, `(?m)^\s*datalake:`, `(?m)^\s*redbeams:`}
 	shouldnt := []string{`(?m)^\s*cloudbreak:`, `(?m)^\s*core-gateway:`, `(?m)^\s*datalake-dr:`}

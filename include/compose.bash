@@ -88,6 +88,7 @@ compose-kill() {
     docker rm -f cbreak_datalake_1 2> /dev/null || :
     docker rm -f cbreak_redbeams_1 2> /dev/null || :
     docker rm -f cbreak_environment_1 2> /dev/null || :
+    docker rm -f cbreak_consumption_1 2> /dev/null || :
     docker rm -f cbreak_freeipa_1 2> /dev/null || :
     docker rm -f cbreak_idbmms_1 2> /dev/null || :
     docker rm -f cbreak_workloadiam_1 2> /dev/null || :
