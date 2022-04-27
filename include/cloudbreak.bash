@@ -93,6 +93,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CLOUDBREAK_WEB docker-private.infra.cloudera.com/cloudera/hdc-web
     env-import DOCKER_IMAGE_CLOUDBREAK_AUTH docker-private.infra.cloudera.com/cloudera/hdc-auth
     env-import DOCKER_IMAGE_CLOUDBREAK_PERISCOPE docker-private.infra.cloudera.com/cloudera/cloudbreak-autoscale
+    env-import DOCKER_IMAGE_CLOUDBREAK_CONSUMPTION docker-private.infra.cloudera.com/cloudera/cloudbreak-consumption
     env-import DOCKER_IMAGE_CLOUDBREAK_DATALAKE docker-private.infra.cloudera.com/cloudera/cloudbreak-datalake
     env-import DOCKER_IMAGE_CLOUDBREAK_REDBEAMS docker-private.infra.cloudera.com/cloudera/cloudbreak-redbeams
     env-import DOCKER_IMAGE_CLOUDBREAK_ENVIRONMENT docker-private.infra.cloudera.com/cloudera/cloudbreak-environment
