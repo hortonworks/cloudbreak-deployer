@@ -112,10 +112,6 @@ migrate-one-db() {
             local scripts_location=${FREEIPA_SCHEMA_SCRIPTS_LOCATION}
             local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_FREEIPA}:${DOCKER_TAG_FREEIPA}
             ;;
-        consumptiondb)
-            local scripts_location=${CONSUMPTION_SCHEMA_SCRIPTS_LOCATION}
-            local docker_image_name=${DOCKER_IMAGE_CLOUDBREAK_CONSUMPTION}:${DOCKER_TAG_CONSUMPTION}
-            ;;
         *)
             migrateError "Invalid database service name: $service_name. Supported databases: cbdb, periscopedb, datalakedb, redbeamsdb, environmentdb and freeipadb"
             return 1
@@ -141,8 +137,6 @@ execute-migration() {
         migrate-one-db environmentdb pending
         migrate-one-db freeipadb up
         migrate-one-db freeipadb pending
-        migrate-one-db consumptiondb up
-        migrate-one-db consumptiondb pending
     else
         if [[ "$2" == "new" ]]; then
             case $1 in
@@ -182,14 +176,8 @@ execute-migration() {
                         _exit 127
                     fi
                     ;;
-                consumptiondb)
-                    if [[ "$CONSUMPTION_SCHEMA_SCRIPTS_LOCATION" == "container" && "$CB_LOCAL_DEV_LIST" == *"consumption"* ]]; then
-                        migrateError "CONSUMPTION_SCHEMA_SCRIPTS_LOCATION environment variable must be set and pointing to the freeipa project's schema location"
-                        _exit 127
-                    fi
-                    ;;
                 *)
-                    migrateError "Invalid database service name: $1. Supported databases: cbdb, periscopedb, datalakedb, redbeamsdb, environmentdb, freeipadb and consumptiondb"
+                    migrateError "Invalid database service name: $1. Supported databases: cbdb, periscopedb, datalakedb, redbeamsdb, environmentdb and freeipadb"
                     return 1
                     ;;
             esac

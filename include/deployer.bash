@@ -435,7 +435,6 @@ localdev-doctor() {
     localdev-doctor-service "datalake" "8086"
     localdev-doctor-service "redbeams" "8087"
     localdev-doctor-service "environment" "8088"
-    localdev-doctor-service "consumption" "8099"
     localdev-doctor-service "freeipa" "8090"
     localdev-doctor-service "cluster-proxy" "10081"
     localdev-doctor-service "idbmms" "8990"
@@ -613,7 +612,6 @@ start-wait-cmd() {
 
     start-requested-services "$@"
     wait-for-service "cloudbreak" "cb" "$CB_HOST_ADDRESS"
-    wait-for-service "consumption" "consumption" "$CONSUMPTION_HOST_ADDRESS"
     wait-for-service "environment" "environmentservice" "$ENVIRONMENT_HOST_ADDRESS"
     wait-for-service "periscope" "as" "$PERISCOPE_HOST_ADDRESS"
     wait-for-service "redbeams" "redbeams" "$REDBEAMS_HOST_ADDRESS"
