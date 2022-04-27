@@ -73,6 +73,12 @@
             [backends.distrox-api.servers.server0]
             url = "{{{ .DistroxApiURL }}}"
 {{{- end}}}
+{{{- if isLocal . "thunderhead-mock" }}}
+    [backends.thunderhead-mock]
+        [backends.thunderhead-mock.servers]
+            [backends.thunderhead-mock.servers.server0]
+            url = "{{{ .ThunderheadURL }}}"
+{{{- end}}}
 
 [frontends]
 {{{- if isLocal . "cloudbreak"}}}
@@ -157,6 +163,13 @@
     backend = "audit-api"
         [frontends.audit-api-frontend.routes.frontendrule]
         rule = "PathPrefix:/api/v1/audit/"
+        priority = 100
+{{{- end}}}
+{{{- if isLocal . "thunderhead-mock"}}}
+    [frontends.thunderhead-mock-frontend]
+    backend = "thunderhead-mock"
+        [frontends.thunderhead-mock-frontend.routes.frontendrule]
+        rule = "PathPrefix:/thunderhead/"
         priority = 100
 {{{- end}}}
 

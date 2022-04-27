@@ -353,7 +353,7 @@ cloudbreak-conf-defaults() {
 
     if [[ "$THUNDERHEAD_MOCK" == "true" ]]; then
         env-import ULUWATU_FRONTEND_RULE "PathPrefix:/"
-        env-import THUNDERHEAD_URL $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8080" "8080")
+        env-import THUNDERHEAD_URL $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "10080" "10080")
         env-import GATEWAY_DEFAULT_REDIRECT_PATH "/environments"
         if [[ "$UMS_ENABLED" == "true" ]]; then
             env-import UMS_HOST $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
