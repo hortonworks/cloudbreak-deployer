@@ -22,6 +22,7 @@ update-container-versions:
 	sed -i "0,/DOCKER_TAG_ENVIRONMENT/ s/DOCKER_TAG_ENVIRONMENT .*/DOCKER_TAG_ENVIRONMENT $(CB_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_FREEIPA/ s/DOCKER_TAG_FREEIPA .*/DOCKER_TAG_FREEIPA $(CB_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_CLOUDBREAK/  s/DOCKER_TAG_CLOUDBREAK .*/DOCKER_TAG_CLOUDBREAK $(CB_VERSION)/" include/cloudbreak.bash
+	sed -i "0,/DOCKER_TAG_CONSUMPTION/  s/DOCKER_TAG_CONSUMPTION .*/DOCKER_TAG_CONSUMPTION $(CB_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_ULUWATU/ s/DOCKER_TAG_ULUWATU .*/DOCKER_TAG_ULUWATU $(CB_VERSION)/" include/cloudbreak.bash
 
 update-container-versions-cdpcp:

@@ -64,6 +64,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_THUNDERHEAD_MOCK 2.57.0-b29
     env-import DOCKER_TAG_MOCK_INFRASTRUCTURE 2.57.0-b29
     env-import DOCKER_TAG_PERISCOPE 2.57.0-b29
+    env-import DOCKER_TAG_CONSUMPTION 2.57.0-b29
     env-import DOCKER_TAG_CLOUDBREAK 2.57.0-b29
     env-import DOCKER_TAG_DATALAKE 2.57.0-b29
     env-import DOCKER_TAG_REDBEAMS 2.57.0-b29
@@ -278,6 +279,7 @@ cloudbreak-conf-defaults() {
 
     env-import CLOUDBREAK_URL $(service-url cloudbreak "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "9091" "8080")
     env-import PERISCOPE_URL $(service-url periscope "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8085" "8080")
+    env-import CONSUMPTION_URL $(service-url consumption "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8089" "8080")
     env-import DATALAKE_URL $(service-url datalake "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8086" "8080")
     env-import REDBEAMS_URL $(service-url redbeams "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8087" "8080")
     env-import ENVIRONMENT_URL $(service-url environment "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8088" "8088")
@@ -290,6 +292,7 @@ cloudbreak-conf-defaults() {
 
     env-import CLOUDBREAK_HOST $(host-from-url "$CLOUDBREAK_URL")
     env-import PERISCOPE_HOST $(host-from-url "$PERISCOPE_URL")
+    env-import CONSUMPTION_HOST $(host-from-url "$CONSUMPTION_URL")
     env-import ENVIRONMENT_HOST $(host-from-url "$ENVIRONMENT_URL")
     env-import FREEIPA_HOST $(host-from-url "$FREEIPA_URL")
     env-import MOCK_INFRASTRUCTURE_HOST $(host-from-url "$MOCK_INFRASTRUCTURE_URL")
@@ -320,6 +323,7 @@ cloudbreak-conf-defaults() {
 
     env-import CB_PORT $(port-from-url "$CLOUDBREAK_URL")
     env-import PERISCOPE_PORT $(port-from-url "$PERISCOPE_URL")
+    env-import CONSUMPTION_PORT $(port-from-url "$CONSUMPTION_URL")
     env-import ENVIRONMENT_PORT $(port-from-url "$ENVIRONMENT_URL")
     env-import FREEIPA_PORT $(port-from-url "$FREEIPA_URL")
 
@@ -433,6 +437,7 @@ cloudbreak-conf-host-addr() {
     env-import FREEIPA_HOST_ADDRESS  "http://$PUBLIC_IP"
     env-import REDBEAMS_HOST_ADDRESS  "http://$PUBLIC_IP"
     env-import PERISCOPE_HOST_ADDRESS  "http://$PUBLIC_IP"
+    env-import CONSUMPTION_HOST_ADDRESS  "http://$PUBLIC_IP"
     env-import DATALAKE_HOST_ADDRESS  "http://$PUBLIC_IP"
     env-import AUDIT_HOST_ADDRESS  "http://$PUBLIC_IP"
 }
@@ -440,6 +445,7 @@ cloudbreak-conf-host-addr() {
 cloudbreak-conf-java() {
     env-import CB_JAVA_OPTS ""
     env-import PERISCOPE_JAVA_OPTS ""
+    env-import CONSUMPTION_JAVA_OPTS ""
     env-import FREEIPA_JAVA_OPTS ""
     env-import REDBEAMS_JAVA_OPTS ""
     env-import DATALAKE_JAVA_OPTS ""
@@ -522,7 +528,7 @@ generate-toml-file-for-localdev() {
 
 generate-toml-file-for-localdev-force() {
     declare traefikFile=${1:-traefik.toml}
-    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$DATALAKE_URL" "$ENVIRONMENT_URL" "$REDBEAMS_URL" "$FREEIPA_URL" "http://$THUNDERHEAD_URL" "$CLUSTER_PROXY_URL" "$ENVIRONMENTS2_API_URL" "$DATALAKE_API_URL" "$DISTROX_API_URL" "$JAEGER_HOST" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
+    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$CONSUMPTION_URL" "$DATALAKE_URL" "$ENVIRONMENT_URL" "$REDBEAMS_URL" "$FREEIPA_URL" "http://$THUNDERHEAD_URL" "$CLUSTER_PROXY_URL" "$ENVIRONMENTS2_API_URL" "$DATALAKE_API_URL" "$DISTROX_API_URL" "$JAEGER_HOST" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
 }
 
 generate-traefik-check-diff() {
