@@ -373,6 +373,10 @@ cloudbreak-conf-defaults() {
     fi
 
     env-import UMS_PORT "8982"
+
+    env-import SAAS_SDX_HOST $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
+    env-import SAAS_SDX_PORT "8982"
+
     env-import CLUSTERPROXY_ENABLED "true"
 
     env-import CADENCE_FRONTEND_PORT "7933"
