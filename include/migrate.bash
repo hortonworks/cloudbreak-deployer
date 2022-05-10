@@ -15,6 +15,8 @@ migrate-config() {
     env-import ENVIRONMENT_SCHEMA_MIGRATION_AUTO true
     env-import FREEIPA_SCHEMA_SCRIPTS_LOCATION "container"
     env-import FREEIPA_SCHEMA_MIGRATION_AUTO true
+    env-import CONSUMPTION_SCHEMA_SCRIPTS_LOCATION "container"
+    env-import CONSUMPTION_SCHEMA_MIGRATION_AUTO true
     env-import DB_MIGRATION_LOG "db_migration.log"
     env-import VERBOSE_MIGRATION false
 }
@@ -184,7 +186,7 @@ execute-migration() {
                     ;;
                 consumptiondb)
                     if [[ "$CONSUMPTION_SCHEMA_SCRIPTS_LOCATION" == "container" && "$CB_LOCAL_DEV_LIST" == *"consumption"* ]]; then
-                        migrateError "CONSUMPTION_SCHEMA_SCRIPTS_LOCATION environment variable must be set and pointing to the freeipa project's schema location"
+                        migrateError "CONSUMPTION_SCHEMA_SCRIPTS_LOCATION environment variable must be set and pointing to the consumption project's schema location"
                         _exit 127
                     fi
                     ;;
