@@ -152,6 +152,12 @@ cloudbreak-conf-db() {
     env-import PERISCOPE_DB_ENV_PASS ""
     env-import PERISCOPE_DB_ENV_SCHEMA "public"
     env-import PERISCOPE_HBM2DDL_STRATEGY "validate"
+    
+    env-import CONSUMPTION_DB_ENV_USER "postgres"
+    env-import CONSUMPTION_DB_ENV_DB "consumptiondb"
+    env-import CONSUMPTION_DB_ENV_PASS ""
+    env-import CONSUMPTION_DB_ENV_SCHEMA "public"
+    env-import CONSUMPTION_HBM2DDL_STRATEGY "validate"    
 
     env-import DATALAKE_DB_ENV_USER "postgres"
     env-import DATALAKE_DB_ENV_DB "datalakedb"
