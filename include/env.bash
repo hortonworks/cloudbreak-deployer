@@ -282,6 +282,8 @@ UMS_HOST - Host address of Altus UMS service
 UMS_PORT - Port of Altus UMS service
 UMS_ENABLED - Enable UMS, default value is true
 THUNDERHEAD_MOCK - Enables authentication mock
+AUTHDISTRIBUTOR_HOST - Host address of auth distributor service
+AUTHDISTRIBUTOR_PORT - Port of auth distributor service
 
 CCMV2_MANAGEMENT_SERVICE_HOST - CCMv2 Management Service host address, should be available from container
 CCMV2_MANAGEMENT_SERVICE_PORT - CCMv2 Management Service port
