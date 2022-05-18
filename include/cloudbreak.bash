@@ -82,8 +82,8 @@ cloudbreak-conf-tags() {
 
     env-import DOCKER_TAG_POSTGRES 13.2-alpine
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
-    env-import DOCKER_TAG_CLUSTER_PROXY 1.0.7-b17
-    env-import DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER 1.0.7-b17
+    env-import DOCKER_TAG_CLUSTER_PROXY 1.0.8-b6
+    env-import DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER 1.0.8-b6
     env-import DOCKER_TAG_CADENCE 0.11.0-auto-setup
     env-import DOCKER_TAG_CADENCE_WEB 1.0.0-b24
 
@@ -152,12 +152,12 @@ cloudbreak-conf-db() {
     env-import PERISCOPE_DB_ENV_PASS ""
     env-import PERISCOPE_DB_ENV_SCHEMA "public"
     env-import PERISCOPE_HBM2DDL_STRATEGY "validate"
-    
+
     env-import CONSUMPTION_DB_ENV_USER "postgres"
     env-import CONSUMPTION_DB_ENV_DB "consumptiondb"
     env-import CONSUMPTION_DB_ENV_PASS ""
     env-import CONSUMPTION_DB_ENV_SCHEMA "public"
-    env-import CONSUMPTION_HBM2DDL_STRATEGY "validate"    
+    env-import CONSUMPTION_HBM2DDL_STRATEGY "validate"
 
     env-import DATALAKE_DB_ENV_USER "postgres"
     env-import DATALAKE_DB_ENV_DB "datalakedb"
