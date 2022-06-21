@@ -121,6 +121,7 @@ CB_STATUSCHECKER_ENABLED - Automatic status check enabled (default: true)
 CERT_VALIDATION - Enables cert validation in Cloudbreak and Autoscale
 COMMON_DB - Name of the database container
 COMMON_DB_VOL - Name of the database volume
+CONSUMPTION_ENABLED - Enable consumption service feature flag. It is propagated to Environment and Datalake services. (default: false)
 CURL_CONNECT_TIMEOUT - Timeout for curl command
 COMPOSE_HTTP_TIMEOUT - Docker Compose execution timeout
 DATALAKE_HBM2DDL_STRATEGY - Configures hibernate.hbm2ddl.auto in Datalake

@@ -286,7 +286,7 @@ cloudbreak-conf-defaults() {
 
     env-import CLOUDBREAK_URL $(service-url cloudbreak "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "9091" "8080")
     env-import PERISCOPE_URL $(service-url periscope "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8085" "8080")
-    env-import CONSUMPTION_URL $(service-url consumption "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8089" "8080")
+    env-import CONSUMPTION_URL $(service-url consumption "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8099" "8080")
     env-import DATALAKE_URL $(service-url datalake "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8086" "8080")
     env-import REDBEAMS_URL $(service-url redbeams "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8087" "8080")
     env-import ENVIRONMENT_URL $(service-url environment "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8088" "8088")
@@ -361,6 +361,7 @@ cloudbreak-conf-defaults() {
     env-import UAA_ULUWATU_SECRET "dummysecret"
 
     env-import ENVIRONMENT_EXPERIENCE_SCAN_ENABLED false
+    env-import CONSUMPTION_ENABLED false
 
     if [[ "$THUNDERHEAD_MOCK" == "true" ]]; then
         env-import ULUWATU_FRONTEND_RULE "PathPrefix:/"
