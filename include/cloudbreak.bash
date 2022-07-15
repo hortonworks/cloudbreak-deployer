@@ -379,6 +379,8 @@ cloudbreak-conf-defaults() {
         fi
     fi
 
+    env-import MOCK_DATALAKE_DR_PORT "8981"
+
     env-import UMS_PORT "8982"
 
     env-import SAAS_SDX_HOST $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
