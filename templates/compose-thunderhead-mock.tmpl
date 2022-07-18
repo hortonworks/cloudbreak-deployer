@@ -12,6 +12,7 @@
         ports:
         - "{{{get . "THUNDERHEAD_MOCK_BIND_PORT"}}}:8080"
         - "{{{get . "UMS_PORT"}}}:8982"
+        - "{{{get . "MOCK_DATALAKE_DR_PORT"}}}:8989"
         labels:
         - traefik.frontend.priority=100
         - traefik.frontend.rule=PathPrefix:/iam,/oidc,/idp,/thunderhead
