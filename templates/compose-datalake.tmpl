@@ -43,6 +43,7 @@
             - STATUSCHECKER_ENABLED={{{get . "DATALAKE_STATUSCHECKER_ENABLED"}}}
             - "ALTUS_DATALAKEDR_ENDPOINT={{{get . "DATALAKE_DR_ENDPOINT"}}}"
             - "ALTUS_DATALAKEDR_ENABLED={{{get . "DATALAKE_DR_ENABLED"}}}"
+            - "ALTUS_DATALAKEDR_MOCKENDPOINT={{{get . "MOCK_DATALAKE_DR_ENDPOINT"}}}"
         labels:
             - traefik.port=8080
             - traefik.frontend.rule=PathPrefix:/dl/
