@@ -373,7 +373,6 @@ cloudbreak-conf-defaults() {
             env-import UMS_HOST $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
         fi
         env-import CLUSTERDNS_HOST $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
-        env-import MOCK_DATALAKE_DR_ENDPOINT $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8981" "${MOCK_DATALAKE_DR_PORT}") 
     else
         env-import GATEWAY_DEFAULT_REDIRECT_PATH "/cloud"
         env-import THUNDERHEAD_URL $(service-url thunderhead-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8080" "10080")
