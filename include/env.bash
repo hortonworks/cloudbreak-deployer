@@ -175,6 +175,7 @@ DOCKER_IMAGE_CLOUDBREAK_ENVIRONMENT - Environment Docker image name
 DOCKER_IMAGE_CLOUDBREAK_FREEIPA - FreeIpa Docker image name
 DOCKER_IMAGE_CLOUDBREAK_WEB - Web UI Docker image name
 DOCKER_IMAGE_ENVIRONMENTS2_API - Environments2 API Docker image name
+DOCKER_IMAGE_RECIPES_API - Recipes Api Docker image name
 DOCKER_IMAGE_IDBMMS - IDBMMS Docker image name
 DOCKER_IMAGE_WORKLOADIAM - WorkloadIam Docker image name
 DOCKER_TAG_AUDIT - Audit Service container version
@@ -194,6 +195,7 @@ DOCKER_TAG_REDBEAMS - Redbeams container version
 DOCKER_TAG_ENVIRONMENT - Environment container version
 DOCKER_TAG_ENVIRONMENTS2_API - Environments2 API container version
 DOCKER_TAG_FREEIPA - FreeIpa container version
+DOCKER_TAG_RECIPES_API - Recipes API container version
 DOCKER_TAG_POSTGRES - Postgresql container version
 DOCKER_TAG_TRAEFIK - Traefik container version
 DOCKER_TAG_ULUWATU - Web UI container version
