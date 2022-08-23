@@ -77,7 +77,6 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_ENVIRONMENTS2_API 1.0.0-b6159
     env-import DOCKER_TAG_DATALAKE_API 1.0.0-b6159
     env-import DOCKER_TAG_DISTROX_API 1.0.0-b6159
-    env-import DOCKER_TAG_RECIPES_API 1.0.0-b6159
     env-import DOCKER_TAG_AUDIT 1.0.0-b6159
     env-import DOCKER_TAG_DATALAKE_DR 1.0.0-b6159
 
@@ -108,7 +107,6 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_ENVIRONMENTS2_API docker-private.infra.cloudera.com/cloudera/thunderhead-environments2-api
     env-import DOCKER_IMAGE_DATALAKE_API docker-private.infra.cloudera.com/cloudera/thunderhead-datalake-api
     env-import DOCKER_IMAGE_DISTROX_API docker-private.infra.cloudera.com/cloudera/thunderhead-distrox-api
-    env-import DOCKER_IMAGE_RECIPES_API docker-private.infra.cloudera.com/cloudera/thunderhead-recipes-api
     env-import DOCKER_IMAGE_DATALAKE_DR docker-private.infra.cloudera.com/cloudera/thunderhead-datalakedr
     env-import DOCKER_IMAGE_CLUSTER_PROXY docker-private.infra.cloudera.com/cloudera/cloud/cluster-proxy
     env-import DOCKER_IMAGE_CLUSTER_PROXY_HEALTH_CHECK_WORKER docker-private.infra.cloudera.com/cloudera/cloud/cluster-proxy
@@ -203,7 +201,6 @@ cloudbreak-conf-db() {
     env-import DATALAKE_API_TARGET_PATH ""
     env-import DISTROX_API_TARGET_PATH ""
     env-import ENVIRONMENTS2_API_TARGET_PATH ""
-    env-import RECIPES_API_TARGET_PATH ""
     env-import DATALAKE_DR_TARGET_PATH ""
 
     env-import CADENCE_DB_DRIVER "postgres"
@@ -329,10 +326,6 @@ cloudbreak-conf-defaults() {
     env-import DATALAKE_DR_ENABLED false
     env-import DATALAKE_DR_HOST $(host-from-url "$DATALAKE_DR_ENDPOINT")
     env-import DATALAKE_DR_PORT $(port-from-url "$DATALAKE_DR_ENDPOINT")
-    env-import RECIPES_API_ENABLED false
-    env-import RECIPES_API_URL $(service-url recipes-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8993" "8992")
-    env-import RECIPES_API_DEBUG false
-    env-import RECIPES_API_DEBUG_PORT 5004
     env-import CADENCE_ENABLED false
 
     env-import CB_PORT $(port-from-url "$CLOUDBREAK_URL")
@@ -357,7 +350,6 @@ cloudbreak-conf-defaults() {
     env-import ENVIRONMENTS2_API_HEALTHZ_PORT 8983
     env-import DATALAKE_API_HEALTHZ_PORT 8985
     env-import DISTROX_API_HEALTHZ_PORT 8992
-    env-import RECIPES_API_HEALTHZ_PORT 8987
 
     env-import AUDIT_HTTP_PORT 8977
     env-import AUDIT_GRPC_PORT 8979
@@ -554,7 +546,7 @@ generate-toml-file-for-localdev() {
 
 generate-toml-file-for-localdev-force() {
     declare traefikFile=${1:-traefik.toml}
-    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$CONSUMPTION_URL" "$DATALAKE_URL" "$ENVIRONMENT_URL" "$REDBEAMS_URL" "$FREEIPA_URL" "http://$THUNDERHEAD_URL" "$CLUSTER_PROXY_URL" "$ENVIRONMENTS2_API_URL" "$DATALAKE_API_URL" "$DISTROX_API_URL" "$RECIPES_API_URL" "$JAEGER_HOST" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
+    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$CONSUMPTION_URL" "$DATALAKE_URL" "$ENVIRONMENT_URL" "$REDBEAMS_URL" "$FREEIPA_URL" "http://$THUNDERHEAD_URL" "$CLUSTER_PROXY_URL" "$ENVIRONMENTS2_API_URL" "$DATALAKE_API_URL" "$DISTROX_API_URL" "$JAEGER_HOST" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
 }
 
 generate-traefik-check-diff() {

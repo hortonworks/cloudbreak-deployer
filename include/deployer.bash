@@ -443,7 +443,6 @@ localdev-doctor() {
     localdev-doctor-service "environments2-api" "8984"
     localdev-doctor-service "audit-api" "8994"
     localdev-doctor-service "datalake-api" "8986"
-    localdev-doctor-service "recipes-api" "8993"
     localdev-doctor-service "distrox-api" "8988"
 }
 
