@@ -151,9 +151,6 @@ services:
 {{{- block "environments2-api" .}}}{{{end}}}
 {{{- block "datalake-api" .}}}{{{end}}}
 {{{- block "distrox-api" .}}}{{{end}}}
-{{{- if eq (get . "RECIPES_API_ENABLED") "true" }}}
-{{{- block "recipes-api" .}}}{{{end}}}
-{{{- end}}}
 
 {{{- if eq (get . "CB_AUDIT_SERVICE_ENABLED") "true" }}}
 {{{- block "audit" .}}}{{{end}}}
