@@ -79,6 +79,12 @@
             [backends.distrox-api.servers.server0]
             url = "{{{ .DistroxApiURL }}}"
 {{{- end}}}
+{{{- if isLocal . "recipes-api"}}}
+    [backends.recipes-api]
+        [backends.recipes-api.servers]
+            [backends.recipes-api.servers.server0]
+            url = "{{{ .RecipesApiURL }}}"
+{{{- end}}}
 
 [frontends]
 {{{- if isLocal . "cloudbreak"}}}
@@ -163,6 +169,13 @@
     backend = "distrox-api"
         [frontends.distrox-api-frontend.routes.frontendrule]
         rule = "PathPrefix:/api/v1/datahub/"
+        priority = 100
+{{{- end}}}
+{{{- if isLocal . "recipes-api"}}}
+    [frontends.recipes-api-frontend]
+    backend = "recipes-api"
+        [frontends.recipes-api-frontend.routes.frontendrule]
+        rule = "PathPrefix:/api/v1/recipes/"
         priority = 100
 {{{- end}}}
 {{{- if isLocal . "audit-api"}}}
