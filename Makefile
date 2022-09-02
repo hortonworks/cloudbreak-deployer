@@ -31,6 +31,7 @@ update-container-versions-cdpcp:
 	sed -i "0,/DOCKER_TAG_ENVIRONMENTS2_API/ s/DOCKER_TAG_ENVIRONMENTS2_API .*/DOCKER_TAG_ENVIRONMENTS2_API $(CDPCP_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_DATALAKE_API/ s/DOCKER_TAG_DATALAKE_API .*/DOCKER_TAG_DATALAKE_API $(CDPCP_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_DISTROX_API/ s/DOCKER_TAG_DISTROX_API .*/DOCKER_TAG_DISTROX_API $(CDPCP_VERSION)/" include/cloudbreak.bash
+	sed -i "0,/DOCKER_TAG_RECIPES_API/ s/DOCKER_TAG_RECIPES_API .*/DOCKER_TAG_RECIPES_API $(CDPCP_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_AUDIT/ s/DOCKER_TAG_AUDIT .*/DOCKER_TAG_AUDIT $(CDPCP_VERSION)/" include/cloudbreak.bash
 	sed -i "0,/DOCKER_TAG_DATALAKE_DR/ s/DOCKER_TAG_DATALAKE_DR .*/DOCKER_TAG_DATALAKE_DR $(CDPCP_VERSION)/" include/cloudbreak.bash
 
@@ -98,6 +99,9 @@ release-docker-version:
 upload_s3:
 	ls -1 release | xargs -I@ aws s3 cp release/@ s3://public-repo-1.hortonworks.com/HDP/cloudbreak/@ --acl public-read
 
+docker-build:
+	docker build -t cloudera/cloudbreak-deployer:latest .
+	docker run --rm -v ${PWD}:/go/src/github.com/hortonworks/cloudbreak-deployer cloudera/cloudbreak-deployer:latest make deps build
 
 circleci:
 	rm ~/.gitconfig
