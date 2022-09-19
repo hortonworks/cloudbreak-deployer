@@ -3,7 +3,11 @@
         {{{- if get . "DPS_REPO"}}}
         build: {{{get . "DPS_REPO"}}}/core-gateway
         {{{- end}}}
+        {{{- if eq (get . "UMS_HOST") "ums.thunderhead-dev.cloudera.com"}}}
+        image: docker-private.infra.cloudera.com/cloudera/cdp-gateway:{{{get . "CDP_GW_VERSION"}}}
+        {{{- else }}}
         image: docker-private.infra.cloudera.com/cloudera_thirdparty/dps-gateway:{{{get . "DPS_VERSION"}}}
+        {{{- end }}}
         # ports:
             # - {{{get . "PUBLIC_HTTP_PORT"}}}:3000
             # - {{{get . "PUBLIC_HTTPS_PORT"}}}:443
@@ -17,6 +21,9 @@
         - GATEWAY_UNAUTHENTICATED_PATHS=pathPrefix:/idp,pathPrefix:/oidc,pathPrefix:/thunderhead,pathPrefix:/thunderhead/auth,!pathPrefix:/thunderhead/api,pathPrefix:/core,!pathPrefix:/core/api,pathPrefix:/cloud/cb/info,pathPrefix:/cb/info,pathPrefix:/environmentservice/info,pathPrefix:/dl/info,pathPrefix:/freeipa/info
         - UMS_HOST={{{get . "UMS_HOST"}}}
         - GATEWAY_DEFAULT_REDIRECT_PATH={{{get . "GATEWAY_DEFAULT_REDIRECT_PATH"}}}
+        {{{- if eq (get . "UMS_HOST") "ums.thunderhead-dev.cloudera.com"}}}
+        - GRPC_TIMEOUT_MS=20000
+        {{{- end }}}
         - GATEWAY_REDIRECT_ENDPOINT_PATH=/thunderhead/auth/in
         deploy:
           resources:
