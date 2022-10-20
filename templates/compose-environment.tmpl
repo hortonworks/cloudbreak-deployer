@@ -54,6 +54,7 @@
             - MOCK_INFRASTRUCTURE_ADDRESS={{{get . "MOCK_INFRASTRUCTURE_HOST"}}}
             - MOCK_INFRASTRUCTURE_BIND_PORT={{{get . "MOCK_INFRASTRUCTURE_BIND_PORT"}}}
             - "CLUSTERDNS_HOST={{{get . "CLUSTERDNS_HOST"}}}"
+            - ALTUS_UMS_CLIENT_GRPC_SHORT_TIMEOUT_SEC={{{get . "ALTUS_UMS_CLIENT_GRPC_SHORT_TIMEOUT_SEC"}}}
         labels:
             - traefik.port=8088
             - traefik.frontend.rule=PathPrefix:/environmentservice/

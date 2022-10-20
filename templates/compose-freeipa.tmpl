@@ -55,6 +55,7 @@
             - ALTUS_MINASSHDMGMT_HOST={{{get . "ALTUS_TUNNEL_MANAGEMENT_HOST"}}}
             - ALTUS_MINASSHDMGMT_PORT={{{get . "ALTUS_TUNNEL_MANAGEMENT_PORT"}}}
             - STATUSCHECKER_ENABLED={{{get . "FREEIPA_STATUSCHECKER_ENABLED"}}}
+            - ALTUS_UMS_CLIENT_GRPC_SHORT_TIMEOUT_SEC={{{get . "ALTUS_UMS_CLIENT_GRPC_SHORT_TIMEOUT_SEC"}}}
         labels:
             - traefik.port=8080
             - traefik.frontend.rule=PathPrefix:/freeipa/
