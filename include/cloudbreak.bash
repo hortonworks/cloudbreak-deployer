@@ -410,6 +410,8 @@ cloudbreak-conf-defaults() {
 
     env-import CLUSTER_PROXY_CADENCE_HOST "cadence"
     env-import CLUSTER_PROXY_CADENCE_PORT "7933"
+
+    env-import ALTUS_UMS_CLIENT_GRPC_SHORT_TIMEOUT_SEC 5
 }
 
 cloudbreak-conf-autscale() {

@@ -31,6 +31,7 @@
             - VAULT_ROOT_TOKEN={{{get . "VAULT_ROOT_TOKEN"}}}
             - "ALTUS_UMS_HOST={{{get . "UMS_HOST"}}}"
             - ALTUS_AUDIT_ENDPOINT
+            - ALTUS_UMS_CLIENT_GRPC_SHORT_TIMEOUT_SEC={{{get . "ALTUS_UMS_CLIENT_GRPC_SHORT_TIMEOUT_SEC"}}}
             - MOCK_INFRASTRUCTURE_HOST
             - OPENTRACING_JAEGER_UDP-SENDER_HOST={{{get . "JAEGER_HOST"}}}
         labels:
