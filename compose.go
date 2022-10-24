@@ -29,18 +29,11 @@ func GenerateComposeYaml(args []string) {
 	}).Parse(string(tmpl)))
 	localDevList := dataMap["CB_LOCAL_DEV_LIST"]
 
-	if dataMap["THUNDERHEAD_MOCK"] == "true" || len(dataMap["DPS_REPO"]) == 0 {
-		insertIntoTemplate(t, "no-dps")
+	insertIntoTemplate(t, "cb-traefik")
+	if dataMap["THUNDERHEAD_MOCK"] == "true" {
 		insertIntoTemplateIfNotLocal(t, localDevList, "thunderhead-mock")
-
-		if len(dataMap["UMS_HOST"]) != 0 {
-			insertIntoTemplateIfNotLocal(t, localDevList, "core-gateway")
-		} else {
-			insertIntoTemplate(t, "cb-traefik")
-		}
-	} else {
-		insertIntoTemplateIfNotLocal(t, localDevList, "core-gateway")
 	}
+	insertIntoTemplateIfNotLocal(t, localDevList, "core-gateway")
 	insertIntoTemplateIfNotLocal(t, localDevList, "cadence")
 	insertIntoTemplateIfNotLocal(t, localDevList, "cluster-proxy")
 	insertIntoTemplateIfNotLocal(t, localDevList, "cloudbreak")

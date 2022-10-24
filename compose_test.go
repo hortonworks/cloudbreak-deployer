@@ -43,8 +43,6 @@ export DOCKER_TAG_POSTGRES=9.6.1-alpine
 export DOCKER_TAG_REDBEAMS=2.10.0-dev.809
 export DOCKER_TAG_TRAEFIK=v1.7.9-alpine
 export DOCKER_TAG_ULUWATU=2.10.0-dev.669
-export DPS_REPO=
-export DPS_VERSION=latest
 export HTTPS_PROXYFORCLUSTERCONNECTION=false
 export PERISCOPE_URL=http://periscope:8080
 export PUBLIC_HTTPS_PORT=443
@@ -61,9 +59,6 @@ export VAULT_DOCKER_IMAGE=vault
 export VAULT_DOCKER_IMAGE_TAG=1.0.1
 export VAULT_ROOT_TOKEN=s.1XLr7GJsH3jYY5lzGHcwpevY
 `
-var dpsVar = `
-export DPS_REPO=test.dps.repo
-`
 
 func TestComposeGenerationWithoutDps(t *testing.T) {
 	out := catchStdInStdOut(t, inputVars, func() {
@@ -74,26 +69,6 @@ func TestComposeGenerationWithoutDps(t *testing.T) {
 	// string, ignoring any whitespace that may be present, and matching the service name
 	// followed by a ':'.
 	should := []string{`(?m)^\s*periscope:`, `(?m)^\s*cluster-proxy:`, `(?m)^\s*datalake:`, `(?m)^\s*redbeams:`}
-	shouldnt := []string{`(?m)^\s*cloudbreak:`, `(?m)^\s*core-gateway:`, `(?m)^\s*datalake-dr:`}
-	for _, s := range should {
-		re := regexp.MustCompile(s)
-		if res := re.FindString(out); len(res) == 0 {
-			t.Errorf("Can't find service '%s' in output.", s)
-		}
-	}
-	for _, s := range shouldnt {
-		re := regexp.MustCompile(s)
-		if res := re.FindString(out); len(res) != 0 {
-			t.Errorf("Found service '%s'.", s)
-		}
-	}
-}
-
-func TestComposeGenerationWithDps(t *testing.T) {
-	out := catchStdInStdOut(t, inputVars+dpsVar, func() {
-		GenerateComposeYaml([]string{})
-	})
-	should := []string{`(?m)^\s*periscope:`, `(?m)^\s*datalake:`, `(?m)^\s*redbeams:`, `(?m)^\s*cluster-proxy:`}
 	shouldnt := []string{`(?m)^\s*cloudbreak:`, `(?m)^\s*datalake-dr:`}
 	for _, s := range should {
 		re := regexp.MustCompile(s)

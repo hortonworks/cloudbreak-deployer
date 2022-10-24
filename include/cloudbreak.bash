@@ -278,9 +278,7 @@ cloudbreak-conf-defaults() {
     env-import CB_SHOW_TERMINATED_CLUSTERS_MINUTES 0
 
     env-import CB_LOCAL_DEV_LIST ""
-    env-import DPS_VERSION "latest"
     env-import CDP_GW_VERSION "2.1.0-b228"
-    env-import DPS_REPO ""
     env-import UMS_ENABLED "true"
     env-import THUNDERHEAD_MOCK "true"
     env-import INGRESS_URLS "localhost,manage.dps.local"
