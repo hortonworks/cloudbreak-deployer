@@ -134,7 +134,10 @@ services:
             limits:
               memory: 1024M
               cpus: 1.0
-{{{ block "dps" .}}}{{{end}}}
+{{{- block "cb-traefik" .}}}{{{end}}}
+{{{- block "thunderhead-mock" .}}}{{{end}}}
+{{{- block "mock-infrastructure" .}}}{{{end}}}
+{{{- block "core-gateway" .}}}{{{end}}}
 {{{ block "cadence" .}}}{{{end}}}
 {{{ block "cluster-proxy" .}}}{{{end}}}
 {{{- block "cloudbreak" .}}}{{{end}}}

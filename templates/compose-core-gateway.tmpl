@@ -1,8 +1,5 @@
 {{{define "core-gateway"}}}
     core-gateway:
-        {{{- if get . "DPS_REPO"}}}
-        build: {{{get . "DPS_REPO"}}}/core-gateway
-        {{{- end}}}
         image: docker-private.infra.cloudera.com/cloudera/cdp-gateway:{{{get . "CDP_GW_VERSION"}}}
         # ports:
             # - {{{get . "PUBLIC_HTTP_PORT"}}}:3000
@@ -15,6 +12,7 @@
         - GATEWAY_UPSTREAM_PORT=80
         - GATEWAY_UNAUTHENTICATED_PATHS=pathPrefix:/idp,pathPrefix:/oidc,pathPrefix:/thunderhead,pathPrefix:/thunderhead/auth,!pathPrefix:/thunderhead/api,pathPrefix:/core,!pathPrefix:/core/api,pathPrefix:/cloud/cb/info,pathPrefix:/cb/info,pathPrefix:/environmentservice/info,pathPrefix:/dl/info,pathPrefix:/freeipa/info
         - UMS_HOST={{{get . "UMS_HOST"}}}
+        - UMS_PORT={{{get . "UMS_PORT"}}}
         - GATEWAY_DEFAULT_REDIRECT_URI={{{get . "GATEWAY_DEFAULT_REDIRECT_PATH"}}}
         - GRPC_TIMEOUT_MS=20000
         - GATEWAY_REDIRECT_ENDPOINT_PATH=/thunderhead/auth/in
