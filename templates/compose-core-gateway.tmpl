@@ -14,7 +14,7 @@
         - UMS_HOST={{{get . "UMS_HOST"}}}
         - UMS_PORT={{{get . "UMS_PORT"}}}
         - GATEWAY_DEFAULT_REDIRECT_URI={{{get . "GATEWAY_DEFAULT_REDIRECT_PATH"}}}
-        - GRPC_TIMEOUT_MS=20000
+        - GRPC_TIMEOUT_MS=10000
         - GATEWAY_REDIRECT_ENDPOINT_PATH=/thunderhead/auth/in
         - CORS_ALLOWED_ORIGINS=*
         deploy:
