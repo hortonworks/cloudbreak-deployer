@@ -11,7 +11,7 @@
         - {{{get . "DOCKER_NETWORK_NAME"}}}
         ports:
         - "{{{get . "THUNDERHEAD_MOCK_BIND_PORT"}}}:8080"
-        - "{{{get . "UMS_PORT"}}}:8982"
+        - "{{{get . "THUNDERHEAD_MOCK_UMS_PORT"}}}:8982"
         - "{{{get . "MOCK_DATALAKE_DR_PORT"}}}:8981"
         labels:
         - traefik.frontend.priority=100

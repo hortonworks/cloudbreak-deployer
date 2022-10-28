@@ -364,6 +364,8 @@ cloudbreak-conf-defaults() {
 
     env-import MOCK_DATALAKE_DR_PORT "8981"
 
+    env-import UMS_PORT "8982"
+
     if [[ "$THUNDERHEAD_MOCK" == "true" ]]; then
         env-import ULUWATU_FRONTEND_RULE "PathPrefix:/"
         env-import THUNDERHEAD_URL $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8080" "8080")
@@ -372,15 +374,19 @@ cloudbreak-conf-defaults() {
             env-import UMS_HOST $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
         fi
         env-import CLUSTERDNS_HOST $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
+        if [[ "$UMS_HOST" == *"cloudera.com"* ]]; then
+            env-import THUNDERHEAD_MOCK_UMS_PORT "8982"
+        else
+            env-import THUNDERHEAD_MOCK_UMS_PORT $UMS_PORT
+        fi
     else
         env-import GATEWAY_DEFAULT_REDIRECT_PATH "/cloud"
         env-import THUNDERHEAD_URL $(service-url thunderhead-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "8080" "10080")
         if [[ "$UMS_ENABLED" == "true" ]]; then
             env-import UMS_HOST $(service-url thunderhead-api "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
         fi
+        env-import THUNDERHEAD_MOCK_UMS_PORT $UMS_PORT
     fi
-
-    env-import UMS_PORT "8982"
 
     env-import SAAS_SDX_HOST $(service-url thunderhead-mock "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "" "" "")
     env-import SAAS_SDX_PORT "8982"
