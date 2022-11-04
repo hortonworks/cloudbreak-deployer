@@ -711,7 +711,7 @@ main() {
 
     cbd-find-root
     start-time-init
-	color-init
+	  color-init
     if is_command_needs_profile $1; then
         init-profile
         load-profile
