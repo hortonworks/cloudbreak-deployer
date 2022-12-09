@@ -639,7 +639,7 @@ start-requested-services() {
         debug "All services must be started"
         if [[ "$(docker-compose -p cbreak ps $COMMON_DB | tail -1)" == *"Up"* ]]; then
             debug "DB services: $COMMON_DB are already running, start only other services"
-            services=$(yq r -j docker-compose.yml | jq -r ".services|keys[]" | grep -v "db$" | xargs)
+            services=$(yq -o json docker-compose.yml | jq -r ".services|keys[]" | grep -v "db$" | xargs)
         fi
     fi
 
@@ -720,7 +720,7 @@ main() {
     deps-init
     create-temp-dir
     deps-require sed
-    deps-require yq
+    deps-require yq 4.30.5
 
     circle-init
     compose-init
