@@ -172,17 +172,3 @@
         rule = "PathPrefix:/api/v1/audit/"
         priority = 100
 {{{- end}}}
-
-# Tracing definition
-[tracing]
-  backend = "jaeger"
-  serviceName = "traefik"
-  spanNameLimit = 0
-
-  [tracing.jaeger]
-    localAgentHostPort = "{{{ .JAEGER_HOST }}}:6831"
-    samplingServerURL = "http://{{{ .JAEGER_HOST }}}:5778/sampling"
-    samplingType = "const"
-    samplingParam = 1.0
-    traceContextHeaderName = "uber-trace-id"
-    disableAttemptReconnecting = false

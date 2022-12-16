@@ -291,7 +291,6 @@ cloudbreak-conf-defaults() {
     env-import ENVIRONMENT_URL $(service-url environment "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8088" "8088")
     env-import FREEIPA_URL $(service-url freeipa "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "8090" "8080")
     env-import CLUSTER_PROXY_URL "$(service-url cluster-proxy "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "http://" "10180" "10080")/cluster-proxy"
-    env-import JAEGER_HOST "$BRIDGE_ADDRESS"
 
     env-import MOCK_INFRASTRUCTURE_BIND_PORT 10090
     env-import MOCK_INFRASTRUCTURE_URL $(service-url mock-infrastructure "$BRIDGE_ADDRESS" "$CB_LOCAL_DEV_LIST" "https://" "$MOCK_INFRASTRUCTURE_BIND_PORT" "10090")
@@ -553,7 +552,7 @@ generate-toml-file-for-localdev() {
 
 generate-toml-file-for-localdev-force() {
     declare traefikFile=${1:-traefik.toml}
-    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$CONSUMPTION_URL" "$DATALAKE_URL" "$ENVIRONMENT_URL" "$REDBEAMS_URL" "$FREEIPA_URL" "http://$THUNDERHEAD_URL" "$CLUSTER_PROXY_URL" "$ENVIRONMENTS2_API_URL" "$DATALAKE_API_URL" "$DISTROX_API_URL" "$JAEGER_HOST" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
+    generate-traefik-toml "$CLOUDBREAK_URL" "$PERISCOPE_URL" "$CONSUMPTION_URL" "$DATALAKE_URL" "$ENVIRONMENT_URL" "$REDBEAMS_URL" "$FREEIPA_URL" "http://$THUNDERHEAD_URL" "$CLUSTER_PROXY_URL" "$ENVIRONMENTS2_API_URL" "$DATALAKE_API_URL" "$DISTROX_API_URL" "$AUDIT_API_URL" "$CB_LOCAL_DEV_LIST" > "$traefikFile"
 }
 
 generate-traefik-check-diff() {

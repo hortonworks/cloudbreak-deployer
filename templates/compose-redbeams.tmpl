@@ -40,7 +40,6 @@
             - ALTUS_AUDIT_ENDPOINT
             - MOCK_INFRASTRUCTURE_HOST
             - "NOTIFICATION_URLS={{{get . "CB_DEFAULT_SUBSCRIPTION_ADDRESS"}}}"
-            - OPENTRACING_JAEGER_UDP-SENDER_HOST={{{get . "JAEGER_HOST"}}}
             - ALTUS_UMS_CLIENT_GRPC_SHORT_TIMEOUT_SEC={{{get . "ALTUS_UMS_CLIENT_GRPC_SHORT_TIMEOUT_SEC"}}}
         labels:
             - traefik.port=8080
