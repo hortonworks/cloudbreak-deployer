@@ -38,6 +38,7 @@
             - "ALTUS_UMS_PORT={{{get . "UMS_PORT"}}}"
             - ALTUS_AUDIT_ENDPOINT
             - MOCK_INFRASTRUCTURE_HOST
+            - OPENTRACING_JAEGER_UDP-SENDER_HOST={{{get . "JAEGER_HOST"}}}
             - "ALTUS_IDBMMS_HOST={{{get . "IDBMMS_HOST"}}}"
             - "ALTUS_IDBMMS_PORT={{{get . "IDBMMS_PORT"}}}"
             - STATUSCHECKER_ENABLED={{{get . "DATALAKE_STATUSCHECKER_ENABLED"}}}

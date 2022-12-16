@@ -43,6 +43,7 @@
             - CDP_PLATFORMS_SUPPORTEDPLATFORMS
             - MOCK_INFRASTRUCTURE_HOST
             - "NOTIFICATION_URLS={{{get . "CB_DEFAULT_SUBSCRIPTION_ADDRESS"}}}"
+            - OPENTRACING_JAEGER_UDP-SENDER_HOST={{{get . "JAEGER_HOST"}}}
             {{{- if get . "CB_DEFAULT_GATEWAY_CIDR"}}}
             - FREEIPA_DEFAULT_GATEWAY_CIDR={{{get . "CB_DEFAULT_GATEWAY_CIDR"}}}
             {{{- end}}}
