@@ -1,7 +1,7 @@
 package main
 
 import (
-	"io/ioutil"
+	"io"
 	"os"
 	"testing"
 )
@@ -23,7 +23,7 @@ func catchStdInStdOut(t *testing.T, input string, runnable func()) string {
 	dieOn(w.Close(), t)
 	runnable()
 	dieOn(fakeStdout.Close(), t)
-	newOutBytes, err := ioutil.ReadAll(r)
+	newOutBytes, err := io.ReadAll(r)
 	dieOn(err, t)
 	dieOn(r.Close(), t)
 	dieOn(fakeStdin.Close(), t)
@@ -38,7 +38,7 @@ func catchStdOut(t *testing.T, runnable func()) string {
 	os.Stdout = fakeStdout
 	runnable()
 	dieOn(fakeStdout.Close(), t)
-	newOutBytes, err := ioutil.ReadAll(r)
+	newOutBytes, err := io.ReadAll(r)
 	dieOn(err, t)
 	dieOn(r.Close(), t)
 	return string(newOutBytes)
