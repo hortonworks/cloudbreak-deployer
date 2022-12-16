@@ -40,7 +40,6 @@
             - "ALTUS_UMS_PORT={{{get . "UMS_PORT"}}}"
             - ALTUS_AUDIT_ENDPOINT
             - MOCK_INFRASTRUCTURE_HOST
-            - OPENTRACING_JAEGER_UDP-SENDER_HOST={{{get . "JAEGER_HOST"}}}
             - ALTUS_UMS_CLIENT_GRPC_SHORT_TIMEOUT_SEC={{{get . "ALTUS_UMS_CLIENT_GRPC_SHORT_TIMEOUT_SEC"}}}
         labels:
         - traefik.port=8080
