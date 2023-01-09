@@ -13,6 +13,7 @@
             - "SERVICEDEPENDENCIES_FMSPORT={{{get . "FREEIPA_PORT"}}}"
             - "SERVICEDEPENDENCIES_WORKLOADIAMHOST={{{get . "WORKLOADIAM_HOST"}}}"
             - "SERVICEDEPENDENCIES_WORKLOADIAMPORT={{{get . "WORKLOADIAM_PORT"}}}"
+            - "GOV_CLOUD_DEPLOYMENT={{{get . "GOV_CLOUD_DEPLOYMENT"}}}"
             - TELEMETRY_SERVICE_NAME=Environments2Api
             - DEBUG={{{get . "ENVIRONMENTS2_DEBUG"}}}
         {{{- if get . "ENVIRONMENTS2_API_TARGET_PATH"}}}
