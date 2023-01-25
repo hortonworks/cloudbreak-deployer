@@ -325,6 +325,7 @@ cloudbreak-conf-defaults() {
     env-import DATALAKE_DR_HOST $(host-from-url "$DATALAKE_DR_ENDPOINT")
     env-import DATALAKE_DR_PORT $(port-from-url "$DATALAKE_DR_ENDPOINT")
     env-import CADENCE_ENABLED false
+    env-import CADENCE_USE_GRPC false
 
     env-import CB_PORT $(port-from-url "$CLOUDBREAK_URL")
     env-import PERISCOPE_PORT $(port-from-url "$PERISCOPE_URL")
