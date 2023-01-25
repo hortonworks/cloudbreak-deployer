@@ -22,6 +22,7 @@
             - cadence.enabled={{{get . "CADENCE_ENABLED"}}}
             - cadence.host={{{get . "CLUSTER_PROXY_CADENCE_HOST"}}}
             - cadence.port={{{get . "CLUSTER_PROXY_CADENCE_PORT"}}}
+            - cadence.useGRPC={{{get . "CADENCE_USE_GRPC"}}}
         {{{- if get . "DATALAKE_DR_TARGET_PATH"}}}
         volumes:
         - {{{get . "DATALAKE_DR_TARGET_PATH"}}}/dependency-hard-links:/thunderhead-datalakedr-service/lib
