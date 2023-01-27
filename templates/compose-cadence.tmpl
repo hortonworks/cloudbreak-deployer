@@ -2,6 +2,7 @@
     cadence:
         image: {{{get . "DOCKER_IMAGE_CADENCE"}}}:{{{get . "DOCKER_TAG_CADENCE"}}}
         ports:
+            - "{{{get . "CADENCE_GRPC_PORT"}}}:7833"
             - "{{{get . "CADENCE_FRONTEND_PORT"}}}:7933"
             - "{{{get . "CADENCE_HISTORY_PORT"}}}:7934"
             - "{{{get . "CADENCE_MATCHING_PORT"}}}:7935"
