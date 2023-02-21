@@ -268,6 +268,9 @@ cloudbreak-conf-defaults() {
 
     env-import CB_SMARTSENSE_ID ""
 
+    env-import CB_ENABLEDPLATFORMS "AWS,AZURE,GCP,YARN,MOCK"
+    env-import CB_ENABLEDGOVPLATFORMS "AWS"
+
     env-import DOCKER_STOP_TIMEOUT 60
 
     env-import PUBLIC_HTTP_PORT 80
