@@ -98,6 +98,9 @@ release-docker-version:
 upload_s3:
 	ls -1 release | xargs -I@ aws s3 cp release/@ s3://public-repo-1.hortonworks.com/HDP/cloudbreak/@ --acl public-read
 
+docker-build:
+	docker build -t cloudera/cloudbreak-deployer:latest .
+	docker run --rm -v ${PWD}:/go/src/github.com/hortonworks/cloudbreak-deployer cloudera/cloudbreak-deployer:latest make deps build
 
 circleci:
 	rm ~/.gitconfig
