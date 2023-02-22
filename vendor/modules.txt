@@ -1,0 +1,17 @@
+# github.com/go-bindata/go-bindata v3.1.2+incompatible
+## explicit
+# github.com/hashicorp/go-version v0.0.0-20170202080759-03c5bf6be031
+## explicit
+github.com/hashicorp/go-version
+# github.com/kardianos/osext v0.0.0-20170510131534-ae77be60afb1
+## explicit
+github.com/kardianos/osext
+# github.com/mitchellh/go-homedir v0.0.0-20161203194507-b8bc1bf76747
+## explicit
+github.com/mitchellh/go-homedir
+# github.com/progrium/go-basher v0.0.0-20170201215011-6a5b35fcdaea
+## explicit
+github.com/progrium/go-basher
+# github.com/skratchdot/open-golang v0.0.0-20160302144031-75fb7ed4208c
+## explicit
+github.com/skratchdot/open-golang/open

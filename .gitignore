@@ -12,5 +12,3 @@ Profile*
 *.yaml
 *.yml
 *.log
-go.mod
-go.sum
