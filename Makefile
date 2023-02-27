@@ -58,8 +58,18 @@ ifeq ($(shell which go-bindata),)
 	go install -mod=mod github.com/go-bindata/go-bindata/...
 endif
 
-bindata: deps-bindata
+_bindata: deps-bindata
 	go-bindata include templates .deps/bin
+
+_bindata-docker:
+	@ docker run --rm -v "${PWD}":/go/src/github.com/hortonworks/cloudbreak-deployer -w /go/src/github.com/hortonworks/cloudbreak-deployer -e GO111MODULE=on $(GO_IMAGE):$(GO_IMAGE_VERSION) make _bindata
+
+bindata:
+	@ if which docker; then \
+		make _bindata-docker; \
+	else \
+		make _bindata; \
+    fi
 
 install: build ## Installs OS specific binary into: /usr/local/bin and ~/.local/bin
 	install build/$(shell uname -s)/$(BINARYNAME) /usr/local/bin || true
