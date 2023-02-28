@@ -13,7 +13,7 @@ ifeq ($(VERSION),)
 endif
 FLAGS=" -X main.Version=$(VERSION)"
 GO_IMAGE_VERSION=1.20.1
-GO_IMAGE=docker-private.infra.cloudera.com/cloudera_thirdparty/golang
+GO_IMAGE=golang
 GO_MOD_FLAG_INTRODUCED=1.14.0
 
 update-container-versions:
