@@ -12,8 +12,6 @@ ifeq ($(VERSION),)
     	VERSION = $(shell echo \${GIT_BRANCH}-snapshot)
 endif
 FLAGS=" -X main.Version=$(VERSION)"
-GO_IMAGE_VERSION=1.20.1
-GO_IMAGE=golang
 
 update-container-versions:
 	sed -i "0,/DOCKER_TAG_THUNDERHEAD_MOCK/  s/DOCKER_TAG_THUNDERHEAD_MOCK .*/DOCKER_TAG_THUNDERHEAD_MOCK $(CB_VERSION)/" include/cloudbreak.bash
@@ -47,7 +45,7 @@ push-container-versions-cdpcp: update-container-versions-cdpcp
 	git commit -m "Updated CDPCP container versions to $(CDPCP_VERSION)"
 	git push origin HEAD:$(GIT_BRANCH)
 
-build: bindata
+build: bindata ## Creates linux an osx binaries in "build/$OS"
 	go test
 	mkdir -p build/Linux  && GOOS=linux  go build -ldflags $(FLAGS) -o build/Linux/$(BINARYNAME)
 	mkdir -p build/Darwin && GOOS=darwin go build -ldflags $(FLAGS) -o build/Darwin/$(BINARYNAME)
@@ -55,10 +53,14 @@ build: bindata
 deps-bindata:
 ifeq ($(shell which go-bindata),)
 	go get -u github.com/go-bindata/go-bindata/...
-	go install -mod=mod github.com/go-bindata/go-bindata/...
 endif
 
-bindata: deps-bindata
+deps: deps-bindata ## Installs required cli tools (only needed for new envs)
+	go get -u github.com/kardianos/govendor
+#	go get github.com/github/hub
+	go get || true
+
+bindata: deps
 	go-bindata include templates .deps/bin
 
 install: build ## Installs OS specific binary into: /usr/local/bin and ~/.local/bin
@@ -87,21 +89,15 @@ release-version: build
 
 release-docker:
 	@USER_NS='-u $(shell id -u $(whoami)):$(shell id -g $(whoami))'
-	docker run --rm ${USER_NS} -v "${PWD}":/go/src/github.com/hortonworks/cloudbreak-deployer -w /go/src/github.com/hortonworks/cloudbreak-deployer -e VERSION=${VERSION} -e GITHUB_ACCESS_TOKEN=${GITHUB_TOKEN} $(GO_IMAGE):$(GO_IMAGE_VERSION) bash -c "make release"
+	docker run --rm ${USER_NS} -v "${PWD}":/go/src/github.com/hortonworks/cloudbreak-deployer -w /go/src/github.com/hortonworks/cloudbreak-deployer -e VERSION=${VERSION} -e GITHUB_ACCESS_TOKEN=${GITHUB_TOKEN} docker-private.infra.cloudera.com/cloudera_thirdparty/golang/golang:1.13.1 bash -c "make release"
 
 release-docker-version:
 	@USER_NS='-u $(shell id -u $(whoami)):$(shell id -g $(whoami))'
-	docker run --rm ${USER_NS} -v "${PWD}":/go/src/github.com/hortonworks/cloudbreak-deployer -w /go/src/github.com/hortonworks/cloudbreak-deployer -e VERSION=${VERSION} -e GITHUB_ACCESS_TOKEN=${GITHUB_TOKEN} $(GO_IMAGE):$(GO_IMAGE_VERSION) bash -c "make release-version"
+	docker run --rm ${USER_NS} -v "${PWD}":/go/src/github.com/hortonworks/cloudbreak-deployer -w /go/src/github.com/hortonworks/cloudbreak-deployer -e VERSION=${VERSION} -e GITHUB_ACCESS_TOKEN=${GITHUB_TOKEN} docker-private.infra.cloudera.com/cloudera_thirdparty/golang/golang:1.13.1 bash -c "make release-version"
 
 upload_s3:
 	ls -1 release | xargs -I@ aws s3 cp release/@ s3://public-repo-1.hortonworks.com/HDP/cloudbreak/@ --acl public-read
 
-mod-tidy:
-	@docker run --rm -v "${PWD}":/go/src/github.com/hortonworks/cloudbreak-deployer -w /go/src/github.com/hortonworks/cloudbreak-deployer -e GO111MODULE=on $(GO_IMAGE):$(GO_IMAGE_VERSION) make _mod-tidy
-
-_mod-tidy:
-	go mod tidy -v
-	go mod vendor
 
 circleci:
 	rm ~/.gitconfig
