@@ -73,12 +73,12 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_ULUWATU 2.69.0-b94
 
     env-import DOCKER_TAG_IDBMMS 1.0.0-b8874
-    env-import DOCKER_TAG_WORKLOADIAM 1.0.0-b8874
-    env-import DOCKER_TAG_ENVIRONMENTS2_API 1.0.0-b8874
-    env-import DOCKER_TAG_DATALAKE_API 1.0.0-b8874
-    env-import DOCKER_TAG_DISTROX_API 1.0.0-b8874
-    env-import DOCKER_TAG_AUDIT 1.0.0-b8874
-    env-import DOCKER_TAG_DATALAKE_DR 1.0.0-b8874
+    env-import DOCKER_TAG_WORKLOADIAM 1.0.0-b9463
+    env-import DOCKER_TAG_ENVIRONMENTS2_API 1.0.0-b9355
+    env-import DOCKER_TAG_DATALAKE_API 1.0.0-b9355
+    env-import DOCKER_TAG_DISTROX_API 1.0.0-b9355
+    env-import DOCKER_TAG_AUDIT 1.0.0-b9263
+    env-import DOCKER_TAG_DATALAKE_DR 1.0.0-b9319
 
     env-import DOCKER_TAG_POSTGRES 13.2-alpine
     env-import DOCKER_TAG_CBD_SMARTSENSE 0.13.4
