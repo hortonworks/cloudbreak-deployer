@@ -1,0 +1,15 @@
+{{{define "nssdb-init"}}}
+    nssdb-init-svc:
+      image: {{{get . "DOCKER_IMAGE_JAVA_NSSDB_INIT"}}}:{{{get . "DOCKER_TAG_JAVA_NSSDB_INIT"}}}
+      volumes:
+        - nssdb-init:/mounted/nssdb
+        - ./certs/into-nssdb/:/usr/local/share/ca-certificates/into-nssdb/
+      networks:
+        - default
+      command: /usr/local/share/ca-certificates/into-nssdb/
+      deploy:
+        resources:
+          limits:
+            memory: 256M
+            cpus: 1.0 
+{{{end}}}

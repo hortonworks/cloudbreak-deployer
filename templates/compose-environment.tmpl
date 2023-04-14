@@ -13,7 +13,7 @@
             - REST_DEBUG
             - 'ENVIRONMENT_JAVA_OPTS={{{getEscaped . "ENVIRONMENT_JAVA_OPTS"}}}'
             - ENVIRONMENT_HBM2DDL_STRATEGY
-            - "ENVIRONMENT_DB_HOST={{{get . "COMMON_DB"}}}"
+            - "ENVIRONMENT_DB_HOST={{{get . "ENVIRONMENT_DB_HOST"}}}"
             - "ENVIRONMENT_DB_PORT=5432"
             - ENVIRONMENT_DB_ENV_USER
             - ENVIRONMENT_DB_ENV_PASS
@@ -69,6 +69,10 @@
             - /dev/urandom:/dev/random
             - ./logs/environment:/environment-log
             - ./etc/:/etc/environment-service
+            - nssdb-init:/etc/pki/nssdb
+        depends_on:
+            nssdb-init-svc:
+                condition: service_completed_successfully
         networks:
         - {{{get . "DOCKER_NETWORK_NAME"}}}
         logging:

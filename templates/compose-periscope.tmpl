@@ -4,7 +4,7 @@
             - http_proxy={{{get . "HTTP_PROXY"}}}
             - https_proxy={{{get . "HTTPS_PROXY"}}}
             - PERISCOPE_HBM2DDL_STRATEGY
-            - "PERISCOPE_DB_PORT_5432_TCP_ADDR={{{get . "COMMON_DB"}}}"
+            - "PERISCOPE_DB_PORT_5432_TCP_ADDR={{{get . "PERISCOPE_DB_PORT_5432_TCP_ADDR"}}}"
             - "PERISCOPE_DB_PORT_5432_TCP_PORT=5432"
             - PERISCOPE_DB_ENV_USER
             - PERISCOPE_DB_ENV_PASS
@@ -54,6 +54,10 @@
             - "{{{get . "CBD_CERT_ROOT_PATH"}}}:/certs"
             - ./logs/autoscale:/autoscale-log
             - /dev/urandom:/dev/random
+            - nssdb-init:/etc/pki/nssdb
+        depends_on:
+            nssdb-init-svc:
+                condition: service_completed_successfully
         networks:
         - {{{get . "DOCKER_NETWORK_NAME"}}}
         logging:

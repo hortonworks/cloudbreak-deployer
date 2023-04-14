@@ -7,7 +7,7 @@
             - REST_DEBUG
             - 'CONSUMPTION_JAVA_OPTS={{{getEscaped . "CONSUMPTION_JAVA_OPTS"}}}'
             - CONSUMPTION_HBM2DDL_STRATEGY
-            - "CONSUMPTION_DB_HOST={{{get . "COMMON_DB"}}}"
+            - "CONSUMPTION_DB_HOST={{{get . "CONSUMPTION_DB_HOST"}}}"
             - "CONSUMPTION_DB_PORT=5432"
             - CONSUMPTION_DB_ENV_USER
             - CONSUMPTION_DB_ENV_PASS
@@ -47,6 +47,10 @@
             - /dev/urandom:/dev/random
             - ./logs/consumption:/consumption-log
             - ./etc/:/etc/consumption
+            - nssdb-init:/etc/pki/nssdb
+        depends_on:
+            nssdb-init-svc:
+                condition: service_completed_successfully
         networks:
             - {{{get . "DOCKER_NETWORK_NAME"}}}
         logging:

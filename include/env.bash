@@ -177,6 +177,7 @@ DOCKER_IMAGE_CLOUDBREAK_WEB - Web UI Docker image name
 DOCKER_IMAGE_ENVIRONMENTS2_API - Environments2 API Docker image name
 DOCKER_IMAGE_IDBMMS - IDBMMS Docker image name
 DOCKER_IMAGE_WORKLOADIAM - WorkloadIam Docker image name
+DOCKER_IMAGE_JAVA_NSSDB_INIT - Java init container image name that initializes the NSS DB for java based services
 DOCKER_TAG_AUDIT - Audit Service container version
 DOCKER_TAG_ALPINE - Alpine container version
 DOCKER_TAG_CBD_SMARTSENSE - SmartSense container version
@@ -197,6 +198,7 @@ DOCKER_TAG_FREEIPA - FreeIpa container version
 DOCKER_TAG_POSTGRES - Postgresql container version
 DOCKER_TAG_TRAEFIK - Traefik container version
 DOCKER_TAG_ULUWATU - Web UI container version
+DOCKER_TAG_JAVA_NSSDB_INIT - Java init container image version that initializes the NSS DB for java based services
 DOCKER_STOP_TIMEOUT - Specify a shutdown timeout in seconds for containers
 HTTP_PROXY_HOST - HTTP proxy address
 HTTPS_PROXY_HOST - HTTPS proxy address
