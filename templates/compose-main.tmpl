@@ -1,6 +1,7 @@
 version: '3'
 volumes:
     {{{get . "COMMON_DB_VOL"}}}:
+    nssdb-init:
 networks:
   {{{get . "DOCKER_NETWORK_NAME"}}}:
     driver: bridge
@@ -118,6 +119,7 @@ services:
               memory: 1024M
               cpus: 1.0
 {{{- block "cb-traefik" .}}}{{{end}}}
+{{{- block "nssdb-init" .}}}{{{end}}}
 {{{- block "thunderhead-mock" .}}}{{{end}}}
 {{{- block "mock-infrastructure" .}}}{{{end}}}
 {{{- block "core-gateway" .}}}{{{end}}}

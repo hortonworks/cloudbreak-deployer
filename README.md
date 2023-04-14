@@ -90,3 +90,22 @@ Once the PR is merged, CircleCI will build it:
 * Create a new release on [GitHub releases tab](https://github.com/hortonworks/cloudbreak-deployer/releases), with the
  help of [gh-release](https://github.com/progrium/gh-release).
 * Create the git tag with `v` prefix like: `v0.0.3`.
+
+### Configuring trusted certificates for the Java based services of Clodbreak Deployer Tool
+If an external database(RDS for example) for Cloudbreak's Java based services and enable `SSL` verification are needed, CBD started to support loading certificates from the `certs/into-nssdb/` directory of your deployment.
+
+This means that certificates from the `certs/into-nssdb/` will be loaded to an `NSS DB` instance by a new Java init container and Java based services will get this `NSS DB` on a shared volume and use it as the default trust/key-store.
+
+**The following `Profile` file snippet is an example of how `SSL` could be configured for the Environment and FreeIPA services**
+```
+export ENVIRONMENT_JAVA_OPTS='-Denvironment.db.env.ssl="true"'
+export ENVIRONMENT_DB_ENV_USER="postgres"
+export ENVIRONMENT_DB_ENV_DB="environmentdb"
+export ENVIRONMENT_DB_ENV_PASS="..."
+export ENVIRONMENT_DB_HOST="tb-.....cwuvxwrz4ivx.eu-central-1.rds.amazonaws.com"
+
+export FREEIPA_DB_ENV_USER="postgres"
+export FREEIPA_DB_ENV_DB="freeipadb"
+export FREEIPA_DB_ENV_PASS="..."
+export FREEIPA_DB_ADDR="tb-....cwuvxwrz4ivx.eu-central-1.rds.amazonaws.com"
+export FREEIPA_JAVA_OPTS='-Dfreeipa.db.env.ssl="true"'

@@ -86,6 +86,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER 3.0.0-b59
     env-import DOCKER_TAG_CADENCE 0.24.0-auto-setup
     env-import DOCKER_TAG_CADENCE_WEB 1.0.0-b24
+    env-import DOCKER_TAG_JAVA_NSSDB_INIT 1.0.0-b10108
 
     env-import DOCKER_IMAGE_THUNDERHEAD_MOCK docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-thunderhead
     env-import DOCKER_IMAGE_MOCK_INFRASTRUCTURE docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-infrastructure
@@ -112,6 +113,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CLUSTER_PROXY_HEALTH_CHECK_WORKER docker-private.infra.cloudera.com/cloudera/cloud/cluster-proxy
     env-import DOCKER_IMAGE_CADENCE ubercadence/server
     env-import DOCKER_IMAGE_CADENCE_WEB docker-private.infra.cloudera.com/cloudera/cadence-web
+    env-import DOCKER_IMAGE_JAVA_NSSDB_INIT docker-private.infra.cloudera.com/cloudera/thunderhead-java-init-container-11
 
     env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu:3000/notifications
 }
@@ -146,42 +148,50 @@ cloudbreak-conf-db() {
     env-import CB_DB_ENV_PASS ""
     env-import CB_DB_ENV_SCHEMA "public"
     env-import CB_HBM2DDL_STRATEGY "validate"
+    env-import CB_DB_PORT_5432_TCP_ADDR "$COMMON_DB"
 
     env-import PERISCOPE_DB_ENV_USER "postgres"
     env-import PERISCOPE_DB_ENV_DB "periscopedb"
     env-import PERISCOPE_DB_ENV_PASS ""
     env-import PERISCOPE_DB_ENV_SCHEMA "public"
     env-import PERISCOPE_HBM2DDL_STRATEGY "validate"
+    env-import PERISCOPE_DB_PORT_5432_TCP_ADDR "$COMMON_DB"
 
     env-import CONSUMPTION_DB_ENV_USER "postgres"
     env-import CONSUMPTION_DB_ENV_DB "consumptiondb"
     env-import CONSUMPTION_DB_ENV_PASS ""
     env-import CONSUMPTION_DB_ENV_SCHEMA "public"
     env-import CONSUMPTION_HBM2DDL_STRATEGY "validate"
+    env-import CONSUMPTION_DB_HOST "$COMMON_DB"
 
     env-import DATALAKE_DB_ENV_USER "postgres"
     env-import DATALAKE_DB_ENV_DB "datalakedb"
     env-import DATALAKE_DB_ENV_PASS ""
     env-import DATALAKE_DB_ENV_SCHEMA "public"
     env-import DATALAKE_HBM2DDL_STRATEGY "validate"
+    env-import DATALAKE_DB_PORT_5432_TCP_ADDR "$COMMON_DB"
+
 
     env-import REDBEAMS_DB_ENV_USER "postgres"
     env-import REDBEAMS_DB_ENV_DB "redbeamsdb"
     env-import REDBEAMS_DB_ENV_PASS ""
     env-import REDBEAMS_DB_ENV_SCHEMA "public"
     env-import REDBEAMS_HBM2DDL_STRATEGY "validate"
+    env-import REDBEAMS_DB_PORT_5432_TCP_ADDR "$COMMON_DB"
 
     env-import ENVIRONMENT_DB_ENV_USER "postgres"
     env-import ENVIRONMENT_DB_ENV_DB "environmentdb"
     env-import ENVIRONMENT_DB_ENV_PASS ""
     env-import ENVIRONMENT_DB_ENV_SCHEMA "public"
     env-import ENVIRONMENT_HBM2DDL_STRATEGY "validate"
+    env-import ENVIRONMENT_DB_HOST "$COMMON_DB"
 
     env-import FREEIPA_DB_ENV_USER "postgres"
     env-import FREEIPA_DB_ENV_DB "freeipadb"
     env-import FREEIPA_DB_ENV_PASS ""
     env-import FREEIPA_DB_ENV_SCHEMA "public"
     env-import FREEIPA_HBM2DDL_STRATEGY "validate"
+    env-import FREEIPA_DB_ADDR "$COMMON_DB"
 
     env-import IDBMMS_DB_ENV_USER "postgres"
     env-import IDBMMS_DB_ENV_DB "idbmmsdb"

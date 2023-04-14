@@ -13,7 +13,7 @@
             - REST_DEBUG
             - 'REDBEAMS_JAVA_OPTS={{{getEscaped . "REDBEAMS_JAVA_OPTS"}}}'
             - REDBEAMS_HBM2DDL_STRATEGY
-            - "REDBEAMS_DB_PORT_5432_TCP_ADDR={{{get . "COMMON_DB"}}}"
+            - "REDBEAMS_DB_PORT_5432_TCP_ADDR={{{get . "REDBEAMS_DB_PORT_5432_TCP_ADDR"}}}"
             - "REDBEAMS_DB_PORT_5432_TCP_PORT=5432"
             - REDBEAMS_DB_ENV_USER
             - REDBEAMS_DB_ENV_PASS
@@ -54,6 +54,10 @@
             - /dev/urandom:/dev/random
             - ./logs/redbeams:/redbeams-log
             - ./etc/:/etc/redbeams
+            - nssdb-init:/etc/pki/nssdb
+        depends_on:
+            nssdb-init-svc:
+                condition: service_completed_successfully
         networks:
         - {{{get . "DOCKER_NETWORK_NAME"}}}
         logging:

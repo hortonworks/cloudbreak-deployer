@@ -7,7 +7,7 @@
             - REST_DEBUG
             - 'DATALAKE_JAVA_OPTS={{{getEscaped . "DATALAKE_JAVA_OPTS"}}}'
             - DATALAKE_HBM2DDL_STRATEGY
-            - "DATALAKE_DB_PORT_5432_TCP_ADDR={{{get . "COMMON_DB"}}}"
+            - "DATALAKE_DB_PORT_5432_TCP_ADDR={{{get . "DATALAKE_DB_PORT_5432_TCP_ADDR"}}}"
             - "DATALAKE_DB_PORT_5432_TCP_PORT=5432"
             - DATALAKE_DB_ENV_USER
             - DATALAKE_DB_ENV_PASS
@@ -57,6 +57,10 @@
             - /dev/urandom:/dev/random
             - ./logs/datalake:/datalake-log
             - ./etc/:/etc/datalake
+            - nssdb-init:/etc/pki/nssdb
+        depends_on:
+            nssdb-init-svc:
+                condition: service_completed_successfully
         networks:
             - {{{get . "DOCKER_NETWORK_NAME"}}}
         logging:

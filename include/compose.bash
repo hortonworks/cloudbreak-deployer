@@ -1,5 +1,5 @@
 compose-init() {
-    local required_compose=1.27.2
+    local required_compose=1.29.1
     local compose_version=$(docker-compose --version 2>&1 | grep -E -o "([0-9]+\.)+[0-9]+")
 
     local compare_result=$(compare-versions ${compose_version} ${required_compose})

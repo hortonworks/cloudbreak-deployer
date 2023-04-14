@@ -17,7 +17,7 @@
             - REST_DEBUG
             - 'FREEIPA_JAVA_OPTS={{{getEscaped . "FREEIPA_JAVA_OPTS"}}}'
             - FREEIPA_HBM2DDL_STRATEGY
-            - "FREEIPA_DB_ADDR={{{get . "COMMON_DB"}}}"
+            - "FREEIPA_DB_ADDR={{{get . "FREEIPA_DB_ADDR"}}}"
             - "FREEIPA_DB_PORT=5432"
             - FREEIPA_DB_ENV_USER
             - FREEIPA_DB_ENV_PASS
@@ -70,6 +70,10 @@
             - /dev/urandom:/dev/random
             - ./logs/freeipa:/freeipa-log
             - ./etc/:/etc/freeipa
+            - nssdb-init:/etc/pki/nssdb
+        depends_on:
+            nssdb-init-svc:
+                condition: service_completed_successfully
         networks:
         - {{{get . "DOCKER_NETWORK_NAME"}}}
         logging:

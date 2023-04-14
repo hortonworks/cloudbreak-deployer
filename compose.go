@@ -33,6 +33,7 @@ func GenerateComposeYaml(args []string) {
 	if dataMap["THUNDERHEAD_MOCK"] == "true" {
 		insertIntoTemplateIfNotLocal(t, localDevList, "thunderhead-mock")
 	}
+	insertIntoTemplate(t, "nssdb-init")
 	insertIntoTemplateIfNotLocal(t, localDevList, "core-gateway")
 	insertIntoTemplateIfNotLocal(t, localDevList, "cadence")
 	insertIntoTemplateIfNotLocal(t, localDevList, "cluster-proxy")
