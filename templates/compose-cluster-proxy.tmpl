@@ -34,7 +34,7 @@
         deploy:
           resources:
             limits:
-              memory: 1024M
+              memory: {{{get . "CLUSTERPROXY_MEMORY_LIMIT"}}}
               cpus: 1.0
 
     cluster-proxy-health-check-worker:
@@ -51,6 +51,6 @@
         deploy:
           resources:
             limits:
-              memory: 1024M
+              memory: {{{get . "CLUSTERPROXY_HEALTH_CHECK_MEMORY_LIMIT"}}}
               cpus: 1.0
 {{{end}}}
