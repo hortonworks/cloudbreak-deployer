@@ -22,7 +22,7 @@
             - INVERTING_PROXY_SERVICE_PORT={{{get . "INVERTING_PROXY_SERVICE_PORT"}}}
         networks:
             - {{{get . "DOCKER_NETWORK_NAME"}}}
-        restart: always
+        restart: on-failure
         labels:
             - "traefik.backend=cluster-proxy"
             - "traefik.frontend.rule=PathPrefix:/cluster-proxy"
@@ -44,7 +44,7 @@
             - CADENCE_PORT={{{get . "CLUSTER_PROXY_CADENCE_PORT"}}}
             - CLUSTER_PROXY_HOST=cluster-proxy
             - CLUSTER_PROXY_PORT=10080
-        restart: always
+        restart: on-failure
         depends_on:
             - cadence
         entrypoint: ["/usr/cluster-proxy/bin/cluster-proxy","-main", "com.cloudera.cdp.WorkflowMain"]
