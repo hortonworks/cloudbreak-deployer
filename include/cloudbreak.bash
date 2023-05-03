@@ -86,7 +86,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_TAG_CLUSTER_PROXY_HEALTH_CHECK_WORKER 3.0.0-b59
     env-import DOCKER_TAG_CADENCE 0.24.0-auto-setup
     env-import DOCKER_TAG_CADENCE_WEB 1.0.0-b24
-    env-import DOCKER_TAG_JAVA_NSSDB_INIT 1.0.0-b10108
+    env-import DOCKER_TAG_JAVA_NSSDB_INIT 1.0.0-b10181
 
     env-import DOCKER_IMAGE_THUNDERHEAD_MOCK docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-thunderhead
     env-import DOCKER_IMAGE_MOCK_INFRASTRUCTURE docker-private.infra.cloudera.com/cloudera/cloudbreak-mock-infrastructure
@@ -113,7 +113,7 @@ cloudbreak-conf-tags() {
     env-import DOCKER_IMAGE_CLUSTER_PROXY_HEALTH_CHECK_WORKER docker-private.infra.cloudera.com/cloudera/cloud/cluster-proxy
     env-import DOCKER_IMAGE_CADENCE ubercadence/server
     env-import DOCKER_IMAGE_CADENCE_WEB docker-private.infra.cloudera.com/cloudera/cadence-web
-    env-import DOCKER_IMAGE_JAVA_NSSDB_INIT docker-private.infra.cloudera.com/cloudera/thunderhead-java-init-container-11
+    env-import DOCKER_IMAGE_JAVA_NSSDB_INIT docker-private.infra.cloudera.com/cloudera/thunderhead-java-init-container-17
 
     env-import CB_DEFAULT_SUBSCRIPTION_ADDRESS http://uluwatu:3000/notifications
 }
