@@ -409,6 +409,8 @@ cloudbreak-conf-defaults() {
     env-import AUTHDISTRIBUTOR_PORT "8982"
 
     env-import CLUSTERPROXY_ENABLED "true"
+    env-import CLUSTERPROXY_MEMORY_LIMIT "2560M"
+    env-import CLUSTERPROXY_HEALTH_CHECK_MEMORY_LIMIT "2560M"
 
     env-import CADENCE_GRPC_PORT "7833"
     env-import CADENCE_FRONTEND_PORT "7933"
